@@ -3,7 +3,9 @@ package compile
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
+	"path"
 
 	"github.com/BurntSushi/toml"
 	"github.com/teawithsand/twsblog/compile/process"
@@ -23,7 +25,7 @@ func Run() (err error) {
 	}
 
 	loader := process.DefaultLoader{
-		Loader: &scripting.DataLoader{
+		MetadataLoader: &scripting.DataLoader{
 			Parsers: []scripting.DataParser{
 				{
 					Parser:    json.Unmarshal,
@@ -33,6 +35,12 @@ func Run() (err error) {
 					Parser:    toml.Unmarshal,
 					Extension: "toml",
 				},
+			},
+		},
+		ContentLoader: &scripting.RawDataLoader{
+			Extensions: []string{
+				"md",
+				"html",
 			},
 		},
 		Dir: config.SourcePath,
@@ -66,19 +74,79 @@ func Run() (err error) {
 	}
 
 	log.Println("Running rendering...")
-	renderer := process.DefaultRenderer{
-		TargetDir: config.EmitPath,
+	err = runRenderers(ctx, config, posts)
+	if err != nil {
+		return
+	}
+	log.Println("Posts rendered OK")
+
+	return
+}
+
+func runRenderers(ctx context.Context, config Config, posts []process.Post) (err error) {
+	emitPath := config.EmitPath
+	var metas []process.PostMetadata
+	for _, p := range posts {
+		metas = append(metas, p.PostMetadata)
+	}
+
+	cleanup := process.CleanupRenderer{
+		TargetDir: emitPath,
+	}
+	err = cleanup.Render(ctx, nil)
+	if err != nil {
+		return
+	}
+
+	pdp := func(ctx context.Context, i int, metadata process.PostMetadata) (dir string, err error) {
+		dir = fmt.Sprintf("post_%d", i)
+		return
+	}
+
+	copy := process.CopyRenderer{
+		PostDirPicker: pdp,
+		TargetPath:    emitPath,
+	}
+
+	err = copy.Render(ctx, posts)
+	if err != nil {
+		return
+	}
+
+	ts := process.TSIndexRenderer{
+		TargetPath:    emitPath,
+		PostDirPicker: pdp,
+	}
+
+	err = ts.Render(ctx, metas)
+	if err != nil {
+		return
+	}
+
+	metadata := process.MetadataRenderer{
+		TargetPath:    emitPath,
+		PostDirPicker: pdp,
+	}
+
+	err = metadata.Render(ctx, metas)
+	if err != nil {
+		return
+	}
+
+	index := process.IndexRenderer{
+		CombinedMetadataOutputPath: path.Join(emitPath, "combinedMetadata.json"),
+		FuseIndexOutputPath:        path.Join(emitPath, "fuseIndex.json"),
+
+		FuseScriptName: "fuse_index",
 		Scripts: &scripting.Collection{
 			Dir: config.ScriptsPath,
 		},
 	}
 
-	err = renderer.RenderPosts(ctx, posts)
+	err = index.Render(ctx, metas)
 	if err != nil {
 		return
 	}
-
-	log.Println("Posts rendered OK")
 
 	return
 }

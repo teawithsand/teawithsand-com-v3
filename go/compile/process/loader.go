@@ -2,6 +2,7 @@ package process
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os"
 	"path"
@@ -16,8 +17,9 @@ type Loader[T any] interface {
 
 // DefaultLoader, which loads RawPost.
 type DefaultLoader struct {
-	Loader *scripting.DataLoader
-	Dir    string
+	MetadataLoader *scripting.DataLoader
+	ContentLoader  *scripting.RawDataLoader
+	Dir            string
 }
 
 func (bc *DefaultLoader) LoadPostsDir(ctx context.Context, receiver util.Receiver[RawPost]) (err error) {
@@ -36,7 +38,17 @@ func (bc *DefaultLoader) LoadPostsDir(ctx context.Context, receiver util.Receive
 
 		var meta RawPostMetadata
 
-		err = bc.Loader.ReadData(path.Join(postDir, "metadata"), &meta)
+		err = bc.MetadataLoader.ReadData(path.Join(postDir, "metadata"), &meta)
+		if err != nil {
+			return
+		}
+
+		var content []byte
+		var ext string
+		content, ext, err = bc.ContentLoader.ReadData(path.Join(postDir, "content"))
+		if errors.Is(err, os.ErrNotExist) {
+			err = nil
+		}
 		if err != nil {
 			return
 		}
@@ -44,6 +56,10 @@ func (bc *DefaultLoader) LoadPostsDir(ctx context.Context, receiver util.Receive
 		var post RawPost
 		post.Metadata = meta
 		post.Dir = postDir
+		post.Content = RawPostContent{
+			Content: content,
+			Kind:    ext,
+		}
 
 		err = receiver(ctx, post)
 		if err != nil {
