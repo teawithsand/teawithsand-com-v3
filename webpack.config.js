@@ -95,10 +95,6 @@ Encore
                 test: /(tea-animation|tea-params)\.s?css/,
                 reuseExistingChunk: false,
             },
-            posts: {
-                test: /generated/,
-                reuseExistingChunk: false,
-            },
         }
     })
 

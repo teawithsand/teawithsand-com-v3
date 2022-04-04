@@ -1,0 +1,121 @@
+@import "./tea-params.scss";
+
+$app-tea-height: 100vh;
+
+:root {
+    --app-tea-columns: #{$sand-columns};
+    --app-tea-styles: #{length($flow-time)};
+}
+
+.app-tea {
+    width: 100%;
+    height: $app-tea-height;
+    background-color: orange;
+    display: grid;
+    overflow: hidden;
+    user-select: none;
+
+    grid-template-columns: repeat($sand-columns, minmax(0, 100% / $sand-columns));
+    grid-template-rows: 1fr;
+
+    place-items: end;
+
+    &__sand {
+        opacity: 0;
+        grid-row: 1;
+
+        @for $i from 1 through $sand-columns {
+            &--col-#{$i} {
+                grid-column: #{$i};
+                --app-tea--column: #{$i};
+            }
+        }
+
+        @for $i from 1 through length($flow-time) {
+            $ft: nth($flow-time, $i);
+
+            $tr: nth($tea-radius, $i);
+            $del: nth($delay, $i);
+
+            $ftf: nth($flow-time-function, $i);
+            $atf: nth($appear-time-function, $i);
+
+            &--flow-#{$i} {
+                width: $tr;
+                height: $tr;
+                border-radius: $tr;
+
+                animation: app-tea-flow-#{$i} $ft $del $ftf infinite, app-tea-appear-#{$i} $ft $del $atf infinite,
+                    app-tea-background-#{$i} $ft $del $atf infinite;
+            }
+        }
+    }
+}
+
+@for $i from 1 through length($flow-time) {
+    $ft: nth($flow-time, $i);
+
+    $at: nth($appear-time, $i);
+    $dt: nth($disappear-time, $i);
+
+    $sh: nth($start-height, $i);
+    $eh: nth($end-height, $i);
+    $tr: nth($tea-radius, $i);
+
+    $scs: nth($sand-color-start, $i);
+    $sce: nth($sand-color-end, $i);
+
+    $deo: nth($disappear-end-opacity, $i);
+
+    $sks: nth($skew-start, $i);
+    $ske: nth($skew-end, $i);
+
+    @keyframes app-tea-appear-#{$i} {
+        0% {
+            opacity: 0;
+        }
+        #{($at/$ft) * 100%} {
+            opacity: 1;
+        }
+        #{(1 - ($dt/$ft)) * 100%} {
+            opacity: 1;
+        }
+        100% {
+            opacity: $deo;
+        }
+    }
+
+    @keyframes app-tea-flow-#{$i} {
+        0% {
+            transform: translateY(-1 * $sh) translateX($sks);
+        }
+        100% {
+            transform: translateY(-1 * $eh) translateX($ske);
+        }
+    }
+
+    @keyframes app-tea-background-#{$i} {
+        0% {
+            background-color: $scs;
+        }
+        100% {
+            background-color: $sce;
+        }
+    }
+}
+
+.app-tea-appear-later {
+    animation: app-tea-appear-animation 1.5s ease-out 1;
+}
+
+@keyframes app-tea-appear-animation {
+    0% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

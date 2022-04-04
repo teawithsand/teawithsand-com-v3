@@ -13,6 +13,7 @@
     "paths": {
       "@app/*": ["*"],
       "@posts/*": ["generated/*"],
+      "@pc/*": ["Components/Post/*"]
     },
     "resolveJsonModule": true,
     "experimentalDecorators": true,
