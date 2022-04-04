@@ -1,0 +1,7 @@
+# Ignore images assets in git.
+# Handling lots of big files in git is nono.
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
