@@ -1,11 +1,12 @@
 import { render } from "react-dom"
 import React from "react"
-import TeaAnimation from "./Components/TeaAnimation/TeaAnimation"
+import TeaAnimation from "./Component/TeaAnimation/TeaAnimation"
 
-import "@app/styles/style.scss"
+import "@app/styles/global.scss"
+import Router from "@app/Component/Router"
 
 const App = () => {
-    return <TeaAnimation />
+    return <Router />
 }
 
 document.title = "teawithsand.com"

@@ -160,12 +160,15 @@ Encore
     }))
     // .addPlugin(new StrictCspHtmlWebpackPlugin(HtmlWebpackPlugin))
 
+    /*
     .addPlugin(new WorkboxPlugin.GenerateSW({
         clientsClaim: true,
         skipWaiting: true,
         cleanupOutdatedCaches: true,
         cacheId: "twsblog",
     }))
+    */
+    /*
     .addPlugin(new CopyWebpackPlugin({
         patterns: [
             {
@@ -175,6 +178,7 @@ Encore
             }
         ]
     }))
+    */
     .addPlugin(new CompressionPlugin({
         filename: "[path][base].gz",
         test: /\.(js|css|svg|json).*$/i,

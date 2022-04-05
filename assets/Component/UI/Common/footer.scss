@@ -1,0 +1,28 @@
+@use "@app/styles/bs.scss" as bs;
+@use "@app/styles/defines.scss" as def;
+
+.footer {
+    @extend .container;
+    @extend .text-muted;
+
+    padding-bottom: map-get(def.$spacers, 3);
+    padding-left: map-get(def.$spacers, 2);
+    padding-right: map-get(def.$spacers, 2);
+
+    hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 1px solid #ccc;
+        margin: 1em 0;
+        padding: 0;
+    }
+
+    text-align: right;
+
+    &__right {
+    }
+
+    &__left {
+    }    
+}

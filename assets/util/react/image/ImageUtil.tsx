@@ -1,4 +1,4 @@
-import { Image } from "react-bootstrap"
+import classnames from "@app/util/lang/classnames"
 import * as React from "react"
 import { ResponsiveImage } from "./responsive"
 
@@ -38,16 +38,18 @@ export default (
         srcSet = image.srcSet
     }
 
-    return <Image
+    return <img
         onClick={props.onClick}
         src={src}
         srcSet={srcSet}
         style={props.style}
         alt={props.alt}
-        className={props.className}
+        className={classnames(props.className)}
+        /*
         fluid={props.fluid}
         rounded={props.rounded}
         thumbnail={props.thumbnail}
+        */
         width={props.width}
         height={props.height}
     />

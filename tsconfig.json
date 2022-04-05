@@ -12,8 +12,9 @@
     "baseUrl": "./assets",
     "paths": {
       "@app/*": ["*"],
+      "@styles/*": ["styles/*"],
       "@posts/*": ["generated/*"],
-      "@pc/*": ["Components/Post/*"]
+      "@pc/*": ["Component/Post/*"]
     },
     "resolveJsonModule": true,
     "experimentalDecorators": true,
