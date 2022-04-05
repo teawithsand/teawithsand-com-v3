@@ -1,4 +1,4 @@
-package compile
+package render
 
 type Config struct {
 	EmitPath    string `required:"true" split_words:"true"`

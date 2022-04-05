@@ -22,6 +22,7 @@ func (fs *PrefixFS) translatePath(inputPath string) string {
 	if strings.Contains(newPath, "..") {
 		panic("result path is relative! It should not happen")
 	}
+
 	return newPath
 }
 

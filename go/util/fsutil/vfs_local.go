@@ -11,7 +11,8 @@ type LocalFS struct {
 var _ FS = &LocalFS{}
 
 func (fs *LocalFS) Open(path string, openMode int) (f File, err error) {
-	return os.OpenFile(path, openMode, 0660)
+	f, err = os.OpenFile(path, openMode, 0660)
+	return
 }
 func (fs *LocalFS) ReadDir(path string) (entries []Entry, err error) {
 	rawEntries, err := ioutil.ReadDir(path)
@@ -19,6 +20,7 @@ func (fs *LocalFS) ReadDir(path string) (entries []Entry, err error) {
 		return
 	}
 	for _, re := range rawEntries {
+		re := re
 		entries = append(entries, re)
 	}
 	return
@@ -29,12 +31,12 @@ func (fs *LocalFS) Rename(from, to string) (err error) {
 }
 
 func (fs *LocalFS) Mkdir(path string) (err error) {
-	err = os.Mkdir(path, 0660)
+	err = os.Mkdir(path, 0770)
 	return
 }
 
 func (fs *LocalFS) MkdirAll(path string) (err error) {
-	err = os.MkdirAll(path, 0660)
+	err = os.MkdirAll(path, 0770)
 	return
 }
 
@@ -44,6 +46,9 @@ func (fs *LocalFS) Remove(path string) (err error) {
 }
 
 func (fs *LocalFS) RemoveAll(path string) (err error) {
+	if path == "/" {
+		panic("no no, this is not ok")
+	}
 	err = os.RemoveAll(path)
 	return
 }

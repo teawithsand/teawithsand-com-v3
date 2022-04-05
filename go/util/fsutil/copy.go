@@ -8,8 +8,14 @@ import (
 	"path"
 )
 
-func CopyDirectory(fs FS, scrDir, dest string) error {
-	entries, err := fs.ReadDir(scrDir)
+// TODO(teawithsand): inter filesystem copy
+
+func CopyDirectory(srcFs, dstFs FS, scrDir, dest string) error {
+	if dstFs == nil {
+		dstFs = srcFs
+	}
+
+	entries, err := srcFs.ReadDir(scrDir)
 	if err != nil {
 		return err
 	}
@@ -17,19 +23,19 @@ func CopyDirectory(fs FS, scrDir, dest string) error {
 		sourcePath := path.Join(scrDir, entry.Name())
 		destPath := path.Join(dest, entry.Name())
 
-		fileInfo, err := fs.Stat(sourcePath)
+		fileInfo, err := srcFs.Stat(sourcePath)
 		if err != nil {
 			return err
 		}
 		if fileInfo.IsDir() {
-			if err := CreateIfNotExists(fs, destPath); err != nil {
+			if err := createIfNotExists(dstFs, destPath); err != nil {
 				return err
 			}
-			if err := CopyDirectory(fs, sourcePath, destPath); err != nil {
+			if err := CopyDirectory(srcFs, dstFs, sourcePath, destPath); err != nil {
 				return err
 			}
 		} else {
-			if err := Copy(fs, sourcePath, destPath); err != nil {
+			if err := innerCopy(srcFs, dstFs, sourcePath, destPath); err != nil {
 				return err
 			}
 		}
@@ -37,15 +43,19 @@ func CopyDirectory(fs FS, scrDir, dest string) error {
 	return nil
 }
 
-func Copy(fs FS, srcFile, dstFile string) error {
-	out, err := fs.Open(dstFile, os.O_WRONLY|os.O_TRUNC|os.O_CREATE)
+func innerCopy(srcFs, dstFs FS, srcFile, dstFile string) error {
+	if dstFs == nil {
+		dstFs = srcFs
+	}
+
+	out, err := dstFs.Open(dstFile, os.O_WRONLY|os.O_TRUNC|os.O_CREATE)
 	if err != nil {
 		return err
 	}
 
 	defer out.Close()
 
-	in, err := fs.Open(srcFile, os.O_RDONLY)
+	in, err := srcFs.Open(srcFile, os.O_RDONLY)
 	if err != nil {
 		return err
 	}
@@ -65,14 +75,14 @@ func Copy(fs FS, srcFile, dstFile string) error {
 }
 
 func Exists(fs FS, filePath string) (ok bool, err error) {
-	if _, err := os.Stat(filePath); errors.Is(err, os.ErrNotExist) {
+	if _, err := fs.Stat(filePath); errors.Is(err, os.ErrNotExist) {
 		return false, nil
 	}
 
 	return err == nil, err
 }
 
-func CreateIfNotExists(fs FS, dir string) error {
+func createIfNotExists(fs FS, dir string) error {
 	exists, err := Exists(fs, dir)
 	if err != nil {
 		return err

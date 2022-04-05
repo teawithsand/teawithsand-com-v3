@@ -21,6 +21,8 @@ func ReadFile(fs FS, path string) (data []byte, err error) {
 		return
 	}
 
+	data = b.Bytes()
+
 	return
 }
 
