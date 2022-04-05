@@ -1,6 +1,3 @@
 entries:
 - type: asdf
-  tag: fdsa
   content: asdf
-  props:
-    prop: ok
