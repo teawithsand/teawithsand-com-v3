@@ -7,7 +7,7 @@ import styles from "./home.scss?module"
 import phoneImage from "@app/images/svgrepo/phone.svg"
 import emailImage from "@app/images/svgrepo/email.svg"
 import TeaAnimation from "@app/Component/TeaAnimation/TeaAnimation"
-import { blogPostListPath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endpoints"
+import { blogHomePath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endpoints"
 
 export default () => {
     const firstSectionRef = useRef<HTMLElement>()
@@ -53,7 +53,7 @@ export default () => {
                         Blog consists of programming contents in {">"}90%.
                         You have been warned.
                     </p>
-                    <Link className={styles.features__btn} to={blogPostListPath}>
+                    <Link className={styles.features__btn} to={blogHomePath}>
                         See posts
                     </Link>
                 </div>

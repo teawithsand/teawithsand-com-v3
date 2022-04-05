@@ -1,4 +1,4 @@
-export const blogPostListPath = "/blog/posts"
+export const blogHomePath = "/blog/home"
 export const portfolioPath = "/portfolio"
 export const contactPath = "/contact"
 export const aboutMePath = "/about-me"
