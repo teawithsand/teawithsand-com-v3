@@ -3,6 +3,8 @@ import React from "react"
 import { Container, Nav, Navbar } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
 
+import styles from "./navbar.scss?module"
+
 export default () => {
     return <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container fluid={true} >
@@ -15,6 +17,7 @@ export default () => {
             <Navbar.Toggle />
 
             <Navbar.Collapse>
+                <span className={styles.alignToEnd}></span>
                 <Nav>
                     <LinkContainer to={portfolioPath}>
                         <Nav.Link>
