@@ -14,6 +14,8 @@ $second-hero-background: #a1ccf0;
     grid-template-columns: 1fr;
 
     &__overlay {
+        animation: appear-later-animation 1s ease-out 1;
+
         padding-top: map-get(def.$spacers, 5) * 2;
         z-index: 1000;
 
@@ -38,8 +40,6 @@ $second-hero-background: #a1ccf0;
         padding: map-get(def.$spacers, 2);
         padding-left: map-get(def.$spacers, 5);
         padding-right: map-get(def.$spacers, 5);
-
-        animation: appear-later-animation 1s ease-out 1;
     }
 }
 
@@ -76,7 +76,7 @@ $second-hero-background: #a1ccf0;
         opacity: 0;
     }
 
-    75% {
+    50% {
         opacity: 0;
     }
 
