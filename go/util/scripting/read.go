@@ -2,7 +2,10 @@ package scripting
 
 import (
 	"errors"
+	"io/fs"
 	"os"
+
+	"github.com/teawithsand/twsblog/util/fsutil"
 )
 
 type DataParser struct {
@@ -11,6 +14,7 @@ type DataParser struct {
 }
 
 type DataLoader struct {
+	FS      fsutil.FS
 	Parsers []DataParser
 }
 
@@ -18,7 +22,7 @@ type DataLoader struct {
 func (dl *DataLoader) ReadData(path string, res interface{}) (err error) {
 	for _, p := range dl.Parsers {
 		var data []byte
-		data, err = os.ReadFile(path + "." + p.Extension)
+		data, err = fs.ReadFile(path + "." + p.Extension)
 		if errors.Is(err, os.ErrNotExist) {
 			err = nil
 			continue
@@ -28,29 +32,6 @@ func (dl *DataLoader) ReadData(path string, res interface{}) (err error) {
 		if err != nil {
 			return
 		}
-		return
-	}
-
-	err = os.ErrNotExist
-	return
-}
-
-type RawDataLoader struct {
-	Extensions []string
-}
-
-// Reads file at provided path and deserializes content into res.
-func (rdl *RawDataLoader) ReadData(path string) (res []byte, resExt string, err error) {
-	for _, ext := range rdl.Extensions {
-		var data []byte
-		data, err = os.ReadFile(path + "." + ext)
-		if errors.Is(err, os.ErrNotExist) {
-			err = nil
-			continue
-		}
-
-		res = data
-		resExt = ext
 		return
 	}
 
