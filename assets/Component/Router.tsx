@@ -4,7 +4,7 @@ import Footer from "@app/Component/UI/Common/Footer"
 import Home from "@app/Component/Page/Home/Home"
 import Navbar from "@app/Component/UI/Common/Navbar"
 import NotFound from "./Page/NotFound/NotFound"
-import { contactPath, homePath } from "./endponts"
+import { contactPath, homePath } from "./endpoints"
 import Contact from "./Page/Contact/Contact"
 
 export default () => {

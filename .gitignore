@@ -3,3 +3,4 @@
 /dist
 /posts/*
 !/posts/.gitkeep
+.vscode

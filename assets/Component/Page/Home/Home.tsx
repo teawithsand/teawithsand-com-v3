@@ -7,7 +7,7 @@ import styles from "./home.scss?module"
 import phoneImage from "@app/images/svgrepo/phone.svg"
 import emailImage from "@app/images/svgrepo/email.svg"
 import TeaAnimation from "@app/Component/TeaAnimation/TeaAnimation"
-import { blogPostListPath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endponts"
+import { blogPostListPath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endpoints"
 
 export default () => {
     const firstSectionRef = useRef<HTMLElement>()
@@ -23,7 +23,7 @@ export default () => {
                 </h1>
                 <p>
                     Some notes, utils, blog and portfolio.
-                    Everyting that simple programmer needs in single webpack project.
+                    Everything that simple programmer needs in single webpack project.
                 </p>
                 <button className={styles["header__scroll-button"]} onClick={() => {
                     firstSectionRef.current.scrollIntoView({

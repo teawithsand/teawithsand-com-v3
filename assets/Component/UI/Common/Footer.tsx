@@ -3,7 +3,7 @@ import * as React from "react"
 import style from "./footer.scss?module"
 
 import { icons } from "feather-icons"
-import { linkGithub, linkLinkedIn, linkYouTube } from "@app/Component/endponts"
+import { linkGithub, linkLinkedIn, linkYouTube } from "@app/Component/endpoints"
 
 export default () => {
 
