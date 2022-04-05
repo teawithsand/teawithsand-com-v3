@@ -27,6 +27,7 @@
 	"features": {
 		"node": "lts",
 		"golang": "latest",
-		"rust": "latest"
+		"rust": "latest",
+		"git-lfs": "latest"
 	}
 }
