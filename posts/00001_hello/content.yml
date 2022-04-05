@@ -1,3 +1,4 @@
 entries:
-- type: asdf
-  content: asdf
+- content: |
+    This is content of the first blog post.
+    It's going to be rendered as valid react components, however it's still processable and indexable.
