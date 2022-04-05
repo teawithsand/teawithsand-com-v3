@@ -9,6 +9,8 @@ type File interface {
 	io.Reader
 	io.Writer
 	io.Seeker
+	io.ReaderAt
+	io.WriterAt
 }
 
 type Entry interface {
@@ -19,9 +21,11 @@ type Entry interface {
 type FS interface {
 	Open(path string, openMode int) (f File, err error)
 
-	ScanDir(path string) (entries []Entry, err error)
-	Copy(source, dst string) (err error)
+	ReadDir(path string) (entries []Entry, err error)
+	Rename(from, to string) (err error)
 	Mkdir(path string) (err error)
+	MkdirAll(path string) (err error)
 	Remove(path string) (err error) // also works as RMDIr
 	RemoveAll(path string) (err error)
+	Stat(path string) (e Entry, err error)
 }

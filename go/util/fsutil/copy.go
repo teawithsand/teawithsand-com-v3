@@ -1,58 +1,35 @@
 package fsutil
 
 import (
+	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
-	"path/filepath"
-	"syscall"
+	"path"
 )
 
-func CopyDirectory(scrDir, dest string) error {
-	entries, err := ioutil.ReadDir(scrDir)
+func CopyDirectory(fs FS, scrDir, dest string) error {
+	entries, err := fs.ReadDir(scrDir)
 	if err != nil {
 		return err
 	}
 	for _, entry := range entries {
-		sourcePath := filepath.Join(scrDir, entry.Name())
-		destPath := filepath.Join(dest, entry.Name())
+		sourcePath := path.Join(scrDir, entry.Name())
+		destPath := path.Join(dest, entry.Name())
 
-		fileInfo, err := os.Stat(sourcePath)
+		fileInfo, err := fs.Stat(sourcePath)
 		if err != nil {
 			return err
 		}
-
-		stat, ok := fileInfo.Sys().(*syscall.Stat_t)
-		if !ok {
-			return fmt.Errorf("failed to get raw syscall.Stat_t data for '%s'", sourcePath)
-		}
-
-		switch fileInfo.Mode() & os.ModeType {
-		case os.ModeDir:
-			if err := CreateIfNotExists(destPath, 0755); err != nil {
+		if fileInfo.IsDir() {
+			if err := CreateIfNotExists(fs, destPath); err != nil {
 				return err
 			}
-			if err := CopyDirectory(sourcePath, destPath); err != nil {
+			if err := CopyDirectory(fs, sourcePath, destPath); err != nil {
 				return err
 			}
-		case os.ModeSymlink:
-			if err := CopySymLink(sourcePath, destPath); err != nil {
-				return err
-			}
-		default:
-			if err := Copy(sourcePath, destPath); err != nil {
-				return err
-			}
-		}
-
-		if err := os.Lchown(destPath, int(stat.Uid), int(stat.Gid)); err != nil {
-			return err
-		}
-
-		isSymlink := entry.Mode()&os.ModeSymlink != 0
-		if !isSymlink {
-			if err := os.Chmod(destPath, entry.Mode()); err != nil {
+		} else {
+			if err := Copy(fs, sourcePath, destPath); err != nil {
 				return err
 			}
 		}
@@ -60,52 +37,53 @@ func CopyDirectory(scrDir, dest string) error {
 	return nil
 }
 
-func Copy(srcFile, dstFile string) error {
-	out, err := os.Create(dstFile)
+func Copy(fs FS, srcFile, dstFile string) error {
+	out, err := fs.Open(dstFile, os.O_WRONLY|os.O_TRUNC|os.O_CREATE)
 	if err != nil {
 		return err
 	}
 
 	defer out.Close()
 
-	in, err := os.Open(srcFile)
-	defer in.Close()
+	in, err := fs.Open(srcFile, os.O_RDONLY)
 	if err != nil {
 		return err
 	}
+	defer in.Close()
 
 	_, err = io.Copy(out, in)
 	if err != nil {
 		return err
 	}
 
+	err = out.Close()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func Exists(filePath string) bool {
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		return false
+func Exists(fs FS, filePath string) (ok bool, err error) {
+	if _, err := os.Stat(filePath); errors.Is(err, os.ErrNotExist) {
+		return false, nil
 	}
 
-	return true
+	return err == nil, err
 }
 
-func CreateIfNotExists(dir string, perm os.FileMode) error {
-	if Exists(dir) {
+func CreateIfNotExists(fs FS, dir string) error {
+	exists, err := Exists(fs, dir)
+	if err != nil {
+		return err
+	}
+	if exists {
 		return nil
 	}
 
-	if err := os.MkdirAll(dir, perm); err != nil {
+	if err := fs.MkdirAll(dir); err != nil {
 		return fmt.Errorf("failed to create directory: '%s', error: '%s'", dir, err.Error())
 	}
 
 	return nil
-}
-
-func CopySymLink(source, dest string) error {
-	link, err := os.Readlink(source)
-	if err != nil {
-		return err
-	}
-	return os.Symlink(link, dest)
 }
