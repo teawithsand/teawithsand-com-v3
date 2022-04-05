@@ -14,13 +14,13 @@ $second-hero-background: #a1ccf0;
     grid-template-columns: 1fr;
 
     &__overlay {
-        padding-top: map-get(def.$spacers, 5);
+        padding-top: map-get(def.$spacers, 5) * 2;
         z-index: 1000;
 
         grid-row: 1;
         grid-column: 1;
 
-        >p {
+        > p {
             @extend .lead;
         }
     }
@@ -34,6 +34,10 @@ $second-hero-background: #a1ccf0;
     &__scroll-button {
         @extend .btn;
         @extend .btn-primary;
+
+        padding: map-get(def.$spacers, 2);
+        padding-left: map-get(def.$spacers, 5);
+        padding-right: map-get(def.$spacers, 5);
 
         animation: appear-later-animation 1s ease-out 1;
     }
@@ -99,7 +103,7 @@ $second-hero-background: #a1ccf0;
 
         column-gap: 10vw;
 
-        > * {
+        >* {
             padding: map-get(def.$spacers, 3);
             width: auto;
             align-self: center;
@@ -110,7 +114,7 @@ $second-hero-background: #a1ccf0;
                 height: 100px;
             }
 
-            > * {
+            >* {
                 margin-top: map-get(def.$spacers, 2);
             }
         }

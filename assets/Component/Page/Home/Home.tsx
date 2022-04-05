@@ -1,19 +1,19 @@
 import ImageUtil from "@app/util/react/image/ImageUtil"
 import React, { useRef } from "react"
 import { Link } from "react-router-dom"
-import { blogPostListPath, portfolioPath } from "../endponts"
-import TeaAnimation from "../TeaAnimation/TeaAnimation"
 
 import styles from "./home.scss?module"
 
 import phoneImage from "@app/images/svgrepo/phone.svg"
 import emailImage from "@app/images/svgrepo/email.svg"
+import TeaAnimation from "@app/Component/TeaAnimation/TeaAnimation"
+import { blogPostListPath, portfolioPath } from "@app/Component/endponts"
 
 export default () => {
     const firstSectionRef = useRef<HTMLElement>()
 
-    return <div className={styles["page-container"]}>
-        <section className={styles.header}>
+    return <main className={styles["page-container"]}>
+        <article className={styles.header}>
             <div className={styles.header__background}>
                 <TeaAnimation />
             </div>
@@ -34,16 +34,16 @@ export default () => {
                     See more
                 </button>
             </div>
-        </section>
-        <section className={styles["about-website"]} ref={firstSectionRef}>
+        </article>
+        <article className={styles["about-website"]} ref={firstSectionRef}>
             <h2>
                 About this website
             </h2>
             <p>
                 Lorem ipsum
             </p>
-        </section>
-        <section className={styles.features}>
+        </article>
+        <article className={styles.features}>
             <div className={styles["features__card-container"]}>
                 <div className={styles.features__feature}>
                     <h3>
@@ -69,15 +69,17 @@ export default () => {
                     </Link>
                 </div>
             </div>
-        </section>
-        <section className={styles.contact}>
+        </article>
+        <article className={styles.contact}>
             <div>
-                <h3>
-                    Contact
-                </h3>
-                <p>
-                    Via email or phone(but I prefer email).
-                </p>
+                <header>
+                    <h3>
+                        Contact
+                    </h3>
+                    <p>
+                        Via email or phone(but I prefer email).
+                    </p>
+                </header>
                 <div className={styles.contact__container}>
                     <div className={styles.contact__phone}>
                         <div>
@@ -110,6 +112,6 @@ export default () => {
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </article>
+    </main>
 }

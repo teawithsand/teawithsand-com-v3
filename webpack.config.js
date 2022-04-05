@@ -181,7 +181,7 @@ Encore
     */
     .addPlugin(new CompressionPlugin({
         filename: "[path][base].gz",
-        test: /\.(js|css|svg|json).*$/i,
+        test: /\.(js|css|svg|json|html).*$/i,
         threshold: 0,
         algorithm: "gzip",
         compressionOptions: {
@@ -190,7 +190,7 @@ Encore
     }))
     .addPlugin(new CompressionPlugin({
         filename: "[path][base].br",
-        test: /\.(js|css|svg|json).*$/i,
+        test: /\.(js|css|svg|json|html).*$/i,
         threshold: 0,
         algorithm: "brotliCompress",
         compressionOptions: {
@@ -230,6 +230,10 @@ Encore
     .addPlugin(new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
     }))
+    .configureCssLoader((config) => {
+        config.modules = config.modules ?? {}
+        config.modules.exportLocalsConvention = "camelCase"
+    })
     // TODO(teawithsand): add uglifyjs plugin before compression plugin
     //  and replace webpack default minimizer
     ;

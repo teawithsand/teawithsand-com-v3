@@ -12,9 +12,8 @@ func (f fileSystemFunc) Open(name string) (http.File, error) {
 	return f(name)
 }
 
-var validCompressedExtensions = []string{"js", "css"}
-var validCompressedExtensionsWithDots = []string{".js", ".css"}
-var validCompressedContentType = []string{"text/javascript", "text/css"}
+var validCompressedExtensionsWithDots = []string{".js", ".css", ".html"}
+var validCompressedContentType = []string{"text/javascript", "text/css", "text/html"}
 
 type ComrpessionAlgoData struct {
 	Extension string

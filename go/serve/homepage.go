@@ -1,6 +1,7 @@
 package serve
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -43,6 +44,35 @@ func buildData(ep webpack.Entrypoint, nce string) (tplData webpack.Data) {
 	return
 }
 
+func doPush(w http.ResponseWriter, data webpack.Data) (err error) {
+	// for now disable http2 server push
+
+	return
+	defer func() {
+		if errors.Is(err, http.ErrNotSupported) {
+			err = nil
+		}
+	}()
+	if pusher, ok := w.(http.Pusher); ok {
+		for _, e := range data.Scripts {
+			if err = pusher.Push(e.Src, nil); err != nil {
+				return
+			}
+		}
+
+		for _, e := range data.Links {
+			if e.Rel != "stylesheet" {
+				continue
+			}
+			if err = pusher.Push(e.Href, nil); err != nil {
+				return
+			}
+		}
+	}
+
+	return
+}
+
 func MakeDebugHomeHandler(epsDir string) (h http.Handler) {
 	fmw := httpext.CacheMW{
 		ForceDisable: true,
@@ -71,7 +101,9 @@ func MakeDebugHomeHandler(epsDir string) (h http.Handler) {
 		}
 		ep := eps.App
 
-		tplData := buildData(ep, nce)
+		webpackData := buildData(ep, nce)
+
+		doPush(w, webpackData)
 
 		w.Header().Set(
 			"Content-Security-Policy",
@@ -83,7 +115,7 @@ func MakeDebugHomeHandler(epsDir string) (h http.Handler) {
 		)
 
 		w.WriteHeader(200)
-		webpack.RenderTemplate(w, tplData)
+		webpack.RenderTemplate(w, webpackData)
 	}))
 }
 
@@ -114,7 +146,9 @@ func MakeProdHomePathHandler() (h http.Handler) {
 			panic(err)
 		}
 
-		tplData := buildData(ep, nce)
+		webpackData := buildData(ep, nce)
+
+		doPush(w, webpackData)
 
 		w.Header().Set(
 			"Content-Security-Policy",
@@ -126,6 +160,6 @@ func MakeProdHomePathHandler() (h http.Handler) {
 		)
 
 		w.WriteHeader(200)
-		webpack.RenderTemplate(w, tplData)
+		webpack.RenderTemplate(w, webpackData)
 	}))
 }

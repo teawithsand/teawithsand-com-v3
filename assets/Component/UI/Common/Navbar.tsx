@@ -1,5 +1,49 @@
+import { aboutMePath, contactPath, homePath, portfolioPath } from "@app/Component/endponts"
 import React from "react"
+import { Container, Nav, Navbar } from "react-bootstrap"
+import { LinkContainer } from "react-router-bootstrap"
 
 export default () => {
-    return <></>
+    return <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Container fluid={true} >
+            <LinkContainer to={homePath}>
+                <Navbar.Brand href="#">
+                    teawithsand.com
+                </Navbar.Brand>
+            </LinkContainer>
+
+            <Navbar.Toggle />
+
+            <Navbar.Collapse>
+                <Nav>
+                    <LinkContainer to={portfolioPath}>
+                        <Nav.Link>
+                            Portfolio
+                        </Nav.Link>
+                    </LinkContainer>
+                </Nav>
+                <Nav>
+                    <LinkContainer to={portfolioPath}>
+                        <Nav.Link>
+                            Blog
+                        </Nav.Link>
+                    </LinkContainer>
+                </Nav>
+                <Nav>
+                    <LinkContainer to={contactPath}>
+                        <Nav.Link>
+                            Contact
+                        </Nav.Link>
+                    </LinkContainer>
+                </Nav>
+                <Nav>
+                    <LinkContainer to={aboutMePath}>
+                        <Nav.Link>
+                            About me
+                        </Nav.Link>
+                    </LinkContainer>
+                </Nav>
+            </Navbar.Collapse>
+        </Container>
+    </Navbar>
 }
