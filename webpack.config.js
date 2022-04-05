@@ -166,17 +166,15 @@ Encore
         cleanupOutdatedCaches: true,
         cacheId: "twsblog",
     }))
-    /*
     .addPlugin(new CopyWebpackPlugin({
         patterns: [
             {
-                from: "assets/images/favicon/favicon.png",
-                to: "[name]_1[ext]",
+                from: "assets/generated/combinedMetadata.json",
+                to: "metadata.json",
                 toType: "template",
             }
         ]
     }))
-    */
     .addPlugin(new CompressionPlugin({
         filename: "[path][base].gz",
         test: /\.(js|css|svg|json).*$/i,

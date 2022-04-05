@@ -12,6 +12,7 @@ import (
 	"github.com/teawithsand/twsblog/util"
 	"github.com/teawithsand/twsblog/util/cfg"
 	"github.com/teawithsand/twsblog/util/scripting"
+	"gopkg.in/yaml.v2"
 )
 
 // Compiles all assets, so that webpack is able to build blog.
@@ -35,12 +36,14 @@ func Run() (err error) {
 					Parser:    toml.Unmarshal,
 					Extension: "toml",
 				},
-			},
-		},
-		ContentLoader: &scripting.RawDataLoader{
-			Extensions: []string{
-				"md",
-				"html",
+				{
+					Parser:    yaml.UnmarshalStrict,
+					Extension: "yaml",
+				},
+				{
+					Parser:    yaml.UnmarshalStrict,
+					Extension: "yml",
+				},
 			},
 		},
 		Dir: config.SourcePath,
@@ -144,6 +147,19 @@ func runRenderers(ctx context.Context, config Config, posts []process.Post) (err
 	}
 
 	err = index.Render(ctx, metas)
+	if err != nil {
+		return
+	}
+
+	post := process.TSPostRenderer{
+		TargetPath:    emitPath,
+		PostDirPicker: pdp,
+		TagImporter: func(tag string) (string, error) {
+			return "@pc/" + tag, nil
+		},
+	}
+
+	err = post.Render(ctx, posts)
 	if err != nil {
 		return
 	}

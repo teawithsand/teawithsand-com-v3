@@ -2,7 +2,6 @@ package process
 
 import (
 	"context"
-	"errors"
 	"log"
 	"os"
 	"path"
@@ -11,14 +10,9 @@ import (
 	"github.com/teawithsand/twsblog/util/scripting"
 )
 
-type Loader[T any] interface {
-	Load(ctx context.Context, receiver util.Receiver[T]) (err error)
-}
-
 // DefaultLoader, which loads RawPost.
 type DefaultLoader struct {
 	MetadataLoader *scripting.DataLoader
-	ContentLoader  *scripting.RawDataLoader
 	Dir            string
 }
 
@@ -37,18 +31,14 @@ func (bc *DefaultLoader) LoadPostsDir(ctx context.Context, receiver util.Receive
 		postDir := path.Join(bc.Dir, e.Name())
 
 		var meta RawPostMetadata
+		var content PostContent
 
 		err = bc.MetadataLoader.ReadData(path.Join(postDir, "metadata"), &meta)
 		if err != nil {
 			return
 		}
 
-		var content []byte
-		var ext string
-		content, ext, err = bc.ContentLoader.ReadData(path.Join(postDir, "content"))
-		if errors.Is(err, os.ErrNotExist) {
-			err = nil
-		}
+		err = bc.MetadataLoader.ReadData(path.Join(postDir, "content"), &content)
 		if err != nil {
 			return
 		}
@@ -56,10 +46,7 @@ func (bc *DefaultLoader) LoadPostsDir(ctx context.Context, receiver util.Receive
 		var post RawPost
 		post.Metadata = meta
 		post.Dir = postDir
-		post.Content = RawPostContent{
-			Content: content,
-			Kind:    ext,
-		}
+		post.Content = content
 
 		err = receiver(ctx, post)
 		if err != nil {

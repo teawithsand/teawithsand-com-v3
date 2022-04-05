@@ -10,7 +10,7 @@ import (
 	"text/template"
 )
 
-const rawTsRendererTemplate = `
+const rawRenderTsIndexTemplate = `
 {{ range $i, $el := .Metadata }}
 import * as metadata_{{$i}} from "./{{ .Dir }}/compiledMetadata.json"{{ end }}
 export default [
@@ -22,8 +22,8 @@ export default [
 ]
 `
 
-func compileTsRendererTemplate() *template.Template {
-	tpl, err := template.New("default").Parse(strings.TrimSpace(rawTsRendererTemplate))
+func compileRawRenderTsIndexTemplate() *template.Template {
+	tpl, err := template.New("default").Parse(strings.TrimSpace(rawRenderTsIndexTemplate))
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +31,7 @@ func compileTsRendererTemplate() *template.Template {
 	return tpl
 }
 
-var compiledTsRendererTemplate = compileTsRendererTemplate()
+var compiledRawRenderTsIndexTemplate = compileRawRenderTsIndexTemplate()
 
 type extPostMetadata struct {
 	PostMetadata
@@ -65,7 +65,7 @@ func (tir *TSIndexRenderer) Render(ctx context.Context, metadata []PostMetadata)
 		})
 	}
 
-	err = compiledTsRendererTemplate.Execute(b, tsTemplateObj{
+	err = compiledRawRenderTsIndexTemplate.Execute(b, tsTemplateObj{
 		Metadata: extMetas,
 	})
 	if err != nil {
