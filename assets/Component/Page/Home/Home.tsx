@@ -7,7 +7,7 @@ import styles from "./home.scss?module"
 import phoneImage from "@app/images/svgrepo/phone.svg"
 import emailImage from "@app/images/svgrepo/email.svg"
 import TeaAnimation from "@app/Component/TeaAnimation/TeaAnimation"
-import { blogPostListPath, portfolioPath } from "@app/Component/endponts"
+import { blogPostListPath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endponts"
 
 export default () => {
     const firstSectionRef = useRef<HTMLElement>()
@@ -83,30 +83,30 @@ export default () => {
                 <div className={styles.contact__container}>
                     <div className={styles.contact__phone}>
                         <div>
-                            <a href={`tel:retractedretracted`}>
+                            <a href={linkPhone}>
                                 <ImageUtil
                                     src={phoneImage}
                                 />
                             </a>
                         </div>
                         <div>
-                            <a href={`tel:retractedretracted`}>
-                                retracted retracted
+                            <a href={linkPhone}>
+                                {phone}
                             </a>
                         </div>
 
                     </div>
                     <div className={styles.contact__email}>
                         <div>
-                            <a href={`mailto:contact@przemyslawglowacki.com`}>
+                            <a href={linkEmail}>
                                 <ImageUtil
                                     src={emailImage}
                                 />
                             </a>
                         </div>
                         <div>
-                            <a href={`mailto:contact@przemyslawglowacki.com`}>
-                                contact@przemyslawglowacki.com
+                            <a href={linkEmail}>
+                                {email}
                             </a>
                         </div>
                     </div>
