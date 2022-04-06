@@ -16,7 +16,7 @@ type RawPostMetadata struct {
 }
 
 type PostContentEntry struct {
-	Type    string            `json:"type" toml:"type" yaml:"type"`
+	Type    string            `json:"type" toml:"type" yaml:"type"` // purely informative for renderer, ignored in output
 	Tag     string            `json:"tag" toml:"tag" yaml:"tag"`
 	Content string            `json:"content" toml:"content" yaml:"content"`
 	Props   map[string]string `json:"props,omitempty" toml:"props,omitempty" yaml:"props,omitempty"`

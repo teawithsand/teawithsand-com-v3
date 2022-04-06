@@ -18,7 +18,7 @@ import (
 
 func Run() (err error) {
 	/*
-			{
+		{
 			c := compile.PostContent{
 				Imports: []typescript.Import{
 					typescript.Import{
@@ -36,6 +36,14 @@ func Run() (err error) {
 							"prop": "ok",
 						},
 					},
+					{
+						Type:    "other",
+						Tag:     "other",
+						Content: "other",
+						Props: map[string]string{
+							"other": "other",
+						},
+					},
 				},
 			}
 
@@ -44,7 +52,6 @@ func Run() (err error) {
 				panic(err)
 			}
 			fmt.Println(string(res))
-
 		}
 	*/
 
