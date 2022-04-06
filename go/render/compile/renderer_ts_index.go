@@ -18,7 +18,7 @@ export default [
 	{{ range $i, $el := .Metadata }}
 	{
 		{{ if .ComponentFile }}
-		"component": import("./{{ .Dir }}/{{ .ComponentFile }}"),{{ end }}
+		"component": () => import("./{{ .Dir }}/{{ .ComponentFile }}"),{{ end }}
 		{{ if .PostMetadataFile }}
 		"metadata": metadata_{{$i}},{{ end }}
 	}{{ if not $i }},{{ end }}{{ end }}
