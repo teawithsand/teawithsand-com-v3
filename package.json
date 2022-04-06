@@ -64,7 +64,6 @@
         "final-form-arrays": "^3.0.2",
         "fuse.js": "^6.5.3",
         "highlight.js": "^11.5.0",
-        "highlightjs-line-numbers.js": "^2.8.0",
         "jwt-decode": "^3.1.2",
         "marked": "^4.0.12",
         "prop-types": "^15.8.1",
