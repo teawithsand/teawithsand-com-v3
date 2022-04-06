@@ -3,6 +3,7 @@
 @use "@app/styles/hero.scss" as hero;
 @use "@app/styles/card.scss" as card;
 @use "@app/styles/page.scss" as page;
+@use "@app/styles/form.scss" as form;
 
 .page-container {
     @extend .m-page-container;
@@ -11,26 +12,61 @@
 
 .header {
     margin-bottom: map-get(def.$spacers, 2);
+    text-align: center;
+}
+
+.sub-header {
+    margin-bottom: map-get(def.$spacers, 2);
+}
+
+.search-form {
+    @include form.any-form();
+}
+
+@mixin muted() {
+    font-size: .8rem;
+    color: map-get(def.$text-color, "muted");
 }
 
 .post-summary {
+    @extend .card;
+
     &__title {
+        @extend .h3;
+          font-size: 2rem;
     }
 
-    &__createdAt {
+    &__created-at {
+        @include muted();
+    }
+
+    &__post-summary-last-edited-at {
+        @include muted();
+    }
+
+    &__tags {
+        @include muted();
+    }
+
+    &__content {
+        @include muted();
     }
 }
 
 .post-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: map-get(def.$spacers, 2);
+    
     > * {
         padding: map-get(def.$spacers, 2);
     }
 
     > *:nth-child(even) {
-        background-color: rgba(0, 0, 0, 0.05);
+        // background-color: rgba(0, 0, 0, 0.05);
     }
 
     > *:nth-child(odd) {
-        background-color: rgba(0, 0, 0, 0.1);
+        // background-color: rgba(0, 0, 0, 0.1);
     }
 }

@@ -1,3 +1,8 @@
 @use "@app/styles/bs.scss" as bs;
 
 $spacers: bs.$spacers;
+
+$text-color: (
+    "primary": rgb(0, 0, 0),
+    "muted": rgb(0, 0, 0, .5),
+);

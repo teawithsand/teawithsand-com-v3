@@ -3,6 +3,8 @@ package compile
 import (
 	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 	"strings"
 	"text/template"
@@ -68,10 +70,7 @@ func (tir *TSPostRenderer) Render(ctx context.Context, post Post, output Rendere
 
 	components := []tsPostRenderComponent{}
 	imports := tir.BaseImports
-
-	for k, v := range post.Content.Imports {
-		imports[k] = v
-	}
+	imports = append(imports, post.Content.Imports...)
 
 	importedSet := map[string]struct{}{}
 
@@ -85,13 +84,26 @@ func (tir *TSPostRenderer) Render(ctx context.Context, post Post, output Rendere
 		}
 	}
 
-	for _, content := range post.Content.Entries {
-		tag := content.Tag
+	for _, contentEntry := range post.Content.Entries {
+		tag := contentEntry.Tag
+
+		if contentEntry.Type == "text" || contentEntry.Type == "" {
+			var modified []byte
+			modified, err = json.Marshal(contentEntry.Content)
+			if err != nil {
+				return
+			}
+
+			contentEntry.Content = fmt.Sprintf("{%s}", string(modified))
+		} else {
+			err = fmt.Errorf("unknown content entry type: '%s'", contentEntry.Type)
+			return
+		}
 
 		components = append(components, tsPostRenderComponent{
 			Tag:     tag,
-			Content: content.Content,
-			Props:   content.Props,
+			Content: contentEntry.Content,
+			Props:   contentEntry.Props,
 		})
 	}
 

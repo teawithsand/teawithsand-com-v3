@@ -1,6 +1,7 @@
 package render
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 
@@ -121,6 +122,13 @@ func Run() (err error) {
 
 	fullPostData := util.MapIterator(posts, func(ctx context.Context, data compile.Post) (res compile.FullPostData, err error) {
 		mt := data.PostMetadata
+
+		b := bytes.NewBuffer(nil)
+		err = compile.ExtractPostContentText(data.Content.Entries, b)
+		if err != nil {
+			return
+		}
+
 		res = compile.FullPostData{
 			Post: data,
 			ExportedPostMetadata: compile.ExportedPostMetadata{
@@ -131,6 +139,7 @@ func Run() (err error) {
 				CreatedAt:    mt.CreatedAt,
 				LastEditedAt: mt.LastEditedAt,
 				UnstableID:   mt.UnstableID,
+				Content:      b.String(),
 			},
 		}
 		return
@@ -209,20 +218,16 @@ func Run() (err error) {
 		return
 	}
 
-	err = c.Invoke(func(it util.Iterator[compile.ExportedPostMetadata]) (err error) {
-		renderer := compile.FuseIndexRenderer[compile.ExportedPostMetadata]{
-			FuseIndexOutputPath: "fuseIndex.json",
-			Scripts: &scripting.Collection{
-				Dir: config.ScriptsPath,
-			},
-			FuseScriptName: "fuse_index.js",
+	err = c.Invoke(func(metadata util.Iterator[compile.FullPostData]) (err error) {
+		renderer := compile.JSONRenderer[compile.SummaryExportedPostMetadata]{
+			FileName: "summaryMetadata.json",
 		}
-		metadata, err := util.CollectIterator(ctx, it)
-		if err != nil {
+		return metadata.Iterate(ctx, util.Receiver[compile.FullPostData](func(ctx context.Context, data compile.FullPostData) (err error) {
+			err = renderer.Render(ctx, data.ExportedPostMetadata.Summary(), &compile.DefaultRendererOutput{
+				TargetFS: data.Post.DstFs,
+			})
 			return
-		}
-		err = renderer.Render(ctx, metadata, globalOutput)
-		return
+		}))
 	})
 	if err != nil {
 		return
@@ -243,24 +248,6 @@ func Run() (err error) {
 			return
 		}
 
-		return
-	})
-	if err != nil {
-		return
-	}
-
-	err = c.Invoke(func(it util.Iterator[compile.ExportedPostMetadata]) (err error) {
-		renderer := compile.JSONRenderer[[]compile.ExportedPostMetadata]{
-			FileName: "completeIndex.json",
-		}
-		entries, err := util.CollectIterator(ctx, it)
-		if err != nil {
-			return
-		}
-		err = renderer.Render(ctx, entries, globalOutput)
-		if err != nil {
-			return
-		}
 		return
 	})
 	if err != nil {
@@ -290,10 +277,52 @@ func Run() (err error) {
 		return
 	}
 
+	err = c.Invoke(func(it util.Iterator[compile.ExportedPostMetadata]) (err error) {
+		renderer := compile.FuseIndexRenderer[compile.ExportedPostMetadata]{
+			FuseIndexOutputPath: "fuseIndex.json",
+			Scripts: &scripting.Collection{
+				Dir: config.ScriptsPath,
+			},
+			FuseScriptName: "fuse_index.js",
+			IndexFields: []string{
+				"title",
+				"tags",
+				"content",
+			},
+		}
+		metadata, err := util.CollectIterator(ctx, it)
+		if err != nil {
+			return
+		}
+		err = renderer.Render(ctx, metadata, globalOutput)
+		return
+	})
+	if err != nil {
+		return
+	}
+
+	err = c.Invoke(func(it util.Iterator[compile.ExportedPostMetadata]) (err error) {
+		renderer := compile.JSONRenderer[[]compile.ExportedPostMetadata]{
+			FileName: "completeIndex.json",
+		}
+		entries, err := util.CollectIterator(ctx, it)
+		if err != nil {
+			return
+		}
+		err = renderer.Render(ctx, entries, globalOutput)
+		if err != nil {
+			return
+		}
+		return
+	})
+	if err != nil {
+		return
+	}
+
 	err = c.Invoke(func(it util.Iterator[compile.Post]) (err error) {
 		renderer := compile.TSIndexRenderer{
 			TargetPath:       "posts.tsx",
-			PostMetadataFile: "metadata.json",
+			PostMetadataFile: "summaryMetadata.json",
 			ComponentFile:    "Post",
 		}
 

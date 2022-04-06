@@ -54,12 +54,12 @@ type PostMetadata struct {
 	Slug string `json:"slug"`
 
 	Title string   `json:"title"`
-	Tags  []string `json:"tags,omitempty"`
+	Tags  []string `json:"tags"`
 
 	CreatedAt    time.Time  `json:"createdAt"`
-	LastEditedAt *time.Time `json:"lastEditedAt,omitempty"`
+	LastEditedAt *time.Time `json:"lastEditedAt"`
 
-	DirName string `json:"dirName,omitempty"`
+	DirName string `json:"dirName"`
 }
 
 type ExportedPostMetadata struct {
@@ -70,10 +70,40 @@ type ExportedPostMetadata struct {
 	Slug string `json:"slug"`
 
 	Title string   `json:"title"`
-	Tags  []string `json:"tags,omitempty"`
+	Tags  []string `json:"tags"`
 
 	CreatedAt    time.Time  `json:"createdAt"`
-	LastEditedAt *time.Time `json:"lastEditedAt,omitempty"`
+	LastEditedAt *time.Time `json:"lastEditedAt"`
+
+	Content string `json:"content"`
+}
+
+func (epm ExportedPostMetadata) Summary() SummaryExportedPostMetadata {
+	partialContent := epm.Content
+	const limit = 20
+	if len(partialContent) > limit {
+		partialContent = partialContent[:limit]
+		partialContent += "..."
+	}
+	return SummaryExportedPostMetadata{
+		UnstableID:     epm.UnstableID,
+		Path:           epm.Path,
+		Title:          epm.Title,
+		Tags:           epm.Tags,
+		CreatedAt:      epm.CreatedAt,
+		LastEditedAt:   epm.LastEditedAt,
+		PartialContent: partialContent,
+	}
+}
+
+type SummaryExportedPostMetadata struct {
+	UnstableID     string     `json:"unstableId"`
+	Path           string     `json:"path"`
+	Title          string     `json:"title"`
+	Tags           []string   `json:"tags"`
+	CreatedAt      time.Time  `json:"createdAt"`
+	LastEditedAt   *time.Time `json:"lastEditedAt"`
+	PartialContent string     `json:"partialContent"`
 }
 
 type FullPostData struct {

@@ -16,6 +16,7 @@ type FuseIndexRenderer[T any] struct {
 	FuseIndexOutputPath string
 	Scripts             *scripting.Collection
 	FuseScriptName      string
+	IndexFields         []string
 }
 
 func (dr *FuseIndexRenderer[T]) Render(ctx context.Context, input []T, output RendererOutput) (err error) {
@@ -31,9 +32,7 @@ func (dr *FuseIndexRenderer[T]) Render(ctx context.Context, input []T, output Re
 	defer f.Close()
 
 	var cmd *scripting.Command
-	cmd, err = dr.Scripts.GetCommand("fuse_index.js", []string{
-		"title",
-	})
+	cmd, err = dr.Scripts.GetCommand("fuse_index.js", dr.IndexFields)
 	if err != nil {
 		return
 	}

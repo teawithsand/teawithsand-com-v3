@@ -18,6 +18,7 @@
     },
     "resolveJsonModule": true,
     "experimentalDecorators": true,
+    "downlevelIteration": true,
   },
   "include": [
     "assets/**/*"
