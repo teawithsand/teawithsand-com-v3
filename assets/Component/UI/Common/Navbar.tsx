@@ -19,6 +19,13 @@ export default () => {
             <Navbar.Collapse>
                 <span className={styles.alignToEnd}></span>
                 <Nav>
+                    <LinkContainer to={homePath}>
+                        <Nav.Link>
+                            Home
+                        </Nav.Link>
+                    </LinkContainer>
+                </Nav>
+                <Nav>
                     <LinkContainer to={portfolioPath}>
                         <Nav.Link>
                             Portfolio

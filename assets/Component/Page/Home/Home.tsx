@@ -7,7 +7,7 @@ import styles from "./home.scss?module"
 import phoneImage from "@app/images/svgrepo/phone.svg"
 import emailImage from "@app/images/svgrepo/email.svg"
 import TeaAnimation from "@app/Component/TeaAnimation/TeaAnimation"
-import { blogHomePath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endpoints"
+import { blogHomePath, contactPath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endpoints"
 
 export default () => {
     const firstSectionRef = useRef<HTMLElement>()
@@ -74,7 +74,7 @@ export default () => {
             <div>
                 <header>
                     <h3>
-                        Contact
+                        <Link to={contactPath}>Contact</Link>
                     </h3>
                     <p>
                         Via email or phone(but I prefer email).
