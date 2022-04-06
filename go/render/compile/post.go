@@ -80,7 +80,7 @@ type ExportedPostMetadata struct {
 
 func (epm ExportedPostMetadata) Summary() SummaryExportedPostMetadata {
 	partialContent := epm.Content
-	const limit = 20
+	const limit = 150
 	if len(partialContent) > limit {
 		partialContent = partialContent[:limit]
 		partialContent += "..."
