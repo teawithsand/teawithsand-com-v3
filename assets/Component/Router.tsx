@@ -16,7 +16,6 @@ import LoadingSpinner from "./UI/Util/Loading/LoadingSpinner"
 export default () => {
     return <HashRouter>
         <Navbar />
-        <LoadingSpinner />
         <Routes>
             <Route path={homePath} element={<Home />} />
             <Route path={contactPath} element={<Contact />} />
