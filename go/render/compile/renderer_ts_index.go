@@ -19,6 +19,8 @@ export default [
 	{
 		{{ if .ComponentFile }}
 		"component": () => import("./{{ .Dir }}/{{ .ComponentFile }}"),{{ end }}
+		{{ if .Path }}
+		"path": "{{ .Path }}",{{ end }}
 		{{ if .PostMetadataFile }}
 		"metadata": metadata_{{$i}},{{ end }}
 	}{{ if not $i }},{{ end }}{{ end }}
@@ -41,6 +43,7 @@ type extPostMetadata struct {
 	Dir string
 
 	PostMetadataFile string
+	Path             string
 	ComponentFile    string
 }
 
@@ -52,24 +55,25 @@ type TSIndexRenderer struct {
 	TargetPath    string
 	PostDirPicker PostDirPicker
 
-	PostMetadataFile string
-	ComponentFile    string
+	// PostMetadataFile string
+	ComponentFile string
 }
 
-func (tir *TSIndexRenderer) Render(ctx context.Context, posts util.Iterator[Post], output RendererOutput) (err error) {
+func (tir *TSIndexRenderer) Render(ctx context.Context, posts util.Iterator[FullPostData], output RendererOutput) (err error) {
 	log.Printf("Rendering postIndex.ts file to %s", tir.TargetPath)
 
 	var extMetas []extPostMetadata
 
 	fs := output.FS()
 
-	err = posts.Iterate(ctx, util.Receiver[Post](func(ctx context.Context, data Post) (err error) {
+	err = posts.Iterate(ctx, util.Receiver[FullPostData](func(ctx context.Context, data FullPostData) (err error) {
 		extMetas = append(extMetas, extPostMetadata{
-			PostMetadata: data.PostMetadata,
-			Dir:          data.Dir,
+			PostMetadata: data.Post.PostMetadata,
+			Dir:          data.Post.Dir,
 
-			PostMetadataFile: tir.PostMetadataFile,
-			ComponentFile:    tir.ComponentFile,
+			Path: data.ExportedPostMetadata.Path,
+			// PostMetadataFile: tir.PostMetadataFile,
+			ComponentFile: tir.ComponentFile,
 		})
 		return
 	}))

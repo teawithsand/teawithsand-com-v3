@@ -3,21 +3,18 @@ import Fuse from 'fuse.js'
 
 import styles from "./postList.scss?module"
 
-import posts from "@app/generated/posts"
 import fuseIndex from "@app/generated/fuseIndex.json"
-import completeIndex from "@app/generated/completeIndex.json"
+import summaryIndex from "@app/generated/summaryIndex.json"
 import { useSearchParams } from "react-router-dom"
 import { Link } from "react-router-dom"
 
 const ParsedFuseIndex = Fuse.parseIndex(fuseIndex)
-const postsIndexes = [...Array(completeIndex.length).keys()]
+const postsIndexes = [...Array(summaryIndex.length).keys()]
 const fuse = new Fuse(postsIndexes, {
     isCaseSensitive: false,
     shouldSort: true,
     includeScore: true,
 }, ParsedFuseIndex);
-
-(window as any).fuse = fuse
 
 interface PostMetadata {
     title: string,
@@ -86,7 +83,9 @@ export default () => {
             indexes = fuseResults as number[]
         }
 
-        let filteredPosts = indexes.map(i => posts[i])
+        let filteredPosts = indexes.map(i => ({
+            metadata: summaryIndex[i],
+        }))
 
         if (sort === sortAscCreatedAt) {
             filteredPosts = filteredPosts.sort((a, b) => (new Date(a.metadata.createdAt)).getTime() - (new Date(b.metadata.createdAt)).getTime())

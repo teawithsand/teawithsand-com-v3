@@ -12,6 +12,16 @@ import { aboutMePath, blogHomePath, blogPostListPath, contactPath, homePath } fr
 import BlogHome from "@app/Component/Page/Blog/Home/BlogHome"
 import PostList from "./Page/Blog/PostList/PostList"
 
+import postComponents from "@app/generated/postComponents"
+import { makePostComponent } from "./Page/Blog/Post/Post"
+
+const displayPosts = postComponents.map(data => ({
+    Component: makePostComponent({
+        source: data.component,
+    }),
+    path: data.path,
+}))
+
 export default () => {
     return <HashRouter>
         <Navbar />
@@ -21,6 +31,9 @@ export default () => {
             <Route path={aboutMePath} element={<AboutMe />} />
             <Route path={blogHomePath} element={<BlogHome />} />
             <Route path={blogPostListPath} element={<PostList />} />
+            {
+                displayPosts.map(({ Component, path }, i) => <Route key={i} path={path} element={<Component />} />)
+            }
             <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

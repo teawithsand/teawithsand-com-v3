@@ -181,6 +181,17 @@ func Run() (err error) {
 		return
 	}
 
+	err = c.Provide(func(it util.Iterator[compile.ExportedPostMetadata]) (res util.Iterator[compile.SummaryExportedPostMetadata], err error) {
+		res = util.MapIterator(it, func(ctx context.Context, data compile.ExportedPostMetadata) (res compile.SummaryExportedPostMetadata, err error) {
+			res = data.Summary()
+			return
+		})
+		return
+	})
+	if err != nil {
+		return
+	}
+
 	err = c.Provide(func() (res util.Iterator[compile.FullPostData], err error) {
 		res = fullPostData
 		return
@@ -326,11 +337,29 @@ func Run() (err error) {
 		return
 	}
 
-	err = c.Invoke(func(it util.Iterator[compile.Post]) (err error) {
+	err = c.Invoke(func(it util.Iterator[compile.SummaryExportedPostMetadata]) (err error) {
+		renderer := compile.JSONRenderer[[]compile.SummaryExportedPostMetadata]{
+			FileName: "summaryIndex.json",
+		}
+		entries, err := util.CollectIterator(ctx, it)
+		if err != nil {
+			return
+		}
+		err = renderer.Render(ctx, entries, globalOutput)
+		if err != nil {
+			return
+		}
+		return
+	})
+	if err != nil {
+		return
+	}
+
+	err = c.Invoke(func(it util.Iterator[compile.FullPostData]) (err error) {
 		renderer := compile.TSIndexRenderer{
-			TargetPath:       "posts.tsx",
-			PostMetadataFile: "summaryMetadata.json",
-			ComponentFile:    "Post",
+			TargetPath: "postComponents.tsx",
+			// PostMetadataFile: "summaryMetadata.json",
+			ComponentFile: "Post",
 		}
 
 		err = renderer.Render(ctx, it, globalOutput)
