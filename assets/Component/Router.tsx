@@ -11,10 +11,12 @@ import AboutMe from "@app/Component/Page/AboutMe/AboutMe"
 import { aboutMePath, blogHomePath, blogPostListPath, contactPath, homePath } from "./endpoints"
 import BlogHome from "@app/Component/Page/Blog/Home/BlogHome"
 import PostList from "./Page/Blog/PostList/PostList"
+import LoadingSpinner from "./UI/Util/Loading/LoadingSpinner"
 
 export default () => {
     return <HashRouter>
         <Navbar />
+        <LoadingSpinner />
         <Routes>
             <Route path={homePath} element={<Home />} />
             <Route path={contactPath} element={<Contact />} />

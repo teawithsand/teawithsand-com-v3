@@ -1,0 +1,31 @@
+@keyframes spinner--rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+$sqrt2: 1.4142135623730950488016887242097;
+
+// TODO(teawithsand): figure out how to define this size better
+$spinner-size: 150px;
+
+.spinner {
+    &__image {
+        width: $spinner-size;
+        height: $spinner-size;
+        display: block;
+        animation: spinner--rotating 2s cubic-bezier(0.1, 0.7, 1, 0.1) infinite;
+        margin-top: calc($spinner-size * ($sqrt2 - 1) / 2);  // makes rotating square not intersect anything
+        margin-bottom: calc($spinner-size * ($sqrt2 - 1) / 2);
+
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    &__text {
+        text-align: center;
+    }
+}
