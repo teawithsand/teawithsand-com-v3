@@ -32,6 +32,8 @@ type RawPost struct {
 	Content  PostContent
 	Dir      string
 
+	PermalinkText string
+
 	FS fsutil.FS
 }
 
@@ -45,6 +47,8 @@ type Post struct {
 }
 
 type PostMetadata struct {
+	UnstableID string `json:"unstableId"`
+
 	Path string `json:"path"`
 
 	Slug string `json:"slug"`
@@ -59,6 +63,8 @@ type PostMetadata struct {
 }
 
 type ExportedPostMetadata struct {
+	UnstableID string `json:"unstableId"`
+
 	Path string `json:"path"`
 
 	Slug string `json:"slug"`
@@ -68,4 +74,9 @@ type ExportedPostMetadata struct {
 
 	CreatedAt    time.Time  `json:"createdAt"`
 	LastEditedAt *time.Time `json:"lastEditedAt,omitempty"`
+}
+
+type FullPostData struct {
+	Post                 Post
+	ExportedPostMetadata ExportedPostMetadata
 }

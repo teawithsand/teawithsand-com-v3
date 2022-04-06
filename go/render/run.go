@@ -56,7 +56,7 @@ func Run() (err error) {
 	}
 
 	loader := compile.DefaultLoader{
-		MetadataLoader: &fsutil.DataLoader{
+		Loader: &fsutil.DataLoader{
 			Parsers: []fsutil.DataParser{
 				{
 					Parser:    json.Unmarshal,
@@ -119,17 +119,25 @@ func Run() (err error) {
 		return
 	})
 
-	exportedMetadata := util.MapIterator(posts, func(ctx context.Context, data compile.Post) (res compile.ExportedPostMetadata, err error) {
+	fullPostData := util.MapIterator(posts, func(ctx context.Context, data compile.Post) (res compile.FullPostData, err error) {
 		mt := data.PostMetadata
-		res = compile.ExportedPostMetadata{
-			Slug:         mt.Slug,
-			Path:         mt.Path,
-			Title:        mt.Title,
-			Tags:         mt.Tags,
-			CreatedAt:    mt.CreatedAt,
-			LastEditedAt: mt.LastEditedAt,
+		res = compile.FullPostData{
+			Post: data,
+			ExportedPostMetadata: compile.ExportedPostMetadata{
+				Slug:         mt.Slug,
+				Path:         mt.Path,
+				Title:        mt.Title,
+				Tags:         mt.Tags,
+				CreatedAt:    mt.CreatedAt,
+				LastEditedAt: mt.LastEditedAt,
+				UnstableID:   mt.UnstableID,
+			},
 		}
 		return
+	})
+
+	exportedMetadata := util.MapIterator(fullPostData, func(ctx context.Context, data compile.FullPostData) (compile.ExportedPostMetadata, error) {
+		return data.ExportedPostMetadata, nil
 	})
 
 	c := dig.New()
@@ -148,8 +156,17 @@ func Run() (err error) {
 	if err != nil {
 		return
 	}
+
 	err = c.Provide(func() (res util.Iterator[compile.ExportedPostMetadata], err error) {
 		res = exportedMetadata
+		return
+	})
+	if err != nil {
+		return
+	}
+
+	err = c.Provide(func() (res util.Iterator[compile.FullPostData], err error) {
+		res = fullPostData
 		return
 	})
 	if err != nil {
@@ -166,9 +183,9 @@ func Run() (err error) {
 		return
 	}
 
-	err = c.Invoke(func(metadata util.Iterator[compile.PostMetadata]) (err error) {
-		return metadata.Iterate(ctx, util.Receiver[compile.PostMetadata](func(ctx context.Context, data compile.PostMetadata) (err error) {
-			err = postOutput(data).FS().Mkdir("/")
+	err = c.Invoke(func(posts util.Iterator[compile.Post]) (err error) {
+		return posts.Iterate(ctx, util.Receiver[compile.Post](func(ctx context.Context, data compile.Post) (err error) {
+			err = data.DstFs.Mkdir("/")
 			return
 		}))
 	})
@@ -176,11 +193,15 @@ func Run() (err error) {
 		return
 	}
 
-	err = c.Invoke(func(metadata util.Iterator[compile.PostMetadata]) (err error) {
-		renderer := compile.MetadataRenderer{}
-		return metadata.Iterate(ctx, util.Receiver[compile.PostMetadata](func(ctx context.Context, data compile.PostMetadata) (err error) {
+	err = c.Invoke(func(metadata util.Iterator[compile.FullPostData]) (err error) {
+		renderer := compile.JSONRenderer[compile.ExportedPostMetadata]{
+			FileName: "metadata.json",
+		}
+		return metadata.Iterate(ctx, util.Receiver[compile.FullPostData](func(ctx context.Context, data compile.FullPostData) (err error) {
 
-			err = renderer.Render(ctx, data, postOutput(data))
+			err = renderer.Render(ctx, data.ExportedPostMetadata, &compile.DefaultRendererOutput{
+				TargetFS: data.Post.DstFs,
+			})
 			return
 		}))
 	})

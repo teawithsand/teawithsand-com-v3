@@ -1,0 +1,36 @@
+@use "@app/styles/bs.scss";
+@use "@app/styles/defines.scss" as def;
+@use "@app/styles/hero.scss" as hero;
+@use "@app/styles/card.scss" as card;
+@use "@app/styles/page.scss" as page;
+
+.page-container {
+    @extend .m-page-container;
+    margin-top: map-get(def.$spacers, 5);
+}
+
+.header {
+    margin-bottom: map-get(def.$spacers, 2);
+}
+
+.post-summary {
+    &__title {
+    }
+
+    &__createdAt {
+    }
+}
+
+.post-summary-list {
+    > * {
+        padding: map-get(def.$spacers, 2);
+    }
+
+    > *:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    > *:nth-child(odd) {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+}

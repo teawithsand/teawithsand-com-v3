@@ -1,4 +1,4 @@
-import { aboutMePath, contactPath, homePath, portfolioPath } from "@app/Component/endpoints"
+import { aboutMePath, blogHomePath, contactPath, homePath, portfolioPath } from "@app/Component/endpoints"
 import React from "react"
 import { Container, Nav, Navbar } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
@@ -33,7 +33,7 @@ export default () => {
                     </LinkContainer>
                 </Nav>
                 <Nav>
-                    <LinkContainer to={portfolioPath}>
+                    <LinkContainer to={blogHomePath}>
                         <Nav.Link>
                             Blog
                         </Nav.Link>

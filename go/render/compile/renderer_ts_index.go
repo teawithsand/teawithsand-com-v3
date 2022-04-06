@@ -20,7 +20,7 @@ export default [
 		{{ if .ComponentFile }}
 		"component": import("./{{ .Dir }}/{{ .ComponentFile }}"),{{ end }}
 		{{ if .PostMetadataFile }}
-		"compiledMetadata": metadata_{{$i}},{{ end }}
+		"metadata": metadata_{{$i}},{{ end }}
 	}{{ if not $i }},{{ end }}{{ end }}
 ]
 `

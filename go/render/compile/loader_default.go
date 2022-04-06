@@ -3,6 +3,7 @@ package compile
 import (
 	"context"
 	"path"
+	"strings"
 
 	"github.com/teawithsand/twsblog/util"
 	"github.com/teawithsand/twsblog/util/fsutil"
@@ -10,7 +11,7 @@ import (
 
 // DefaultLoader, which loads RawPost.
 type DefaultLoader struct {
-	MetadataLoader *fsutil.DataLoader
+	Loader *fsutil.DataLoader
 }
 
 func (bc *DefaultLoader) Load(ctx context.Context, src LoaderInput) (iterator util.Iterator[RawPost], err error) {
@@ -28,16 +29,19 @@ func (bc *DefaultLoader) Load(ctx context.Context, src LoaderInput) (iterator ut
 			}
 
 			postDir := e.Name()
+			if strings.HasPrefix(postDir, ".") || strings.HasPrefix(postDir, "_") {
+				continue
+			}
 
 			var meta RawPostMetadata
 			var content PostContent
 
-			err = bc.MetadataLoader.ReadData(fs, path.Join(postDir, "metadata"), &meta)
+			err = bc.Loader.ReadData(fs, path.Join(postDir, "metadata"), &meta)
 			if err != nil {
 				return
 			}
 
-			err = bc.MetadataLoader.ReadData(fs, path.Join(postDir, "content"), &content)
+			err = bc.Loader.ReadData(fs, path.Join(postDir, "content"), &content)
 			if err != nil {
 				return
 			}
