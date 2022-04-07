@@ -280,10 +280,34 @@ func Run() (err error) {
 					From:    "react",
 					Default: "React",
 				},
+				{
+					From:    "@app/Component/Page/Blog/Post/PostHeader",
+					Default: "PostHeader",
+				},
+				{
+					From:    "@app/Component/UI/Util/Markdown/Markdown",
+					Default: "Markdown",
+				},
+				{
+					From:    "./summaryMetadata.json",
+					Default: "metadata",
+				},
 			},
 		}
 
 		err = it.Iterate(ctx, util.Receiver[compile.Post](func(ctx context.Context, post compile.Post) (err error) {
+			entries := []compile.PostContentEntry{
+				{
+					Tag: "PostHeader",
+					Props: map[string]string{
+						"metadata": "metadata",
+					},
+				},
+			}
+
+			entries = append(entries, post.Content.Entries...)
+			post.Content.Entries = entries
+
 			err = renderer.Render(ctx, post, &compile.DefaultRendererOutput{
 				TargetFS: post.DstFs,
 			})

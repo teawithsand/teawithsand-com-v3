@@ -31,14 +31,14 @@ const tsRenderPostTemplate = `
 export default () => {
 	return <>
 		{{ range .Components }}
-			{{ if not .Content }}
-				<{{ .Tag }}{{ range $k, $v := .Props }}
-				{{$k}}={ {{$v}} }{{ end }}/>
-			{{ else }}
+			{{ if .Content }}
 				<{{ .Tag }}{{ range $k, $v := .Props }}
 					{{$k}}={ {{$v}} }{{ end }}>
 					{{ .Content }}
 				</{{ .Tag }}>
+			{{ else }}
+				<{{ .Tag }}{{ range $k, $v := .Props }}
+				{{$k}}={ {{$v}} }{{ end }}/>			
 			{{ end }}
 		{{end}}
 	</>
@@ -89,12 +89,17 @@ func (tir *TSPostRenderer) Render(ctx context.Context, post Post, output Rendere
 
 		if contentEntry.Type == "text" || contentEntry.Type == "" {
 			var modified []byte
-			modified, err = json.Marshal(contentEntry.Content)
-			if err != nil {
-				return
+			if len(contentEntry.Content) > 0 {
+				modified, err = json.Marshal(contentEntry.Content)
+				if err != nil {
+					return
+				}
+				contentEntry.Content = fmt.Sprintf("{%s}", string(modified))
+			} else if contentEntry.Type == "formatstring" {
+				contentEntry.Content = fmt.Sprintf("{`%s`}", contentEntry.Content)
+			} else if contentEntry.Type == "raw" {
+				// do not modify, raw is raw
 			}
-
-			contentEntry.Content = fmt.Sprintf("{%s}", string(modified))
 		} else {
 			err = fmt.Errorf("unknown content entry type: '%s'", contentEntry.Type)
 			return

@@ -1,0 +1,29 @@
+@use "@app/styles/bs.scss";
+@use "@app/styles/defines.scss" as def;
+@use "@app/styles/hero.scss" as hero;
+@use "@app/styles/card.scss" as card;
+
+
+@mixin muted() {
+    font-size: .8rem;
+    color: map-get(def.$text-color, "muted");
+}
+
+.post {
+    padding-top: map-get(def.$spacers, 5);
+    @extend .container;
+
+    &__header {
+        &__created-at {
+            @include muted();
+        }
+        
+        &__last-edited-at {
+            @include muted();
+        }
+
+        &__tags {
+            @include muted();
+        }
+    }
+}

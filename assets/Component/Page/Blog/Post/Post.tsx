@@ -3,6 +3,8 @@ import React, { Suspense } from "react"
 
 export type PostSource = () => Promise<{ default: React.ComponentType<any> }>
 
+import styles from "./post.scss?module"
+
 export const makePostComponent = (options: {
     source: PostSource
 }) => {
@@ -11,7 +13,11 @@ export const makePostComponent = (options: {
 
     const PageWrapperComponent = () => {
         return <Suspense fallback={<LoadingSpinner />}>
-            <PageComponent />
+            <main className={styles.post}>
+                <article>
+                    <PageComponent />
+                </article>
+            </main>
         </Suspense>
     }
 

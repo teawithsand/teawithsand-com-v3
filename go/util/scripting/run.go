@@ -11,14 +11,15 @@ type Command struct {
 	Command string
 	Args    []string
 
-	Input  io.Reader
-	Output io.Writer
+	Stdin  io.Reader
+	Stdout io.Writer
+	Stderr io.Writer
 }
 
 func (c *Command) Exec(ctx context.Context) (err error) {
 	cmd := exec.Command(c.Command, c.Args...)
-	cmd.Stdout = c.Output
-	cmd.Stdin = c.Input
+	cmd.Stdout = c.Stdout
+	cmd.Stdin = c.Stdin
 	cmd.Stderr = os.Stderr
 
 	err = cmd.Run()

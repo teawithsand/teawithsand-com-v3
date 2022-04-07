@@ -7,6 +7,7 @@ import fuseIndex from "@app/generated/fuseIndex.json"
 import summaryIndex from "@app/generated/summaryIndex.json"
 import { useSearchParams } from "react-router-dom"
 import { Link } from "react-router-dom"
+import { formatTime } from "@app/util/lang/date"
 
 const ParsedFuseIndex = Fuse.parseIndex(fuseIndex)
 const postsIndexes = [...Array(summaryIndex.length).keys()]
@@ -30,11 +31,6 @@ interface PostSummaryData {
     metadata: PostMetadata,
 }
 
-const formatDate = (date: string): string => {
-    const parsed = new Date(date)
-    return parsed.toLocaleDateString("pl-PL")
-}
-
 const PostSummary = (props: {
     post: PostSummaryData,
 }) => {
@@ -45,8 +41,8 @@ const PostSummary = (props: {
 
     return <div className={styles.postSummary}>
         <h2 className={styles.postSummaryTitle}><Link to={path}>{metadata.title}</Link></h2>
-        <div className={styles.postSummaryCreatedAt}>Created: {formatDate(createdAt)}</div>
-        {lastEditedAt ? <div className={styles.postSummaryLastEditedAt}>Edited: {formatDate(lastEditedAt)}</div> : null}
+        <div className={styles.postSummaryCreatedAt}>Created: {formatTime(createdAt)}</div>
+        {lastEditedAt ? <div className={styles.postSummaryLastEditedAt}>Edited: {formatTime(lastEditedAt)}</div> : null}
         <div className={styles.postSummaryTags}>Tags: {((tags ?? []).length > 0 ? tags : ["No tags"]).join(" ")}</div>
         <p className={styles.postSummaryContent}>
             <Link to={path}>{partialContent}</Link>
