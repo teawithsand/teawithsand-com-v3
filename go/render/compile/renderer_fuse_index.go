@@ -53,8 +53,8 @@ func (dr *FuseIndexRenderer[T]) Render(ctx context.Context, input []T, output Re
 		}
 	}()
 
-	cmd.Input = pr
-	cmd.Output = f
+	cmd.Stdin = pr
+	cmd.Stdout = f
 
 	err = cmd.Exec(ctx)
 	if err != nil {
