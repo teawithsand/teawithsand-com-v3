@@ -10,9 +10,9 @@ import (
 // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/CacheMW-Control
 // for caching options description
 type CacheMW struct {
-	ForceDisable bool // Forces diable all caching for resource, overrides other options
+	ForceDisable bool // Forces disable all caching for resource, overrides other options
 
-	Infinite             bool          // Do whatever to cache resource for enternity. Useful for static resources. Overrides other options.
+	Infinite             bool          // Do whatever to cache resource for eternity. Useful for static resources. Overrides other options.
 	MaxAge               time.Duration // Aligned to second, ignored when zero
 	SharedMaxAge         time.Duration // Aligned to second, ignored when zero
 	StaleWhileRevalidate time.Duration // Aligned to second, ignored when zero
