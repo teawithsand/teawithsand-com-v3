@@ -15,12 +15,27 @@ import PostList from "./Page/Blog/PostList/PostList"
 import postComponents from "@app/generated/postComponents"
 import { makePostComponent } from "./Page/Blog/Post/Post"
 
+import allEndpoints from "@app/generated/allEndpoints.json"
+
+const checkEndpoints = (...eps: string[]) => {
+    eps.forEach(ep =>{
+        if(!allEndpoints.endpoints.some(e => e === ep)){
+            console.error("endpoint not registered", {
+                endpoint: ep,
+            })
+        }
+    })
+} 
+
 const displayPosts = postComponents.map(data => ({
     Component: makePostComponent({
         source: data.component,
     }),
     path: data.path,
 }))
+
+
+checkEndpoints(homePath, contactPath, aboutMePath, blogHomePath, blogPostListPath)
 
 export default () => {
     return <HashRouter>

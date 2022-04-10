@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/teawithsand/twsblog/util/httpext"
+	"github.com/teawithsand/handmd/util/httpext"
 )
 
 func MakeRouter(config Config) (h http.Handler, err error) {
@@ -13,14 +13,14 @@ func MakeRouter(config Config) (h http.Handler, err error) {
 	var homeHandler http.Handler
 	var staticAssetsHandler http.Handler
 	if config.Env == "prod" {
-		homeHandler = MakeProdHomePathHandler()
+		// homeHandler = MakeProdHomePathHandler()
 		staticAssetsHandler = httpext.PrecompressedHandler(http.FS(EmbeddedAssets), nil)
 	} else {
 		basePath := config.DebugPath
 		d := http.Dir(basePath)
 		staticAssetsHandler = httpext.PrecompressedHandler(d, nil)
 
-		homeHandler = MakeDebugHomeHandler(basePath)
+		// homeHandler = MakeDebugHomeHandler(basePath)
 	}
 
 	fmw := httpext.CacheMW{
@@ -32,6 +32,7 @@ func MakeRouter(config Config) (h http.Handler, err error) {
 		Handler(
 			http.StripPrefix("/dist", staticAssetsHandler),
 		)
+
 	r.NotFoundHandler = homeHandler
 	// r.Methods("GET", "HEAD").Path("/").Handler(homeHandler)
 

@@ -1,19 +1,8 @@
 package serve
 
-import (
-	"errors"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"path"
-
-	"github.com/teawithsand/twsblog/util"
-	"github.com/teawithsand/twsblog/util/httpext"
-	"github.com/teawithsand/twsblog/util/webpack"
-)
-
-func buildData(ep webpack.Entrypoint, nce string) (tplData webpack.Data) {
-	ep.AddToData(webpack.AddOptions{
+/*
+func buildData(ep webpackparse.Entrypoint, nce string) (headTags simplesite.HTMLTag) {
+	ep.AddToData(webpackparse.AddOptions{
 		Nonce: nce,
 		Defer: true,
 	}, &tplData)
@@ -43,88 +32,16 @@ func buildData(ep webpack.Entrypoint, nce string) (tplData webpack.Data) {
 
 	return
 }
+*/
 
-func doPush(w http.ResponseWriter, data webpack.Data) (err error) {
-	// for now disable http2 server push
-
-	return
-	defer func() {
-		if errors.Is(err, http.ErrNotSupported) {
-			err = nil
-		}
-	}()
-	if pusher, ok := w.(http.Pusher); ok {
-		for _, e := range data.Scripts {
-			if err = pusher.Push(e.Src, nil); err != nil {
-				return
-			}
-		}
-
-		for _, e := range data.Links {
-			if e.Rel != "stylesheet" {
-				continue
-			}
-			if err = pusher.Push(e.Href, nil); err != nil {
-				return
-			}
-		}
-	}
-
-	return
-}
-
-func MakeDebugHomeHandler(epsDir string) (h http.Handler) {
-	fmw := httpext.CacheMW{
-		ForceDisable: true,
-	}
-
-	cspNonceGenerator := util.HexNonceGenerator{
-		BytesLength: 16,
-	}
-
-	return fmw.Apply(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		nce, err := cspNonceGenerator.GenerateNonce(r.Context())
-		if err != nil {
-			panic(err)
-		}
-
-		// for dev load entrypoints.json here
-		// in prod load once
-		rawEntrypoints, err := ioutil.ReadFile(path.Join(epsDir, "entrypoints.json"))
-		if err != nil {
-			panic(err)
-		}
-
-		eps, err := webpack.ParseEntrypointsJSON(rawEntrypoints)
-		if err != nil {
-			panic(err)
-		}
-		ep := eps.App
-
-		webpackData := buildData(ep, nce)
-
-		doPush(w, webpackData)
-
-		w.Header().Set(
-			"Content-Security-Policy",
-			fmt.Sprintf(
-				`object-src 'none'; style-src  'nonce-%s' 'unsafe-inline' https: http:; script-src 'nonce-%s' 'unsafe-inline' 'strict-dynamic' https: http:; base-uri 'none';`,
-				nce,
-				nce,
-			),
-		)
-
-		w.WriteHeader(200)
-		webpack.RenderTemplate(w, webpackData)
-	}))
-}
+/*
 
 func MakeProdHomePathHandler() (h http.Handler) {
 	fmw := httpext.CacheMW{
 		ForceDisable: true,
 	}
 
-	cspNonceGenerator := util.HexNonceGenerator{
+	cspNonceGenerator := nonce.HexGenerator{
 		BytesLength: 16,
 	}
 
@@ -163,3 +80,5 @@ func MakeProdHomePathHandler() (h http.Handler) {
 		webpack.RenderTemplate(w, webpackData)
 	}))
 }
+
+*/
