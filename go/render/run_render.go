@@ -190,6 +190,18 @@ func Run() (err error) {
 					From:    "@app/Component/UI/Util/Markdown/Markdown",
 					Default: "Markdown",
 				},
+				{
+					From:    "@app/Component/Page/Blog/Post/PostHeader",
+					Default: "PostHeader",
+				},
+				{
+					From:    "@app/Component/Page/Blog/Post/PostFooter",
+					Default: "PostFooter",
+				},
+				{
+					From:    "./summaryMetadata.json",
+					Default: "summaryMetadata",
+				},
 			},
 		}
 
@@ -211,8 +223,24 @@ func Run() (err error) {
 					return
 				}
 
+				tags := []tsrender.SimpleTag{
+					{
+						Name: "PostHeader",
+						Props: map[string]any{
+							"metadata": tsrender.RawTagPropertyValue("summaryMetadata"),
+						},
+					},
+				}
+				tags = append(tags, input.Data.Content.ToSimpleTags()...)
+				tags = append(tags, tsrender.SimpleTag{
+					Name: "PostFooter",
+					Props: map[string]any{
+						"metadata": tsrender.RawTagPropertyValue("summaryMetadata"),
+					},
+				})
+
 				err = tsComponentRenderer.Render(ctx, renderer.TSComponentRenderData{
-					Tags:    input.Data.Content.ToSimpleTags(),
+					Tags:    tags,
 					Imports: input.Data.Content.Imports,
 				}, output)
 				if err != nil {
