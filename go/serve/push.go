@@ -6,9 +6,6 @@ import (
 )
 
 func doPush(w http.ResponseWriter, entries []string) (err error) {
-	// for now disable http2 server push
-	return
-
 	defer func() {
 		if errors.Is(err, http.ErrNotSupported) {
 			err = nil

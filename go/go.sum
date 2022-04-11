@@ -19,8 +19,8 @@ github.com/spf13/cobra v1.4.0/go.mod h1:Wo4iy3BUC+X2Fybo0PDqwJIv3dNRiZLHQymsfxlB
 github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
 github.com/spf13/pflag v1.0.5/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
 github.com/stretchr/testify v1.4.0 h1:2E4SXV/wtOkTonXsotYi4li6zVWxYlZuYNCXe9XRJyk=
-github.com/teawithsand/handmd v0.0.0-20220410190952-1b542d7553b1 h1:EGiC91lxojuER9SBAECxaqmsl4l7fAqrlgtKh6Ylprs=
-github.com/teawithsand/handmd v0.0.0-20220410190952-1b542d7553b1/go.mod h1:TA5mU04hC+xwQe/f9gxumnT/ivL4YwjasEJQUkLwC4o=
+github.com/teawithsand/handmd v0.0.0-20220411091706-9d0905139616 h1:2Bn0zrOaX6ipZUMMpNNmSGy9U1zPHNXHdGiTOtBkFpg=
+github.com/teawithsand/handmd v0.0.0-20220411091706-9d0905139616/go.mod h1:TA5mU04hC+xwQe/f9gxumnT/ivL4YwjasEJQUkLwC4o=
 go.uber.org/dig v1.14.1 h1:fyakRgZDdi2F8FgwJJoRGangMSPTIxPSLGzR3Oh0/54=
 go.uber.org/dig v1.14.1/go.mod h1:52EKx/Vjdpz9EzeNcweC4YMsTrDdFn9mS/+Uw5ZnVTI=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=

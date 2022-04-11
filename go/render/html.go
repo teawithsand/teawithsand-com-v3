@@ -28,10 +28,14 @@ type templateData struct {
 	HeadTags string
 }
 
-func RenderHTML(headTags []simplesite.HTMLTag, w io.Writer) (err error) {
+type RenderHTMLData struct {
+	HeadTags []simplesite.HTMLTag
+}
+
+func RenderHTML(data RenderHTMLData, w io.Writer) (err error) {
 	tags := ""
 
-	for _, tag := range headTags {
+	for _, tag := range data.HeadTags {
 		var singleTag string
 		singleTag, err = tag.RenderSimple()
 		if err != nil {

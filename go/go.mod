@@ -8,7 +8,7 @@ require (
 	github.com/gosimple/slug v1.12.0
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/spf13/cobra v1.4.0
-	github.com/teawithsand/handmd v0.0.0-20220410190952-1b542d7553b1
+	github.com/teawithsand/handmd v0.0.0-20220411091706-9d0905139616
 	go.uber.org/dig v1.14.1
 	gopkg.in/yaml.v2 v2.4.0
 )
