@@ -29,6 +29,7 @@ func MakeRouter(config Config) (h http.Handler, err error) {
 	var data PageData
 
 	var dataFS fsal.FS
+	var pushEntries []string
 
 	if config.Env == "prod" {
 		dataFS = &fsal.PrefixFS{
@@ -42,6 +43,11 @@ func MakeRouter(config Config) (h http.Handler, err error) {
 		}
 
 		data, err = loader.LoadData(ctx)
+		if err != nil {
+			return
+		}
+
+		pushEntries, err = data.GetHTTP2PushEntries(ctx, entrypointName)
 		if err != nil {
 			return
 		}
@@ -64,11 +70,15 @@ func MakeRouter(config Config) (h http.Handler, err error) {
 		staticAssetsHandler = httpext.PrecompressedHandler(http.FS(StrippedPrefixAssets), nil)
 
 		notFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			doPush(w, pushEntries)
+
 			w.Header().Set("Content-Type", "text/html")
 			w.WriteHeader(404)
 			w.Write(templates)
 		})
 		homeHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			doPush(w, pushEntries)
+
 			w.Header().Set("Content-Type", "text/html")
 			w.Write(templates)
 		})
@@ -157,7 +167,7 @@ func MakeRouter(config Config) (h http.Handler, err error) {
 					w.Header().Set("Content-Type", "text/html")
 					w.WriteHeader(200)
 
-					// doPush(w, []string{})
+					doPush(w, pushEntries)
 
 					f, err := dataFS.Open(htmlPath, os.O_RDONLY)
 					if errors.Is(err, os.ErrNotExist) {
