@@ -1,5 +1,5 @@
 import React from "react"
-import { Routes, Route, HashRouter } from 'react-router-dom'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
 
 import Footer from "@app/Component/UI/Common/Footer"
 import Home from "@app/Component/Page/Home/Home"
@@ -38,7 +38,7 @@ const displayPosts = postComponents.map(data => ({
 checkEndpoints(homePath, contactPath, aboutMePath, blogHomePath, blogPostListPath)
 
 export default () => {
-    return <HashRouter>
+    return <BrowserRouter>
         <Navbar />
         <Routes>
             <Route path={homePath} element={<Home />} />
@@ -52,5 +52,5 @@ export default () => {
             <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
-    </HashRouter>
+    </BrowserRouter>
 }
