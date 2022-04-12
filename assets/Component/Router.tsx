@@ -8,7 +8,7 @@ import NotFound from "@app/Component/Page/NotFound/NotFound"
 import Contact from "@app/Component/Page/Contact/Contact"
 import AboutMe from "@app/Component/Page/AboutMe/AboutMe"
 
-import { aboutMePath, blogHomePath, blogPostListPath, contactPath, homePath } from "./endpoints"
+import { aboutMePath, blogHomePath, blogPostListPath, contactPath, homePath, portfolioPath } from "./endpoints"
 import BlogHome from "@app/Component/Page/Blog/Home/BlogHome"
 import PostList from "./Page/Blog/PostList/PostList"
 
@@ -16,6 +16,7 @@ import postComponents from "@app/generated/postComponents"
 import { makePostComponent } from "./Page/Blog/Post/Post"
 
 import allEndpoints from "@app/generated/allEndpoints.json"
+import Portfolio from "./Page/Portfolio/Portfolio"
 
 const checkEndpoints = (...eps: string[]) => {
     eps.forEach(ep =>{
@@ -35,7 +36,7 @@ const displayPosts = postComponents.map(data => ({
 }))
 
 
-checkEndpoints(homePath, contactPath, aboutMePath, blogHomePath, blogPostListPath)
+checkEndpoints(homePath, contactPath, aboutMePath, blogHomePath, blogPostListPath, portfolioPath)
 
 export default () => {
     return <BrowserRouter>
@@ -46,6 +47,8 @@ export default () => {
             <Route path={aboutMePath} element={<AboutMe />} />
             <Route path={blogHomePath} element={<BlogHome />} />
             <Route path={blogPostListPath} element={<PostList />} />
+            <Route path={portfolioPath} element={<Portfolio />} />
+            
             {
                 displayPosts.map(({ Component, path }, i) => <Route key={i} path={path} element={<Component />} />)
             }
