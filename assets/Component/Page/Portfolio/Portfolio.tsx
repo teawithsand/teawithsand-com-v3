@@ -18,33 +18,22 @@ import { Collapse } from "react-bootstrap"
 import { useNamedToggle } from "@app/util/react/hook/toggleHook"
 import classnames from "@app/util/lang/classnames"
 
-/*
-const projects = [
-    {
-        name: "teawithsand.com v3",
-        tags: [] as string[],
-        content: <div className={styles.featureContent}>
-            <p>
-                Aside from being a portfolio, it's also my blog and a few pieces of utils.
-                I've created simple static website generator https://github.com/teawithsand/handmd in order to create this.
-                There is also a <a href="/posts/2022-06-04/blogging-like-a-programmer">post on my blog</a> about it.
-            </p>
-            <p>
-                Technologies used: Go, TypeScript, Webpack
-            </p>
-        </div>,
-        header: <>
-            <h2>teawithsand.com v3 website(this one)</h2>
-            <button onClick={() => teawithsandComV3Toggle.toggle()} className={styles.featureToggleButton}>
-                {teawithsandComV3Toggle.toggled ? "Less" : "More"}
-            </button>
-        </>
-    }
-]
-*/
-
 const palmabooksComArchiveOrgLink = "https://web.archive.org/web/20180307161225/https://palmabooks.com/"
-const torutCratesIOLink = "https://github.com/teawithsand/gorut"
+const torutCratesIOLink = "https://crates.io/crates/torut"
+const teawithsandComV1GithubLink = "https://github.com/teawithsand/teawithsand-com-v1"
+const teawithsandComV2GithubLink = "https://github.com/teawithsand/teawithsand-com-v2"
+
+import teawithsandComV1Screen0 from "@app/static/teawithsandComV1/screen-0.png"
+import teawithsandComV1Screen1 from "@app/static/teawithsandComV1/screen-1.png"
+import teawithsandComV1Screen2 from "@app/static/teawithsandComV1/screen-2.png"
+import teawithsandComV1Screen3 from "@app/static/teawithsandComV1/screen-3.png"
+import teawithsandComV1Screen4 from "@app/static/teawithsandComV1/screen-4.png"
+import teawithsandComV1Screen5 from "@app/static/teawithsandComV1/screen-5.png"
+import teawithsandComV1Screen6 from "@app/static/teawithsandComV1/screen-6.png"
+import teawithsandComV1Screen7 from "@app/static/teawithsandComV1/screen-7.png"
+import teawithsandComV1Screen8 from "@app/static/teawithsandComV1/screen-8.png"
+import teawithsandComV1Screen9 from "@app/static/teawithsandComV1/screen-9.png"
+import teawithsandComV1Screen10 from "@app/static/teawithsandComV1/screen-10.png"
 
 // TODO(teawithsand): fix display on phone devices using media breakpoints
 
@@ -65,6 +54,25 @@ export default () => {
         }))
     }, [])
 
+    const teawithsandComV1GalleryImages: GalleryImage[] = useMemo(() => {
+        const images = [
+            teawithsandComV1Screen0,
+            teawithsandComV1Screen1,
+            teawithsandComV1Screen2,
+            teawithsandComV1Screen3,
+            teawithsandComV1Screen4,
+            teawithsandComV1Screen5,
+            teawithsandComV1Screen6,
+            teawithsandComV1Screen7,
+            teawithsandComV1Screen8,
+            teawithsandComV1Screen9,
+            teawithsandComV1Screen10,
+        ]
+        return images.map((s) => ({
+            source: s
+        }))
+    }, [])
+
     const othersToggle = useNamedToggle()
     const palmabooksComToggle = useNamedToggle()
     const palmabooksABookToggle = useNamedToggle()
@@ -76,7 +84,7 @@ export default () => {
             <header className={styles.header}>
                 <h1>Portfolio</h1>
                 <p>
-                    Portfolio consists of list of projects that I've created.
+                    Portfolio consists of list of projects that I have created.
                     It contains only major projects, lots of other minor ones are available on my <a href={linkGithub}>github</a>.
                 </p>
             </header>
@@ -95,7 +103,7 @@ export default () => {
                         <div className={styles.featureContent}>
                             <p>
                                 Aside from being a portfolio, it's also my blog and a few utils.
-                                I've created simple static website generator <a href="https://github.com/teawithsand/handmd">handmd</a> in order to create this website.
+                                I have created simple static website generator <a href="https://github.com/teawithsand/handmd">handmd</a> in order to create this website.
                                 There is also a <Link to="/posts/2022-06-04/blogging-like-a-programmer">post on my blog</Link> about it.
                             </p>
                             <p>
@@ -124,19 +132,33 @@ export default () => {
                                 Previous versions of teawithsand.com website.
                                 They both implement lots of features and simple app for learning languages called Langka.
                             </p>
-                            Both projects were somewhat similar and implemented:
+                            Both projects were somewhat similar and implemented.
+                            On backend side:
                             <ul>
                                 <li>REST(like) API and SPA, with axios as HTTP client</li>
                                 <li>User login with password reset , email confirmation, captcha checking and other user-related features</li>
                                 <li>Simple foreign languages learning app called langka</li>
+                            </ul>
+                            On frontend side:
+                            <ul>
+                                <li>React + webpack project</li>
+                                <li>Redux for global state management</li>
+                                <li>i18n-react for managing translations</li>
                             </ul>
                             <p>
                                 Technologies used in V1: PHP, Symfony 6, PostgreSQL, TypeScript, Webpack, SASS<br />
                                 Technologies used in V2: Go, MongoDB, TypeScript, Webpack, SASS
                             </p>
                             <p>
-                                <a href="https://github.com" className={styles.downloadButton}>See on GitHub</a>
+                                <a href={teawithsandComV1GithubLink} className={styles.downloadButton}>See version one code on github</a><br /><br />
+                                <a href={teawithsandComV2GithubLink} className={styles.downloadButton}>See version two code on github</a><br /><br />
+                                Small note here: I have removed commit history, since it contained some secrets and I didn't really wanted to cleanup git repo.
+                                It would not contain them if I have known that I will be publishing it by the time.
                             </p>
+                            <h3>Screenshots of version one(created on dev environment with dummy data):</h3>
+                            <Gallery
+                                images={teawithsandComV1GalleryImages}
+                                />
                         </div>
                     </Collapse>
                 </div>
@@ -282,12 +304,14 @@ export default () => {
                     <Collapse in={othersToggle.toggled}>
                         <div className={styles.featureContent}>
                             <p>
-                                I've created lots of OSS projects, but only one got some wide spread attention:
-                                <a href={torutCratesIOLink}>torut</a>. At the moment of writing this text, it has more than 48k downloads on crates.io
+                                I've created lots of OSS projects, but only one got some wide spread attention:{" "}
+                                <a href={torutCratesIOLink}>torut</a>. At the moment of writing this text, it has more than 48k downloads on <a href="https://crates.io">crates.io</a>
                             </p>
                         </div>
                     </Collapse>
                 </div>
+            </div>
+            <div className={styles.footer}>
 
             </div>
         </article>
