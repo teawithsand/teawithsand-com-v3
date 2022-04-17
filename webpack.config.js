@@ -168,17 +168,15 @@ Encore
         cacheId: "twsblog",
     }))
     */
-    /*
     .addPlugin(new CopyWebpackPlugin({
         patterns: [
             {
-                from: "assets/generated/combinedMetadata.json",
-                to: "metadata.json",
+                from: "assets/generated/allEndpoints.json",
+                to: "all_endpoints.json",
                 toType: "template",
             }
         ]
     }))
-    */
     .addPlugin(new CompressionPlugin({
         filename: "[path][base].gz",
         test: /\.(js|css|svg|json|html).*$/i,

@@ -32,6 +32,7 @@
         "imagemin-svgo": "^10.0.1",
         "jimp": "^0.16.1",
         "postcss-loader": "^6.0.0",
+        "prerender": "^5.19.0",
         "regenerator-runtime": "^0.13.2",
         "responsive-loader": "^2.3.0",
         "sass": "^1.49.9",
