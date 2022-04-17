@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"io"
 	"path"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gosimple/slug"
 	"github.com/teawithsand/handmd/compile/loader"
 	"github.com/teawithsand/handmd/compile/renderer"
+	"github.com/teawithsand/handmd/util/encoding"
 	"github.com/teawithsand/handmd/util/fsal"
 	"github.com/teawithsand/handmd/util/iter"
 	"github.com/teawithsand/handmd/util/nonce"
@@ -21,6 +23,10 @@ import (
 	"go.uber.org/dig"
 	"gopkg.in/yaml.v2"
 )
+
+var JSONEncoderFactory = encoding.EncoderFactoryFunc(func(w io.Writer) encoding.Encoder {
+	return json.NewEncoder(w)
+})
 
 func Run() (err error) {
 	ctx := context.Background()
@@ -205,11 +211,13 @@ func Run() (err error) {
 			},
 		}
 
-		postMetadataRenderer := renderer.JSON[defines.ExportedPostMetadata]{
-			FileName: "metadata.json",
+		postMetadataRenderer := renderer.Encoding[defines.ExportedPostMetadata]{
+			EncoderFactory: JSONEncoderFactory,
+			FileName:       "metadata.json",
 		}
-		postSummaryMetadataRenderer := renderer.JSON[defines.SummaryExportedPostMetadata]{
-			FileName: "summaryMetadata.json",
+		postSummaryMetadataRenderer := renderer.Encoding[defines.SummaryExportedPostMetadata]{
+			EncoderFactory: JSONEncoderFactory,
+			FileName:       "summaryMetadata.json",
 		}
 
 		dirsRenderer := renderer.Dir[defines.Post]{
@@ -273,8 +281,9 @@ func Run() (err error) {
 
 		/// global renderers ///
 
-		summaryIndexRenderer := renderer.JSON[any]{
-			FileName: "summaryIndex.json",
+		summaryIndexRenderer := renderer.Encoding[any]{
+			EncoderFactory: JSONEncoderFactory,
+			FileName:       "summaryIndex.json",
 		}
 
 		exportedMetas, err := iter.Collect(ctx, iter.Map(posts, func(ctx context.Context, data defines.Post) (defines.ExportedPostMetadata, error) {
@@ -308,8 +317,9 @@ func Run() (err error) {
 			return
 		}
 
-		configEndpointsRenderer := renderer.JSON[defines.Endpoints]{
-			FileName: "configEndpoints.json",
+		configEndpointsRenderer := renderer.Encoding[defines.Endpoints]{
+			EncoderFactory: JSONEncoderFactory,
+			FileName:       "configEndpoints.json",
 		}
 
 		err = configEndpointsRenderer.Render(ctx, eps, parentOutput)
@@ -317,8 +327,9 @@ func Run() (err error) {
 			return
 		}
 
-		allEndpointsRenderer := renderer.JSON[defines.Endpoints]{
-			FileName: "allEndpoints.json",
+		allEndpointsRenderer := renderer.Encoding[defines.Endpoints]{
+			EncoderFactory: JSONEncoderFactory,
+			FileName:       "allEndpoints.json",
 		}
 
 		err = posts.Iterate(ctx, iter.Receiver[defines.Post](func(ctx context.Context, data defines.Post) (err error) {
