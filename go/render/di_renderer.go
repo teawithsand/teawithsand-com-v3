@@ -61,7 +61,7 @@ func RegisterGlobalRenderers(c *dig.Container) (err error) {
 	err = c.Provide(func(encoder JSONEncoderFactory) (res SummaryExportedMetadataRenderer, err error) {
 		res = &renderer.Encoding[[]defines.SummaryExportedPostMetadata]{
 			EncoderFactory: encoder,
-			FileName:       "summaryMetadata.json",
+			FileName:       "summaryIndex.json",
 		}
 		return
 	})

@@ -67,6 +67,7 @@ func DIPerformRender(c *dig.Container) (err error) {
 		smr SummaryExportedMetadataRenderer,
 		epr AllEndpointsRenderer,
 		tsr TsIndexRenderer,
+		fir FuseIndexRenderer,
 	) (err error) {
 		err = cr.Render(ctx, struct{}{}, output)
 		if err != nil {
@@ -88,7 +89,7 @@ func DIPerformRender(c *dig.Container) (err error) {
 			return
 		}
 
-		entries, err := iter.Collect(ctx, iter.Map[defines.Post](posts, func(ctx context.Context, data defines.Post) (res map[string]string, err error) {
+		tsEntries, err := iter.Collect(ctx, iter.Map[defines.Post](posts, func(ctx context.Context, data defines.Post) (res map[string]string, err error) {
 			res = map[string]string{
 				"component": fmt.Sprintf("() => import(\"./%s\")", path.Join(data.PostMetadata.DirName, "Post")),
 				"path":      fmt.Sprintf("\"%s\"", data.PostMetadata.Path),
@@ -100,13 +101,23 @@ func DIPerformRender(c *dig.Container) (err error) {
 		}
 
 		err = tsr.Render(ctx, renderer.TSIndexRenderData{
-			Entries: iter.Slice(entries),
+			Entries: iter.Slice(tsEntries),
 		}, output)
 		if err != nil {
 			return
 		}
 
 		err = epr.Render(ctx, defines.Endpoints(eps), output)
+		if err != nil {
+			return
+		}
+
+		metadataEntries, err := iter.Collect[defines.ExportedPostMetadata](ctx, exportedPostMetadatas)
+		if err != nil {
+			return
+		}
+
+		err = fir.Render(ctx, metadataEntries, output)
 		if err != nil {
 			return
 		}
