@@ -15,7 +15,6 @@ export interface FillOptions {
     color: Color,
 }
 
-
 export type FigureDrawOptions = {
     type: "fill",
     fillOptions: FillOptions,
@@ -28,7 +27,7 @@ export type FigureDrawOptions = {
 /**
  * Any type, which can be painted onto HTML canvas.
  */
-export type PaintElement = {
+ export type DrawableElement = {
     type: "rectangle",
     points: [Point, Point],
     figureOptions: FigureDrawOptions,
@@ -49,4 +48,15 @@ export type PaintElement = {
     type: "image", // raster image to embed 
     position: [Point, Point] | [Point], // rect to fit image to, or point that image should be mounted at using some other method
     image: string, // URL here. Data/object URLs are allowed 
+}
+
+export interface DrawResult {
+    // Makes sure that all pending resources are stopped.
+    // Should be called after draw becomes obsolete because canvas is destroyed or another draw call is about to be called.
+    // Call to this function does not undo changes made to draw target.
+    close(): void
+}
+
+export interface Draw {
+    drawElement(element: DrawableElement): DrawResult
 }

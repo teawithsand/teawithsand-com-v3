@@ -1,8 +1,8 @@
-import { ThemeProvider } from "react-bootstrap";
 import { encodeColor } from "./color";
-import { FigureDrawOptions, FillOptions, PaintElement, StrokeOptions } from "./primitive";
+import { FigureDrawOptions, FillOptions, DrawableElement, StrokeOptions, DrawResult, Draw } from "./primitive";
+import { DrawSession } from "./session";
 
-export class CanvasDraw {
+export class CanvasDraw implements Draw {
     constructor(private readonly ctx: CanvasRenderingContext2D) {
     }
 
@@ -35,7 +35,9 @@ export class CanvasDraw {
     }
 
 
-    drawElement = (element: PaintElement) => {
+    drawElement = (element: DrawableElement): DrawResult => {
+        const session = new DrawSession()
+
         if (element.type === "rectangle") {
             const [p1, p2] = element.points
 
@@ -85,17 +87,28 @@ export class CanvasDraw {
 
             this.finalizeFigure(element.figureOptions)
         } else if (element.type === "image") {
-            const image = new Image()
-            image.src = element.image
+            session.addTask(async (chk) => {
+                const image = new Image()
+                image.onload = () => {
 
-            if (element.position.length === 1) {
-                const [[x, y]] = element.position
-                this.ctx.drawImage(image, x, y)
-            } else {
-                const [[x, y], [dx, dy]] = element.position
-                this.ctx.drawImage(image, x, y, dx, dy)
-            }
+                    if (chk.isClosed) {
+                        return;
+                    }
+                    
+                    if (element.position.length === 1) {
+                        const [[x, y]] = element.position
+                        this.ctx.drawImage(image, x, y)
+                    } else {
+                        const [[x, y], [dx, dy]] = element.position
+                        this.ctx.drawImage(image, x, y, dx, dy)
+                    }
+                }
+
+                image.src = element.image
+            })
         }
+
+        return session
     }
 }
 
