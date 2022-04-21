@@ -47,7 +47,6 @@ export class CanvasDraw {
             this.ctx.beginPath()
             this.ctx.moveTo(x1, y1)
 
-            // draw rect
             this.ctx.lineTo(x1, y2)
             this.ctx.lineTo(x2, y2)
             this.ctx.lineTo(x2, y1)
@@ -70,8 +69,32 @@ export class CanvasDraw {
             this.ctx.moveTo(x1, y1)
             this.ctx.lineTo(x2, y2)
             this.ctx.stroke()
-        } else {
+        } else if (element.type === "polygon") {
+            this.initFigure(element.figureOptions)
 
+            this.ctx.beginPath()
+
+            element.points.forEach((v, i) => {
+                const [x, y] = v
+                if (i === 0) {
+                    this.ctx.moveTo(x, y)
+                } else {
+                    this.ctx.lineTo(x, y)
+                }
+            })
+
+            this.finalizeFigure(element.figureOptions)
+        } else if (element.type === "image") {
+            const image = new Image()
+            image.src = element.image
+
+            if (element.position.length === 1) {
+                const [[x, y]] = element.position
+                this.ctx.drawImage(image, x, y)
+            } else {
+                const [[x, y], [dx, dy]] = element.position
+                this.ctx.drawImage(image, x, y, dx, dy)
+            }
         }
     }
 }

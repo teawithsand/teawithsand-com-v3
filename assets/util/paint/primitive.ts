@@ -41,4 +41,12 @@ export type PaintElement = {
     type: "path",
     ends: [Point, Point],
     strokeOptions: StrokeOptions,
+} | {
+    type: "polygon",
+    points: Point[],
+    figureOptions: FigureDrawOptions,
+} | {
+    type: "image", // raster image to embed 
+    position: [Point, Point] | [Point], // rect to fit image to, or point that image should be mounted at using some other method
+    image: string, // URL here. Data/object URLs are allowed 
 }
