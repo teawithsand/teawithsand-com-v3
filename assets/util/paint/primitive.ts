@@ -55,6 +55,12 @@ export interface DrawResult {
     // Should be called after draw becomes obsolete because canvas is destroyed or another draw call is about to be called.
     // Call to this function does not undo changes made to draw target.
     close(): void
+
+    readonly isInfinite: boolean
+
+    // Promise resolved when draw session is done.
+    // It's never resolved if is infinite
+    readonly donePromise: Promise<void>
 }
 
 export interface Draw {

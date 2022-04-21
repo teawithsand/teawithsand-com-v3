@@ -36,7 +36,7 @@ export class CanvasDraw implements Draw {
 
 
     drawElement = (element: DrawableElement): DrawResult => {
-        const session = new DrawSession()
+        const session = new DrawSession(false)
 
         if (element.type === "rectangle") {
             const [p1, p2] = element.points
@@ -90,7 +90,6 @@ export class CanvasDraw implements Draw {
             session.addTask(async (chk) => {
                 const image = new Image()
                 image.onload = () => {
-
                     if (chk.isClosed) {
                         return;
                     }
@@ -108,7 +107,7 @@ export class CanvasDraw implements Draw {
             })
         }
 
-        return session
+        return session.finalize()
     }
 }
 
