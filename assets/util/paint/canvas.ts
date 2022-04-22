@@ -1,6 +1,6 @@
 import { encodeColor } from "./color";
-import { FigureDrawOptions, FillOptions, DrawableElement, StrokeOptions, DrawResult, Draw } from "./primitive";
-import { DrawSession, DrawSessionConsumer } from "./session";
+import { FigureDrawOptions, FillOptions, DrawableElement, StrokeOptions, Draw } from "./primitive";
+import { DrawSessionConsumer } from "./session";
 
 export class CanvasDraw implements Draw {
     constructor(private readonly ctx: CanvasRenderingContext2D) {
@@ -90,7 +90,8 @@ export class CanvasDraw implements Draw {
                 session.addTask(async (chk) => {
                     const image = new Image()
                     image.onload = () => {
-                        if (chk.isClosed) {
+                        // never apply changes if is closed already
+                        if (chk.isClosed()) {
                             return;
                         }
 
@@ -109,49 +110,3 @@ export class CanvasDraw implements Draw {
         }
     }
 }
-
-/*
-
-export const fillOptionsAsPath = (ctx: CanvasRenderingContext2D, options: PathOptions) => {
-    switch (options.type) {
-        case "fill":
-            ctx.fillStyle = encodeColor(options.fillColor)
-            ctx.strokeStyle = encodeColor(options.strokeColor)
-            break;
-    }
-}
-
-/**
- * Applies paint element onto 2d canvas.
- * /
- export const executePaintElementOnCanvas = (ctx: CanvasRenderingContext2D, element: PaintElement) => {
-    switch (element.type) {
-        case "rectangle":
-            const [p1, p2] = element.points
-            // const x = Math.min(p1[0], p2[0])
-            // const y = Math.min(p1[1], p2[1])
-            // const w = Math.abs(p1[0] - p2[0])
-            // const h = Math.abs(p1[1] - p2[1])
-
-            // applyFillOptionsToCanvas(ctx, element.fill)
-
-            // ctx.fillRect(x, y, w, h)
-
-            const [x1, y1] = p1
-            const [x2, y2] = p2
-
-            ctx.beginPath()
-            ctx.moveTo(x1, y1)
-
-            // draw rect
-            ctx.lineTo(x1, y2)
-            ctx.lineTo(x2, y2)
-            ctx.lineTo(x2, y1)
-            ctx.lineTo(x1, y1)
-
-            ctx.fill()
-            break;
-    }
-}
-*/
-

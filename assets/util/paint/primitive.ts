@@ -51,16 +51,29 @@ export type DrawableElement = {
     image: string, // URL here. Data/object URLs are allowed 
 }
 
-export interface DrawResult {
-    // Makes sure that all pending resources are stopped.
-    // Should be called after draw becomes obsolete because canvas is destroyed or another draw call is about to be called.
-    // Call to this function does not undo changes made to draw target.
+export interface DrawSessionResult {
+    /**
+    * Makes sure that all pending resources are stopped.
+    * Should be called after draw becomes obsolete because canvas is destroyed or another draw call is about to be called.
+    * Call to this function does not undo changes made to draw target.
+    */
     close(): void
 
+    /**
+     * True, if session was already closed.
+     */
+    readonly isClosed: boolean
+
+    /**
+     * True, if session was marked as infinite.
+     */
     readonly isInfinite: boolean
 
-    // Promise resolved when draw session is done.
-    // It's never resolved if is infinite
+    /**
+     * Promise resolved once draw session is done.
+     * Also resolved when session gets closed and all processes are finished.
+     * For infinite sessions, resolved when session gets closed.
+     */
     readonly donePromise: Promise<void>
 }
 
