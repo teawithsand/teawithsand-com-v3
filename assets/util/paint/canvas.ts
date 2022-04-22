@@ -38,6 +38,10 @@ export class CanvasDraw implements Draw {
     drawToSession = (session: DrawSessionConsumer, elements: Iterable<DrawableElement>) => {
         // TODO(teawithsand): if drawing infinite stuff, then it must be checked here
 
+        session.addTask(async (chk) => {
+            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
+        })
+
         for (const element of elements) {
             if (element.type === "rectangle") {
                 session.addTask(async (chk) => {
@@ -82,13 +86,36 @@ export class CanvasDraw implements Draw {
                     if (chk.isClosed()) {
                         return
                     }
-
-                    const [[x1, y1], [x2, y2]] = element.ends
-
+                    this.applyStrokeOptions(element.strokeOptions)
                     this.ctx.beginPath()
-                    this.ctx.moveTo(x1, y1)
-                    this.ctx.lineTo(x2, y2)
-                    this.ctx.stroke()
+
+                    // TODO(teawithsand): better drawing of single point polygon, which is not filled,
+                    // which basically means that it's path
+                    if (element.points.length === 1) {
+                        const [x, y] = element.points[0]
+                        this.ctx.arc(x, y, 1, 0, 2 * Math.PI)
+                        this.finalizeFigure({
+                            type: "fill",
+                            fillOptions: {
+                                color: element.strokeOptions.color,
+                            },
+                            strokeOptions: element.strokeOptions,
+                        })
+                    } else {
+                        element.points.forEach((v, i) => {
+                            const [x, y] = v
+                            if (i === 0) {
+                                this.ctx.moveTo(x, y)
+                            } else {
+                                this.ctx.lineTo(x, y)
+                            }
+                        })
+
+                        this.finalizeFigure({
+                            type: "stroke",
+                            strokeOptions: element.strokeOptions,
+                        })
+                    }
                 })
             } else if (element.type === "polygon") {
                 session.addTask(async (chk) => {

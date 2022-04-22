@@ -39,7 +39,7 @@ export type DrawableElement = {
     figureOptions: FigureDrawOptions,
 } | {
     type: "path",
-    ends: [Point, Point],
+    points: Point[],
     strokeOptions: StrokeOptions,
 } | {
     type: "polygon",
