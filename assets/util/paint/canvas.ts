@@ -171,6 +171,17 @@ export class CanvasDraw implements Draw {
 
                     await promise
                 })
+            } else if (element.type === "text") {
+                session.addTask(async (chk) => {
+                    if (chk.isClosed()) {
+                        return
+                    }
+
+                    this.ctx.font = `${element.size}px ${element.font}`
+                    this.applyFillOptions(element.fillOptions)
+                    this.ctx.textAlign = element.textAlign ?? "start" 
+                    this.ctx.fillText(element.text, element.position[0], element.position[1], element.maxWidth)
+                })
             }
         }
     }

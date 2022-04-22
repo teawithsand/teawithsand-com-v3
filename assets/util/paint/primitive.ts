@@ -1,6 +1,19 @@
 import { Color } from "./color"
 import { DrawSessionConsumer } from "./session"
 
+// CSS size
+export type Size = number | [number, string] | string
+
+export const formatCssSize = (s: Size): string => {
+    if (typeof s === "string") {
+        return s
+    } else if (typeof s === "number") {
+        return `${s}px`
+    } else {
+        return `${s[0]}${s[1]}`
+    }
+}
+
 /**
  * Point encoded with x and y coordinates.
  * Point [0, 0] is in top left corner.
@@ -49,6 +62,17 @@ export type DrawableElement = {
     type: "image", // raster image to embed 
     position: [Point, Point] | [Point], // rect to fit image to, or point that image should be mounted at using some other method
     image: string, // URL here. Data/object URLs are allowed 
+} | {
+    type: "text",
+    position: Point,
+    text: string,
+    maxWidth?: number,
+
+    fillOptions: FillOptions,
+    textAlign?: "center" | "left" | "right" | "end" | "start",
+    
+    font: string, // Font name to use
+    size: number, // size in px to write
 }
 
 export interface DrawSessionResult {
