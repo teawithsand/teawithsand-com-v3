@@ -5,10 +5,15 @@ interface ClosedChecker {
     readonly isClosed: boolean
 }
 
+export interface DrawSessionConsumer {
+    readonly isInfinite: boolean
+    addTask: (t: (obj: ClosedChecker) => Promise<void>) => void
+}
+
 /**
  * Util for Draw classes, which implements DrawResult.
  */
-export class DrawSession implements ClosedChecker {
+export class DrawSession implements ClosedChecker, DrawSessionConsumer {
     private innerIsClosed = false
     private lateResolve: () => void
     private lateResolvePromise: Promise<void>

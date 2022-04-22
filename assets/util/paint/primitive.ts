@@ -1,4 +1,5 @@
 import { Color } from "./color"
+import { DrawSessionConsumer } from "./session"
 
 /**
  * Point encoded with x and y coordinates.
@@ -27,7 +28,7 @@ export type FigureDrawOptions = {
 /**
  * Any type, which can be painted onto HTML canvas.
  */
- export type DrawableElement = {
+export type DrawableElement = {
     type: "rectangle",
     points: [Point, Point],
     figureOptions: FigureDrawOptions,
@@ -64,5 +65,5 @@ export interface DrawResult {
 }
 
 export interface Draw {
-    drawElement(element: DrawableElement): DrawResult
+    drawToSession(session: DrawSessionConsumer, elements: Iterable<DrawableElement>): void
 }
