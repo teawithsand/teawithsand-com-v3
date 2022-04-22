@@ -1,4 +1,5 @@
-import { latePromise } from "../latePromise"
+import { latePromise } from "../lang/latePromise"
+import { TaskQueue } from "../lang/taskQueue"
 import { DrawSessionResult } from "./primitive"
 
 interface ClosedChecker {
@@ -22,8 +23,12 @@ export interface DrawSessionConsumer {
  */
 export class DrawSession implements DrawSessionConsumer {
     private innerIsClosed = false
+
     private lateResolve: () => void
+    private lateReject: (e: any) => void
     private lateResolvePromise: Promise<void>
+
+    private readonly taskQueue = new TaskQueue()
 
     private taskDoneCounter: number = 0
     private taskCounter: number = 0
@@ -32,8 +37,9 @@ export class DrawSession implements DrawSessionConsumer {
     private innerIsInfinite: boolean = false
 
     constructor() {
-        const [promise, resolve, _] = latePromise<void>()
+        const [promise, resolve, reject] = latePromise<void>()
         this.lateResolve = resolve
+        this.lateReject = reject
         this.lateResolvePromise = promise
     }
 
@@ -66,21 +72,25 @@ export class DrawSession implements DrawSessionConsumer {
             return;
         }
 
-        // it's up to task to cancel any side effect
-        // if session was closed
-        this.taskCounter += 1
+        this.taskQueue.scheduleTask(async () => {
+            // it's up to task to cancel any side effect
+            // if session was closed
+            this.taskCounter += 1
+            try {
+                await t({
+                    isClosed: () => {
+                        return this.innerIsClosed
+                    }
+                })
+            } catch(e) {
+                this.lateReject(e)
+            } finally {
+                this.taskDoneCounter += 1
 
-        t({
-            isClosed: () => {
-                return this.innerIsClosed
-            }
-        }).finally(() => {
-            this.taskDoneCounter += 1
-
-            if (this.isFinalized && this.taskDoneCounter === this.taskCounter) {
-                this.lateResolve()
+                if (this.isFinalized && this.taskDoneCounter === this.taskCounter) {
+                    this.lateResolve()
+                }
             }
         })
     }
-
 }
