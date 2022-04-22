@@ -17,7 +17,7 @@ import { makePostComponent } from "./Page/Blog/Post/Post"
 
 import allEndpoints from "@app/generated/allEndpoints.json"
 import Portfolio from "./Page/Portfolio/Portfolio"
-import Paint from "./UI/Paint/Paint"
+import PaintPage from "./Page/Tool/PaintPage"
 
 const checkEndpoints = (...eps: string[]) => {
     eps.forEach(ep =>{
@@ -49,7 +49,7 @@ export default () => {
             <Route path={blogHomePath} element={<BlogHome />} />
             <Route path={blogPostListPath} element={<PostList />} />
             <Route path={portfolioPath} element={<Portfolio />} />
-            <Route path={paintPath} element={<Paint />} />
+            <Route path={paintPath} element={<PaintPage />} />
             
             {
                 displayPosts.map(({ Component, path }, i) => <Route key={i} path={path} element={<Component />} />)
