@@ -56,6 +56,7 @@
         "extract-messages": "NODE_ENV=production encore production --progress"
     },
     "dependencies": {
+        "@use-gesture/react": "^10.2.11",
         "animate.css": "^4.1.1",
         "another-react-gallery": "^0.0.4",
         "bootstrap": "^5.1.3",
