@@ -75,7 +75,6 @@ export default () => {
                 .search(query)
                 .sort((a, b) => a.score - b.score)
                 .map((v) => v.item)
-            console.log({ fuseResults })
             indexes = fuseResults as number[]
         }
 

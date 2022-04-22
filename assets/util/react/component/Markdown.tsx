@@ -10,8 +10,6 @@ export const Markdown = (props: {
         xhtml: true,
     }), [markdown])
 
-    console.log({ html, markdown })
-
     return <div
         className={className}
         dangerouslySetInnerHTML={{ __html: html }}>
