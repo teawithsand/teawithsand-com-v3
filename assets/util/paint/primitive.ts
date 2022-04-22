@@ -23,6 +23,7 @@ export type Point = [number, number]
 export interface StrokeOptions {
     size: number,
     color: Color,
+    lineCap: "butt" | "round" | "square",
 }
 
 export interface FillOptions {

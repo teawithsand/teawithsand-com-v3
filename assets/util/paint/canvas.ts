@@ -10,6 +10,7 @@ export class CanvasDraw implements Draw {
     private applyStrokeOptions = (options: StrokeOptions) => {
         this.ctx.strokeStyle = encodeColor(options.color)
         this.ctx.lineWidth = options.size
+        this.ctx.lineCap = options.lineCap
     }
 
     private applyFillOptions = (options: FillOptions) => {
