@@ -1,6 +1,6 @@
 import { Subscriber } from "final-form";
-import EventBus, { SimpleEventBus } from "./eventBus";
-import { Subscribable, SubscriptionCanceler } from "./stateSubscribe";
+import EventBus, { SimpleEventBus } from "./EventBus";
+import { StickySubscribable, Subscribable, SubscriptionCanceler } from "./stateSubscribe";
 
 /**
  * Event bus, which:
@@ -12,7 +12,7 @@ export default interface StickyEventBus<T> extends EventBus<T> {
     readonly lastEvent: T
 }
 
-export class DefaultStickyEventBus<T> implements StickyEventBus<T>, Subscribable<T> {
+export class DefaultStickyEventBus<T> implements StickyEventBus<T>, StickySubscribable<T> {
     private readonly innerBus = new SimpleEventBus()
 
     constructor(private innerLastEvent: T) {
