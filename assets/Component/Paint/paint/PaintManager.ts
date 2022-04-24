@@ -51,12 +51,12 @@ export default interface PaintManager {
     /**
      * Appends specified PaintElement to current layer.
      */
-    appendToCurrentLayer(e: PaintElement): void
+    appendToCurrentLayer(...elements: PaintElement[]): void
 
     /**
      * Sets or unsets current element.
      */
-    setCurrentElement(element: PaintElement | null): void
+    setCurrentElements(element: PaintElement[]): void
 
     /**
      * Releases all *internal* resources allocated by this PaintManager.

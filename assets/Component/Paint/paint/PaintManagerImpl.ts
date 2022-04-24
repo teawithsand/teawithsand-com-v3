@@ -8,7 +8,7 @@ import PaintManager from "./PaintManager";
 export default class PaintManagerImpl implements PaintManager {
     private layers: Layer[] = []
     private currentLayerIndex: number = 0
-    private currentElement: PaintElement | null = null
+    private currentElements: PaintElement[] = []
 
     private currentSessionResult: CanvasSessionResult | null = null
 
@@ -70,9 +70,8 @@ export default class PaintManagerImpl implements PaintManager {
         this.layerRedraw(this.currentLayerIndex)
     }
 
-    setCurrentElement = (element: CanvasDrawElement | null): void => {
-        this.currentElement = element
-
+    setCurrentElements = (element: PaintElement[]): void => {
+        this.currentElements = [...element]
         this.currentElementRedraw()
     }
 
@@ -103,8 +102,8 @@ export default class PaintManagerImpl implements PaintManager {
                 }
 
                 if (i === self.currentLayerIndex) {
-                    if (self.currentElement !== null) {
-                        yield self.currentElement
+                    for (const currentElement of self.currentElements) {
+                        yield currentElement
                     }
                 }
             }
