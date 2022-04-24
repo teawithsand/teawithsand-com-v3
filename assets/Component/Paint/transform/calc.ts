@@ -1,4 +1,4 @@
-import { Point } from "./primitive";
+import { Point } from "../primitive/primitive"
 
 export const euclideanDistance = (...points: Point[]) => {
     if(points.length <= 1)
