@@ -1,3 +1,4 @@
+import PaintManagerMutation from "../../scene/mutation/PaintManagerMutation"
 import PaintTool from "./PaintTool"
 
 /**
@@ -7,12 +8,7 @@ export default interface PaintToolCallbacks {
     /**
      * Notifies parent that mutations have changed and refreshing scene is required.
      */
-    notifyMutationsChanged(): void
-
-    /**
-     * Notifies parent that tools want it's current mutations to be applied to scene.
-     */
-    applyMutations(): void
+    notifyMutationsChanged(mutations: PaintManagerMutation[]): void
 
     /**
      * Discards current tool, letting parent decide what should happen now.

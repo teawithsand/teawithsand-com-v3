@@ -1,4 +1,4 @@
-import StickyEventBus from "@app/util/lang/bus/stickyEventBus"
+import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 import PaintSceneManager from "../scene/PaintSceneManager"
 import PaintUIInput from "./PaintUIInput"
 import PaintUIState from "./PaintUIState"
@@ -18,7 +18,7 @@ export default interface PaintUIManager {
      * Bus, which emits event each time PaintUIstate changes.
      * Allows reading state as well.
      */
-    readonly state: StickyEventBus<Readonly<PaintUIState>>
+    readonly state: StickySubscribable<Readonly<PaintUIState>>
 
     /**
      * Handles UI input and takes some actions/updates current state.

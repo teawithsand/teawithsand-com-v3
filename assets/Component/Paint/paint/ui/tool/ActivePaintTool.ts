@@ -21,4 +21,10 @@ export default interface ActivePaintTool {
      * Returns mutations, which can be applied to PaintManager.
      */
     getMutations(): PaintManagerMutation[]
+
+    /**
+     * Called in order to allow APT to cleanup it's resources.
+     * After this call, no call to other APT functions will be done.
+     */
+    close(): void
 }
