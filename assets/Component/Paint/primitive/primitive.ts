@@ -10,5 +10,5 @@ export type Point = [number, number]
 export type Size = number
 
 export const pointEquals = (a: Point, b: Point): boolean => {
-    return a[0] == b[0] && a[1] == b[1]
+    return a[0] === b[0] && a[1] === b[1]
 }

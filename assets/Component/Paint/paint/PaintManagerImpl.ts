@@ -1,6 +1,6 @@
 import Canvas from "../canvas/Canvas";
 import CanvasDrawElement from "../canvas/CanvasDrawElement";
-import CanvasSession, { CanvasSessionResult } from "../canvas/CanvasSession";
+import { CanvasSessionResult } from "../canvas/CanvasSession";
 import Layer, { LayerMetadata } from "./Layer";
 import PaintElement from "./PaintElement";
 import PaintManager from "./PaintManager";
@@ -110,12 +110,8 @@ export default class PaintManagerImpl implements PaintManager {
             }
         }
 
-        const s = new CanvasSession()
-
         this.canvas.reset()
-        this.canvas.draw(iter(), s)
-
-        this.currentSessionResult = s.finalize()
+        this.currentSessionResult = this.canvas.draw(iter())
     }
 
     /**

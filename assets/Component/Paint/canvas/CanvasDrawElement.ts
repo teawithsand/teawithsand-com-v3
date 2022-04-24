@@ -19,16 +19,19 @@ export type CanvasDrawElementProperties = {
 /**
  * Element, which canvas knows how to draw.
  */
-export type CanvasDrawElement = ({
+export type CanvasDrawElement = {
     type: "path",
     points: Point[],
+    props: CanvasDrawElementProperties & { action: "fill" },
 } | {
     type: "circle",
     center: Point,
     radius: number,
+    props: CanvasDrawElementProperties,
 } | {
     type: "rect",
     ends: [Point, Point],
+    props: CanvasDrawElementProperties,
 } | {
     type: "text",
     position: Point,
@@ -43,12 +46,11 @@ export type CanvasDrawElement = ({
     type: "polygon",
     points: Point[],
     autoClose?: boolean, // whether or not should be polygon last point closed to it's first one. False by default.
+    props: CanvasDrawElementProperties,
 } | {
     type: "image", // raster image to embed 
     position: [Point, Point] | [Point], // rect to fit image to, or point that image should be mounted at using some other method
     image: string, // URL here. Data/object URLs are allowed 
-}) & ({
-    props: CanvasDrawElementProperties,
-})
+}
 
 export default CanvasDrawElement

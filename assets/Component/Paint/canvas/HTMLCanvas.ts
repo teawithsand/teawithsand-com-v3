@@ -168,18 +168,13 @@ export default class HTMLCanvas implements Canvas {
 
             await promise
         } else if (element.type === "text") {
-            const finalizer = this.initFigure(element.props)
-            try {
-                if (chk.isClosed()) {
-                    return
-                }
-
-                this.ctx.font = `${element.size}px ${element.font}`
-                this.ctx.textAlign = element.textAlign ?? "start"
-                this.ctx.fillText(element.text, element.position[0], element.position[1], element.maxWidth)
-            } finally {
-                finalizer()
+            if (chk.isClosed()) {
+                return
             }
+
+            this.ctx.font = `${element.size}px ${element.font}`
+            this.ctx.textAlign = element.textAlign ?? "start"
+            this.ctx.fillText(element.text, element.position[0], element.position[1], element.maxWidth)
         }
     }
 }
