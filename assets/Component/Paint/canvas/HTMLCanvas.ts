@@ -3,7 +3,7 @@ import { TaskQueue } from "@app/util/lang/taskQueue";
 import { encodeColor, pointEquals } from "../primitive";
 import Canvas from "./Canvas";
 import CanvasDrawElement, { CanvasDrawElementProperties } from "./CanvasDrawElement";
-import { CanvasSessionClosedChecker, CanvasSessionConsumer, CanvasSessionResult } from "./CanvasSession";
+import { CanvasSessionClosedChecker, CanvasSessionResult } from "./CanvasSession";
 
 export default class HTMLCanvas implements Canvas {
     constructor(private readonly canvas: HTMLCanvasElement) {
