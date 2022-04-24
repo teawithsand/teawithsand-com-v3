@@ -149,13 +149,8 @@ export default class HTMLCanvas implements Canvas {
                         return;
                     }
 
-                    if (element.position.length === 1) {
-                        const [[x, y]] = element.position
-                        this.ctx.drawImage(image, x, y)
-                    } else {
-                        const [[x, y], [dx, dy]] = element.position
-                        this.ctx.drawImage(image, x, y, dx, dy)
-                    }
+                    const [[x, y], [dx, dy]] = element.position
+                    this.ctx.drawImage(image, x, y, dx, dy)
                 } finally {
                     resolve()
                 }
@@ -175,6 +170,8 @@ export default class HTMLCanvas implements Canvas {
             this.ctx.font = `${element.size}px ${element.font}`
             this.ctx.textAlign = element.textAlign ?? "start"
             this.ctx.fillText(element.text, element.position[0], element.position[1], element.maxWidth)
+        } else {
+            throw new Error("unreachable code")
         }
     }
 }

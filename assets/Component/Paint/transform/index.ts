@@ -12,7 +12,7 @@ export type PointTransformer = (p: Point) => Point
  */
 export type Transformer = (element: PaintElement) => PaintElement
 
-
 export * from "./calc"
 export * from "./rotate"
 export * from "./translate"
+export * from "./aabb"
