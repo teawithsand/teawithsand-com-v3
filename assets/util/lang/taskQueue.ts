@@ -40,7 +40,8 @@ export class TaskQueue {
     }
 
     /**
-     * Schedules task in queue and returns promise, which resolves once prev task was done.
+     * Schedules task in queue and returns promise, which resolves once provided task is done.
+     * In other words: it's as-if task's promise was returned.
      */
     scheduleTask = <T>(task: Task<T>): Promise<T> => {
         const [promise, resolve, reject] = latePromise<T>()
