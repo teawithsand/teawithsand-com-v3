@@ -3,6 +3,13 @@ export type DeltaSubscriber<S> = (previousState: S, newState: S) => void
 export type Extractor<S, E> = (state: S) => E
 export type SubscriptionCanceler = () => void
 
+/**
+ * Something, one can subscribe to.
+ */
+export interface Subscribable<T> {
+    addSubscriber(subscriber: Subscriber<T>): SubscriptionCanceler
+}
+
 export class StateSubscriptionManager<S> {
     private subscribers: Subscriber<S>[] = []
     constructor(private innerState: S) { }
