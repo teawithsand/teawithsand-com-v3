@@ -1,5 +1,5 @@
-import { UIState } from "@app/Component/UI/Paint/Paint";
 import PaintManagerMutation from "../../scene/mutation/PaintManagerMutation";
+import PaintUIState from "../PaintUIState";
 import PaintToolCallbacks from "./PaintToolCallbacks";
 import PaintToolInput from "./PaintToolInput";
 import PaintToolInputResult from "./PaintToolInputResult";
@@ -10,7 +10,7 @@ export default interface ActivePaintTool {
     /**
      * Updates UI state, 
      */
-    updateUIState(state: UIState): void
+    updateUIState(state: PaintUIState): void
 
     /**
      * Processes input from canvas.
