@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import ImagePaintElement from "../../element/ImagePaintElement"
+import ImagePaintElement from "../../element/impls/ImagePaintElement"
 import { normalizeRect, NORM_RECT_MIN, rectDimensions } from "../../primitive/calc"
 import { PaintDisplayElementProps as ImagePaintDisplayElement } from "../PaintDisplayElement"
 import { PaintDisplayInfoContext } from "../PaintDisplayInfo"

@@ -1,7 +1,7 @@
-import { Point } from "../primitive";
-import PaintElement from "./PaintElement";
-import PaintElementFill from "./PaintElementFill";
-import PaintElementStroke from "./PaintElementStroke";
+import { Point } from "../../primitive"
+import PaintElement from "../PaintElement"
+import PaintElementFill from "../PaintElementFill"
+import PaintElementStroke from "../PaintElementStroke"
 
 export default class PolygonPaintElement extends PaintElement {
     public points: Point[]

@@ -1,8 +1,8 @@
-import ImagePaintElement from "@app/Component/DOMPaint/element/ImagePaintElement"
+import ImagePaintElement from "@app/Component/DOMPaint/element/impls//ImagePaintElement"
 import PaintElementFill from "@app/Component/DOMPaint/element/PaintElementFill"
 import PaintElementStroke from "@app/Component/DOMPaint/element/PaintElementStroke"
-import PathPaintElement from "@app/Component/DOMPaint/element/PathPaintElement"
-import PolygonPaintElement from "@app/Component/DOMPaint/element/PolygonPaintElement"
+import PathPaintElement from "@app/Component/DOMPaint/element/impls/PathPaintElement"
+import PolygonPaintElement from "@app/Component/DOMPaint/element/impls//PolygonPaintElement"
 import PaintLayer from "@app/Component/DOMPaint/layer/Layer"
 import PaintLayerMetadata from "@app/Component/DOMPaint/layer/LayerMetadata"
 import { Point, Rect } from "@app/Component/DOMPaint/primitive"
@@ -66,11 +66,9 @@ export default () => {
                         renderId: "e3",
                     }),
 
-                    new PolygonPaintElement({
+                    new PathPaintElement({
                         points,
                         stroke: strokeOne,
-                        autoClose: false,
-                        fill: fillOne,
                         renderId: GenerateUUID(),
                     }),
                 ],

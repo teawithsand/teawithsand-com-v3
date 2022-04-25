@@ -1,5 +1,5 @@
-import { Rect } from "../primitive";
-import PaintElement from "./PaintElement";
+import { Rect } from "../../primitive";
+import PaintElement from "../PaintElement";
 
 export type ObjectFit =
     "contain" |

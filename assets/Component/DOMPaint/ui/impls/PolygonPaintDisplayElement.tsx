@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import PolygonPaintElement from "../../element/PolygonPaintElement"
+import PolygonPaintElement from "../../element/impls/PolygonPaintElement"
 import { renderSvgProps } from "../../element/svg"
 import { PaintDisplayElementProps } from "../PaintDisplayElement"
 import { PaintDisplayInfoContext } from "../PaintDisplayInfo"

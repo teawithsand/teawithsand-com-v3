@@ -7,12 +7,19 @@ import PaintDisplayLayer from "./PaintDisplayLayer"
 import styles from "./paintDisplay.scss?module"
 import usePaintDraw from "@app/Component/Page/Tool/usePaintDraw"
 import DrawEvent from "./DrawEvent"
+import classnames from "@app/util/lang/classnames"
+import PaintElementProcessor from "../element/processor/PaintElementProcessor"
 
 export default (props: {
     layers: Iterable<PaintLayer>,
-    onDrawEvent?: (e: DrawEvent) => void
+
+    processor?: PaintElementProcessor,
+
+    onDrawEvent?: (e: DrawEvent) => void,
+    className?: string,
+    style?: React.CSSProperties,
 }) => {
-    const { layers, onDrawEvent } = props
+    const { layers, onDrawEvent, processor } = props
     const { height, width } = useWindowDimensions()
 
     const ref = useRef()
@@ -24,8 +31,9 @@ export default (props: {
 
     return <div
         ref={ref as React.MutableRefObject<HTMLDivElement>}
-        className={styles.paintDisplay}
+        className={classnames(styles.paintDisplay, props.className)}
         {...bind}
+        style={props.style}
     >
         <PaintDisplayInfoContext.Provider value={{
             canvasHeight: height * 2,
@@ -33,6 +41,7 @@ export default (props: {
         }}>
             {
                 [...layers].map((v, i) => <PaintDisplayLayer
+                    topLevelProcessor={processor}
                     baseZIndex={(i + 1) * 1000}
                     layer={v}
                     key={i}

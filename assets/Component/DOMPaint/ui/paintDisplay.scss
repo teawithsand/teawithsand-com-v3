@@ -19,3 +19,7 @@
         user-select: none;
     }
 }
+
+.paint-overlay {
+    z-index: 10000000;
+}

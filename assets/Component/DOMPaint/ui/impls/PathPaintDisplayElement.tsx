@@ -1,6 +1,6 @@
 import windowed from "@app/util/lang/windowed"
 import React, { useContext } from "react"
-import PathPaintElement from "../../element/PathPaintElement"
+import PathPaintElement from "../../element/impls/PathPaintElement"
 import { renderSvgProps } from "../../element/svg"
 import { PaintDisplayElementProps } from "../PaintDisplayElement"
 import { PaintDisplayInfoContext } from "../PaintDisplayInfo"

@@ -1,6 +1,6 @@
-import { Point } from "../primitive";
-import PaintElement from "./PaintElement";
-import PaintElementStroke from "./PaintElementStroke";
+import { Point } from "../../primitive"
+import PaintElement from "../PaintElement"
+import PaintElementStroke from "../PaintElementStroke"
 
 export default class PathPaintElement extends PaintElement {
     public points: Point[]
