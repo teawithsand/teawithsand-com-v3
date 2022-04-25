@@ -2,11 +2,10 @@ import ImagePaintElement from "@app/Component/DOMPaint/element/impls//ImagePaint
 import PaintElementFill from "@app/Component/DOMPaint/element/PaintElementFill"
 import PaintElementStroke from "@app/Component/DOMPaint/element/PaintElementStroke"
 import PathPaintElement from "@app/Component/DOMPaint/element/impls/PathPaintElement"
-import PolygonPaintElement from "@app/Component/DOMPaint/element/impls//PolygonPaintElement"
 import PaintLayer from "@app/Component/DOMPaint/layer/Layer"
 import PaintLayerMetadata from "@app/Component/DOMPaint/layer/LayerMetadata"
 import { Point, Rect } from "@app/Component/DOMPaint/primitive"
-import PaintDisplay from "@app/Component/DOMPaint/ui/PaintDisplay"
+import PaintDisplay from "@app/Component/DOMPaint/render/PaintDisplay"
 import { GenerateUUID } from "@app/util/lang/uuid"
 import React, { useState } from "react"
 
