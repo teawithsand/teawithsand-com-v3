@@ -1,6 +1,10 @@
 import { Point } from "../../primitive"
 
 export type PaintUIInput = {
+    // Note: mouse events aren't delivered when user hovers mouse
+    //  only when left mouse button is pressed
+    //  or when user touches touch screen
+    //  This behavior ensures compatibility with touch screen.
     type: "mouse",
     x: number,
     y: number,
