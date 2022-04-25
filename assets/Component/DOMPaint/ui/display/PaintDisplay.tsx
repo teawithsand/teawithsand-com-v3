@@ -76,7 +76,11 @@ export default (props: {
         ref={ref as React.MutableRefObject<HTMLDivElement>}
         className={classnames(styles.paintDisplay, props.className)}
         {...bind}
-        style={props.style}
+        style={{
+            width: width,
+            height: height,
+            ...(props.style ?? {})
+        }}
     >
         <PaintDisplayInfoContext.Provider value={{
             canvasHeight: height * 2,
