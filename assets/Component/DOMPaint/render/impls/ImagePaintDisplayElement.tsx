@@ -1,16 +1,10 @@
-import React, { useContext } from "react"
+import React from "react"
 import ImagePaintElement from "../../element/impls/ImagePaintElement"
 import { normalizeRect, NORM_RECT_MIN, rectDimensions } from "../../primitive/calc"
 import { PaintDisplayElementProps as ImagePaintDisplayElement } from "../PaintDisplayElement"
-import { PaintDisplayInfoContext } from "../PaintDisplayInfo"
 
 export default (props: ImagePaintDisplayElement<ImagePaintElement>) => {
     const { element, zIndex } = props
-    const { canvasHeight, canvasWidth } = useContext(PaintDisplayInfoContext)
-
-    const style = {
-        zIndex,
-    }
 
     const normalizedRect = normalizeRect(element.rect)
     const { width, height } = rectDimensions(normalizedRect)
