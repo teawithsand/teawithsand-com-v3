@@ -5,6 +5,11 @@
 export type Point = [number, number]
 
 /**
+ * Rectangle defined by two points.
+ */
+export type Rect = [Point, Point]
+
+/**
  * CSS size in PX units or canvas size in pixels.
  */
 export type Size = number

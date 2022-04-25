@@ -1,4 +1,4 @@
-import { Point } from "./primitive"
+import { Point, Rect } from "./primitive"
 
 export const euclideanDistance = (...points: Point[]) => {
     if (points.length <= 1)
@@ -30,20 +30,36 @@ export const manhattanDistance = (...points: Point[]) => {
     return agg
 }
 
+export const NORM_RECT_MIN = 0
+export const NORM_RECT_MAX = 1
+
 /**
  * Normalizes rectangle provided.
  */
-export const normalizeRect = (points: [Point, Point]): [Point, Point] => {
-    const [[x1, y1], [x2, y2]] = points
+export const normalizeRect = (rect: Rect): Rect => {
+    const [[x1, y1], [x2, y2]] = rect
 
     return [
         [
             Math.min(x1, x2),
-            Math.max(y1, y2),
+            Math.min(y1, y2),
         ],
         [
             Math.max(x1, x2),
-            Math.min(y1, y2),
+            Math.max(y1, y2),
         ]
     ]
+}
+
+export const rectDimensions = (rect: Rect): {
+    width: number,
+    height: number,
+} => {
+    const width = Math.abs(rect[0][0] - rect[1][0])
+    const height = Math.abs(rect[0][1] - rect[1][1])
+
+    return {
+        width,
+        height,
+    }
 }

@@ -1,12 +1,21 @@
+@use "@app/styles/scrollbar.scss" as scrollbar;
+
 .paint-display {
+    @include scrollbar.pretty-scrollbar();
+
     display: grid;
-    grid-template-columns: 100vw;
-    grid-template-rows: 100vh;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
 
     touch-action: "none";
+    overflow: auto;
 
     & > * {
         grid-row: 1;
         grid-column: 1;
+    }
+
+    & > * {
+        user-select: none;
     }
 }

@@ -22,15 +22,14 @@ export default (props: {
         }
     })
 
-
     return <div
         ref={ref as React.MutableRefObject<HTMLDivElement>}
         className={styles.paintDisplay}
         {...bind}
     >
         <PaintDisplayInfoContext.Provider value={{
-            canvasHeight: height,
-            canvasWidth: width,
+            canvasHeight: height * 2,
+            canvasWidth: width * 2,
         }}>
             {
                 [...layers].map((v, i) => <PaintDisplayLayer

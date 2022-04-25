@@ -1,10 +1,11 @@
+import ImagePaintElement from "@app/Component/DOMPaint/element/ImagePaintElement"
 import PaintElementFill from "@app/Component/DOMPaint/element/PaintElementFill"
 import PaintElementStroke from "@app/Component/DOMPaint/element/PaintElementStroke"
 import PathPaintElement from "@app/Component/DOMPaint/element/PathPaintElement"
 import PolygonPaintElement from "@app/Component/DOMPaint/element/PolygonPaintElement"
 import PaintLayer from "@app/Component/DOMPaint/layer/Layer"
 import PaintLayerMetadata from "@app/Component/DOMPaint/layer/LayerMetadata"
-import { Point } from "@app/Component/DOMPaint/primitive"
+import { Point, Rect } from "@app/Component/DOMPaint/primitive"
 import PaintDisplay from "@app/Component/DOMPaint/ui/PaintDisplay"
 import { GenerateUUID } from "@app/util/lang/uuid"
 import React, { useState } from "react"
@@ -19,7 +20,7 @@ export default () => {
     }
 
     const [points, setPoints] = useState<Point[]>([])
-    
+
     return <PaintDisplay
         onDrawEvent={(e) => {
             if (e.type === "mouse") {
@@ -53,6 +54,16 @@ export default () => {
                         ],
                         stroke: { ...strokeOne, color: [0, 0, 255] },
                         renderId: "p1"
+                    }),
+
+                    new ImagePaintElement({
+                        url: "https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png",
+                        objectFit: "contain",
+                        rect: [
+                            [0, 0],
+                            [512, 512],
+                        ].map(v => v.map(v => v + 100)) as Rect,
+                        renderId: "e3",
                     }),
 
                     new PolygonPaintElement({
