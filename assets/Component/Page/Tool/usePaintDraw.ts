@@ -12,30 +12,38 @@ export default (
     const isClickedRef = useRef(false)
     const lastInCanvasPointRef = useRef<Point>([0, 0])
 
+    const fixCoordinates = (p: Point): Point => {
+        const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
+
+        return [
+            p[0] - bb.left + elementRef.current.scrollLeft,
+            p[1] - bb.top + elementRef.current.scrollTop,
+        ]
+    }
+
     const handlePointerPositionChange = (data: {
         x: number,
         y: number,
     }) => {
-        let { x, y } = data
+        let { x: xxxxxx, y: yyyyyy } = data
+        let p: Point = [xxxxxx, yyyyyy]
 
         if (onCanvasMouseEvent && elementRef.current) {
             const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
-
-            x = x - bb.left
-            y = y - bb.top
-
             // ensure our point is in bound of canvas
-            if (x < 0 || y < 0 || x > bb.width || y > bb.height) {
+            if (xxxxxx < 0 || yyyyyy < 0 || xxxxxx > bb.width || yyyyyy > bb.height) {
                 return;
             }
 
-            lastInCanvasPointRef.current = [x, y]
+            p = fixCoordinates(p)
+
+            lastInCanvasPointRef.current = p
 
             if (isClickedRef.current) {
                 onCanvasMouseEvent({
                     type: "mouse",
                     pressed: isClickedRef.current,
-                    point: [x, y],
+                    point: p,
                 })
             }
         }
@@ -61,20 +69,20 @@ export default (
         x: number,
         y: number,
     }) => {
-        let { x, y } = data
+        let { x: xxxxxx, y: yyyyyy } = data
+        let p: Point = [xxxxxx, yyyyyy]
 
         if (elementRef.current) {
             const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
-            x = x - bb.left
-            y = y - bb.top
+            p = fixCoordinates(p)
 
-            lastInCanvasPointRef.current = [x, y]
+            lastInCanvasPointRef.current = p
             isClickedRef.current = true
 
             onCanvasMouseEvent({
                 type: "mouse",
                 pressed: isClickedRef.current,
-                point: [x, y],
+                point: p,
             })
         }
     }
