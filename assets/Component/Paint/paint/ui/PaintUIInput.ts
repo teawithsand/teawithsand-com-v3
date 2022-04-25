@@ -4,6 +4,11 @@ export type PaintUIInput = {
     y: number,
     pressed: boolean,
     pressedToggled: boolean,
+} | {
+    type: "setting-change",
+    data: SettingChangeUIInput,
 }
+
+export type SettingChangeUIInput = {}
 
 export default PaintUIInput

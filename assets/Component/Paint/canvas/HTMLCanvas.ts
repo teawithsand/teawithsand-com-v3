@@ -5,6 +5,13 @@ import Canvas from "./Canvas";
 import CanvasDrawElement, { CanvasDrawElementProperties } from "./CanvasDrawElement";
 import { CanvasSessionClosedChecker, CanvasSessionResult } from "./CanvasSession";
 
+export type HTMLCanvasProps = {
+    width: number,
+    height: number,
+    cssWidth?: number,
+    cssHeight?: number,
+}
+
 export default class HTMLCanvas implements Canvas {
     constructor(private readonly canvas: HTMLCanvasElement) {
     }

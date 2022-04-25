@@ -11,8 +11,18 @@ export default interface PaintToolCallbacks {
     notifyMutationsChanged(mutations: PaintManagerMutation[]): void
 
     /**
+     * Notifies parent that current mutations should be applied to canvas.
+     * Also unsets mutations from local buffer, since now they are part of canvas.
+     */
+    notifyMutationsApply(): void
+
+    /**
      * Discards current tool, letting parent decide what should happen now.
      */
     discardTool(): void
+
+    /**
+     * Sets new tool, which replaces this one.
+     */
     setTool(tool: PaintTool): void
 }

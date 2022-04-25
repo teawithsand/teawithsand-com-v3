@@ -9,7 +9,7 @@ import PaintToolCallbacks from "./PaintToolCallbacks"
 export default interface PaintTool {
     activate(
         callbacks: PaintToolCallbacks,
-        scene: PaintScene,
-        state: PaintUIState,
+        scene: Readonly<PaintScene>,
+        state: Readonly<PaintUIState>,
     ): ActivePaintTool
 }

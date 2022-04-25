@@ -1,37 +1,34 @@
-import PaintCanvas from "@app/Component/UI/Paint/PaintCanvas"
-import { DrawableElement } from "@app/util/paint/primitive"
+import PaintElement from "@app/Component/Paint/paint/PaintElement"
+import PaintElementsCanvas from "@app/Component/Paint/ui/PaintElementsCanvas"
 import React from "react"
 
 export default () => {
-    const elements: DrawableElement[] = [
-        {
-            type: "circle",
-            figureOptions: {
-                type: "fill",
-                fillOptions: {
-                    color: "black",
-                },
-                strokeOptions: {
-                    color: "red",
-                    size: 10,
-                },
-            },
-            point: [100, 100],
-            radius: 50,
-        },
+    const elements: PaintElement[] = [
         {
             type: "image",
             image: 'https://www.lenna.org/len_std.jpg',
             position: [
                 [0, 0],
-                [100, 100],
-            ]
-        }
+                [1000, 1000],
+            ],
+        },
+        {
+            type: "circle",
+            props: {
+                action: "fill",
+                fillColor: [0, 0, 0, 1],
+                strokeCap: "butt",
+                strokeColor: [0, 0, 0, 1],
+                strokeSize: 10,
+            },
+            center: [1000 / 2, 1000 / 2],
+            radius: 50,
+        },
     ]
-    
-    return <PaintCanvas
-        width={200}
-        height={200}
+
+    return <PaintElementsCanvas
+        width={1000}
+        height={1000}
         elements={elements}
     />
 }
