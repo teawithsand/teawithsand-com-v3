@@ -34,19 +34,25 @@ export default class HTMLCanvas implements Canvas {
 
     draw = (elements: Iterable<CanvasDrawElement>): CanvasSessionResult => {
         let ctr = 0
-        let p = []
+
+        let p = Promise.resolve()
         let isClosed = false
         for (const e of elements) {
             ctr += 1
 
             const chk = new CanvasSessionClosedChecker(() => isClosed)
+            /*
             p.push(this.queue.scheduleTask(async () => {
-                this.innerPlotElement(e, chk)
+                
             }))
+            */
+            p = p.then(() => this.innerPlotElement(e, chk))
         }
 
-        const donePromise = Promise.all(p)
-            .then(() => { }) // fix return type
+        // const donePromise = Promise.all(p)
+        //     .then(() => { }) // fix return type
+
+        const donePromise = p
 
         return {
             donePromise,

@@ -6,6 +6,7 @@ import PaintUIState from "@app/Component/Paint/paint/ui/PaintUIState";
 import ActivePaintTool from "../ActivePaintTool";
 import PaintTool from "../PaintTool";
 import PaintToolCallbacks from "../PaintToolCallbacks";
+import AppendPaintManagerMutation from "../../../scene/mutation/AppendPaintManagerMutation";
 
 export default class PathPaintTool implements PaintTool {
     activate = (callbacks: PaintToolCallbacks, scene: PaintScene, state: PaintUIState): ActivePaintTool => {
@@ -17,8 +18,31 @@ export default class PathPaintTool implements PaintTool {
         let currentPath: Point[] = []
 
         const computeMutations = (): PaintManagerMutation[] => {
-            return []
+            let sz = 0
+            for (const p of [...paths, currentPath]) {
+                sz += p.length
+            }
+            console.log("mutation size", sz)
+            return [
+                new AppendPaintManagerMutation(
+                    [
+                        ...paths,
+                        currentPath
+                    ].map(p => ({
+                        type: "path",
+                        points: p,
+                        props: {
+                            action: "stroke",
+                            strokeCap: "butt",
+                            strokeColor: [0, 0, 0],
+                            strokeSize: 10,
+                        }
+                    }))
+                )
+            ]
         }
+
+        console.log("done tool activation!")
 
         return {
             callbacks,
@@ -66,7 +90,7 @@ export default class PathPaintTool implements PaintTool {
             updateUIState: (s) => {
                 state = s
             },
-            close: () => { 
+            close: () => {
                 // nothing to release
             },
         }

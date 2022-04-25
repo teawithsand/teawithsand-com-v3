@@ -35,6 +35,7 @@ export default class PaintUIManagerImpl implements PaintUIManager {
     }
 
     handleInput = (uiInput: PaintUIInput): void => {
+        console.log("inManager", { uiInput })
         const ct = this.currentTool
         if (ct) {
             const res = ct.active.processInput(uiInput)
@@ -64,7 +65,7 @@ export default class PaintUIManagerImpl implements PaintUIManager {
     }
 
     private innerHandleUIInput = (input: PaintUIInput) => {
-        // TODO(teawithsand): update state here
+
     }
 
     private releaseTool = () => {
@@ -102,4 +103,8 @@ export default class PaintUIManagerImpl implements PaintUIManager {
         this.paintSceneManager.commit()
     }
 
+    close = () => {
+        this.releaseTool()
+        // aside from that, nothing to close here
+    }
 }

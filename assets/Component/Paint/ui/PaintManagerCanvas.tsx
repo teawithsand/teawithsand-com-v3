@@ -1,51 +1,60 @@
 import React, { MutableRefObject, useEffect, useRef } from "react"
-import CanvasDrawElement from "../canvas/CanvasDrawElement"
-import HTMLCanvas, { HTMLCanvasProps } from "../canvas/HTMLCanvas"
+import { HTMLCanvasProps } from "../canvas/HTMLCanvas"
 import PaintUIInput from "../paint/ui/PaintUIInput"
+import PaintUIManager from "../paint/ui/PaintUIManager"
 import { Point } from "../primitive"
 
 /**
  * Util component, which draws specified set of elements onto canvas with specified properties.
  */
 export default (props: {
-    elements: Iterable<CanvasDrawElement>,
+    managerFactory: (canvas: HTMLCanvasElement) => PaintUIManager,
+
     ref?: MutableRefObject<HTMLCanvasElement>,
     style?: React.CSSProperties,
     className?: string,
 
-    onError?: (e: any) => void,
-    onDone?: () => void,
-
-    // Canvas catches only mouse input
-    onCanvasMouseEvent?: (event: PaintUIInput & { type: "mouse" }) => void,
+    onManagerSet?: (manager: PaintUIManager) => void,
+    onManagerClose?: (manager: PaintUIManager) => void,
 } & HTMLCanvasProps) => {
-    const { elements, width, height, className, style, cssWidth, cssHeight, onError, onDone, onCanvasMouseEvent } = props
+    const { managerFactory, width, height, className, style, cssWidth, cssHeight, onManagerSet, onManagerClose } = props
     const elementRef = props.ref ?? useRef<HTMLCanvasElement>()
+
+    const managerRef = useRef<PaintUIManager | null>()
 
     useEffect(() => {
         if (elementRef.current) {
-            const element = elementRef.current
-            const canvasOp = new HTMLCanvas(element)
+            if (elementRef.current) {
+                const manager = managerFactory(elementRef.current)
+                managerRef.current = manager
 
-            canvasOp.reset()
-            const result = canvasOp.draw(elements)
+                if (onManagerSet) {
+                    onManagerSet(manager)
+                }
 
-            result.donePromise
-                .then(() => {
-                    if (onDone) onDone()
-                })
-                .catch((e) => {
-                    if (onError) onError(e)
-                })
-
-            return () => {
-                result.close()
+                return () => {
+                    if (onManagerClose) {
+                        onManagerClose(manager)
+                    }
+                    manager.close()
+                }
+            } else {
+                managerRef.current = null
             }
         }
-    }, [elements, onDone, onError])
+    }, [elementRef.current, managerFactory])
+
+
+    // TODO(teawithsand): remove copy&paste code from PaintElementCanvas
 
     const isClickedRef = useRef(false)
     const lastInCanvasPointRef = useRef<Point>([0, 0])
+
+    const onCanvasMouseEvent = (e: PaintUIInput) => {
+        if (managerRef.current) {
+            managerRef.current.handleInput(e)
+        }
+    }
 
     const handlePointerPositionChange = (data: {
         x: number,
@@ -53,7 +62,7 @@ export default (props: {
     }) => {
         let { x, y } = data
 
-        if (onCanvasMouseEvent && elementRef.current) {
+        if (managerRef.current && elementRef.current) {
             const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
 
             x = x - bb.left

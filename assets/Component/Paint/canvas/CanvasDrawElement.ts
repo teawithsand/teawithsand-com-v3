@@ -22,7 +22,7 @@ export type CanvasDrawElementProperties = {
 export type CanvasDrawElement = {
     type: "path",
     points: Point[],
-    props: CanvasDrawElementProperties & { action: "fill" },
+    props: CanvasDrawElementProperties & { action: "stroke" },
 } | {
     type: "circle",
     center: Point,

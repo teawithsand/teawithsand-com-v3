@@ -29,4 +29,9 @@ export default interface PaintUIManager {
      * Sets paint tool to use.
      */
     setTool(tool: PaintTool): void
+
+    /**
+     * Releases all resources that this manager used.
+     */
+    close(): void
 }

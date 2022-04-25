@@ -1,0 +1,30 @@
+.paint-container {
+    position: relative;
+    width: auto;
+    height: auto;
+
+    &__left-panel {
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        max-width: 100vw;
+        max-height: 100vh;
+
+        opacity: .5;
+        background-color: white;
+    }
+
+    &__canvas {
+        width: auto;
+        height: auto;
+        position: absolute;
+
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        z-index: -1;
+    }
+}
