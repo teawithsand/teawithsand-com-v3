@@ -1,7 +1,9 @@
 import React from "react"
 import PaintElement from "../element/PaintElement"
 import PathPaintElement from "../element/PathPaintElement"
-import PathDOMPaintElement from "./impls/PathPaintDisplayElement"
+import PolygonPaintElement from "../element/PolygonPaintElement"
+import PathPaintDisplayElement from "./impls/PathPaintDisplayElement"
+import PolygonPaintDisplayElement from "./impls/PolygonPaintDisplayElement"
 
 export interface PaintDisplayElementProps<T extends PaintElement> {
     element: T,
@@ -11,6 +13,10 @@ export interface PaintDisplayElementProps<T extends PaintElement> {
 export default (props: PaintDisplayElementProps<PaintElement>) => {
     const { element } = props
     if (element instanceof PathPaintElement) {
-        return <PathDOMPaintElement {...props} element={element} />
+        return <PathPaintDisplayElement {...props} element={element} />
+    } else if (element instanceof PolygonPaintElement) {
+        return <PolygonPaintDisplayElement {...props} element={element} />
+    } else {
+        throw new Error(`unsupported element ${element}`)
     }
 }

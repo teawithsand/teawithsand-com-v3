@@ -1,5 +1,7 @@
+import PaintElementFill from "@app/Component/DOMPaint/element/PaintElementFill"
 import PaintElementStroke from "@app/Component/DOMPaint/element/PaintElementStroke"
 import PathPaintElement from "@app/Component/DOMPaint/element/PathPaintElement"
+import PolygonPaintElement from "@app/Component/DOMPaint/element/PolygonPaintElement"
 import PaintLayer from "@app/Component/DOMPaint/layer/Layer"
 import PaintLayerMetadata from "@app/Component/DOMPaint/layer/LayerMetadata"
 import { Point } from "@app/Component/DOMPaint/primitive"
@@ -12,8 +14,12 @@ export default () => {
         color: [0, 255, 0],
         size: 2,
     }
+    const fillOne: PaintElementFill = {
+        color: [128, 128, 128],
+    }
 
     const [points, setPoints] = useState<Point[]>([])
+    
     return <PaintDisplay
         onDrawEvent={(e) => {
             if (e.type === "mouse") {
@@ -49,9 +55,11 @@ export default () => {
                         renderId: "p1"
                     }),
 
-                    new PathPaintElement({
+                    new PolygonPaintElement({
                         points,
                         stroke: strokeOne,
+                        autoClose: false,
+                        fill: fillOne,
                         renderId: GenerateUUID(),
                     }),
                 ],

@@ -1,6 +1,6 @@
 import { Color } from "../primitive";
 
-export default interface PaintElementFill {
+type PaintElementFill = {
     color: Color,
-    size: number,
 }
+export default PaintElementFill

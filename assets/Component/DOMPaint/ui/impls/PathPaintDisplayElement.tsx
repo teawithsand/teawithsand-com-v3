@@ -1,13 +1,12 @@
 import windowed from "@app/util/lang/windowed"
 import React, { useContext } from "react"
 import PathPaintElement from "../../element/PathPaintElement"
-import { encodeColor } from "../../primitive"
+import { renderSvgProps } from "../../element/svg"
 import { PaintDisplayElementProps } from "../PaintDisplayElement"
 import { PaintDisplayInfoContext } from "../PaintDisplayInfo"
 
 export default (props: PaintDisplayElementProps<PathPaintElement>) => {
     const { element, zIndex } = props
-    const { stroke } = element
     const { canvasHeight, canvasWidth } = useContext(PaintDisplayInfoContext)
 
     const style = {
@@ -21,12 +20,11 @@ export default (props: PaintDisplayElementProps<PathPaintElement>) => {
             const [s, e] = w
 
             reactElements.push(
-                <line 
-                key={s.map(v => v.toString()).join(';')}
-                x1={s[0]} y1={s[1]} x2={e[0]} y2={e[1]} style={{
-                    stroke: encodeColor(stroke.color),
-                    strokeWidth: stroke.size,
-                }} />
+                <line
+                    key={Math.random()}
+                    x1={s[0]} y1={s[1]} x2={e[0]} y2={e[1]}
+                    {...renderSvgProps(element)}
+                />
             )
         }
     }

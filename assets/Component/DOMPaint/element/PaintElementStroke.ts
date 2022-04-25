@@ -1,6 +1,8 @@
-import { Color } from "../primitive";
+import { Color, encodeColor } from "../primitive";
 
-export default interface PaintElementStroke {
+type PaintElementStroke = {
     color: Color,
     size: number,
 }
+
+export default PaintElementStroke
