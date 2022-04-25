@@ -15,18 +15,6 @@ import styles from "./paintUser.scss?module"
 export default () => {
     const { width, height } = useWindowDimensions()
     const elements: PaintElement[] = [
-        {
-            type: "circle",
-            props: {
-                action: "fill",
-                fillColor: [0, 0, 0, 1],
-                strokeCap: "butt",
-                strokeColor: [0, 0, 0, 1],
-                strokeSize: 10,
-            },
-            center: [1000 / 2, 1000 / 2],
-            radius: 50,
-        },
     ]
 
     return <div className={styles.paintContainer}>

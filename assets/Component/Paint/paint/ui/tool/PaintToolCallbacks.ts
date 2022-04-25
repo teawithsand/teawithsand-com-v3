@@ -8,7 +8,7 @@ export default interface PaintToolCallbacks {
     /**
      * Notifies parent that mutations have changed and refreshing scene is required.
      */
-    notifyMutationsChanged(mutations: PaintManagerMutation[]): void
+    notifyMutationsChanged(mutations: Iterable<PaintManagerMutation>): void
 
     /**
      * Notifies parent that current mutations should be applied to canvas.

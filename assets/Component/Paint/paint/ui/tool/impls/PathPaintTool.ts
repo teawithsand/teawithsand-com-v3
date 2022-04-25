@@ -12,17 +12,12 @@ export default class PathPaintTool implements PaintTool {
     activate = (callbacks: PaintToolCallbacks, scene: PaintScene, state: PaintUIState): ActivePaintTool => {
         let wasMousePressed = false
 
-        let paths: Point[][] = [
+        let paths: Path2D[] = [
         ]
 
-        let currentPath: Point[] = []
+        let currentPath: Path2D = new Path2D
 
         const computeMutations = (): PaintManagerMutation[] => {
-            let sz = 0
-            for (const p of [...paths, currentPath]) {
-                sz += p.length
-            }
-            console.log("mutation size", sz)
             return [
                 new AppendPaintManagerMutation(
                     [
@@ -30,7 +25,7 @@ export default class PathPaintTool implements PaintTool {
                         currentPath
                     ].map(p => ({
                         type: "path",
-                        points: p,
+                        path: p,
                         props: {
                             action: "stroke",
                             strokeCap: "butt",
@@ -44,6 +39,8 @@ export default class PathPaintTool implements PaintTool {
 
         console.log("done tool activation!")
 
+        let lastPoint: Point | null = null
+        let currentPathSize = 0
         return {
             callbacks,
             processInput: (i) => {
@@ -52,27 +49,31 @@ export default class PathPaintTool implements PaintTool {
 
                     try {
                         if (!wasMousePressed && i.pressed) {
-                            currentPath = [
-                                [i.x, i.y]
-                            ]
+                            currentPath = new Path2D
+                            currentPath.moveTo(p[0], p[1])
+
+                            lastPoint = null
+                            currentPathSize = 1
 
                             callbacks.notifyMutationsChanged(computeMutations())
                         } else if (wasMousePressed && i.pressed) {
-                            const delta = euclideanDistance(currentPath[currentPath.length - 1], p)
+                            const delta = lastPoint === null ? 100000 : euclideanDistance(lastPoint, p)
                             if (delta >= 4) {
                                 // ignore smaller changes
-                                currentPath.push(p)
+                                currentPath.lineTo(p[0], p[1])
+                                currentPathSize++
+                                lastPoint = p
 
                                 callbacks.notifyMutationsChanged(computeMutations())
                             }
                         } else if (wasMousePressed && !i.pressed) {
                             // always push end of path, even if delta is small
-                            currentPath.push(p)
-                            if (currentPath.length > 0) {
+                            currentPath.lineTo(p[0], p[1])
+                            if (currentPathSize > 0) {
                                 paths.push(currentPath)
                             }
-                            currentPath = []
 
+                            currentPath = new Path2D
                             callbacks.notifyMutationsChanged(computeMutations())
                         }
                         return {

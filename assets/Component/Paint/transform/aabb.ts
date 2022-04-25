@@ -1,6 +1,5 @@
 import PaintElement from "../paint/PaintElement";
 import { Point } from "../primitive";
-import { normalizeRect } from "./calc";
 
 /**
  * Computes Axis Aligned Bounding Box of specified paint element.
@@ -13,6 +12,10 @@ export const paintElementAABB = (element: PaintElement, ctx?: CanvasRenderingCon
     Point,
     Point
 ] => {
+    const p = new Path2D
+    throw new Error("Not implemented yet")
+    /*
+
     if (element.type === "rect") {
         return normalizeRect(element.ends)
     } else if (element.type === "circle") {
@@ -92,4 +95,5 @@ export const paintElementAABB = (element: PaintElement, ctx?: CanvasRenderingCon
     } else {
         throw new Error("unreachable code")
     }
+    */
 }

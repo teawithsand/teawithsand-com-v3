@@ -97,61 +97,8 @@ export default class HTMLCanvas implements Canvas {
             return
         }
 
-        if (element.type === "rect") {
-            if (chk.isClosed()) {
-                return
-            }
-
-            const [p1, p2] = element.ends
-
-            const [x1, y1] = p1
-            const [x2, y2] = p2
-
-            const p = new Path2D()
-            p.moveTo(x1, y1)
-            p.lineTo(x1, y2)
-            p.lineTo(x2, y2)
-            p.lineTo(x2, y1)
-            p.lineTo(x1, y1)
-
-            this.initFigure(element.props)(p)
-        } else if (element.type === "circle") {
-            const [x, y] = element.center
-
-            const p = new Path2D()
-            p.arc(x, y, element.radius, 0, 2 * Math.PI)
-
-            this.initFigure(element.props)(p)
-        } else if (element.type === "path") {
-            const p = new Path2D()
-            element.points.forEach((v, i) => {
-                const [x, y] = v
-                if (i === 0) {
-                    p.moveTo(x, y)
-                } else {
-                    p.lineTo(x, y)
-                }
-            })
-
-            this.initFigure(element.props)(p)
-        } else if (element.type === "polygon") {
-            const p = new Path2D()
-            element.points.forEach((v, i) => {
-                const [x, y] = v
-                if (i === 0) {
-                    p.moveTo(x, y)
-                } else {
-                    p.lineTo(x, y)
-                }
-            })
-
-            if (element.autoClose) {
-                if (!pointEquals(element.points[0], element.points[element.points.length - 1])) {
-                    p.lineTo(element.points[0][0], element.points[0][1])
-                }
-            }
-
-            this.initFigure(element.props)(p)
+        if (element.type === "path") {
+            this.initFigure(element.props)(element.path)
         } else if (element.type === "image") {
             const image = new Image()
             const [promise, resolve, reject] = latePromise<void>()
