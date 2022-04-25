@@ -40,7 +40,7 @@ export default (props: {
             canvasWidth: width * 2,
         }}>
             {
-                [...layers].map((v, i) => <PaintDisplayLayer
+                [...layers].filter((l) => !l.metadata.isHidden).map((v, i) => <PaintDisplayLayer
                     topLevelProcessor={processor}
                     baseZIndex={(i + 1) * 1000}
                     layer={v}
