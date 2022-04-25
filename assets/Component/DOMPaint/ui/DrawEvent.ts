@@ -2,7 +2,9 @@ import { Point } from "../primitive"
 
 export type DrawEvent = {
     type: "mouse",
-    point: Point,
+    // Absolute canvas coordinates, after applying scroll correction
+    canvasPoint: Point,
+    screenPoint: Point,
     pressed: boolean,
 }
 export default DrawEvent

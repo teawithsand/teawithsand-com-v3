@@ -1,16 +1,19 @@
 import { Point } from "@app/Component/DOMPaint/primitive"
+import DrawEvent from "@app/Component/DOMPaint/ui/DrawEvent"
 import { RefObject, useEffect, useRef } from "react"
 
 export default (
     elementRef: RefObject<HTMLElement>,
-    onCanvasMouseEvent: (data: {
-        type: "mouse",
-        pressed: boolean,
-        point: Point,
-    }) => void
+    onCanvasMouseEvent: (data: DrawEvent & { type: "mouse" }) => void
 ) => {
     const isClickedRef = useRef(false)
-    const lastInCanvasPointRef = useRef<Point>([0, 0])
+    const lastInCanvasPointRef = useRef<{
+        corrected: Point,
+        absolute: Point
+    }>({
+        absolute: [0, 0],
+        corrected: [0, 0],
+    })
 
     const fixCoordinates = (p: Point): Point => {
         const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
@@ -26,6 +29,7 @@ export default (
         y: number,
     }) => {
         let { x: xxxxxx, y: yyyyyy } = data
+        const abs: Point = [xxxxxx, yyyyyy]
         let p: Point = [xxxxxx, yyyyyy]
 
         if (onCanvasMouseEvent && elementRef.current) {
@@ -37,13 +41,17 @@ export default (
 
             p = fixCoordinates(p)
 
-            lastInCanvasPointRef.current = p
+            lastInCanvasPointRef.current = {
+                absolute: abs,
+                corrected: p,
+            }
 
             if (isClickedRef.current) {
                 onCanvasMouseEvent({
                     type: "mouse",
                     pressed: isClickedRef.current,
-                    point: p,
+                    canvasPoint: p,
+                    screenPoint: [xxxxxx, yyyyyy],
                 })
             }
         }
@@ -56,12 +64,15 @@ export default (
 
         isClickedRef.current = false
 
-        const [x, y] = lastInCanvasPointRef.current
+        const {
+            absolute, corrected
+        } = lastInCanvasPointRef.current
 
         onCanvasMouseEvent({
             type: "mouse",
             pressed: isClickedRef.current,
-            point: [x, y],
+            canvasPoint: corrected,
+            screenPoint: absolute,
         })
     }
 
@@ -70,19 +81,27 @@ export default (
         y: number,
     }) => {
         let { x: xxxxxx, y: yyyyyy } = data
+        const abs: Point = [xxxxxx, yyyyyy]
         let p: Point = [xxxxxx, yyyyyy]
 
         if (elementRef.current) {
             const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
             p = fixCoordinates(p)
 
-            lastInCanvasPointRef.current = p
+
+            p = fixCoordinates(p)
+
+            lastInCanvasPointRef.current = {
+                absolute: abs,
+                corrected: p,
+            }
             isClickedRef.current = true
 
             onCanvasMouseEvent({
                 type: "mouse",
                 pressed: isClickedRef.current,
-                point: p,
+                canvasPoint: p,
+                screenPoint: abs,
             })
         }
     }
