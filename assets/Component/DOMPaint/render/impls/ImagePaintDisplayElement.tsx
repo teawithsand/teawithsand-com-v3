@@ -22,7 +22,9 @@ export default (props: ImagePaintDisplayElement<ImagePaintElement>) => {
             width: `${width}px`,
             height: `${height}px`,
             objectFit: element.objectFit,
-            transform: `translate(${offsetX}px, ${offsetY}px)`
+            position: "relative",
+            top: `${offsetY}px`,
+            left: `${offsetX}px`,
         }}
     />
 }
