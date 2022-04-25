@@ -21,7 +21,9 @@ export default (props: PaintDisplayElementProps<PathPaintElement>) => {
             const [s, e] = w
 
             reactElements.push(
-                <line x1={s[0]} y1={s[1]} x2={e[0]} y2={e[1]} style={{
+                <line 
+                key={s.map(v => v.toString()).join(';')}
+                x1={s[0]} y1={s[1]} x2={e[0]} y2={e[1]} style={{
                     stroke: encodeColor(stroke.color),
                     strokeWidth: stroke.size,
                 }} />
