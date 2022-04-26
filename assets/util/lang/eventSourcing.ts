@@ -58,6 +58,9 @@ export class InMemoryEventSourcing<A, E> implements EventSourcing<A, E>, NoHisto
     }
 
     popEvent = (): void => {
+        if (this.eventStack.length === 0) {
+            return
+        }
         this.eventStack.pop()
         this.recomputeCurrentAggregate()
     }
