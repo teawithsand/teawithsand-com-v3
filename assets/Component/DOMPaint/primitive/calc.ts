@@ -36,7 +36,7 @@ export const NORM_RECT_MAX = 1
 /**
  * Normalizes rectangle provided.
  */
-export const normalizeRect = (rect: Rect): Rect => {
+export const rectNormalize = (rect: Rect): Rect => {
     const [[x1, y1], [x2, y2]] = rect
 
     return [
@@ -65,7 +65,7 @@ export const rectDimensions = (rect: Rect): {
 }
 
 export const rectContains = (rect: Rect, p: Point, bordersAllowed: boolean = true) => {
-    rect = normalizeRect(rect)
+    rect = rectNormalize(rect)
     if (bordersAllowed && rect[NORM_RECT_MAX][0] >= p[0] && rect[NORM_RECT_MAX][1] >= p[1] && rect[NORM_RECT_MIN][0] <= p[0] && rect[NORM_RECT_MIN][1] <= p[1]) {
         return true
     } else if (rect[NORM_RECT_MAX][0] > p[0] && rect[NORM_RECT_MAX][1] > p[1] && rect[NORM_RECT_MIN][0] < p[0] && rect[NORM_RECT_MIN][1] < p[1]) {
@@ -73,4 +73,36 @@ export const rectContains = (rect: Rect, p: Point, bordersAllowed: boolean = tru
     } else {
         return false
     }
+}
+
+/**
+ * Creates zero sized rectangle from point.
+ */
+export const pointRect = (point: Point): Rect => ([
+    [...point],
+    [...point],
+])
+
+/**
+ * Grows rectangle by specified size.
+ */
+export const rectGrow = (rect: Rect, by: number): Rect => {
+    rect = rectNormalize(rect)
+
+    const normalizeNo = (n: number): number => {
+        if (n < 0)
+            return 0
+        return n
+    }
+
+    return [
+        [
+            normalizeNo(rect[0][0] - by),
+            normalizeNo(rect[0][1] - by),
+        ],
+        [
+            normalizeNo(rect[1][0] + by),
+            normalizeNo(rect[1][1] + by),
+        ]
+    ]
 }
