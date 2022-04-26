@@ -1,12 +1,12 @@
 import React from "react"
 import ImagePaintElement from "../../element/impls/ImagePaintElement"
-import { normalizeRect, NORM_RECT_MIN, rectDimensions } from "../../primitive/calc"
+import { rectNormalize, NORM_RECT_MIN, rectDimensions } from "../../primitive/calc"
 import { PaintDisplayElementProps as ImagePaintDisplayElement } from "../PaintDisplayElement"
 
 export default (props: ImagePaintDisplayElement<ImagePaintElement>) => {
     const { element, zIndex } = props
 
-    const normalizedRect = normalizeRect(element.rect)
+    const normalizedRect = rectNormalize(element.rect)
     const { width, height } = rectDimensions(normalizedRect)
 
     const offsetX = normalizedRect[NORM_RECT_MIN][0]

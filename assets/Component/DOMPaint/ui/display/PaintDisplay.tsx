@@ -10,43 +10,36 @@ import ActivePaintTool from "../tool/ActivePaintTool"
 import classnames from "@app/util/lang/classnames"
 import { PaintDisplayInfoContext } from "../../render/PaintDisplayInfo"
 import PaintDisplayLayer from "../../render/PaintDisplayLayer"
+import { EventSourcing } from "@app/util/lang/eventSourcing"
+import PaintSceneMutation from "../../scene/PaintSceneMutation"
+import useEventSourcing from "@app/util/react/hook/useEventSourcing"
+
 export default (props: {
-    scene: PaintScene,
+    scene: EventSourcing<PaintScene, PaintSceneMutation>,
 
     processor?: PaintElementProcessor,
-    onSceneUpdate?: (scene: PaintScene) => void,
 
     className?: string,
     style?: React.CSSProperties,
 
     tool?: PaintTool,
 }) => {
-    const { scene, processor, tool, onSceneUpdate } = props
+    const { scene: sceneEventSourcing, processor, tool } = props
     const { height, width } = useWindowDimensions()
 
     const activeToolRef = useRef<ActivePaintTool | null>(null)
 
-    const ref = useRef()
-    const bind = usePaintDraw(ref, (event) => {
+    const ref = useRef<HTMLDivElement | null>()
+    const bind = usePaintDraw(ref as any, (event) => {
         if (activeToolRef.current) {
             activeToolRef.current.submitDrawEvent(event)
         }
-        /*
-        if (onDrawEvent) {
-            onDrawEvent(event)
-        }
-        */
     })
 
 
     useEffect(() => {
         if (tool) {
             const active = tool.activate({
-                updateScene: (scene) => {
-                    if (onSceneUpdate) {
-                        onSceneUpdate(scene)
-                    }
-                },
                 disableSelf: () => {
                     //NIY
                 },
@@ -55,13 +48,14 @@ export default (props: {
                 },
                 updateTopLevelStyles: () => {
                     //NIY
-                }
+                },
             }, {
-                parentElementRef: ref,
+                parentElementRef: ref as any,
                 uiState: {
                     fillColor: [0, 0, 0],
                     strokeColor: [0, 0, 0],
-                }
+                },
+                scene: sceneEventSourcing,
             })
 
             activeToolRef.current = active
@@ -72,8 +66,10 @@ export default (props: {
         }
     }, [tool])
 
+    const scene = useEventSourcing(sceneEventSourcing)
+
     return <div
-        ref={ref as React.MutableRefObject<HTMLDivElement>}
+        ref={ref as any as React.MutableRefObject<HTMLDivElement>}
         className={classnames(styles.paintDisplay, props.className)}
         {...bind}
         style={{

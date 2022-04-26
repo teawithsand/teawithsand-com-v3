@@ -4,12 +4,14 @@ import PaintElementStroke from "@app/Component/DOMPaint/element/PaintElementStro
 import PathPaintElement from "@app/Component/DOMPaint/element/impls/PathPaintElement"
 import PaintLayer from "@app/Component/DOMPaint/layer/Layer"
 import PaintLayerMetadata from "@app/Component/DOMPaint/layer/LayerMetadata"
-import { Point, Rect } from "@app/Component/DOMPaint/primitive"
+import { Rect } from "@app/Component/DOMPaint/primitive"
 import { GenerateUUID } from "@app/util/lang/uuid"
-import React, { useState } from "react"
+import React from "react"
 import PaintScene from "@app/Component/DOMPaint/scene/PaintScene"
 import ScrollPaintTool from "@app/Component/DOMPaint/ui/tool/impl/ScrollPaintTool"
 import PaintDisplay from "@app/Component/DOMPaint/ui/display/PaintDisplay"
+import { InMemoryEventSourcing } from "@app/util/lang/eventSourcing"
+import PickPaintTool from "@app/Component/DOMPaint/ui/tool/impl/PickPaintTool"
 
 export default () => {
     const strokeOne: PaintElementStroke = {
@@ -19,8 +21,6 @@ export default () => {
     const fillOne: PaintElementFill = {
         color: [128, 128, 128],
     }
-
-    const [points, setPoints] = useState<Point[]>([])
 
     const layers = [
         new PaintLayer(
@@ -32,8 +32,8 @@ export default () => {
                         [200, 200],
                         [200, 100],
                         [100, 100],
-                    ].map(v => [v[0] + 50, v[1] + 50]),
-                    stroke: { ...strokeOne, color: [255, 0, 0] },
+                    ].map(v => [v[0] - 50, v[1] - 50]),
+                    stroke: { ...strokeOne, color: [255, 0, 0], size: 10, },
                     renderId: "p2",
                 }),
 
@@ -60,7 +60,7 @@ export default () => {
                 }),
 
                 new PathPaintElement({
-                    points,
+                    points: [],
                     stroke: strokeOne,
                     renderId: GenerateUUID(),
                 }),
@@ -70,6 +70,17 @@ export default () => {
     ]
 
     return <PaintDisplay
-        tool={new ScrollPaintTool()}
-        scene={new PaintScene(layers)} />
+        tool={new PickPaintTool()}
+        scene={
+            new InMemoryEventSourcing(
+                {
+                    applyEvent: (agg, event) => {
+                        agg.applyMutation(event)
+                    },
+                    copy: (a) => new PaintScene([...a.layers]) // shallow copy of layers should be ok(?)
+                },
+                new PaintScene(layers),
+                [],
+            )
+        } />
 }
