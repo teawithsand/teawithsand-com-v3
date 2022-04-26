@@ -69,11 +69,17 @@ export default class PaintScene implements PaintSceneQuery {
             insertAt(this.layers, m.index ?? this.layers.length - 1, layer)
         } else if (m.type === "set-layer-metadata") {
             this.ensureLayer(m.index).metadata = m.metadata
-        } else if (m.type === "drop-layer-element") {
-            removeAt(this.ensureLayer(m.layerIndex).elements, m.elementIndex)
-        } else if (m.type === "push-layer-element") {
+        } else if (m.type === "drop-layer-elements") {
+            if (m.elementIndices.length === 1) {
+                removeAt(this.ensureLayer(m.layerIndex).elements, m.elementIndices[0])
+            } else {
+                const indexSet = new Set(m.elementIndices)
+                const layer = this.ensureLayer(m.layerIndex)
+                layer.elements = layer.elements.filter((_, i) => !indexSet.has(i))
+            }
+        } else if (m.type === "push-layer-elements") {
             const arr = this.ensureLayer(m.layerIndex).elements
-            insertAt(arr, m.beforeElementIndex ?? arr.length - 1, m.element)
+            insertAt(arr, m.beforeElementIndex ?? arr.length - 1, ...m.elements)
         } else if (m.type === "move-layer-element") {
             const src = this.ensureLayer(m.sourceLayerIndex)
             const dst = this.ensureLayer(m.destinationLayerIndex)

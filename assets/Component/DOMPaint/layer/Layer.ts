@@ -8,4 +8,6 @@ export default class PaintLayer {
         public metadata: PaintLayerMetadata,
         public processor?: PaintElementProcessor,
     ) { }
+
+    copy = () => new PaintLayer([...this.elements], this.metadata.copy(), this.processor)
 }

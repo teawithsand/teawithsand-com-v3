@@ -10,4 +10,9 @@ export default class PaintLayerMetadata {
         this.isHidden = data?.isHidden ?? false
         this.name = data?.name ?? "layer-" + GenerateUUID()
     }
+
+    copy = () => new PaintLayerMetadata({
+        isHidden: this.isHidden,
+        name: this.name,
+    })
 }

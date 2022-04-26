@@ -25,14 +25,14 @@ type LayerMutation = {
 }
 
 type ElementMutation = {
-    type: "push-layer-element",
+    type: "push-layer-elements",
     layerIndex: number,
     beforeElementIndex?: number | undefined,
-    element: PaintElement,
+    elements: PaintElement[],
 } | {
-    type: "drop-layer-element",
+    type: "drop-layer-elements",
     layerIndex: number,
-    elementIndex: number,
+    elementIndices: number[],
 } | {
     type: "move-layer-element",
     sourceLayerIndex: number,
