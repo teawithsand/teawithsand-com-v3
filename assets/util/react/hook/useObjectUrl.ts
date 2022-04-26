@@ -5,9 +5,9 @@ import { useEffect, useRef } from "react"
  * URL is revoked, once src is changed or component is unmounted.
  */
 export default (src: Blob | MediaSource): {
-    readonly current: string,
+    readonly current: string | null,
 } => {
-    const ref = useRef<string>(null)
+    const ref = useRef<string | null>(null)
 
     useEffect(() => {
         const url = URL.createObjectURL(src)

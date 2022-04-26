@@ -21,7 +21,7 @@ interface PostMetadata {
     title: string,
     unstableId: string,
     createdAt: string,
-    lastEditedAt?: string,
+    lastEditedAt?: string | null,
     path: string,
     tags?: null | string[],
     partialContent: string,
@@ -43,7 +43,7 @@ const PostSummary = (props: {
         <h2 className={styles.postSummaryTitle}><Link to={path}>{metadata.title}</Link></h2>
         <div className={styles.postSummaryCreatedAt}>Created: {formatTime(createdAt)}</div>
         {lastEditedAt ? <div className={styles.postSummaryLastEditedAt}>Edited: {formatTime(lastEditedAt)}</div> : null}
-        <div className={styles.postSummaryTags}>Tags: {((tags ?? []).length > 0 ? tags : ["No tags"]).join(" ")}</div>
+        <div className={styles.postSummaryTags}>Tags: {((tags ?? []).length > 0 ? (tags ?? []) : ["No tags"]).join(" ")}</div>
         <p className={styles.postSummaryContent}>
             <Link to={path}>{partialContent}</Link>
         </p>
@@ -73,7 +73,7 @@ export default () => {
         if (query) {
             const fuseResults = fuse
                 .search(query)
-                .sort((a, b) => a.score - b.score)
+                .sort((a, b) => (a.score ?? 0) - (b.score ?? 0))
                 .map((v) => v.item)
             indexes = fuseResults as number[]
         }

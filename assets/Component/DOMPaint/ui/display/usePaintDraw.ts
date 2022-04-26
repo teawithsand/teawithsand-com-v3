@@ -16,12 +16,19 @@ export default (
     })
 
     const fixCoordinates = (p: Point): Point => {
-        const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
+        if (elementRef.current) {
+            const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
 
-        return [
-            p[0] - bb.left + elementRef.current.scrollLeft,
-            p[1] - bb.top + elementRef.current.scrollTop,
-        ]
+            return [
+                p[0] - bb.left + elementRef.current.scrollLeft,
+                p[1] - bb.top + elementRef.current.scrollTop,
+            ]
+        } else {
+            return [
+                p[0],
+                p[1]
+            ]
+        }
     }
 
     const handlePointerPositionChange = (data: {

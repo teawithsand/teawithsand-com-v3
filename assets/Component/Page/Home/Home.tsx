@@ -10,7 +10,7 @@ import TeaAnimation from "@app/Component/TeaAnimation/TeaAnimation"
 import { blogHomePath, contactPath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endpoints"
 
 export default () => {
-    const firstSectionRef = useRef<HTMLElement>()
+    const firstSectionRef = useRef<HTMLElement | null>(null)
 
     return <main className={styles["page-container"]}>
         <article className={styles.header}>
@@ -26,10 +26,12 @@ export default () => {
                     Everything that simple programmer needs in single webpack project.
                 </p>
                 <button className={styles["header__scroll-button"]} onClick={() => {
-                    firstSectionRef.current.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                    })
+                    if (firstSectionRef.current) {
+                        (firstSectionRef.current).scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        })
+                    }
                 }}>
                     See more
                 </button>

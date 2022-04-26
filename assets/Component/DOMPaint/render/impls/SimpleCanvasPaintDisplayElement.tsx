@@ -7,11 +7,14 @@ export default (props: PaintDisplayElementProps<SimpleCanvasPaintElement>) => {
     const { element, zIndex } = props
     const { canvasHeight, canvasWidth } = useContext(PaintDisplayInfoContext)
 
-    const ref = useRef<HTMLCanvasElement>()
+    const ref = useRef<HTMLCanvasElement | null>(null)
 
     useEffect(() => {
         if (ref.current) {
             const ctx = ref.current.getContext("2d")
+            if (!ctx) {
+                throw new Error("filed to get context")
+            }
             element.renderer(ctx)
         }
     }, [element.renderer])
