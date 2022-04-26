@@ -63,3 +63,14 @@ export const rectDimensions = (rect: Rect): {
         height,
     }
 }
+
+export const rectContains = (rect: Rect, p: Point, bordersAllowed: boolean = true) => {
+    rect = normalizeRect(rect)
+    if (bordersAllowed && rect[NORM_RECT_MAX][0] >= p[0] && rect[NORM_RECT_MAX][1] >= p[1] && rect[NORM_RECT_MIN][0] <= p[0] && rect[NORM_RECT_MIN][1] <= p[1]) {
+        return true
+    } else if (rect[NORM_RECT_MAX][0] > p[0] && rect[NORM_RECT_MAX][1] > p[1] && rect[NORM_RECT_MIN][0] < p[0] && rect[NORM_RECT_MIN][1] < p[1]) {
+        return true
+    } else {
+        return false
+    }
+}
