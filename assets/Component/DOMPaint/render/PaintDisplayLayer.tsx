@@ -11,7 +11,7 @@ export default (props: {
     const { layer, baseZIndex, topLevelProcessor } = props
     return <>
         {
-            [...layer.elements]
+            layer.elements
                 .map((v, i) => {
                     if (layer.processor) {
                         layer.processor(v)
@@ -20,7 +20,7 @@ export default (props: {
                         v = topLevelProcessor(v)
                     }
                     return <PaintDisplayElement
-                        key={v.renderId}
+                        key={i}
                         element={v}
                         zIndex={baseZIndex + i}
                     />

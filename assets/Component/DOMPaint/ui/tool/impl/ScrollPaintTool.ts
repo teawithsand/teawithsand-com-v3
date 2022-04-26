@@ -9,10 +9,8 @@ export default class ScrollPaintTool extends PaintTool {
         let wasPressed = false
         let startPressPoint: Point = [0, 0]
         let startScroll: Point = [0, 0]
+        
         return {
-            submitUIState: (state) => {
-
-            },
             submitDrawEvent: (event) => {
                 if (event.type === "mouse") {
                     const parent = environment.parentElementRef.current

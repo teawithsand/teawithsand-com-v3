@@ -26,6 +26,11 @@ export const renderSvgProps = (props: {
             ...style,
             fill: encodeColor(fill.color),
         }
+    } else {
+        style = {
+            ...style,
+            fill: "none",
+        }
     }
 
     return {

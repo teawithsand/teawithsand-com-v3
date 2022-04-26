@@ -1,4 +1,3 @@
-import windowed from "@app/util/lang/windowed"
 import React, { useContext } from "react"
 import PathPaintElement from "../../element/impls/PathPaintElement"
 import { renderSvgProps } from "../../element/svg"
@@ -13,23 +12,26 @@ export default (props: PaintDisplayElementProps<PathPaintElement>) => {
         zIndex,
     }
 
-    let reactElements: React.ReactElement[] = []
+    let reactElement: React.ReactElement | null = null
 
-    if (element.points.length >= 2) {
-        for (const w of windowed(element.points, 2)) {
-            const [s, e] = w
-
-            reactElements.push(
-                <line
-                    key={Math.random()}
-                    x1={s[0]} y1={s[1]} x2={e[0]} y2={e[1]}
-                    {...renderSvgProps(element)}
-                />
-            )
+    const path = element.points.map((v, i) => {
+        if (i === 0) {
+            return `M ${v[0]},${v[1]}`
+        } else {
+            return `L ${v[0]},${v[1]}`
         }
-    }
+    }).join(" ")
+
+    reactElement = <path
+        d={path}
+        {...renderSvgProps({
+            ...element,
+            fill: undefined,
+        })}
+    />
 
     return <svg xmlns="http://www.w3.org/2000/svg" width={canvasWidth} height={canvasHeight} style={style}>
-        {reactElements}
+        {reactElement}
+
     </svg>
 }

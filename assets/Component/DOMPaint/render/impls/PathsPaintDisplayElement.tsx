@@ -15,17 +15,20 @@ export default (props: PaintDisplayElementProps<PathsPaintElement>) => {
 
     let reactElements: React.ReactElement[] = []
 
+    let i = 0
     for (const p of element.paths) {
         for (const w of windowed(p, 2)) {
             const [s, e] = w
-
+            
             reactElements.push(
                 <line
-                    key={Math.random()}
+                    key={i}
                     x1={s[0]} y1={s[1]} x2={e[0]} y2={e[1]}
                     {...renderSvgProps(element)}
                 />
             )
+
+            i++
         }
     }
 

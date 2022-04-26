@@ -88,35 +88,17 @@ export default (props: {
             canvasWidth: width * 2,
         }}>
             {
-                [...scene.layers].filter((l) => !l.metadata.isHidden).map((v, i) => <PaintDisplayLayer
-                    topLevelProcessor={processor}
-                    baseZIndex={(i + 1) * 1000}
-                    layer={
-                        i === state.activeLayerIndex ? applyCurrentElements(v) : v
-                    }
-                    key={i}
-                />)
+                scene.layers
+                    .filter((l) => !l.metadata.isHidden)
+                    .map((v, i) => <PaintDisplayLayer
+                        topLevelProcessor={processor}
+                        baseZIndex={(i + 1) * 1000}
+                        layer={
+                            i === state.activeLayerIndex ? applyCurrentElements(v) : v
+                        }
+                        key={i}
+                    />)
             }
-
-            <PaintDisplayLayer
-                baseZIndex={(scene.layers.length + 1) * 1000}
-                layer={
-                    new PaintLayer(
-                        state.uncommittedElements,
-                        new PaintLayerMetadata()
-                    )
-                }
-            />
-
-            <PaintDisplayLayer
-                baseZIndex={(scene.layers.length + 2) * 1000}
-                layer={
-                    new PaintLayer(
-                        state.uncommittedElements,
-                        new PaintLayerMetadata()
-                    )
-                }
-            />
         </PaintDisplayInfoContext.Provider>
     </div>
 }

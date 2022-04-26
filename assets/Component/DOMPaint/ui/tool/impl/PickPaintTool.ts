@@ -11,13 +11,7 @@ export default class PickPaintTool extends PaintTool {
         let startPressPoint: Point = [0, 0]
         let startScroll: Point = [0, 0]
 
-
-        const aabbComputer = new DefaultPaintElementAABB()
-
         return {
-            submitUIState: (state) => {
-
-            },
             submitDrawEvent: (event) => {
                 if (event.type === "mouse") {
                     try {
@@ -28,9 +22,6 @@ export default class PickPaintTool extends PaintTool {
                                 const element = scene.getElementWithLocator(locator)
                                 if (!element)
                                     throw new Error("element must be found here")
-
-                                const aabb = aabbComputer.getAABB(element)
-                                console.log({ element, aabb })
                             }
                         }
                     } finally {

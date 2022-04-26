@@ -12,6 +12,7 @@ import PaintDisplay from "@app/Component/DOMPaint/ui/display/PaintDisplay"
 import { InMemoryEventSourcing, NoHistoryInMemoryEventSourcing } from "@app/util/lang/eventSourcing"
 import PickPaintTool from "@app/Component/DOMPaint/ui/tool/impl/PickPaintTool"
 import { initialUIState, uiStateEventSourcingAdapter } from "@app/Component/DOMPaint/ui/state/UIState"
+import PathPaintTool from "@app/Component/DOMPaint/ui/tool/impl/PathPaintTool"
 
 export default () => {
     const strokeOne: PaintElementStroke = {
@@ -70,7 +71,7 @@ export default () => {
     ]
 
     return <PaintDisplay
-        tool={new PickPaintTool()}
+        tool={new PathPaintTool()}
         state={new NoHistoryInMemoryEventSourcing(uiStateEventSourcingAdapter, initialUIState)}
         scene={
             new InMemoryEventSourcing(
