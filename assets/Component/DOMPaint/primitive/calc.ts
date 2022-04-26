@@ -33,10 +33,44 @@ export const manhattanDistance = (...points: Point[]) => {
 export const NORM_RECT_MIN = 0
 export const NORM_RECT_MAX = 1
 
+
+export const pointSegmentDistance = (p: Readonly<Point>, segment: Readonly<[Readonly<Point>, Readonly<Point>]>) => {
+    const [x, y] = p
+    const [[x1, y1], [x2, y2]] = segment
+
+    const A = x - x1;
+    const B = y - y1;
+    const C = x2 - x1;
+    const D = y2 - y1;
+
+    const dot = A * C + B * D;
+    const len_sq = C * C + D * D;
+    let param = -1;
+    if (len_sq != 0) //in case of 0 length line
+        param = dot / len_sq;
+
+    let xx, yy;
+    if (param < 0) {
+        xx = x1;
+        yy = y1;
+    } else if (param > 1) {
+        xx = x2;
+        yy = y2;
+    } else {
+        xx = x1 + param * C;
+        yy = y1 + param * D;
+    }
+
+    const dx = x - xx;
+    const dy = y - yy;
+    return Math.sqrt(dx ** 2 + dy ** 2);
+}
+
+
 /**
  * Normalizes rectangle provided.
  */
-export const rectNormalize = (rect: Rect): Rect => {
+export const rectNormalize = (rect: Readonly<Rect>): Rect => {
     const [[x1, y1], [x2, y2]] = rect
 
     return [
@@ -64,7 +98,7 @@ export const rectDimensions = (rect: Rect): {
     }
 }
 
-export const rectContains = (rect: Rect, p: Point, bordersAllowed: boolean = true) => {
+export const rectContains = (rect: Readonly<Rect>, p: Readonly<Point>, bordersAllowed: boolean = true) => {
     rect = rectNormalize(rect)
     if (bordersAllowed && rect[NORM_RECT_MAX][0] >= p[0] && rect[NORM_RECT_MAX][1] >= p[1] && rect[NORM_RECT_MIN][0] <= p[0] && rect[NORM_RECT_MIN][1] <= p[1]) {
         return true
@@ -86,7 +120,7 @@ export const pointRect = (point: Point): Rect => ([
 /**
  * Grows rectangle by specified size.
  */
-export const rectGrow = (rect: Rect, by: number): Rect => {
+export const rectGrow = (rect: Readonly<Rect>, by: number): Rect => {
     rect = rectNormalize(rect)
 
     const normalizeNo = (n: number): number => {
