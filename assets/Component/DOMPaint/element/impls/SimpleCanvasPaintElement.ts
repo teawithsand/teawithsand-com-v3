@@ -1,20 +1,20 @@
 import PaintElement from "../PaintElement"
-import PaintElementTransform from "../PaintElementTransform"
+import PaintElementPostprocess from "../PaintElementPostprocess"
 
 export default class SimpleCanvasPaintElement extends PaintElement {
-    public transform: PaintElementTransform[]
+    public postprocess: PaintElementPostprocess
     public renderId: string
     public renderer: (ctx: CanvasRenderingContext2D) => void
 
     constructor(data: {
         renderId: string,
         renderer: (ctx: CanvasRenderingContext2D) => void,
-        transform?: PaintElementTransform[],
+        postprocess?: PaintElementPostprocess,
     }) {
         super()
 
         this.renderId = data.renderId
         this.renderer = data.renderer
-        this.transform = data.transform ?? []
+        this.postprocess = data.postprocess ?? {}
     }
 }

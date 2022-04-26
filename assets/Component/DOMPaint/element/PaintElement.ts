@@ -1,6 +1,6 @@
-import PaintElementTransform from "./PaintElementTransform"
+import PaintElementPostprocess from "./PaintElementPostprocess"
 
 export default abstract class PaintElement {
     abstract renderId: string
-    abstract transform: PaintElementTransform[]
+    abstract postprocess: PaintElementPostprocess
 }

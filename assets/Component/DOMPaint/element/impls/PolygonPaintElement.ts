@@ -2,10 +2,10 @@ import { Point } from "../../primitive"
 import PaintElement from "../PaintElement"
 import PaintElementFill from "../PaintElementFill"
 import PaintElementStroke from "../PaintElementStroke"
-import PaintElementTransform from "../PaintElementTransform"
+import PaintElementPostprocess from "../PaintElementPostprocess"
 
 export default class PolygonPaintElement extends PaintElement {
-    public transform: PaintElementTransform[]
+    public postprocess: PaintElementPostprocess
     public points: Point[]
     public stroke: PaintElementStroke
     public fill: PaintElementFill | null
@@ -18,7 +18,7 @@ export default class PolygonPaintElement extends PaintElement {
         fill: PaintElementFill | null,
         renderId: string,
         autoClose: boolean,
-        transform?: PaintElementTransform[]
+        postprocess?: PaintElementPostprocess
     }) {
         super()
 
@@ -27,6 +27,6 @@ export default class PolygonPaintElement extends PaintElement {
         this.fill = data.fill
         this.renderId = data.renderId
         this.autoClose = data.autoClose
-        this.transform = data.transform ?? []
+        this.postprocess = data.postprocess ?? {}
     }
 }
