@@ -5,7 +5,7 @@ import PathPaintElement from "@app/Component/DOMPaint/element/impls/PathPaintEle
 import PaintLayer from "@app/Component/DOMPaint/layer/Layer"
 import PaintLayerMetadata from "@app/Component/DOMPaint/layer/LayerMetadata"
 import { Rect } from "@app/Component/DOMPaint/primitive"
-import { GenerateUUID } from "@app/util/lang/uuid"
+import { generateUUID } from "@app/util/lang/uuid"
 import React from "react"
 import PaintScene from "@app/Component/DOMPaint/scene/PaintScene"
 import PaintDisplay from "@app/Component/DOMPaint/ui/display/PaintDisplay"
@@ -63,7 +63,7 @@ export default () => {
                 new PathPaintElement({
                     points: [],
                     stroke: strokeOne,
-                    renderId: GenerateUUID(),
+                    renderId: generateUUID(),
                 }),
             ],
             new PaintLayerMetadata()

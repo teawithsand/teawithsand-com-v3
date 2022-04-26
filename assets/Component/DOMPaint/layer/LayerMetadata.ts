@@ -1,4 +1,4 @@
-import { GenerateUUID } from "@app/util/lang/uuid"
+import { generateUUID } from "@app/util/lang/uuid"
 
 export default class PaintLayerMetadata {
     public isHidden: boolean
@@ -8,7 +8,7 @@ export default class PaintLayerMetadata {
         name?: string,
     }) {
         this.isHidden = data?.isHidden ?? false
-        this.name = data?.name ?? "layer-" + GenerateUUID()
+        this.name = data?.name ?? "layer-" + generateUUID()
     }
 
     copy = () => new PaintLayerMetadata({

@@ -1,7 +1,7 @@
 import PathPaintElement from "@app/Component/DOMPaint/element/impls/PathPaintElement";
 import { Point } from "@app/Component/DOMPaint/primitive";
 import { euclideanDistance } from "@app/Component/DOMPaint/primitive/calc";
-import { GenerateUUID as generateUUID } from "@app/util/lang/uuid";
+import { generateUUID as generateUUID } from "@app/util/lang/uuid";
 import ActivePaintTool from "../ActivePaintTool";
 import PaintTool from "../PaintTool";
 import PaintToolCallbacks from "../PaintToolCallbacks";
