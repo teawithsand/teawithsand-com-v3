@@ -1,34 +1,45 @@
+import { generateUUID } from "@app/util/lang/uuid";
 import { Rect } from "../../primitive";
-import PaintElement from "../PaintElement";
-import PaintElementPostprocess from "../PaintElementPostprocess";
+import { rectContains } from "../../primitive/calc";
+import { AABBPaintElement, PointCollisionPaintElement } from "../PaintElement";
+import PaintElementData from "../PaintElementData";
 
-export type ObjectFit =
-    "contain" |
-    "cover" |
-    "fill" |
-    "none" |
-    "scale-down"
+export type ImagePaintElementData = {
+    url: string,
+    rect: Rect,
+} & PaintElementData
 
-export default class ImagePaintElement extends PaintElement {
-    public postprocess: PaintElementPostprocess
-    public url: string
-    public renderId: string
-    public rect: Rect
-    public objectFit: ObjectFit
+/**
+ * Paint element, which denotes path, like SVG one.
+ */
+export default class ImagePaintElement implements AABBPaintElement<ImagePaintElementData>, PointCollisionPaintElement<ImagePaintElementData> {
+    private innerRenderHash = generateUUID()
 
-    constructor(data: {
-        url: string,
-        renderId: string,
-        rect: Rect,
-        objectFit: ObjectFit,
-        postprocess?: PaintElementPostprocess,
-    }) {
-        super()
+    constructor(private innerData: ImagePaintElementData) {
+        // shallow copy, just to be sure
+        this.innerData = {
+            ...innerData,
+        }
+    }
 
-        this.renderId = data.renderId
-        this.url = data.url
-        this.rect = data.rect
-        this.objectFit = data.objectFit
-        this.postprocess = data.postprocess ?? {}
+    updateData = (updater: (data: ImagePaintElementData) => ImagePaintElementData): void => {
+        this.innerData = updater(this.innerData)
+        this.innerRenderHash = generateUUID()
+    }
+
+    checkCollision = (p: readonly [number, number]): boolean => {
+        return rectContains(this.innerData.rect, p, true)
+    }
+
+    get renderHash() {
+        return this.innerRenderHash
+    }
+
+    get data() {
+        return this.innerData
+    }
+
+    get aabb(): Readonly<Rect> {
+        return this.innerData.rect
     }
 }

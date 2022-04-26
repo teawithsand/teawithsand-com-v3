@@ -9,5 +9,3 @@ export const PaintDisplayInfoContext = React.createContext<PaintDisplayInfo>({
     canvasHeight: 0,
     canvasWidth: 0,
 })
-
-

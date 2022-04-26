@@ -1,4 +1,4 @@
-import ImagePaintElement from "@app/Component/DOMPaint/element/impls//ImagePaintElement"
+import ImagePaintElement from "@app/Component/DOMPaint/element/impls/ImagePaintElement"
 import PaintElementFill from "@app/Component/DOMPaint/element/PaintElementFill"
 import PaintElementStroke from "@app/Component/DOMPaint/element/PaintElementStroke"
 import PathPaintElement from "@app/Component/DOMPaint/element/impls/PathPaintElement"
