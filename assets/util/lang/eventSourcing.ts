@@ -9,9 +9,9 @@ export interface EventSourcingAdapter<A, E> {
 }
 
 /**
- * Small util for managing some class state(the aggregate) using series of events.
+ * Event sourcing, which can't go back in history and does not store events, but only aggregate.
  */
-export interface EventSourcing<A, E> {
+export interface NoHistoryEventSourcing<A, E> {
     readonly aggregate: StickySubscribable<A>
 
     getEvents(): Iterable<E>
@@ -19,11 +19,17 @@ export interface EventSourcing<A, E> {
     getAggregateCopy(): A
 
     applyEvent(event: E): void
-    popEvent(): void
     getCurrentVersion(): number
 }
 
-export class InMemoryEventSourcing<A, E> implements EventSourcing<A, E> {
+/**
+ * Small util for managing some class state(the aggregate) using series of events.
+ */
+export interface EventSourcing<A, E> extends NoHistoryEventSourcing<A, E> {
+    popEvent(): void
+}
+
+export class InMemoryEventSourcing<A, E> implements EventSourcing<A, E>, NoHistoryEventSourcing<A, E> {
     private innerBus: DefaultStickyEventBus<A>
     private currentAggregateVersion: number = -1
 
