@@ -1,5 +1,5 @@
 import { Point, Rect } from "../../primitive";
-import { normalizeRect } from "../../primitive/calc";
+import { rectNormalize } from "../../primitive/calc";
 import ImagePaintElement from "../impls/ImagePaintElement";
 import PathPaintElement from "../impls/PathPaintElement";
 import PathsPaintElement from "../impls/PathsPaintElement";
@@ -33,7 +33,7 @@ function pointsAABB(points: Iterable<Point>): Rect {
         return [[0, 0], [0, 0]]
     }
 
-    return normalizeRect([maxes, mins])
+    return rectNormalize([maxes, mins])
 }
 
 export class DefaultPaintElementAABB implements PaintElementAABB {
@@ -45,7 +45,7 @@ export class DefaultPaintElementAABB implements PaintElementAABB {
         } else if (element instanceof PathsPaintElement) {
             return pointsAABB(element.paths.flatMap((v) => v))
         } else if (element instanceof ImagePaintElement) {
-            return normalizeRect(element.rect)
+            return rectNormalize(element.rect)
         } else if (element instanceof PolygonPaintElement) {
             return pointsAABB(element.points)
         } else if (element instanceof SimpleCanvasPaintElement) {

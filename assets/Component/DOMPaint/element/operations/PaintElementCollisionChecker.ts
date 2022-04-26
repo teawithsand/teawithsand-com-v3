@@ -16,11 +16,53 @@ export default interface PaintElementCollisionChecker {
 }
 
 
-function pointsCheck(points: Iterable<Point>, target: Point, strokeSize: number): boolean {
+const pointSegmentDistance = (p: Point, segment: [Point, Point]) => {
+    const [x, y] = p
+    const [[x1, y1], [x2, y2]] = segment
+
+    const A = x - x1;
+    const B = y - y1;
+    const C = x2 - x1;
+    const D = y2 - y1;
+
+    const dot = A * C + B * D;
+    const len_sq = C * C + D * D;
+    let param = -1;
+    if (len_sq != 0) //in case of 0 length line
+        param = dot / len_sq;
+
+    let xx, yy;
+    if (param < 0) {
+        xx = x1;
+        yy = y1;
+    } else if (param > 1) {
+        xx = x2;
+        yy = y2;
+    } else {
+        xx = x1 + param * C;
+        yy = y1 + param * D;
+    }
+
+    const dx = x - xx;
+    const dy = y - yy;
+    return Math.sqrt(dx ** 2 + dy ** 2);
+}
+
+
+// TODO(teawithsand): optimize this. oct trees do really great with this task as well as contains AABB checks.
+function pathCheck(points: Iterable<Point>, target: Point, strokeSize: number): boolean {
     let hasAny = false
+    let prevPoint: Point | null = null
     for (const p of points) {
-        hasAny = true
-        if (euclideanDistance(p, target) < strokeSize) {
+        if (prevPoint === null) {
+            prevPoint = p
+            continue;
+        }
+
+        if (pointSegmentDistance(target, [
+            prevPoint,
+            p,
+        ]) <= strokeSize) {
             return true
         }
     }
@@ -39,9 +81,14 @@ export class DefaultPaintElementCollisionChecker implements PaintElementCollisio
 
     checkPointCollision = (p: Point, element: PaintElement): boolean => {
         if (element instanceof PathPaintElement) {
-            return pointsCheck(element.points, p, element.stroke.size)
+            return pathCheck(element.points, p, element.stroke.size)
         } else if (element instanceof PathsPaintElement) {
-            return pointsCheck(element.paths.flatMap(v => v), p, element.stroke.size)
+            for (const path of element.paths) {
+                if (pathCheck(path, p, element.stroke.size)) {
+                    return true
+                }
+            }
+            return false
         } else if (element instanceof ImagePaintElement) {
             const aabb = this.aabb.getAABB(element)
             return rectContains(aabb, p)
