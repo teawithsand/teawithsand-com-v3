@@ -8,10 +8,10 @@ import { Rect } from "@app/Component/DOMPaint/primitive"
 import { GenerateUUID } from "@app/util/lang/uuid"
 import React from "react"
 import PaintScene from "@app/Component/DOMPaint/scene/PaintScene"
-import ScrollPaintTool from "@app/Component/DOMPaint/ui/tool/impl/ScrollPaintTool"
 import PaintDisplay from "@app/Component/DOMPaint/ui/display/PaintDisplay"
-import { InMemoryEventSourcing } from "@app/util/lang/eventSourcing"
+import { InMemoryEventSourcing, NoHistoryInMemoryEventSourcing } from "@app/util/lang/eventSourcing"
 import PickPaintTool from "@app/Component/DOMPaint/ui/tool/impl/PickPaintTool"
+import { initialUIState, uiStateEventSourcingAdapter } from "@app/Component/DOMPaint/ui/state/UIState"
 
 export default () => {
     const strokeOne: PaintElementStroke = {
@@ -71,6 +71,7 @@ export default () => {
 
     return <PaintDisplay
         tool={new PickPaintTool()}
+        state={new NoHistoryInMemoryEventSourcing(uiStateEventSourcingAdapter, initialUIState)}
         scene={
             new InMemoryEventSourcing(
                 {

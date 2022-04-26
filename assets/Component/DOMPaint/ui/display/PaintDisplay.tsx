@@ -10,12 +10,17 @@ import ActivePaintTool from "../tool/ActivePaintTool"
 import classnames from "@app/util/lang/classnames"
 import { PaintDisplayInfoContext } from "../../render/PaintDisplayInfo"
 import PaintDisplayLayer from "../../render/PaintDisplayLayer"
-import { EventSourcing } from "@app/util/lang/eventSourcing"
 import PaintSceneMutation from "../../scene/PaintSceneMutation"
 import useEventSourcing from "@app/util/react/hook/useEventSourcing"
+import UIState from "../state/UIState"
+import UIStateMutator from "../state/UIStateMutator"
+import { EventSourcing, NoHistoryEventSourcing } from "@app/util/lang/eventSourcing"
+import PaintLayer from "../../layer/Layer"
+import PaintLayerMetadata from "../../layer/LayerMetadata"
 
 export default (props: {
     scene: EventSourcing<PaintScene, PaintSceneMutation>,
+    state: NoHistoryEventSourcing<UIState, UIStateMutator>,
 
     processor?: PaintElementProcessor,
 
@@ -24,7 +29,7 @@ export default (props: {
 
     tool?: PaintTool,
 }) => {
-    const { scene: sceneEventSourcing, processor, tool } = props
+    const { scene: sceneEventSourcing, processor, tool, state: stateEventSourcing } = props
     const { height, width } = useWindowDimensions()
 
     const activeToolRef = useRef<ActivePaintTool | null>(null)
@@ -36,7 +41,6 @@ export default (props: {
         }
     })
 
-
     useEffect(() => {
         if (tool) {
             const active = tool.activate({
@@ -46,15 +50,9 @@ export default (props: {
                 updateTool: () => {
                     //NIY
                 },
-                updateTopLevelStyles: () => {
-                    //NIY
-                },
             }, {
                 parentElementRef: ref as any,
-                uiState: {
-                    fillColor: [0, 0, 0],
-                    strokeColor: [0, 0, 0],
-                },
+                uiState: stateEventSourcing,
                 scene: sceneEventSourcing,
             })
 
@@ -67,6 +65,13 @@ export default (props: {
     }, [tool])
 
     const scene = useEventSourcing(sceneEventSourcing)
+    const state = useEventSourcing(stateEventSourcing)
+
+    const applyCurrentElements = (l: PaintLayer) => {
+        const nl = l.copy()
+        nl.elements = [...nl.elements, ...state.uncommittedElements]
+        return nl
+    }
 
     return <div
         ref={ref as any as React.MutableRefObject<HTMLDivElement>}
@@ -86,10 +91,32 @@ export default (props: {
                 [...scene.layers].filter((l) => !l.metadata.isHidden).map((v, i) => <PaintDisplayLayer
                     topLevelProcessor={processor}
                     baseZIndex={(i + 1) * 1000}
-                    layer={v}
+                    layer={
+                        i === state.activeLayerIndex ? applyCurrentElements(v) : v
+                    }
                     key={i}
                 />)
             }
+
+            <PaintDisplayLayer
+                baseZIndex={(scene.layers.length + 1) * 1000}
+                layer={
+                    new PaintLayer(
+                        state.uncommittedElements,
+                        new PaintLayerMetadata()
+                    )
+                }
+            />
+
+            <PaintDisplayLayer
+                baseZIndex={(scene.layers.length + 2) * 1000}
+                layer={
+                    new PaintLayer(
+                        state.uncommittedElements,
+                        new PaintLayerMetadata()
+                    )
+                }
+            />
         </PaintDisplayInfoContext.Provider>
     </div>
 }
