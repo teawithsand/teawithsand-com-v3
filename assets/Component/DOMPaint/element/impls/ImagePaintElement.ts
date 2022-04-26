@@ -1,5 +1,6 @@
 import { Rect } from "../../primitive";
 import PaintElement from "../PaintElement";
+import PaintElementTransform from "../PaintElementTransform";
 
 export type ObjectFit =
     "contain" |
@@ -9,6 +10,7 @@ export type ObjectFit =
     "scale-down"
 
 export default class ImagePaintElement extends PaintElement {
+    public transform: PaintElementTransform[]
     public url: string
     public renderId: string
     public rect: Rect
@@ -19,6 +21,7 @@ export default class ImagePaintElement extends PaintElement {
         renderId: string,
         rect: Rect,
         objectFit: ObjectFit,
+        transform?: PaintElementTransform[],
     }) {
         super()
 
@@ -26,5 +29,6 @@ export default class ImagePaintElement extends PaintElement {
         this.url = data.url
         this.rect = data.rect
         this.objectFit = data.objectFit
+        this.transform = data.transform ?? []
     }
 }
