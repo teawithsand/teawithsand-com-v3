@@ -95,9 +95,6 @@ export default (
             const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
             p = fixCoordinates(p)
 
-
-            p = fixCoordinates(p)
-
             lastInCanvasPointRef.current = {
                 absolute: abs,
                 corrected: p,
