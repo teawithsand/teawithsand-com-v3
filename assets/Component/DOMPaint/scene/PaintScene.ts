@@ -1,6 +1,10 @@
+import { DefaultPaintElementCollisionChecker } from "../element/operations/PaintElementCollisionChecker";
+import PaintElement from "../element/PaintElement";
 import PaintLayer from "../layer/Layer";
 import PaintLayerMetadata from "../layer/LayerMetadata";
+import { Point } from "../primitive";
 import PaintSceneMutation from "./PaintSceneMutation";
+import PaintSceneQuery, { PaintSceneElementLocator } from "./PaintSceneQuery";
 
 function insertAt<T>(array: T[], i: number, ...elements: T[]) {
     array.splice(i, 0, ...elements);
@@ -10,8 +14,34 @@ function removeAt<T>(array: T[], i: number): T {
     return array.splice(i, 1)[0]
 }
 
-export default class PaintScene {
+export default class PaintScene implements PaintSceneQuery {
     constructor(public layers: PaintLayer[] = []) {
+    }
+
+    private collisionChecker = new DefaultPaintElementCollisionChecker()
+
+    getFirstElementAtPoint = (p: Point): PaintSceneElementLocator | null => {
+        let layerIndex = this.layers.length - 1
+        for (const l of [...this.layers].reverse()) {
+            try {
+                let elementIndex = l.elements.length - 1
+                for (const e of [...l.elements].reverse()) {
+                    try {
+                        if (this.collisionChecker.checkPointCollision(p, e)) {
+                            return {
+                                elementIndex,
+                                layerIndex
+                            }
+                        }
+                    } finally {
+                        elementIndex--
+                    }
+                }
+            } finally {
+                layerIndex--
+            }
+        }
+        return null
     }
 
     private ensureLayer = (i: number): PaintLayer => {
@@ -19,6 +49,10 @@ export default class PaintScene {
             this.layers.push(new PaintLayer([], new PaintLayerMetadata()))
         }
         return this.layers[i]
+    }
+
+    getElementWithLocator = (l: PaintSceneElementLocator): PaintElement | null => {
+        return this.layers[l.layerIndex].elements[l.elementIndex]
     }
 
     /**
@@ -46,7 +80,7 @@ export default class PaintScene {
 
             const e = removeAt(src.elements, m.sourceElementIndex)
             insertAt(dst.elements, m.destinationLayerIndex, e)
-        } else if(m.type === "set-layer-processor"){
+        } else if (m.type === "set-layer-processor") {
             this.ensureLayer(m.index).processor = m.processor
         } else {
             throw new Error("unknown mutation")
