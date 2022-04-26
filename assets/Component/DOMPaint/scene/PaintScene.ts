@@ -60,7 +60,7 @@ export default class PaintScene implements PaintSceneQuery {
      */
     applyMutation = (m: PaintSceneMutation) => {
         if (m.type === "push-layer") {
-            const layer = new PaintLayer([], m.metadata)
+            const layer = new PaintLayer(m.elements, m.metadata)
             insertAt(this.layers, m.beforeIndex, layer)
         } else if (m.type === "drop-layer") {
             this.layers.splice(m.index, 1)

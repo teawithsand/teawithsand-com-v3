@@ -1,5 +1,5 @@
 import useWindowDimensions from "@app/util/react/hook/windowDimensionsHook"
-import React, { useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 
 import styles from "./paintDisplay.scss?module"
 import usePaintDraw from "@app/Component/DOMPaint/ui/display/usePaintDraw"
@@ -35,11 +35,14 @@ export default (props: {
     const activeToolRef = useRef<ActivePaintTool | null>(null)
 
     const ref = useRef<HTMLDivElement | null>()
-    const bind = usePaintDraw(ref as any, (event) => {
+
+    const paintDrawCallback = useCallback((event) => {
         if (activeToolRef.current) {
             activeToolRef.current.submitDrawEvent(event)
         }
-    })
+    }, [])
+
+    const bind = usePaintDraw(ref as any, paintDrawCallback)
 
     useEffect(() => {
         if (tool) {
@@ -67,11 +70,14 @@ export default (props: {
     const scene = useEventSourcing(sceneEventSourcing)
     const state = useEventSourcing(stateEventSourcing)
 
-    const applyCurrentElements = (l: PaintLayer) => {
-        const nl = l.copy()
-        nl.elements = [...nl.elements, ...state.uncommittedElements]
+    const createVirtualLayer = () => {
+        const nl = new PaintLayer([], scene.layers[state.activeLayerIndex].metadata, scene.layers[state.activeLayerIndex].processor)
+        nl.elements = state.uncommittedElements
         return nl
     }
+
+    const preCurrentLayers = scene.layers.slice(0, state.activeLayerIndex + 1).filter((l) => !l.metadata.isHidden)
+    const postCurrentLayers = scene.layers.slice(state.activeLayerIndex + 1, scene.layers.length).filter((l) => !l.metadata.isHidden)
 
     return <div
         ref={ref as any as React.MutableRefObject<HTMLDivElement>}
@@ -88,14 +94,27 @@ export default (props: {
             canvasWidth: width * 2,
         }}>
             {
-                scene.layers
-                    .filter((l) => !l.metadata.isHidden)
+                preCurrentLayers
                     .map((v, i) => <PaintDisplayLayer
                         topLevelProcessor={processor}
-                        baseZIndex={(i + 1) * 1000}
-                        layer={
-                            i === state.activeLayerIndex ? applyCurrentElements(v) : v
-                        }
+                        baseZIndex={(i + 1) * 100000}
+                        layer={v}
+                        key={i}
+                    />)
+            }
+
+            <PaintDisplayLayer
+                topLevelProcessor={processor}
+                baseZIndex={(preCurrentLayers.length + 1) * 100000}
+                layer={createVirtualLayer()}
+            />)
+
+            {
+                postCurrentLayers
+                    .map((v, i) => <PaintDisplayLayer
+                        topLevelProcessor={processor}
+                        baseZIndex={(preCurrentLayers.length + 2) * 100000}
+                        layer={v}
                         key={i}
                     />)
             }

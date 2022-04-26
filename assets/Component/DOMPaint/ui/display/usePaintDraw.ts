@@ -1,6 +1,6 @@
 import { Point } from "@app/Component/DOMPaint/primitive"
 import DrawEvent from "@app/Component/DOMPaint/ui/DrawEvent"
-import { RefObject, useEffect, useRef } from "react"
+import { RefObject, useCallback, useEffect, useRef } from "react"
 
 export default (
     elementRef: RefObject<HTMLElement>,
@@ -31,10 +31,11 @@ export default (
         }
     }
 
-    const handlePointerPositionChange = (data: {
-        x: number,
-        y: number,
-    }) => {
+    const handlePointerPositionChange = useCallback((e: any) => {
+        const data = {
+            x: e.clientX,
+            y: e.clientY,
+        }
         let { x: xxxxxx, y: yyyyyy } = data
         const abs: Point = [xxxxxx, yyyyyy]
         let p: Point = [xxxxxx, yyyyyy]
@@ -62,9 +63,9 @@ export default (
                 })
             }
         }
-    }
+    }, [onCanvasMouseEvent])
 
-    const handleOnPointerUp = () => {
+    const handleOnPointerUp = useCallback(() => {
         if (!isClickedRef.current) {
             return;
         }
@@ -81,12 +82,13 @@ export default (
             canvasPoint: corrected,
             screenPoint: absolute,
         })
-    }
+    }, [onCanvasMouseEvent])
 
-    const handleOnPointerDown = (data: {
-        x: number,
-        y: number,
-    }) => {
+    const handleOnPointerDown = useCallback((e: any) => {
+        const data = {
+            x: e.clientX,
+            y: e.clientY,
+        }
         let { x: xxxxxx, y: yyyyyy } = data
         const abs: Point = [xxxxxx, yyyyyy]
         let p: Point = [xxxxxx, yyyyyy]
@@ -108,7 +110,7 @@ export default (
                 screenPoint: abs,
             })
         }
-    }
+    }, [onCanvasMouseEvent])
 
     useEffect(() => {
         const cb = (e: any) => {
@@ -126,22 +128,8 @@ export default (
     }, [onCanvasMouseEvent])
 
     return {
-        onPointerDown: (e: any) => {
-            handleOnPointerDown({
-                x: e.clientX,
-                y: e.clientY,
-            })
-        },
-
-        onPointerUp: () => {
-            handleOnPointerUp()
-        },
-
-        onPointerMove: (e: any) => {
-            handlePointerPositionChange({
-                x: e.clientX,
-                y: e.clientY,
-            })
-        },
+        onPointerDown: handleOnPointerDown,
+        onPointerUp: handleOnPointerUp,
+        onPointerMove: handlePointerPositionChange,
     }
 }

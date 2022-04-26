@@ -2,7 +2,6 @@ import { EventSourcingAdapter } from "@app/util/lang/eventSourcing"
 import PaintElement from "../../element/PaintElement"
 import PaintElementFill from "../../element/PaintElementFill"
 import PaintElementStroke from "../../element/PaintElementStroke"
-import { Color } from "../../primitive"
 import { PaintSceneElementLocator } from "../../scene/PaintSceneQuery"
 import UIStateMutator from "./UIStateMutator"
 

@@ -9,6 +9,7 @@ type LayerMutation = {
     type: "push-layer",
     beforeIndex: number,
     metadata: PaintLayerMetadata,
+    elements: PaintElement[],
 } | {
     type: "move-layer",
     index: number,

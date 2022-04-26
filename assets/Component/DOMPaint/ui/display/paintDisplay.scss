@@ -3,7 +3,7 @@
 .paint-display {
     @include scrollbar.pretty-scrollbar();
 
-    display: grid;
+    position: relative;
     grid-template-columns: auto;
     grid-template-rows: auto;
 
@@ -11,8 +11,9 @@
     overflow: hidden;
 
     & > * {
-        grid-row: 1;
-        grid-column: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 
     & > * {
