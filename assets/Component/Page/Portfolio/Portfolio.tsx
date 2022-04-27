@@ -13,7 +13,7 @@ import Palmabooks2LatestAPK from "@app/static/palmabooks/palmabooks2_latest.apk"
 import { Link } from "react-router-dom"
 import Gallery, { GalleryImage } from "@app/Component/UI/Gallery/Gallery"
 import styles from "./portfolio.scss?module"
-import { linkGithub } from "@app/Component/endpoints"
+import { homePath, linkGithub, paintPath } from "@app/Component/endpoints"
 import { Collapse } from "react-bootstrap"
 import { useNamedToggle } from "@app/util/react/hook/toggleHook"
 import classnames from "@app/util/lang/classnames"
@@ -97,6 +97,11 @@ export default () => {
                         </button>
                         <p className={styles.featureHeaderSubtitle}>
                             2022.03 - now <br /> It's this website.
+                            It implements things like <Link to={paintPath}>
+                                simple vector-graphics paint
+                            </Link> and <Link to={homePath}>
+                                homepage animation.
+                            </Link>
                         </p>
                     </div>
                     <Collapse in={teawithsandComV3Toggle.toggled}>
@@ -108,6 +113,16 @@ export default () => {
                             </p>
                             <p>
                                 Technologies used: Go, TypeScript, Webpack, SASS
+                            </p>
+                            <p>
+                                <Link className={styles.downloadButton} to={paintPath}>
+                                    Go to paint
+                                </Link>
+                            </p>
+                            <p>
+                                <Link className={styles.downloadButton} to={homePath}>
+                                    Go to home page
+                                </Link>
                             </p>
                         </div>
                     </Collapse>
@@ -158,7 +173,7 @@ export default () => {
                             <h3>Screenshots of version one(created on dev environment with dummy data):</h3>
                             <Gallery
                                 images={teawithsandComV1GalleryImages}
-                                />
+                            />
                         </div>
                     </Collapse>
                 </div>

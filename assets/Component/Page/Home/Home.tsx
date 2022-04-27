@@ -7,7 +7,7 @@ import styles from "./home.scss?module"
 import phoneImage from "@app/images/svgrepo/phone.svg"
 import emailImage from "@app/images/svgrepo/email.svg"
 import TeaAnimation from "@app/Component/TeaAnimation/TeaAnimation"
-import { blogHomePath, contactPath, email, linkEmail, linkPhone, phone, portfolioPath } from "@app/Component/endpoints"
+import { blogHomePath, contactPath, email, linkEmail, linkPhone, paintPath, phone, portfolioPath } from "@app/Component/endpoints"
 
 export default () => {
     const firstSectionRef = useRef<HTMLElement | null>(null)
@@ -42,7 +42,9 @@ export default () => {
                 About this website
             </h2>
             <p>
-                Lorem ipsum
+                It's my blog and website, where I can experiment with stuff, without unnecessary development overhead.
+
+                It also implements some utils that I'd like to have.
             </p>
         </article>
         <article className={styles.features}>
@@ -68,6 +70,17 @@ export default () => {
                     </p>
                     <Link className={styles.features__btn} to={portfolioPath}>
                         See portfolio
+                    </Link>
+                </div>
+                <div className={styles.features__feature}>
+                    <h3>
+                        Paint
+                    </h3>
+                    <p>
+                        Simple paint using vector, for painting simple schematics
+                    </p>
+                    <Link className={styles.features__btn} to={paintPath}>
+                        Go to paint
                     </Link>
                 </div>
             </div>
