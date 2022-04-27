@@ -39,7 +39,7 @@ export default class PathPaintTool extends PaintTool {
                             setElements()
                         } else if (wasPressed && event.pressed) {
                             const lastPoint = points[points.length - 1]
-                            if (euclideanDistance(event.canvasPoint, lastPoint) >= 5) {
+                            if (euclideanDistance(event.canvasPoint, lastPoint) >= 1) {
                                 points.push(event.canvasPoint)
                             }
 
