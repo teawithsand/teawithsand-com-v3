@@ -2,7 +2,7 @@ import ImagePaintElement from "@app/Component/DOMPaint/element/impls/ImagePaintE
 import PathPaintElement, { PathFillData, PathPaintElementEntry, PathStrokeData } from "@app/Component/DOMPaint/element/impls/PathPaintElement"
 import { Rect } from "@app/Component/DOMPaint/primitive"
 import React from "react"
-import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
+import PaintScene, { paintSceneEventSourcingAdapter } from "@app/Component/DOMPaint/element/scene/PaintScene"
 import PaintDisplay from "@app/Component/DOMPaint/ui/display/PaintDisplay"
 import { InMemoryEventSourcing, NoHistoryInMemoryEventSourcing } from "@app/util/lang/eventSourcing"
 import { initialUIState, uiStateEventSourcingAdapter } from "@app/Component/DOMPaint/ui/state/UIState"
@@ -121,12 +121,7 @@ export default () => {
         state={new NoHistoryInMemoryEventSourcing(uiStateEventSourcingAdapter, initialUIState)}
         scene={
             new InMemoryEventSourcing(
-                {
-                    applyEvent: (agg, event) => {
-                        agg.updateWithMutation(event)
-                    },
-                    copy: (a) => new PaintScene(a.data) // shallow copy of layers should be ok(?)
-                },
+                paintSceneEventSourcingAdapter,
                 new PaintScene({
                     layers,
                 }),

@@ -16,6 +16,10 @@ import PaintElement from "../../element/PaintElement"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 
 import styles from "./paintDisplay.scss?module"
+import { Link } from "react-router-dom"
+import { homePath } from "@app/Component/endpoints"
+
+const panelHeight = 150
 
 export default (props: {
     scene: EventSourcing<PaintScene, PaintSceneMutation>,
@@ -91,6 +95,8 @@ export default (props: {
         className={classnames(styles.paintDisplay, props.className)}
         {...bind}
         style={{
+            ["--panel-height" as any]: `${panelHeight}px`,
+            ["--header-height" as any]: `0px`,
             width: width,
             height: height,
             ...(props.style ?? {})
@@ -100,7 +106,9 @@ export default (props: {
             canvasHeight: height * 2,
             canvasWidth: width * 2,
         }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height}>
+            <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height - panelHeight}
+                className={styles.paintDisplayCanvas}
+            >
                 {
                     elements
                         .map(e => <SVGPaintDisplayElement
@@ -110,6 +118,33 @@ export default (props: {
                         />)
                 }
             </svg>
+
+            <div className={classnames(styles.paintDisplayOverlay, styles.paintPanel)}>
+                <div className={styles.paintPanelSection}>
+                    <h6 className={styles.paintPanelSectionTitle}>
+                        General
+                    </h6>
+                    <Link className={classnames(styles.paintPanelButtonPrimary, styles.paintPanelButtonFull)} to={homePath}>Go home</Link>
+                </div>
+                <div className={classnames(styles.paintPanelSection, styles.paintPanelSectionList)}>
+                    <h6 className={styles.paintPanelSectionTitle}>
+                        Tools
+                    </h6>
+                    <button
+                        className={classnames(styles.paintPanelButtonPrimary)}
+                        onClick={() => { }}
+                    >
+                        Draw path
+                    </button>
+
+                    <button
+                        className={classnames(styles.paintPanelButtonPrimary)}
+                        onClick={() => { }}
+                    >
+                        Move canvas
+                    </button>
+                </div>
+            </div>
         </PaintDisplayInfoContext.Provider>
     </div>
 }

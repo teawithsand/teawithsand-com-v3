@@ -6,6 +6,7 @@ import RenderHashable from "../RenderHashable";
 import { generateUUID } from "@app/util/lang/uuid";
 import PaintSceneElementLocator from "./PaintSceneElementLocator";
 import { Point } from "../../primitive";
+import { EventSourcingAdapter } from "@app/util/lang/eventSourcing";
 
 function insertAt<T>(array: T[], i: number, ...elements: T[]) {
     array.splice(i, 0, ...elements);
@@ -17,6 +18,13 @@ function removeAt<T>(array: T[], i: number): T {
 
 export type PaintSceneData = {
     layers: PaintLayer[]
+}
+
+export const paintSceneEventSourcingAdapter: EventSourcingAdapter<PaintScene, PaintSceneMutation> = {
+    applyEvent: (agg, event) => {
+        agg.updateWithMutation(event)
+    },
+    copy: (a) => new PaintScene(a.data)
 }
 
 export default class PaintScene implements PaintSceneQuery, RenderHashable<PaintSceneData> {
