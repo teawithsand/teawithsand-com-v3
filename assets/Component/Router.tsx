@@ -20,14 +20,14 @@ import Portfolio from "./Page/Portfolio/Portfolio"
 import PaintPage from "./Page/Tool/PaintPage"
 
 const checkEndpoints = (...eps: string[]) => {
-    eps.forEach(ep =>{
-        if(!allEndpoints.endpoints.some(e => e === ep)){
+    eps.forEach(ep => {
+        if (!allEndpoints.endpoints.some(e => e === ep)) {
             console.error("endpoint not registered", {
                 endpoint: ep,
             })
         }
     })
-} 
+}
 
 const displayPosts = postComponents.map(data => ({
     Component: makePostComponent({
@@ -39,23 +39,46 @@ const displayPosts = postComponents.map(data => ({
 
 checkEndpoints(homePath, contactPath, aboutMePath, blogHomePath, blogPostListPath, portfolioPath, paintPath)
 
+const PageComponent = (props: {
+    Component: any,
+}) => {
+    const { Component } = props
+    return <>
+        <Navbar />
+        {Component}
+        <Footer />
+    </>
+}
+
 export default () => {
     return <BrowserRouter>
-        <Navbar />
         <Routes>
-            <Route path={homePath} element={<Home />} />
-            <Route path={contactPath} element={<Contact />} />
-            <Route path={aboutMePath} element={<AboutMe />} />
-            <Route path={blogHomePath} element={<BlogHome />} />
-            <Route path={blogPostListPath} element={<PostList />} />
-            <Route path={portfolioPath} element={<Portfolio />} />
+            <Route path={homePath} element={
+                <PageComponent Component={<Home />} />}
+            />
+            <Route path={contactPath} element={
+                <PageComponent Component={<Contact />} />}
+            />
+            <Route path={aboutMePath} element={
+                <PageComponent Component={<AboutMe />} />}
+            />
+            <Route path={blogHomePath} element={
+                <PageComponent Component={<BlogHome />} />}
+            />
+            <Route path={blogPostListPath} element={
+                <PageComponent Component={<PostList />} />
+            } />
+            <Route path={portfolioPath} element={
+                <PageComponent Component={<Portfolio />} />
+            } />
             <Route path={paintPath} element={<PaintPage />} />
-            
+
             {
-                displayPosts.map(({ Component, path }, i) => <Route key={i} path={path} element={<Component />} />)
+                displayPosts.map(({ Component, path }, i) => <Route key={i} path={path} element={
+                    <PageComponent Component={<Component />} />
+                } />)
             }
             <Route path="*" element={<NotFound />} />
         </Routes>
-        <Footer />
     </BrowserRouter>
 }
