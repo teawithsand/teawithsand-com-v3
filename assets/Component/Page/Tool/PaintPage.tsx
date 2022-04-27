@@ -2,13 +2,10 @@ import ImagePaintElement from "@app/Component/DOMPaint/element/impls/ImagePaintE
 import PathPaintElement, { PathFillData, PathPaintElementEntry, PathStrokeData } from "@app/Component/DOMPaint/element/impls/PathPaintElement"
 import { Rect } from "@app/Component/DOMPaint/primitive"
 import React from "react"
-import PaintScene, { paintSceneEventSourcingAdapter } from "@app/Component/DOMPaint/element/scene/PaintScene"
-import PaintDisplay from "@app/Component/DOMPaint/ui/display/PaintDisplay"
-import { InMemoryEventSourcing, NoHistoryInMemoryEventSourcing } from "@app/util/lang/eventSourcing"
-import { initialUIState, uiStateEventSourcingAdapter } from "@app/Component/DOMPaint/ui/state/UIState"
-import PathPaintTool from "@app/Component/DOMPaint/ui/tool/impl/PathPaintTool"
 import PaintLayer from "@app/Component/DOMPaint/element/scene/PaintLayer"
 import TextPaintElement, { textPaintElementDataDefaults } from "@app/Component/DOMPaint/element/impls/TextPaintElement"
+import PaintDraw from "@app/Component/DOMPaint/ui/display/PaintDraw"
+import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
 
 export default () => {
     const strokeOne: PathStrokeData = {
@@ -110,22 +107,15 @@ export default () => {
                 new TextPaintElement({
                     ...textPaintElementDataDefaults(),
                     text: "This is lena on the picture",
-                    startPoint: [1000, 1000],
+                    startPoint: [800, 800],
                 }),
             ],
         })
     ]
 
-    return <PaintDisplay
-        tool={new PathPaintTool()}
-        state={new NoHistoryInMemoryEventSourcing(uiStateEventSourcingAdapter, initialUIState)}
-        scene={
-            new InMemoryEventSourcing(
-                paintSceneEventSourcingAdapter,
-                new PaintScene({
-                    layers,
-                }),
-                [],
-            )
-        } />
+    return <PaintDraw
+        initialScene={new PaintScene({
+            layers,
+        })}
+    />
 }

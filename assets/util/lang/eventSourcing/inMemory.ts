@@ -11,7 +11,7 @@ export class InMemoryEventSourcing<A, E> implements EventSourcing<A, E>, NoHisto
         private readonly initialAggregate: A,
         private eventStack: E[],
     ) {
-        this.innerBus = new DefaultStickyEventBus(this.initialAggregate)
+        this.innerBus = new DefaultStickyEventBus(this.adapter.copy(this.initialAggregate))
         this.recomputeCurrentAggregate()
     }
 
@@ -30,12 +30,14 @@ export class InMemoryEventSourcing<A, E> implements EventSourcing<A, E>, NoHisto
         this.recomputeCurrentAggregate()
     }
 
-    popEvent = (): void => {
+    popEvent = (): E | null => {
         if (this.eventStack.length === 0) {
-            return
+            return null
         }
-        this.eventStack.pop()
+        const e = this.eventStack.pop()
         this.recomputeCurrentAggregate()
+        
+        return e as E
     }
 
     getCurrentVersion = (): number => {
@@ -43,16 +45,20 @@ export class InMemoryEventSourcing<A, E> implements EventSourcing<A, E>, NoHisto
     }
 
     private recomputeCurrentAggregate = () => {
-        const currentVersionFromEvents = this.eventStack.length + 1
+        const currentVersionFromEvents = this.eventStack.length
         // TODO(teawithsand): test and debug this code
         if (currentVersionFromEvents < this.currentAggregateVersion) {
             const copy = this.adapter.copy(this.initialAggregate)
-            
+            if (copy === this.initialAggregate) {
+                throw new Error("ERR")
+            }
+
             for (const event of this.eventStack) {
                 this.adapter.applyEvent(copy, event)
             }
-            this.innerBus.emitEvent(copy)
+
             this.currentAggregateVersion = currentVersionFromEvents
+            this.innerBus.emitEvent(copy)
         } else {
             const copy = this.adapter.copy(this.innerBus.lastEvent)
             for (const event of this.eventStack.slice(this.currentAggregateVersion, this.eventStack.length)) {

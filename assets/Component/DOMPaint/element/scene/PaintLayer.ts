@@ -23,10 +23,12 @@ export type PaintLayerData = {
 export default class PaintLayer implements RenderHashable<PaintLayerData>{
     private innerRenderHash = generateUUID()
 
+    private innerData: PaintLayerData
+    
     constructor(
-        private innerData: PaintLayerData,
+        innerData: PaintLayerData,
     ) {
-        innerData = {
+        this.innerData = {
             ...innerData,
             elements: [...innerData.elements],
             metadata: { ...innerData.metadata },

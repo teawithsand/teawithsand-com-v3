@@ -16,10 +16,13 @@
         touch-action: none;
     }
 
-    &__canvas {
+    &__canvas-parent {
         z-index: 1;
         grid-column: 1;
         grid-row: 1;
+
+        @include scrollbar.pretty-scrollbar();
+        overflow: scroll;
     }
 
     &__overlay {

@@ -17,7 +17,7 @@ type UIState = {
     uncommittedElements: PaintElement[],
 }
 
-export const initialUIState: UIState = {
+export const initialUIState: Readonly<UIState> = {
     stroke: {
         color: [0, 0, 0],
         size: 10,

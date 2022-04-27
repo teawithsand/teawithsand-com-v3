@@ -24,16 +24,21 @@ export const paintSceneEventSourcingAdapter: EventSourcingAdapter<PaintScene, Pa
     applyEvent: (agg, event) => {
         agg.updateWithMutation(event)
     },
-    copy: (a) => new PaintScene(a.data)
+    copy: (scene) => new PaintScene(scene.data)
 }
 
 export default class PaintScene implements PaintSceneQuery, RenderHashable<PaintSceneData> {
     private innerRenderHash = generateUUID()
 
-    constructor(private innerData: PaintSceneData) {
+    private innerData: PaintSceneData
+    constructor(innerData: PaintSceneData) {
+        const layers = []
+        for(const l of innerData.layers) {
+            layers.push(new PaintLayer(l.data))
+        }
         this.innerData = {
             ...innerData,
-            layers: [...innerData.layers],
+            layers,
         }
     }
 
