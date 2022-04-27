@@ -4,9 +4,6 @@
     @include scrollbar.pretty-scrollbar();
 
     position: relative;
-    grid-template-columns: auto;
-    grid-template-rows: auto;
-
     touch-action: none;
     overflow: hidden;
 
@@ -16,8 +13,9 @@
         left: 0;
     }
 
-    & > * {
+    & * {
         user-select: none;
+        touch-action: none;
     }
 }
 

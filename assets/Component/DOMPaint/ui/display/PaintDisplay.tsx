@@ -15,6 +15,8 @@ import SVGPaintDisplayElement from "../../render/SVGPaintDisplayElement"
 import PaintElement from "../../element/PaintElement"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 
+import styles from "./paintDisplay.scss?module"
+
 export default (props: {
     scene: EventSourcing<PaintScene, PaintSceneMutation>,
     state: NoHistoryEventSourcing<UIState, UIStateMutator>,
@@ -86,7 +88,7 @@ export default (props: {
 
     return <div
         ref={ref as any as React.MutableRefObject<HTMLDivElement>}
-        className={classnames(props.className)}
+        className={classnames(styles.paintDisplay, props.className)}
         {...bind}
         style={{
             width: width,
