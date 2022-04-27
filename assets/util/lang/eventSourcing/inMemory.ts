@@ -4,7 +4,7 @@ import { EventSourcing, EventSourcingAdapter, NoHistoryEventSourcing } from "./d
 
 export class InMemoryEventSourcing<A, E> implements EventSourcing<A, E>, NoHistoryEventSourcing<A, E> {
     private innerBus: DefaultStickyEventBus<A>
-    private currentAggregateVersion: number = -1
+    private currentAggregateVersion: number = 0
 
     constructor(
         private readonly adapter: EventSourcingAdapter<A, E>,
@@ -43,13 +43,16 @@ export class InMemoryEventSourcing<A, E> implements EventSourcing<A, E>, NoHisto
     }
 
     private recomputeCurrentAggregate = () => {
-        if (this.eventStack.length > this.currentAggregateVersion) {
+        const currentVersionFromEvents = this.eventStack.length + 1
+        // TODO(teawithsand): test and debug this code
+        if (currentVersionFromEvents < this.currentAggregateVersion) {
             const copy = this.adapter.copy(this.initialAggregate)
+            
             for (const event of this.eventStack) {
                 this.adapter.applyEvent(copy, event)
             }
             this.innerBus.emitEvent(copy)
-            this.currentAggregateVersion = this.eventStack.length
+            this.currentAggregateVersion = currentVersionFromEvents
         } else {
             const copy = this.adapter.copy(this.innerBus.lastEvent)
             for (const event of this.eventStack.slice(this.currentAggregateVersion, this.eventStack.length)) {
