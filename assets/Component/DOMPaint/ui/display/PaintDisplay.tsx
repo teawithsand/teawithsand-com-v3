@@ -6,7 +6,6 @@ import PaintSceneMutation from "../../element/scene/PaintSceneMutation"
 import UIState from "../state/UIState"
 import UIStateMutator from "../state/UIStateMutator"
 import { EventSourcing, NoHistoryEventSourcing } from "@app/util/lang/eventSourcing"
-import useWindowDimensions from "@app/util/react/hook/windowDimensionsHook"
 import ActivePaintTool from "../tool/ActivePaintTool"
 import usePaintDraw from "./usePaintDraw"
 import useEventSourcing from "@app/util/react/hook/useEventSourcing"
@@ -14,8 +13,7 @@ import classnames from "@app/util/lang/classnames"
 import { PaintDisplayInfoContext } from "../../render/PaintDisplayInfo"
 import SVGPaintDisplayElement from "../../render/SVGPaintDisplayElement"
 import PaintElement from "../../element/PaintElement"
-import useClientDimensions from "@app/util/react/hook/useClientDimensions"
-import { getUsefulDimensions } from "@app/util/react/hook/useUsefulDimensions"
+import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 
 export default (props: {
     scene: EventSourcing<PaintScene, PaintSceneMutation>,

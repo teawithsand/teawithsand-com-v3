@@ -1,4 +1,4 @@
-import useWindowDimensions from "./windowDimensionsHook";
+import useWindowDimensions from "./useWindowDimensions";
 
 export type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
