@@ -25,6 +25,8 @@ export type PathPaintElementData = {
 export type PathStrokeData = {
     color: Color,
     size: number,
+    linecap: "butt" | "square" | "round",
+    linejoin: "miter" | "round" | "bevel"
 }
 
 export type PathFillData = {
@@ -201,6 +203,8 @@ export default class PathPaintElement implements AABBPaintElement<PathPaintEleme
 
         res.stroke = encodeColor(stroke.color)
         res.strokeWidth = stroke.size
+        res.strokeLinecap = stroke.linecap
+        res.strokeLinejoin = stroke.linejoin
 
         return res
     }

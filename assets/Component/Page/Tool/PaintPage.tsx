@@ -13,6 +13,8 @@ export default () => {
     const strokeOne: PathStrokeData = {
         color: [0, 255, 0],
         size: 2,
+        linecap: "round",
+        linejoin: "round",
     }
 
     const fillOne: PathFillData = {
