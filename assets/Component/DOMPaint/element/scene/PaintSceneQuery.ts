@@ -1,9 +1,7 @@
-import { Point } from "../primitive"
+import { Point } from "../../primitive"
+import PaintSceneElementLocator from "./PaintSceneElementLocator"
 
-export type PaintSceneElementLocator = {
-    layerIndex: number,
-    elementIndex: number
-}
+
 
 /**
  * PaintScene, which can be queried for some stuff like elements for boxes and stuff.

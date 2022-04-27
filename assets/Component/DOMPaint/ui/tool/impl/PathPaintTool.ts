@@ -19,8 +19,12 @@ export default class PathPaintTool extends PaintTool {
         const setElements = () => {
             helper.setElements([
                 new PathPaintElement({
-                    points: [...points],
-                    renderId: generateUUID(),
+                    entries: points.map((v, i) => ({
+                        type: i === 0 ? "M" : "L",
+                        point: v,
+                    })),
+                    fill: null,
+                    filters: [],
                     stroke: { ...environment.uiState.aggregate.lastEvent.stroke },
                 })
             ])
@@ -43,6 +47,7 @@ export default class PathPaintTool extends PaintTool {
                         } else if (wasPressed && !event.pressed) {
                             points.push(event.canvasPoint)
                             setElements()
+
                             helper.commitElements()
 
                             points.splice(0, points.length)

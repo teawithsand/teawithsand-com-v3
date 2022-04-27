@@ -1,6 +1,5 @@
-import PaintElement from "../element/PaintElement"
-import PaintElementProcessor from "../element/processor/PaintElementProcessor"
-import PaintLayerMetadata from "../layer/LayerMetadata"
+import PaintElement from "../PaintElement"
+import { PaintLayerMetadata } from "./PaintLayer"
 
 type LayerMutation = {
     type: "drop-layer",
@@ -18,11 +17,6 @@ type LayerMutation = {
     type: "set-layer-metadata",
     index: number,
     metadata: PaintLayerMetadata,
-} | {
-    // TODO(teawithsand): drop this, since it's not serializable easily to JSON
-    type: "set-layer-processor",
-    index: number,
-    processor: PaintElementProcessor,
 }
 
 type ElementMutation = {

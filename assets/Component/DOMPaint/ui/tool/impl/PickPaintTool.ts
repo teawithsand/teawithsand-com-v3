@@ -1,4 +1,3 @@
-import { DefaultPaintElementAABB } from "@app/Component/DOMPaint/element/operations/PaintElementAABB";
 import { Point } from "@app/Component/DOMPaint/primitive";
 import ActivePaintTool from "../ActivePaintTool";
 import PaintTool from "../PaintTool";

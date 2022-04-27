@@ -1,5 +1,5 @@
 import PaintElement from "../../element/PaintElement"
-import PaintLayerMetadata from "../../layer/LayerMetadata"
+import { PaintLayerMetadata } from "../../element/scene/PaintLayer"
 
 type SVGPaintDisplayElementProps<T extends PaintElement> = {
     paintElement: T,

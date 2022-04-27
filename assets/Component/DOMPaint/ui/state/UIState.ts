@@ -1,15 +1,22 @@
 import { EventSourcingAdapter } from "@app/util/lang/eventSourcing"
 import PaintElement from "../../element/PaintElement"
-import PaintElementFill from "../../element/PaintElementFill"
-import PaintElementStroke from "../../element/PaintElementStroke"
-import { PaintSceneElementLocator } from "../../scene/PaintSceneQuery"
+import PaintSceneElementLocator from "../../element/scene/PaintSceneElementLocator"
+import { Color } from "../../primitive"
 import UIStateMutator from "./UIStateMutator"
 
-type UIState = {
-    stroke: PaintElementStroke,
-    fill: PaintElementFill,
+export type StrokeUIState = {
+    color: Color,
+    size: number
+}
 
+export type FillUIState = {
+    color: Color,
+}
+
+type UIState = {
     activeLayerIndex: number,
+    stroke: StrokeUIState,
+    fill: FillUIState | null,
 
     selectedElements: PaintSceneElementLocator[],
     uncommittedElements: PaintElement[],
@@ -20,9 +27,7 @@ export const initialUIState: UIState = {
         color: [0, 0, 0],
         size: 10,
     },
-    fill: {
-        color: [0, 0, 0],
-    },
+    fill: null,
     selectedElements: [],
     activeLayerIndex: 0,
     uncommittedElements: [],

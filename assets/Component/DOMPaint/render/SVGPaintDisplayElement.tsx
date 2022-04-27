@@ -2,7 +2,7 @@ import React from "react"
 import ImagePaintElement from "../element/impls/ImagePaintElement"
 import PathPaintElement from "../element/impls/PathPaintElement"
 import PaintElement from "../element/PaintElement"
-import PaintLayerMetadata from "../layer/LayerMetadata"
+import { PaintLayerMetadata } from "../element/scene/PaintLayer"
 import ImagePaintDisplayElement from "./svgimpls/ImageSVGPaintDisplayElement"
 import PathPaintDisplayElement from "./svgimpls/PathSVGPaintDisplayElement"
 

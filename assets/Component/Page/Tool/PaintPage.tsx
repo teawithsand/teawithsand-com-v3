@@ -1,73 +1,110 @@
 import ImagePaintElement from "@app/Component/DOMPaint/element/impls/ImagePaintElement"
-import PaintElementFill from "@app/Component/DOMPaint/element/PaintElementFill"
-import PaintElementStroke from "@app/Component/DOMPaint/element/PaintElementStroke"
-import PathPaintElement from "@app/Component/DOMPaint/element/impls/PathPaintElement"
-import PaintLayer from "@app/Component/DOMPaint/layer/Layer"
-import PaintLayerMetadata from "@app/Component/DOMPaint/layer/LayerMetadata"
+import PathPaintElement, { PathFillData, PathPaintElementEntry, PathStrokeData } from "@app/Component/DOMPaint/element/impls/PathPaintElement"
 import { Rect } from "@app/Component/DOMPaint/primitive"
-import { generateUUID } from "@app/util/lang/uuid"
 import React from "react"
-import PaintScene from "@app/Component/DOMPaint/scene/PaintScene"
+import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
 import PaintDisplay from "@app/Component/DOMPaint/ui/display/PaintDisplay"
 import { InMemoryEventSourcing, NoHistoryInMemoryEventSourcing } from "@app/util/lang/eventSourcing"
-import PickPaintTool from "@app/Component/DOMPaint/ui/tool/impl/PickPaintTool"
 import { initialUIState, uiStateEventSourcingAdapter } from "@app/Component/DOMPaint/ui/state/UIState"
 import PathPaintTool from "@app/Component/DOMPaint/ui/tool/impl/PathPaintTool"
+import PaintLayer from "@app/Component/DOMPaint/element/scene/PaintLayer"
 
 export default () => {
-    const strokeOne: PaintElementStroke = {
+    const strokeOne: PathStrokeData = {
         color: [0, 255, 0],
         size: 2,
     }
-    const fillOne: PaintElementFill = {
+
+    const fillOne: PathFillData = {
         color: [128, 128, 128],
     }
 
     const layers = [
-        new PaintLayer(
-            [
+        new PaintLayer({
+            metadata: {
+                isHidden: false,
+                name: "starter",
+            },
+            elements: [
                 new PathPaintElement({
-                    points: [
-                        [100, 100],
-                        [100, 200],
-                        [200, 200],
-                        [200, 100],
-                        [100, 100],
-                    ].map(v => [v[0] - 50, v[1] - 50]),
+                    entries: [
+                        {
+                            type: "M",
+                            point: [100, 100],
+                        },
+                        {
+                            type: "L",
+                            point: [100, 200]
+                        },
+                        {
+                            type: "L",
+                            point: [200, 200],
+                        },
+                        {
+                            type: "L",
+                            point: [200, 100],
+                        },
+                        {
+                            type: "L",
+                            point: [100, 100]
+                        },
+                    ].map(v => ({
+                        type: v.type,
+                        point: [
+                            v.point[0] - 50,
+                            v.point[1] - 50,
+                        ]
+                    })) as PathPaintElementEntry[],
                     stroke: { ...strokeOne, color: [255, 0, 0], size: 10, },
-                    renderId: "p2",
+                    fill: null,
+                    filters: [],
                 }),
 
                 new PathPaintElement({
-                    points: [
-                        [100, 100],
-                        [100, 200],
-                        [200, 200],
-                        [200, 100],
-                        [100, 100],
+                    entries: [
+                        {
+                            type: "M",
+                            point: [100, 100],
+                        },
+                        {
+                            type: "L",
+                            point: [100, 200]
+                        },
+                        {
+                            type: "L",
+                            point: [200, 200],
+                        },
+                        {
+                            type: "L",
+                            point: [200, 100],
+                        },
+                        {
+                            type: "L",
+                            point: [100, 100]
+                        },
                     ],
                     stroke: { ...strokeOne, color: [0, 0, 255] },
-                    renderId: "p1"
+                    fill: null,
+                    filters: [],
                 }),
 
                 new ImagePaintElement({
                     url: "https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png",
-                    objectFit: "contain",
                     rect: [
                         [0, 0],
                         [512, 512],
                     ].map(v => v.map(v => v + 100)) as Rect,
-                    renderId: "e3",
+                    filters: [],
                 }),
 
                 new PathPaintElement({
-                    points: [],
                     stroke: strokeOne,
-                    renderId: generateUUID(),
+                    filters: [],
+                    entries: [],
+                    fill: null,
                 }),
             ],
-            new PaintLayerMetadata()
-        )
+        })
     ]
 
     return <PaintDisplay
@@ -77,11 +114,13 @@ export default () => {
             new InMemoryEventSourcing(
                 {
                     applyEvent: (agg, event) => {
-                        agg.applyMutation(event)
+                        agg.updateWithMutation(event)
                     },
-                    copy: (a) => new PaintScene([...a.layers]) // shallow copy of layers should be ok(?)
+                    copy: (a) => new PaintScene(a.data) // shallow copy of layers should be ok(?)
                 },
-                new PaintScene(layers),
+                new PaintScene({
+                    layers,
+                }),
                 [],
             )
         } />

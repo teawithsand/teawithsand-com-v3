@@ -1,6 +1,6 @@
 import { EventSourcing, NoHistoryEventSourcing } from "@app/util/lang/eventSourcing"
-import PaintScene from "../../scene/PaintScene"
-import PaintSceneMutation from "../../scene/PaintSceneMutation"
+import PaintScene from "../../element/scene/PaintScene"
+import PaintSceneMutation from "../../element/scene/PaintSceneMutation"
 import UIState from "../state/UIState"
 import UIStateMutator from "../state/UIStateMutator"
 
