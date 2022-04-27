@@ -8,6 +8,7 @@ import { InMemoryEventSourcing, NoHistoryInMemoryEventSourcing } from "@app/util
 import { initialUIState, uiStateEventSourcingAdapter } from "@app/Component/DOMPaint/ui/state/UIState"
 import PathPaintTool from "@app/Component/DOMPaint/ui/tool/impl/PathPaintTool"
 import PaintLayer from "@app/Component/DOMPaint/element/scene/PaintLayer"
+import TextPaintElement, { textPaintElementDataDefaults } from "@app/Component/DOMPaint/element/impls/TextPaintElement"
 
 export default () => {
     const strokeOne: PathStrokeData = {
@@ -104,6 +105,12 @@ export default () => {
                     filters: [],
                     entries: [],
                     fill: null,
+                }),
+
+                new TextPaintElement({
+                    ...textPaintElementDataDefaults(),
+                    text: "This is lena on the picture",
+                    startPoint: [1000, 1000],
                 }),
             ],
         })

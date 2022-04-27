@@ -22,5 +22,6 @@ export default (props: SVGPaintDisplayElementProps<ImagePaintElement>) => {
         x={offsetX}
         y={offsetY}
         onDragStart={(e) => e.preventDefault()}
+        onClick={props.onClick}
     />
 }

@@ -8,5 +8,6 @@ export default (props: SVGPaintDisplayElementProps<PathPaintElement>) => {
     return <path
         d={paintElement.stringPath}
         style={paintElement.svgStyle}
+        onClick={props.onClick}
     />
 }
