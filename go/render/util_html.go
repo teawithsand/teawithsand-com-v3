@@ -14,6 +14,7 @@ const templateText = `
 {{ .HeadTags }}
 </head>
 <body>
+<div id="root"><h1>Loading...</h1></div>
 </body>
 </html>
 `

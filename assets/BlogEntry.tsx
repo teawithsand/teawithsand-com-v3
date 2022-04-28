@@ -12,9 +12,9 @@ const App = () => {
 document.title = "teawithsand.com"
 
 const initApp = async () => {
-    const target = document.createElement("div")
-    target.id = "root"
-    document.body.appendChild(target)
+    // const target = document.createElement("div")
+    // target.id = "root"
+    // document.body.appendChild(target)
 
     render(<App />, document.getElementById('root'));
 }
