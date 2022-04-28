@@ -8,4 +8,5 @@ type Config struct {
 	HTTPSListenAddress  string `mapstructure:"TWSBLOG_HTTPS_LISTEN_ADDRESS"`
 	HTTPSCertPath       string `mapstructure:"TWSBLOG_HTTPS_CERT_PATH"`
 	HTTPSPrivateKeyPath string `mapstructure:"TWSBLOG_HTTPS_KEY_PATH"`
+	HTTPSRedirect       bool   `mapstructure:"TWSBLOG_HTTPS_REDIRECT"`
 }
