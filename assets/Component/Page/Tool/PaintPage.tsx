@@ -1,13 +1,10 @@
-import ImagePaintElement from "@app/Component/DOMPaint/element/impls/ImagePaintElement"
-import PathPaintElement, { PathFillData, PathPaintElementEntry, PathStrokeData } from "@app/Component/DOMPaint/element/impls/PathPaintElement"
-import { Rect } from "@app/Component/DOMPaint/primitive"
 import React from "react"
 import PaintLayer from "@app/Component/DOMPaint/element/scene/PaintLayer"
-import TextPaintElement, { textPaintElementDataDefaults } from "@app/Component/DOMPaint/element/impls/TextPaintElement"
 import PaintDraw from "@app/Component/DOMPaint/ui/display/PaintDraw"
 import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
 
 export default () => {
+    /*
     const strokeOne: PathStrokeData = {
         color: [0, 255, 0],
         size: 2,
@@ -112,6 +109,9 @@ export default () => {
             ],
         })
     ]
+    */
+
+    const layers: PaintLayer[] = []
 
     return <PaintDraw
         initialScene={new PaintScene({
