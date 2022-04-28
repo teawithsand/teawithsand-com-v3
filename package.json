@@ -1,7 +1,6 @@
 {
     "devDependencies": {
         "@babel/preset-react": "^7.0.0",
-        "@hotwired/stimulus": "^3.0.0",
         "@symfony/stimulus-bridge": "^3.0.0",
         "@symfony/webpack-encore": "^1.7.0",
         "@types/feather-icons": "^4.7.0",
@@ -11,8 +10,6 @@
         "@types/react-redux": "^7.1.22",
         "@types/react-router-bootstrap": "^0.24.5",
         "@types/react-transition-group": "^4.4.4",
-        "@types/redux": "^3.6.0",
-        "@types/redux-persist": "^4.3.1",
         "@types/redux-state-sync": "^3.1.2",
         "@typescript-eslint/eslint-plugin": "^5.14.0",
         "@typescript-eslint/parser": "^5.14.0",
