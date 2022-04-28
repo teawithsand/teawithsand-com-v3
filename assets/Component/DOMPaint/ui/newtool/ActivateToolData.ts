@@ -3,7 +3,7 @@ import PaintSceneMutation from "@app/Component/DOMPaint/element/scene/PaintScene
 import Tool from "@app/Component/DOMPaint/ui/newtool/Tool"
 import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
 import GlobalUIStateMutation from "@app/Component/DOMPaint/ui/state/GlobalUIStateMutation"
-import StickyEventBus from "@app/util/lang/bus/StickyEventBus"
+import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 
 export interface ActiveToolSceneInteraction {
     setUncommitedMutations: (mutations: PaintSceneMutation[]) => void
@@ -37,13 +37,13 @@ export interface ActiveToolGlobalUIInteraction {
 }
 
 export type ActivateToolData<P> = {
-    readonly globalUIState: StickyEventBus<GlobalUIState>
-    readonly scene: StickyEventBus<PaintScene>
+    readonly globalUIState: StickySubscribable<GlobalUIState>
+    readonly scene: StickySubscribable<PaintScene>
 
     readonly sceneInteraction: ActiveToolSceneInteraction
     readonly globalUIInteraction: ActiveToolGlobalUIInteraction
 
-    setTool(tool: Tool<unknown>): void
+    setTool(tool: Tool<any>): void
     setDisplayPropsCallback: (props: P) => void
 }
 
