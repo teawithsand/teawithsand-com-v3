@@ -11,6 +11,6 @@ export const linkLinkedIn = "https://www.linkedin.com/in/przemyslaw-glowacki-d2f
 // export const linkYouTube = "https://github.com/teawithsand" // NIY for now
 
 export const email = "contact@przemyslawglowacki.com"
-export const linkEmail = `mailto:contact@${email}` 
-export const phone = "retractedretracted"
-export const linkPhone = `tel:${phone}`
+export const linkEmail = `mailto:${email}`
+// export const phone = "retractedretracted"
+// export const linkPhone = `tel:${phone}`
