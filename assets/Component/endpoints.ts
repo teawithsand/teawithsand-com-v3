@@ -12,5 +12,5 @@ export const linkLinkedIn = "https://www.linkedin.com/in/przemyslaw-glowacki-d2f
 
 export const email = "contact@przemyslawglowacki.com"
 export const linkEmail = `mailto:${email}`
-// export const phone = "retractedretracted"
+// export const phone = "retraced"
 // export const linkPhone = `tel:${phone}`
