@@ -59,9 +59,12 @@ export default () => {
             <Route path={contactPath} element={
                 <PageComponent Component={<Contact />} />}
             />
+            {/*
+            
             <Route path={aboutMePath} element={
                 <PageComponent Component={<AboutMe />} />}
             />
+            */}
             <Route path={blogHomePath} element={
                 <PageComponent Component={<BlogHome />} />}
             />
@@ -78,7 +81,7 @@ export default () => {
                     <PageComponent Component={<Component />} />
                 } />)
             }
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={ <PageComponent Component={<NotFound />} />} />
         </Routes>
     </BrowserRouter>
 }
