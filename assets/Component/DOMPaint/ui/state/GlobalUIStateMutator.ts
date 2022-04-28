@@ -1,4 +1,4 @@
-import UIState from "./UIState";
+import UIState from "./GlobalUIState";
 
 /**
  * Function, which changes ui state it's given into new one.

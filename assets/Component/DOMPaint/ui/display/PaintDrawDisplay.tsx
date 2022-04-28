@@ -10,7 +10,7 @@ import { homePath } from "@app/Component/endpoints"
 import SVGPaintDisplayScene from "../../render/SVGPaintDisplayScene"
 import PaintScene from "../../element/scene/PaintScene"
 import DrawEvent from "../DrawEvent"
-import UIState from "../state/UIState"
+import UIState from "../state/GlobalUIState"
 
 const panelHeight = 150
 

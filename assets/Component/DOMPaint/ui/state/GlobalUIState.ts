@@ -2,7 +2,7 @@ import { EventSourcingAdapter } from "@app/util/lang/eventSourcing"
 import { PathFillData, PathStrokeData } from "../../element/impls/PathPaintElement"
 import PaintElement from "../../element/PaintElement"
 import PaintSceneElementLocator from "../../element/scene/PaintSceneElementLocator"
-import UIStateMutator from "./UIStateMutator"
+import UIStateMutator from "./GlobalUIStateMutator"
 
 export type StrokeUIState = PathStrokeData
 
