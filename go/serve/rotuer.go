@@ -143,14 +143,14 @@ func MakeRouter(config Config) (h http.Handler, err error) {
 		})
 	}
 
-	fmw := httpext.CacheMW{
-		ForceDisable: true,
+	assetsMw := httpext.CacheMW{
+		Infinite: true,
 	}
 
 	r.Methods("GET", "HEAD").
 		PathPrefix("/dist").
 		Handler(
-			http.StripPrefix("/dist", staticAssetsHandler),
+			http.StripPrefix("/dist", assetsMw.Apply(staticAssetsHandler)),
 		)
 
 	r.NotFoundHandler = notFoundHandler
@@ -187,6 +187,5 @@ func MakeRouter(config Config) (h http.Handler, err error) {
 	}
 
 	h = r
-	h = fmw.Apply(h)
 	return
 }
