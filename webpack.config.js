@@ -197,7 +197,6 @@ Encore
             },
         },
     }))
-    .addPlugin(new BundleAnalyzerPlugin())
 
 
     // images are configured manually now
@@ -235,6 +234,10 @@ Encore
     // TODO(teawithsand): add uglifyjs plugin before compression plugin
     //  and replace webpack default minimizer
     ;
+
+if (!Encore.isProduction()) {
+    Encore.addPlugin(new BundleAnalyzerPlugin())
+}
 
 let config = Encore.getWebpackConfig();
 config.resolve.plugins = [new TSConfigPathsPlugin];
