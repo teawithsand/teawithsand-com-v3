@@ -1,7 +1,7 @@
-import UIState from "./GlobalUIState";
+import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
 
 /**
  * Function, which changes ui state it's given into new one.
  */
-type UIStateMutator = (state: UIState) => void
-export default UIStateMutator
+type GlobalUIStateMutator = (state: GlobalUIState) => void
+export default GlobalUIStateMutator

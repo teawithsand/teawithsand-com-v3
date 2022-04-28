@@ -1,6 +1,6 @@
 import { Subscribable, Subscriber, SubscriptionCanceler } from "./stateSubscribe"
 
-export default interface EventBus<T> {
+export default interface EventBus<T> extends Subscribable<T> {
     emitEvent(e: T): void
 }
 

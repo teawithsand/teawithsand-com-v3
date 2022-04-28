@@ -10,7 +10,7 @@ import { homePath } from "@app/Component/endpoints"
 import SVGPaintDisplayScene from "../../render/SVGPaintDisplayScene"
 import PaintScene from "../../element/scene/PaintScene"
 import DrawEvent from "../DrawEvent"
-import UIState from "../state/GlobalUIState"
+import GlobalUIState from "../state/GlobalUIState"
 
 const panelHeight = 150
 
@@ -28,7 +28,7 @@ export default (props: {
 
     parentElementRef?: React.MutableRefObject<HTMLDivElement | null>,
 
-    uiState: UIState,
+    uiState: GlobalUIState,
     onDrawEvent?: (event: DrawEvent) => void,
     onPaintDrawUIEvent?: (event: PaintDrawUIEvent) => void,
 }) => {

@@ -24,5 +24,5 @@ export interface NoHistoryEventSourcing<A, E> {
  */
 export interface EventSourcing<A, E> extends NoHistoryEventSourcing<A, E> {
     getEvents(): Iterable<E>
-    popEvent(): void
+    popEvent(): E | null
 }
