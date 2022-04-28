@@ -27,7 +27,6 @@
 	"features": {
 		"node": "lts",
 		"golang": "latest",
-		"rust": "latest",
 		"git-lfs": "latest",
 		"docker-in-docker": "latest",
 	}
