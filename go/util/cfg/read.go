@@ -9,6 +9,7 @@ import (
 
 func init() {
 	viper.AddConfigPath(".")
+	viper.AddConfigPath("./config")
 	viper.SetConfigName(".env") // name of config file (without extension)
 	viper.SetConfigType("env")  // REQUIRED if the config file does not have the extension in the name
 
