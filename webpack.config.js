@@ -243,6 +243,10 @@ let config = Encore.getWebpackConfig();
 config.resolve.plugins = [new TSConfigPathsPlugin];
 
 
+if (!Encore.isProduction()) {
+    config.devtool = "eval-cheap-module-source-map"
+}
+
 if (config.optimization.minimizer) {
     config.optimization.minimizer.push(minifier)
 } else {
@@ -252,7 +256,5 @@ if (config.optimization.minimizer) {
 config.resolve.fallback = {
     buffer: require.resolve('buffer/'),
 }
-
-config.devtool = "eval-cheap-module-source-map"
 
 module.exports = config;
