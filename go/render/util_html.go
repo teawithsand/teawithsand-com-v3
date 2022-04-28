@@ -36,7 +36,8 @@ type RenderHTMLData struct {
 func RenderHTML(data RenderHTMLData, w io.Writer) (err error) {
 	// HACK: it should not be there
 	tags := `<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">`
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">`
 
 	for _, tag := range data.HeadTags {
 		var singleTag string
