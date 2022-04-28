@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
-export type Orientation = "vertical" | "horiziontal" | "square"
-export type WindowDimensions = {
+
+export type Orientation = "vertical" | "horizontal" | "square"
+export type UsefulDimensions = {
     width: number,
     height: number,
     orientation: Orientation,
 }
 
-function getWindowDimensions(): WindowDimensions {
-    const { innerWidth: width, innerHeight: height } = window;
+export const getUsefulDimensions = () => {
+    const { clientWidth: width } = document.body
+    const { innerHeight: height } = window
+
     let orientation: Orientation = "square"
     if (width > height) {
-        orientation = "horiziontal"
+        orientation = "horizontal"
     } else if (height > width) {
         orientation = "vertical"
     }
@@ -22,12 +25,12 @@ function getWindowDimensions(): WindowDimensions {
     }
 }
 
-export default function useWindowDimensions(): WindowDimensions {
-    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+export default function useUsefulDimensions(): UsefulDimensions {
+    const [windowDimensions, setWindowDimensions] = useState(getUsefulDimensions())
 
     useEffect(() => {
         function handleResize() {
-            setWindowDimensions(getWindowDimensions())
+            setWindowDimensions(getUsefulDimensions())
         }
 
         window.addEventListener('resize', handleResize)

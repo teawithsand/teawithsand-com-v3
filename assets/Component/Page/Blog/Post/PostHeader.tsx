@@ -4,7 +4,7 @@ import React from "react"
 export interface PostMetadata {
     title: string,
     createdAt: string,
-    lastEditedAt: string,
+    lastEditedAt: string | null,
     path: string,
     tags?: null | string[],
 }
@@ -21,7 +21,7 @@ export default (props: {
         <h1 className={styles.postHeaderTitle}>{title}</h1>
         <div className={styles.postHeaderCreatedAt}>Created: {formatTime(createdAt)}</div>
         {lastEditedAt ? <div className={styles.postHeaderLastEditedAt}>Edited: {formatTime(lastEditedAt)}</div> : null}
-        <div className={styles.postHeaderTags}>Tags: {((tags ?? []).length > 0 ? tags : ["No tags"]).join(" ")}</div>
+        <div className={styles.postHeaderTags}>Tags: {((tags ?? []).length > 0 ? (tags ?? []) : ["No tags"]).join(" ")}</div>
         <hr></hr>
     </header>
 }

@@ -1,9 +1,9 @@
 import "./tea-animation.scss"
 
 import classnames from '@app/util/lang/classnames';
-import { useBreakpointIndex } from '@app/util/react/hook/breakpointHook';
 import useCssVar from '@app/util/react/hook/useCssVar';
 import React, { useMemo } from 'react';
+import { useBreakpointIndex } from "@app/util/react/hook/dimensions/useBreakpoint";
 
 export default (props: {
     className?: string,

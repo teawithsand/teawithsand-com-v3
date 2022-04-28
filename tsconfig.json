@@ -19,6 +19,8 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
+    "strictPropertyInitialization": true,
+    "strictNullChecks": true
   },
   "include": [
     "assets/**/*"

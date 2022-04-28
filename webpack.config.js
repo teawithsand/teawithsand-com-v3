@@ -250,4 +250,6 @@ config.resolve.fallback = {
     buffer: require.resolve('buffer/'),
 }
 
+config.devtool = "eval-cheap-module-source-map"
+
 module.exports = config;
