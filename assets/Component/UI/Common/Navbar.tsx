@@ -46,6 +46,7 @@ export default () => {
                         </Nav.Link>
                     </LinkContainer>
                 </Nav>
+                {/*
                 <Nav>
                     <LinkContainer to={aboutMePath}>
                         <Nav.Link>
@@ -53,6 +54,7 @@ export default () => {
                         </Nav.Link>
                     </LinkContainer>
                 </Nav>
+                */}
             </Navbar.Collapse>
         </Container>
     </Navbar>
