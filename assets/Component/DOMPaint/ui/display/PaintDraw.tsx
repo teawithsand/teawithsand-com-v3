@@ -3,7 +3,7 @@ import useEventSourcing from "@app/util/react/hook/useEventSourcing"
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import PaintScene, { paintSceneEventSourcingAdapter } from "../../element/scene/PaintScene"
 import PaintSceneMutation from "../../element/scene/PaintSceneMutation"
-import GlobalUIState, { initialUIState, uiStateEventSourcingAdapter } from "../state/GlobalUIState"
+import GlobalUIState, { initialUIState, globalUIStateEventSourcingAdapter } from "../state/GlobalUIState"
 import GlobalUIStateMutator from "../state/GlobalUIStateMutator"
 import ActivePaintTool from "../tool/ActivePaintTool"
 import PathPaintTool from "../tool/impl/PathPaintTool"
@@ -24,7 +24,7 @@ export default (props: {
         [],
     ))
     const [uiStateEventSourcing, setUiStateEventSourcing] = useState(() => new NoHistoryInMemoryEventSourcing(
-        uiStateEventSourcingAdapter,
+        globalUIStateEventSourcingAdapter,
         {
             ...initialUIState,
             uncommittedElements: [],

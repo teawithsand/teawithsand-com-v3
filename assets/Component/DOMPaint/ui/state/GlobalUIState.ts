@@ -33,7 +33,7 @@ export const initialUIState: Readonly<GlobalUIState> = {
 export default GlobalUIState
 
 
-export const uiStateEventSourcingAdapter: EventSourcingAdapter<GlobalUIState, GlobalUIStateMutator> = {
+export const globalUIStateEventSourcingAdapter: EventSourcingAdapter<GlobalUIState, GlobalUIStateMutator> = {
     applyEvent: (agg, e) => e(agg),
     copy: (a) => ({ ...a })
 }
