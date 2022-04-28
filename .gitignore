@@ -4,3 +4,6 @@
 /posts/*
 !/posts/.gitkeep
 .vscode
+
+!/deploy/.gitkeep
+/deploy
