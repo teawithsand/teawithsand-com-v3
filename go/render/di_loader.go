@@ -113,6 +113,13 @@ func RegisterGlobalLoadersInDI(c *dig.Container) (err error) {
 func RegisterDefinesInDI(c *dig.Container) (err error) {
 	err = c.Provide(func(ctx context.Context, dirLoader DirLoader, input InputFileSystem) (res RawPosts, err error) {
 		res, err = dirLoader.Load(ctx, nil, input)
+		if err != nil {
+			return
+		}
+
+		res = iter.Filter[defines.RawPost](res, func(ctx context.Context, data defines.RawPost) (bool, error) {
+			return !data.Metadata.Skip, nil
+		})
 		return
 	})
 	if err != nil {
