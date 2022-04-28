@@ -2,7 +2,7 @@ import { EventSourcingAdapter } from "@app/util/lang/eventSourcing"
 import { PathFillData, PathStrokeData } from "../../element/impls/PathPaintElement"
 import PaintElement from "../../element/PaintElement"
 import PaintSceneElementLocator from "../../element/scene/PaintSceneElementLocator"
-import GlobalUIStateMutator from "./GlobalUIStateMutator"
+import GlobalUIStateMutation from "./GlobalUIStateMutation"
 
 export type StrokeUIState = PathStrokeData
 
@@ -32,8 +32,7 @@ export const initialUIState: Readonly<GlobalUIState> = {
 
 export default GlobalUIState
 
-
-export const globalUIStateEventSourcingAdapter: EventSourcingAdapter<GlobalUIState, GlobalUIStateMutator> = {
+export const globalUIStateEventSourcingAdapter: EventSourcingAdapter<GlobalUIState, GlobalUIStateMutation> = {
     applyEvent: (agg, e) => e(agg),
     copy: (a) => ({ ...a })
 }

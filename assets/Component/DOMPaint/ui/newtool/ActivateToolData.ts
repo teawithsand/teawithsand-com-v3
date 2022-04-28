@@ -2,7 +2,7 @@ import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
 import PaintSceneMutation from "@app/Component/DOMPaint/element/scene/PaintSceneMutation"
 import Tool from "@app/Component/DOMPaint/ui/newtool/Tool"
 import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
-import GlobalUIStateMutator from "@app/Component/DOMPaint/ui/state/GlobalUIStateMutator"
+import GlobalUIStateMutation from "@app/Component/DOMPaint/ui/state/GlobalUIStateMutation"
 import StickyEventBus from "@app/util/lang/bus/StickyEventBus"
 
 export interface ActiveToolSceneInteraction {
@@ -33,7 +33,7 @@ export interface ActiveToolSceneInteraction {
 }
 
 export interface ActiveToolGlobalUIInteraction {
-    mutateUIState(state: GlobalUIStateMutator): void
+    mutateUIState(state: GlobalUIStateMutation): void
 }
 
 export type ActivateToolData<P> = {
