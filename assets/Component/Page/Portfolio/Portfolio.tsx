@@ -98,7 +98,7 @@ export default () => {
                         <p className={styles.featureHeaderSubtitle}>
                             2022.03 - now <br /> It's this website.
                             It implements things like <Link to={paintPath}>
-                                simple vector-graphics paint
+                                simple vector-graphics paint(new features are in development)
                             </Link> and <Link to={homePath}>
                                 homepage animation.
                             </Link>
