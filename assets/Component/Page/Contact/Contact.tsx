@@ -1,4 +1,4 @@
-import { email, linkEmail, linkGithub, linkLinkedIn, linkYouTube } from "@app/Component/endpoints"
+import { email, linkEmail, linkGithub, linkLinkedIn } from "@app/Component/endpoints"
 import React from "react"
 
 import styles from "./contact.scss?module"
@@ -19,7 +19,6 @@ export default () => {
                 <ul>
                     <li><a href={linkGithub}>GitHub</a></li>
                     <li><a href={linkLinkedIn}>LinkedIn</a></li>
-                    <li><a href={linkYouTube}>YouTube</a></li>
                 </ul>
             </div>
         </article>
