@@ -1,7 +1,7 @@
 package serve
 
 type Config struct {
-	Env           string `required:"true" split_words:"true"`
-	ListenAddress string `required:"true" split_words:"true"`
-	DebugPath     string `split_words:"true"`
+	Env           string `mapstructure:"TWSBLOG_ENV"`
+	ListenAddress string `mapstructure:"TWSBLOG_LISTEN_ADDRESS"`
+	DebugPath     string `mapstructure:"TWSBLOG_DEBUG_PATH"`
 }
