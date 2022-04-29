@@ -108,14 +108,10 @@ export default <P extends Object>(props: {
 
                 <button
                     className={classnames(styles.paintPanelButtonPrimary)}
-                    onClick={() => {
-                        if (onDrawUIEvent) {
-                            onDrawUIEvent({
-                                type: "pick-tool",
-                                tool: "scroll",
-                            })
-                        }
-                    }}
+                    onClick={() => uiEvent({
+                        type: "pick-tool",
+                        tool: "scroll",
+                    })}
                 >
                     Move canvas
                 </button>
@@ -127,13 +123,9 @@ export default <P extends Object>(props: {
                 </h6>
                 <button
                     className={classnames(styles.paintPanelButtonPrimary)}
-                    onClick={() => {
-                        if (onDrawUIEvent) {
-                            onDrawUIEvent({
-                                type: "undo",
-                            })
-                        }
-                    }}
+                    onClick={() => onDrawUIEvent({
+                        type: "undo",
+                    })}
                 >
                     Undo
                 </button>
