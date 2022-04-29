@@ -10,6 +10,9 @@ import useStickySubscribable from "@app/util/react/hook/useStickySubscribable"
 import { useEffect, useMemo, useRef, useState } from "react"
 import React from "react"
 import PathTool from "@app/Component/DOMPaint/ui/tool/impl/PathTool"
+import { useNavigate } from "react-router"
+import MoveTool from "@app/Component/DOMPaint/ui/tool/impl/MoveTool"
+import { homePath } from "@app/Component/endpoints"
 
 export default (props: {
     initialMutationsLoader: () => PaintSceneMutation[],
@@ -22,6 +25,8 @@ export default (props: {
         onMutationsChanged,
         onGlobalUIStateChanged,
     } = props
+
+    const navigate = useNavigate()
 
     // this is to make sure
     // that initial mutations will stay same forever.
@@ -90,10 +95,18 @@ export default (props: {
     const uncommitedMutations = useStickySubscribable(uiSceneManager.uncommitedMutations)
 
     const onDrawUIEvent = (event: DrawUIEvent) => {
-        if(event.type === "undo") {
+        if (event.type === "undo") {
             uiSceneManager.popMutationOntoEphemeralStack()
-        } else if(event.type === "redo") {
+        } else if (event.type === "redo") {
             uiSceneManager.popFromEphemeralStack()
+        } else if (event.type === "pick-tool") {
+            if (event.tool === "scroll") {
+                setTool(new MoveTool())
+            } else if (event.tool === "draw") {
+                setTool(new PathTool())
+            }
+        } else if (event.type === "exit") {
+            navigate(homePath)
         }
     }
 
