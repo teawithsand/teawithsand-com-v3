@@ -8,7 +8,7 @@
     width: 100vw;
     display: grid;
     grid-template-columns: 100vw;
-    grid-template-rows: calc(100vh - var(--panel-height) - var(--header-height))  var(--panel-height);
+    grid-template-rows: minmax(max-content, auto) minmax(min-content, fit-content);
     overflow: hidden;
 
     & * {

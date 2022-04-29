@@ -2,12 +2,9 @@ import { Point } from "@app/Component/DOMPaint/primitive"
 import DrawEvent from "@app/Component/DOMPaint/ui/DrawEvent"
 import { RefObject, useCallback, useEffect, useRef } from "react"
 
-// TODO(teawithsand): rewrite it
-// TODO(teawithsand): make this emit events about scrolling, since it's crutial for making it work with new tool scheme
-
 export default (
-    elementRef: RefObject<HTMLElement>,
-    onCanvasMouseEvent: (data: DrawEvent & { type: "mouse" | "scroll" }) => void
+    elementRef: RefObject<null | HTMLElement>,
+    onCanvasEvent: (data: DrawEvent & { type: "mouse" | "scroll" }) => void
 ) => {
     const isClickedRef = useRef(false)
     const lastInCanvasPointRef = useRef<{
@@ -34,42 +31,37 @@ export default (
         }
     }
 
-    const handlePointerPositionChange = useCallback((e: any) => {
-        const data = {
-            x: e.clientX,
-            y: e.clientY,
-        }
-        let { x: xxxxxx, y: yyyyyy } = data
-        const abs: Point = [xxxxxx, yyyyyy]
-        let p: Point = [xxxxxx, yyyyyy]
+    const handlePointerPositionChange = useCallback((abs: Readonly<Point>) => {
+        const [x, y] = abs
+        let p: Point = [...abs]
 
-        if (onCanvasMouseEvent && elementRef.current) {
+        if (onCanvasEvent && elementRef.current) {
             const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
             // ensure our point is in bound of canvas
-            if (xxxxxx < 0 || yyyyyy < 0 || xxxxxx > bb.width || yyyyyy > bb.height) {
+            if (x < 0 || y < 0 || x > bb.width || y > bb.height) {
                 return;
             }
 
             p = fixCoordinates(p)
 
             lastInCanvasPointRef.current = {
-                absolute: abs,
-                corrected: p,
+                absolute: [...abs],
+                corrected: [...p],
             }
 
             if (isClickedRef.current) {
-                onCanvasMouseEvent({
+                onCanvasEvent({
                     type: "mouse",
                     pressed: isClickedRef.current,
-                    canvasPoint: p,
-                    screenPoint: [xxxxxx, yyyyyy],
+                    canvasPoint: [...p],
+                    screenPoint: [...abs],
                 })
             }
         }
-    }, [onCanvasMouseEvent])
+    }, [onCanvasEvent])
 
     const handleOnPointerUp = useCallback(() => {
-        if (!isClickedRef.current) {
+        if (!onCanvasEvent || !isClickedRef.current) {
             return;
         }
 
@@ -79,41 +71,52 @@ export default (
             absolute, corrected
         } = lastInCanvasPointRef.current
 
-        onCanvasMouseEvent({
+        onCanvasEvent({
             type: "mouse",
             pressed: isClickedRef.current,
             canvasPoint: corrected,
             screenPoint: absolute,
         })
-    }, [onCanvasMouseEvent])
+    }, [onCanvasEvent])
 
-    const handleOnPointerDown = useCallback((e: any) => {
-        const data = {
-            x: e.clientX,
-            y: e.clientY,
-        }
-        let { x: xxxxxx, y: yyyyyy } = data
-        const abs: Point = [xxxxxx, yyyyyy]
-        let p: Point = [xxxxxx, yyyyyy]
+    const handleOnPointerDown = useCallback((abs: Readonly<Point>) => {
+        let p: Point = [...abs]
 
-        if (elementRef.current) {
-            const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
+        if (onCanvasEvent && elementRef.current) {
             p = fixCoordinates(p)
 
             lastInCanvasPointRef.current = {
-                absolute: abs,
+                absolute: [...abs],
                 corrected: p,
             }
             isClickedRef.current = true
 
-            onCanvasMouseEvent({
+            onCanvasEvent({
                 type: "mouse",
                 pressed: isClickedRef.current,
-                canvasPoint: p,
-                screenPoint: abs,
+                canvasPoint: [...p],
+                screenPoint: [...abs],
             })
         }
-    }, [onCanvasMouseEvent])
+    }, [onCanvasEvent])
+
+    const handleOnScroll = useCallback(() => {
+        if (onCanvasEvent && elementRef.current) {
+            const {
+                scrollWidth,
+                scrollHeight,
+                scrollLeft,
+                scrollTop,
+            } = elementRef.current
+            onCanvasEvent({
+                type: "scroll",
+                scrollHeight,
+                scrollWidth,
+                scrollY: scrollTop,
+                scrollX: scrollLeft,
+            })
+        }
+    }, [onCanvasEvent])
 
     useEffect(() => {
         const cb = (e: any) => {
@@ -125,14 +128,24 @@ export default (
         }
 
         document.addEventListener("mouseup", cb)
+        // note: this is required, since it preventd bug, which causes drawing when user presses RMB and moves mouse away
+        document.addEventListener("mousemove", cb)
         return () => {
             document.removeEventListener("mouseup", cb)
+            document.addEventListener("mousemove", cb)
         }
-    }, [onCanvasMouseEvent])
+    }, [onCanvasEvent])
 
     return {
-        onPointerDown: handleOnPointerDown,
-        onPointerUp: handleOnPointerUp,
-        onPointerMove: handlePointerPositionChange,
+        onPointerDown: (e: any) => handleOnPointerDown([
+            e.clientX,
+            e.clientY,
+        ]),
+        onPointerUp: () => handleOnPointerUp(),
+        onPointerMove: (e: any) => handlePointerPositionChange([
+            e.clientX,
+            e.clientY,
+        ]),
+        onScroll: (e: any) => handleOnScroll()
     }
 }

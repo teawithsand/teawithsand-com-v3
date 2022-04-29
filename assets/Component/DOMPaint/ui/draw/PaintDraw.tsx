@@ -7,7 +7,7 @@ import UISceneManagerImpl from "@app/Component/DOMPaint/ui/scene/UISceneManagerI
 import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
 import GlobalUIStateManagerImpl from "@app/Component/DOMPaint/ui/state/GlobalUIStateManagerImpl"
 import useStickySubscribable from "@app/util/react/hook/useStickySubscribable"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import React from "react"
 
 export default (props: {
@@ -34,6 +34,8 @@ export default (props: {
     // TODO(teawithsand): supply some tool here instead of null
     const [tool, setTool] = useState<Tool<any>>(() => null as unknown as Tool<any>)
 
+    const parentElementRef = useRef<HTMLDivElement | null>(null)
+
     const makeActivateData = (): ActivateToolData<any> => ({
         globalUIInteraction: uiStateManager,
         globalUIState: uiStateManager.state,
@@ -45,7 +47,8 @@ export default (props: {
         setTool: (tool) => {
             setToolProps(null)
             setTool(tool)
-        }
+        },
+        sceneReference: parentElementRef,
     })
 
     const [toolProps, setToolProps] = useState(null)
@@ -92,6 +95,7 @@ export default (props: {
                 activeTool.processEvent(event)
             }
         }}
-        onDrawUIEvent={(event) => {}}
+        onDrawUIEvent={(event) => { }}
+        parentElementRef={parentElementRef}
     />
 }

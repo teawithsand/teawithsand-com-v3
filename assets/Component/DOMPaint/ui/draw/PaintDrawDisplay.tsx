@@ -2,13 +2,13 @@ import React from "react"
 import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
 import DrawEvent from "@app/Component/DOMPaint/ui/DrawEvent"
 import classnames from "@app/util/lang/classnames"
-import usePaintDraw from "@app/Component/DOMPaint/ui/draw/usePaintDraw"
 import { useRef } from "react-dom/node_modules/@types/react"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
 
 import styles from "./paintDisplay.scss?module"
 import SVGPaintDisplayScene from "@app/Component/DOMPaint/render/SVGPaintDisplayScene"
+import usePaintDraw from "@app/Component/DOMPaint/ui/draw/usePaintDraw"
 
 export type DrawUIEvent = {
     type: "pick-tool",
@@ -28,6 +28,8 @@ export default <P extends Object>(props: {
     readonly scene: PaintScene,
     readonly globalUIState: GlobalUIState,
 
+    readonly parentElementRef?: React.MutableRefObject<HTMLDivElement | null>,
+
     readonly onDrawEvent: (event: DrawEvent) => void
     readonly onDrawUIEvent: (event: DrawUIEvent) => void,
 }) => {
@@ -38,8 +40,9 @@ export default <P extends Object>(props: {
         if (onDrawUIEvent) onDrawUIEvent(e)
     }
 
-    const parentElementRef = useRef<HTMLDivElement | null>(null)
-    const bind = usePaintDraw(parentElementRef as any, (event) => {
+    const maybeParentElementRef = useRef<HTMLDivElement | null>(null)
+    const parentElementRef = props.parentElementRef ?? maybeParentElementRef
+    const bind = usePaintDraw(parentElementRef, (event) => {
         if (onDrawEvent) {
             onDrawEvent(event)
         }
@@ -48,19 +51,17 @@ export default <P extends Object>(props: {
     return <div
         className={classnames(styles.paintDisplay)}
         style={{
-            ["--panel-height" as any]: `${panelHeight}px`,
-            ["--header-height" as any]: `0px`,
             width: width,
             height: height,
         }}
     >
         <div
             className={styles.paintDisplayCanvasParent}
-            ref={parentElementRef as any as React.MutableRefObject<HTMLDivElement>}
+            ref={parentElementRef}
             {...bind}
             style={{
-                height: `${height - panelHeight}px`,
-                width: width,
+                height: `100%`,
+                width: `100%`,
             }}
         >
             <SVGPaintDisplayScene

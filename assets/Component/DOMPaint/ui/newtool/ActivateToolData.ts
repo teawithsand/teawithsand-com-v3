@@ -43,6 +43,8 @@ export type ActivateToolData<P> = {
     readonly sceneInteraction: ActiveToolSceneInteraction
     readonly globalUIInteraction: ActiveToolGlobalUIInteraction
 
+    readonly sceneReference: { readonly current: HTMLElement | null }
+
     setTool(tool: Tool<any>): void
     setDisplayPropsCallback: (props: P) => void
 }
