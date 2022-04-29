@@ -101,7 +101,8 @@ export default () => {
                                 simple vector-graphics paint(new features are in development)
                             </Link> and <Link to={homePath}>
                                 homepage animation.
-                            </Link>
+                            </Link><br />
+                            <a href="https://github.com/teawithsand/teawithsand-com-v3">See code on github</a>
                         </p>
                     </div>
                     <Collapse in={teawithsandComV3Toggle.toggled}>
@@ -123,6 +124,11 @@ export default () => {
                                 <Link className={styles.downloadButton} to={homePath}>
                                     Go to home page
                                 </Link>
+                            </p>
+                            <p>
+                                <a className={styles.downloadButton} href="https://github.com/teawithsand/teawithsand-com-v3">
+                                    See source code on github
+                                </a>
                             </p>
                         </div>
                     </Collapse>
