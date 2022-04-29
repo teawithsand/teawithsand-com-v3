@@ -1,20 +1,30 @@
 import React from "react"
-import PaintLayer from "@app/Component/DOMPaint/element/scene/PaintLayer"
-import PaintDraw from "@app/Component/DOMPaint/ui/display/PaintDraw"
-import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
+import PaintDraw from "@app/Component/DOMPaint/ui/draw/PaintDraw"
 
 export default () => {
     return <PaintDraw
-        initialScene={new PaintScene({
-            layers: [
-                new PaintLayer({
-                    elements: [],
-                    metadata: {
-                        isHidden: false,
-                        name: "layer-0",
-                    }
-                })
-            ],
+        initialMutationsLoader={() => ([
+            {
+                type: "push-layer",
+                elements: [],
+                beforeIndex: 0,
+                metadata: {
+                    isHidden: false,
+                    name: "layer-0",
+                }
+            }
+        ])}
+        initialGlobalUIStateLoader={() => ({
+            activeLayerIndex: 0,
+            fill: null,
+            selectedElements: [],
+            stroke: {
+                color: [0, 0, 0],
+                linecap: "round",
+                linejoin: "round",
+                size: 5,
+            },
+            uncommittedElements: [],
         })}
     />
 }

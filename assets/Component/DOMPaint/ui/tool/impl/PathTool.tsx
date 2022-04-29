@@ -1,7 +1,7 @@
 import React from "react"
-import ActivateToolData from "@app/Component/DOMPaint/ui/newtool/ActivateToolData";
-import { ToolActivationResult } from "@app/Component/DOMPaint/ui/newtool/ActiveTool";
-import Tool from "@app/Component/DOMPaint/ui/newtool/Tool";
+import ActivateToolData from "@app/Component/DOMPaint/ui/tool/ActivateToolData";
+import { ToolActivationResult } from "@app/Component/DOMPaint/ui/tool/ActiveTool";
+import Tool from "@app/Component/DOMPaint/ui/tool/Tool";
 import { Point } from "@app/Component/DOMPaint/primitive";
 import PathPaintElement from "@app/Component/DOMPaint/element/impls/PathPaintElement";
 import { euclideanDistance } from "@app/Component/DOMPaint/primitive/calc";

@@ -1,20 +1,22 @@
-import React from "react"
+import React, { useMemo, useRef } from "react"
 import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
 import DrawEvent from "@app/Component/DOMPaint/ui/DrawEvent"
 import classnames from "@app/util/lang/classnames"
-import { useRef } from "react-dom/node_modules/@types/react"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
 
 import styles from "./paintDisplay.scss?module"
 import SVGPaintDisplayScene from "@app/Component/DOMPaint/render/SVGPaintDisplayScene"
 import usePaintDraw from "@app/Component/DOMPaint/ui/draw/usePaintDraw"
+import PaintSceneMutation from "@app/Component/DOMPaint/element/scene/PaintSceneMutation"
 
 export type DrawUIEvent = {
     type: "pick-tool",
     tool: "draw" | "scroll",
 } | {
     type: "undo",
+} | {
+    type: "redo",
 } | {
     type: "exit"
 }
@@ -28,12 +30,14 @@ export default <P extends Object>(props: {
     readonly scene: PaintScene,
     readonly globalUIState: GlobalUIState,
 
+    readonly uncommitedMutations: PaintSceneMutation[],
+
     readonly parentElementRef?: React.MutableRefObject<HTMLDivElement | null>,
 
     readonly onDrawEvent: (event: DrawEvent) => void
     readonly onDrawUIEvent: (event: DrawUIEvent) => void,
 }) => {
-    const { scene, onDrawEvent, globalUIState, onDrawUIEvent, PanelComponent, OverlayComponent, toolProps } = props
+    const { scene: initialScene, uncommitedMutations, onDrawEvent, globalUIState, onDrawUIEvent, PanelComponent, OverlayComponent, toolProps } = props
     const { height, width } = getUsefulDimensions()
 
     const uiEvent = (e: DrawUIEvent) => {
@@ -47,6 +51,14 @@ export default <P extends Object>(props: {
             onDrawEvent(event)
         }
     })
+
+    const scene = useMemo(() => {
+        const ns = new PaintScene(initialScene.data)
+        for (const m of uncommitedMutations) {
+            ns.updateWithMutation(m)
+        }
+        return ns
+    }, [initialScene, uncommitedMutations])
 
     return <div
         className={classnames(styles.paintDisplay)}
@@ -74,7 +86,7 @@ export default <P extends Object>(props: {
         </div>
 
 
-        <OverlayComponent {...toolProps} />
+        {OverlayComponent ? <OverlayComponent {...toolProps} /> : null}
 
         <div className={classnames(styles.paintDisplayOverlay, styles.paintPanel)}>
             <div className={styles.paintPanelSection}>
@@ -85,8 +97,8 @@ export default <P extends Object>(props: {
                     onClick={() => uiEvent({
                         type: "exit",
                     })}
-                >
-
+                >   
+                    Go home
                 </a>
             </div>
             <div className={classnames(styles.paintPanelSection, styles.paintPanelSectionList)}>
@@ -130,10 +142,18 @@ export default <P extends Object>(props: {
                 >
                     Undo
                 </button>
+                <button
+                    className={classnames(styles.paintPanelButtonPrimary)}
+                    onClick={() => onDrawUIEvent({
+                        type: "redo",
+                    })}
+                >
+                    Redo
+                </button>
             </div>
 
             <div className={classnames(styles.paintPanelSection, styles.paintPanelSectionList)}>
-                <PanelComponent {...toolProps} />
+                {PanelComponent ? <PanelComponent {...toolProps} /> : null}
             </div>
         </div>
     </div>

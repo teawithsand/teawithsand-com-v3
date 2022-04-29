@@ -1,6 +1,6 @@
 import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
 import PaintSceneMutation from "@app/Component/DOMPaint/element/scene/PaintSceneMutation"
-import Tool from "@app/Component/DOMPaint/ui/newtool/Tool"
+import Tool from "@app/Component/DOMPaint/ui/tool/Tool"
 import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
 import GlobalUIStateMutation from "@app/Component/DOMPaint/ui/state/GlobalUIStateMutation"
 import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"

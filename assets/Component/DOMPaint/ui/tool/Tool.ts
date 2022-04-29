@@ -1,5 +1,5 @@
-import { ToolActivationResult } from "@app/Component/DOMPaint/ui/newtool/ActiveTool"
-import ActivateToolData from "@app/Component/DOMPaint/ui/newtool/ActivateToolData"
+import { ToolActivationResult } from "@app/Component/DOMPaint/ui/tool/ActiveTool"
+import ActivateToolData from "@app/Component/DOMPaint/ui/tool/ActivateToolData"
 
 export default interface Tool<P extends Object> {
     readonly initialProps: P

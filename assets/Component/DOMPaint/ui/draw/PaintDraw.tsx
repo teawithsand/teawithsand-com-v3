@@ -1,14 +1,15 @@
 import PaintSceneMutation from "@app/Component/DOMPaint/element/scene/PaintSceneMutation"
-import PaintDrawDisplay from "@app/Component/DOMPaint/ui/draw/PaintDrawDisplay"
-import ActivateToolData from "@app/Component/DOMPaint/ui/newtool/ActivateToolData"
-import ActiveTool from "@app/Component/DOMPaint/ui/newtool/ActiveTool"
-import Tool from "@app/Component/DOMPaint/ui/newtool/Tool"
+import PaintDrawDisplay, { DrawUIEvent } from "@app/Component/DOMPaint/ui/draw/PaintDrawDisplay"
+import ActivateToolData from "@app/Component/DOMPaint/ui/tool/ActivateToolData"
+import ActiveTool from "@app/Component/DOMPaint/ui/tool/ActiveTool"
+import Tool from "@app/Component/DOMPaint/ui/tool/Tool"
 import UISceneManagerImpl from "@app/Component/DOMPaint/ui/scene/UISceneManagerImpl"
 import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
 import GlobalUIStateManagerImpl from "@app/Component/DOMPaint/ui/state/GlobalUIStateManagerImpl"
 import useStickySubscribable from "@app/util/react/hook/useStickySubscribable"
 import { useEffect, useMemo, useRef, useState } from "react"
 import React from "react"
+import PathTool from "@app/Component/DOMPaint/ui/tool/impl/PathTool"
 
 export default (props: {
     initialMutationsLoader: () => PaintSceneMutation[],
@@ -32,7 +33,7 @@ export default (props: {
     const uiSceneManager = useMemo(() => new UISceneManagerImpl(initialMutations), [])
 
     // TODO(teawithsand): supply some tool here instead of null
-    const [tool, setTool] = useState<Tool<any>>(() => null as unknown as Tool<any>)
+    const [tool, setTool] = useState<Tool<any>>(() => new PathTool())
 
     const parentElementRef = useRef<HTMLDivElement | null>(null)
 
@@ -51,14 +52,16 @@ export default (props: {
         sceneReference: parentElementRef,
     })
 
-    const [toolProps, setToolProps] = useState(null)
+    const [toolProps, setToolProps] = useState<{ [key: string]: any } | null>(null)
     const [activeTool, setActiveTool] = useState<ActiveTool | null>(null)
 
     useEffect(() => {
-        const at = tool.activate(makeActivateData())
-        setActiveTool(at.activeTool)
-        return () => {
-            at.activeTool.close()
+        if (tool) {
+            const at = tool.activate(makeActivateData())
+            setActiveTool(at.activeTool)
+            return () => {
+                at.activeTool.close()
+            }
         }
     }, [tool])
 
@@ -84,8 +87,19 @@ export default (props: {
 
     const scene = useStickySubscribable(uiSceneManager.scene)
     const globalUIState = useStickySubscribable(uiStateManager.state)
+    const uncommitedMutations = useStickySubscribable(uiSceneManager.uncommitedMutations)
+
+    const onDrawUIEvent = (event: DrawUIEvent) => {
+        if(event.type === "undo") {
+            uiSceneManager.popMutationOntoEphemeralStack()
+        } else if(event.type === "redo") {
+            uiSceneManager.popFromEphemeralStack()
+        }
+    }
+
     return <PaintDrawDisplay
         scene={scene}
+        uncommitedMutations={uncommitedMutations}
         OverlayComponent={tool.OverlayComponent}
         PanelComponent={tool.PanelComponent}
         toolProps={toolProps ?? tool.initialProps}
@@ -95,7 +109,7 @@ export default (props: {
                 activeTool.processEvent(event)
             }
         }}
-        onDrawUIEvent={(event) => { }}
+        onDrawUIEvent={onDrawUIEvent}
         parentElementRef={parentElementRef}
     />
 }

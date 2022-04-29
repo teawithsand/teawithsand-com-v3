@@ -1,4 +1,4 @@
-import { ActiveToolGlobalUIInteraction } from "@app/Component/DOMPaint/ui/newtool/ActivateToolData"
+import { ActiveToolGlobalUIInteraction } from "@app/Component/DOMPaint/ui/tool/ActivateToolData"
 import GlobalUIState from "@app/Component/DOMPaint/ui/state/GlobalUIState"
 import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 

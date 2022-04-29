@@ -1,5 +1,5 @@
 import PaintScene from "@app/Component/DOMPaint/element/scene/PaintScene"
-import { ActiveToolSceneInteraction } from "@app/Component/DOMPaint/ui/newtool/ActivateToolData"
+import { ActiveToolSceneInteraction } from "@app/Component/DOMPaint/ui/tool/ActivateToolData"
 import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 
 /**
