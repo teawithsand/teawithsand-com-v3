@@ -32,6 +32,7 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
+    "react-transition-group": "^4.4.2",
     "sass": "^1.51.0",
     "typeface-merriweather": "0.0.72",
     "typeface-montserrat": "0.0.75"
@@ -43,6 +44,7 @@
     "@types/jest": "^27.4.1",
     "@types/react-helmet": "^6.1.5",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/react-transition-group": "^4.4.4",
     "babel-jest": "^28.0.3",
     "babel-preset-gatsby": "^2.13.0",
     "identity-obj-proxy": "^3.0.0",
