@@ -1,20 +1,24 @@
 import React, { useMemo } from "react"
 
-import { GalleryMode } from "@app/components/gallery/GalleryNavigation"
+import GalleryNavigation, {
+	GalleryMode,
+} from "@app/components/gallery/GalleryNavigation"
 
 import * as styles from "./gallery.module.scss"
 import { DissolveGalleryDisplay } from "@app/components/gallery/GalleryDisplay"
 import GalleryItemProvider from "@app/components/gallery/ItemProvider"
 import GalleryItemDisplay from "@app/components/gallery/GalleryItemDisplay"
+import classnames from "@app/util/lang/classnames"
 
 export type GalleryProps = {
 	itemProvider: GalleryItemProvider
 	mode: GalleryMode
 	itemIndex: number
+	navigation?: GalleryNavigation
 }
 
 const Gallery = (props: GalleryProps) => {
-	const { itemIndex, itemProvider, mode } = props
+	const { itemIndex, itemProvider, mode, navigation } = props
 	const currentItem = useMemo(
 		() =>
 			itemProvider.provideItem(itemIndex, "main", {
@@ -22,6 +26,18 @@ const Gallery = (props: GalleryProps) => {
 			}),
 		[mode, itemIndex, itemProvider]
 	)
+
+	const hiddenItems = useMemo(() => {
+		const items = []
+		for (let i = 0; i < itemProvider.itemCount; i++) {
+			items.push(
+				itemProvider.provideItem(i, "main", {
+					mode: "normal",
+				})
+			)
+		}
+		return items
+	}, [mode, itemIndex, itemProvider])
 
 	const thumbnails = useMemo(() => {
 		const items = []
@@ -35,23 +51,59 @@ const Gallery = (props: GalleryProps) => {
 		return items
 	}, [itemProvider, mode])
 
-	return (
-		<div className={styles.gallery}>
-			<div className={styles.mainBar}>
-				
-				<div className={styles.mainBarLeftOverlay}>
+	const showControls = !!navigation
 
+	const maybeHideStyle = showControls ? {} : { display: "none" }
+
+	return (
+		<div className={classnames(styles.gallery, styles.gallerySmall)}>
+			<div className={styles.mainBar}>
+				<div
+					className={styles.mainBarLeftOverlay}
+					style={{ ...maybeHideStyle }}
+				>
+					{
+						// This div is required, in order to bypass firefox hover bug
+						// and also because chrome and ff differently understand height
+						// when it comes to flexbox
+						// in firefox, these are centered(when centered with display: flex on grid item)
+						// in context of grid item
+						// but in chrome, they are centered in context of entire grid parent(?!!?)
+						// So let's just center this with margin auto and whatever.
+						//
+						// Apparently it was some weird FF bug
+						// since after refreshing is gone
+						// but still, differently centering arrows in ff and chrome
+						// is a fact
+						// but it's also different when using margin...
+					}
 				</div>
 
 				{
 					// Below wrapper note also applies to this div, which wraps display.
 				}
-				<div className={styles.mainBarEntryWrapper}>
+				<div className={styles.mainBarDisplayedEntryWrapper}>
 					<DissolveGalleryDisplay item={currentItem} />
 				</div>
+				{
+					// Another trick here: load all elements to DOM
+					// with visibility: hidden
+					// so parent container gets it's size from children
+					// then it won't change when there are children with different sizes
+				}
+				<div className={styles.mainBarHiddenElements}>
+					{hiddenItems.map(i => (
+						<GalleryItemDisplay key={i.key} item={i} />
+					))}
+				</div>
 
-				<div className={styles.mainBarRightOverlay}>
-
+				<div
+					className={styles.mainBarRightOverlay}
+					style={{ ...maybeHideStyle }}
+				>
+					{
+						// See notice above
+					}
 				</div>
 			</div>
 			<div className={styles.bottomBar}>
@@ -63,7 +115,7 @@ const Gallery = (props: GalleryProps) => {
 					//  but it won't on chrome
 					//  it's like that, because chrome and ff differently understand specification
 					//  for css height parameter with percentage value
-					// 
+					//
 					// I've spent too much time debugging it, so this div stays here.
 					<div key={i.key} className={styles.bottomBarEntryWrapper}>
 						<GalleryItemDisplay item={i} />

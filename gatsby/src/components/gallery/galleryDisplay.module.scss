@@ -16,13 +16,31 @@
 	transition: opacity 500ms;
 }
 
-.overlap-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    
-    & > * {
-        grid-column: 1;
-        grid-row: 1;
-    }
+.elements-container {
+	display: grid;
+
+	// tldr: do not use 1fr here
+	// works only in ff, not in chrome
+    //
+    // image has different position when two of them exists(one is fading out)
+	// and other when only new one is there
+	// in FF grid dimensions do not change
+    // but in chrome they do change
+    // for some reason
+    //
+    // grid-template-columns: 1fr;
+	// grid-template-rows: 1fr; 
+	grid-template-columns: 100%;
+	grid-template-rows: 100%; 
+
+	width: 100%;
+	height: 100%;
+
+	justify-items: center;
+	align-items: center;
+
+	> * {
+		grid-column: 1;
+		grid-row: 1;
+	}
 }

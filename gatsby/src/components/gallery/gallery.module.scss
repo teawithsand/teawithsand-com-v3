@@ -19,16 +19,37 @@
 	// image-rendering: high-quality;
 }
 
+$bottom-bar-height: 200px;
+
+$gallery-row-gap: map-get(def.$spacers, 2);
+$gallery-padding: map-get(def.$spacers, 2);
+$gallery-max-height: 100vh;
+
+$main-row-max-height: calc(
+	$gallery-max-height - $bottom-bar-height - scrollbar.$height -
+		$gallery-row-gap - $gallery-padding
+);
+
 .gallery {
 	display: grid;
-	grid-template-columns: minmax(1fr, 100vw);
-	grid-template-rows: minmax(1fr, 100vh) minmax(min-content, 1fr);
+	grid-template-columns: minmax(auto, 100vw);
+	grid-template-rows:
+		minmax(
+			max-content,
+			$main-row-max-height
+		)
+		$bottom-bar-height;
 
 	background-color: black;
 	color: white;
 
-	row-gap: map-get(def.$spacers, 2);
-	padding: map-get(def.$spacers, 2);
+	row-gap: $gallery-row-gap;
+	padding: $gallery-padding;
+
+	user-select: none;
+	::selection {
+		background: transparent;
+	}
 }
 
 .main-bar {
@@ -40,15 +61,23 @@
 	grid-template-columns: auto;
 	grid-template-rows: auto;
 
-	&__entry-wrapper {
-        z-index: 0;
+	width: 100%;
+	height: 100%;
+    // For some reason this row won't obey to minmax's max part
+    // computed using calc
+    // but adding this 
+    // makes it work
+    max-height: $main-row-max-height;
+
+	&__displayed-entry-wrapper {
+		z-index: 0;
 		grid-row: 1;
 		grid-column: 1;
 
 		overflow: hidden;
 
-		width: fit-content;
-		height: fit-content;
+		width: 100%;
+		height: 100%;
 
 		margin: auto;
 
@@ -62,47 +91,95 @@
 		}
 	}
 
+	&__hidden-elements {
+		z-index: 0;
+		grid-row: 1;
+		grid-column: 1;
+
+		display: grid;
+		visibility: hidden;
+		overflow: hidden;
+
+		width: 100%;
+		height: 100%;
+
+		> * {
+			grid-row: 1;
+			grid-column: 1;
+
+			width: 100%;
+			height: 100%;
+		}
+
+		img {
+			@include downscaled-image();
+			width: fit-content;
+			height: fit-content;
+			max-width: 100%;
+			max-height: 100%;
+			object-fit: contain;
+		}
+	}
+
 	$overlay-width: 33%;
 
-    // TODO(teawithsand): use less hacky solutions like svg images instead
-    // of ::before content and flexbox for centering.
+	// TODO(teawithsand): use less hacky solutions like svg images instead
+	// of ::before content and flexbox for centering.
 	@mixin overlay {
-        grid-row: 1;
+		grid-row: 1;
 		grid-column: 1;
-        width: $overlay-width;
-        background-color: rgba(255, 255, 255, 0.3);
+		width: $overlay-width;
+		background-color: rgba(255, 255, 255, 0.3);
 
-        text-align: center;
-        
-        overflow: hidden;
-        display: flex;
-        align-items: center; 
-        justify-content: center;
+		box-sizing: border-box;
+		height: 100%;
 
-        font-size: 20em;
+		text-align: center;
 
-        opacity: 0.2; // can't be zero; hover does not work
-        z-index: 10000;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		vertical-align: middle;
+		text-align: center;
 
-        &:hover {
-            opacity: 1;
-        }
+		font-size: 20em;
+
+		transition: opacity 300ms;
+		opacity: 0;
+		z-index: 1;
+
+		// TODO(teawithsand): fix centering arrows
+		// looks like text is not centered to baseline but to
+		// it's top instead
+		//
+		// Or do it like normal person would do
+		// and just use svg
+		//
+		// But I am too lazy to use svg
+		// :3
+		font-family: monospace, monospace;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 
 	&__left-overlay {
-        @include overlay();
-
+		@include overlay();
 		margin-right: auto;
+
 		&::before {
 			content: "←";
 		}
 	}
 
 	&__right-overlay {
-        @include overlay();
+		@include overlay();
 		margin-left: auto;
+
 		&::before {
-            content: "→";
+			content: "→";
 		}
 	}
 }
@@ -110,16 +187,15 @@
 .bottom-bar {
 	@include scrollbar.pretty-scrollbar-light();
 
+	height: $bottom-bar-height;
 	overflow-x: scroll;
 	overflow-y: hidden;
 
-    margin-left: auto;
-    margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
 
 	grid-row: 2;
 	grid-column: 1;
-
-	height: 200px;
 
 	display: grid;
 	grid-template-rows: 1fr;
@@ -146,4 +222,7 @@
 			object-fit: cover;
 		}
 	}
+}
+
+.main-element-display {
 }

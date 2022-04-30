@@ -18,18 +18,17 @@ const BlogIndex = () => {
 		{
 			type: "image",
 			src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png",
-			alt: "Weebu shitto",
+			alt: "Weeb stuff",
 			key: "two",
 		},
 		{
 			type: "image",
-			src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png",
-			alt: "Weebu shitto",
-			key: "two",
+			src: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Jan_Matejko%2C_Bitwa_pod_Grunwaldem.jpg/2560px-Jan_Matejko%2C_Bitwa_pod_Grunwaldem.jpg",
+			alt: "bog",
+			key: "three",
 		},
 	]
 
-	/*
 	const itemIndex = useRef(0)
 	const [item, setItem] = useState(items[0])
 	useEffect(() => {
@@ -37,20 +36,19 @@ const BlogIndex = () => {
 			itemIndex.current++
 			itemIndex.current = itemIndex.current % items.length
 			setItem(items[itemIndex.current])
-		}, 1000)
+		}, 5000)
 
 		return () => {
 			clearTimeout(timeoutId)
 		}
 	})
-	*/
 
 	return (
 		<Layout>
 			<Gallery
 				itemProvider={new ArrayGalleryItemProvider(items)}
 				mode="normal"
-				itemIndex={0}
+				itemIndex={itemIndex.current}
 			/>
 		</Layout>
 	)
