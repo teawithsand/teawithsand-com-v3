@@ -6,3 +6,5 @@ import "normalize.css/normalize.css"
 
 // Highlighting for code blocks
 import "prismjs/themes/prism.css"
+
+import "bootstrap/scss/bootstrap.scss"
