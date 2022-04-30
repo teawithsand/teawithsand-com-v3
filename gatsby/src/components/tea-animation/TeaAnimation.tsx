@@ -1,4 +1,4 @@
-import "./tea-animation.scss"
+import "./tea-animation.global.scss"
 
 import classnames from "@app/util/lang/classnames"
 import useCssVar from "@app/util/react/hook/useCssVar"
