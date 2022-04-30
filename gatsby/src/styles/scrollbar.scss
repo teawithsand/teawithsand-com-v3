@@ -21,7 +21,7 @@ $border-radius: 12px;
 	}
 
 	scrollbar-color: black white;
-	scrollbar-width: auto;
+	scrollbar-width: thin;
 }
 
 @mixin pretty-scrollbar-light {
@@ -42,5 +42,5 @@ $border-radius: 12px;
 	}
 
 	scrollbar-color: white black;
-	scrollbar-width: auto;
+	scrollbar-width: thin;
 }
