@@ -143,6 +143,9 @@ exports.onCreateWebpackConfig = ({ actions, getConfig }) => {
 				},
 			},
 		}),
+	]
+	config.resolve.plugins = [
+		...(config.resolve.plugins ?? []),
 		new TSConfigPathsPlugin(),
 	]
 
