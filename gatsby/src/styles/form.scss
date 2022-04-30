@@ -1,0 +1,48 @@
+@use "@app/styles/bs.scss" as bs;
+
+@mixin any-form() {
+    $this: &;
+
+    &__input {
+        margin-bottom: map-get(bs.$spacers, 3);
+        margin-top: map-get(bs.$spacers, 3);
+
+        > input {
+            @extend .form-control;
+        }    
+
+        > textarea {
+            @extend .form-control; 
+        }
+
+        > select {
+            @extend .form-control; 
+        }
+
+        > label {
+            @extend .form-label;
+        }
+    }
+
+    &__submit {
+        button[type="submit"] {
+            @extend .btn;
+            @extend .btn-primary;
+
+            @include bs.media-breakpoint-down(md) {
+                width: 100%;
+            }
+        }
+    }
+
+    &__validation-error {
+        @extend .invalid-feedback;
+        margin-left: map-get(bs.$spacers, 2);
+        display: none;
+    }
+
+    &__top-error {
+        @extend .alert;
+        @extend .alert-danger;
+    }
+}

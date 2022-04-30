@@ -1,0 +1,6 @@
+@import "~bootstrap/scss/bootstrap.scss";
+// @import "~animate/animate.css/animate.css";
+
+.gallery-sized-container {
+    height: calc(min(70vh, 600px));
+}

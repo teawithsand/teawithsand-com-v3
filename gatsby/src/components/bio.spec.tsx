@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react"
 import { render } from "@testing-library/react"
 
 const Title = () => <h1 data-testid="hero-title">Gatsby is awesome!</h1>
