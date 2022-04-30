@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import "./tea-params.scss";
 
 $app-tea-height: 100vh;
@@ -15,7 +17,7 @@ $app-tea-height: 100vh;
     overflow: hidden;
     user-select: none;
 
-    grid-template-columns: repeat($sand-columns, minmax(0, 100% / $sand-columns));
+    grid-template-columns: repeat($sand-columns, minmax(0, math.div(100%, $sand-columns)));
     grid-template-rows: 1fr;
 
     place-items: end;
@@ -74,10 +76,10 @@ $app-tea-height: 100vh;
         0% {
             opacity: 0;
         }
-        #{($at/$ft) * 100%} {
+        #{math.div($at, $ft) * 100%} {
             opacity: 1;
         }
-        #{(1 - ($dt/$ft)) * 100%} {
+        #{(1 - math.div($dt, $ft)) * 100%} {
             opacity: 1;
         }
         100% {
