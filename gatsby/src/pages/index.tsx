@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useMemo } from "react"
 import { graphql } from "gatsby"
 
 import Layout from "@app/components/layout/Layout"
 import { GalleryItem } from "@app/components/gallery"
-import { DissolveGalleryDisplay } from "@app/components/gallery/GalleryDisplay"
 import Gallery from "@app/components/gallery/Gallery"
 import { ArrayGalleryItemProvider } from "@app/components/gallery/ItemProvider"
 
@@ -29,27 +28,11 @@ const BlogIndex = () => {
 		},
 	]
 
-	const itemIndex = useRef(0)
-	const [item, setItem] = useState(items[0])
-	useEffect(() => {
-		const timeoutId = setTimeout(() => {
-			itemIndex.current++
-			itemIndex.current = itemIndex.current % items.length
-			setItem(items[itemIndex.current])
-		}, 5000)
-
-		return () => {
-			clearTimeout(timeoutId)
-		}
-	})
+	const provider = useMemo(() => new ArrayGalleryItemProvider(items), [items])
 
 	return (
 		<Layout>
-			<Gallery
-				itemProvider={new ArrayGalleryItemProvider(items)}
-				mode="normal"
-				itemIndex={itemIndex.current}
-			/>
+			<Gallery provider={provider} />
 		</Layout>
 	)
 }

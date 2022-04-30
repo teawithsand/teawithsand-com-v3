@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
+// TODO(teawithsand): hide overflow of html/body when this is active
 export const useFullscreen = ({
 	onEnterError,
 	onExitError,

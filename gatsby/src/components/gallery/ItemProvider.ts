@@ -1,11 +1,11 @@
+import { GalleryMode } from "@app/components/gallery/Gallery"
 import { GalleryItem } from "@app/components/gallery/GalleryItem"
-import { GalleryMode } from "@app/components/gallery/GalleryNavigation"
 
 export type GalleryItemProviderOptions = {
 	mode: GalleryMode
 }
 
-export type GalleryItemProviderContext = "main" | "summary"
+export type GalleryItemProviderContext = "main" | "thumbnail" | "main-hidden"
 
 export default interface GalleryItemProvider {
 	readonly itemCount: number

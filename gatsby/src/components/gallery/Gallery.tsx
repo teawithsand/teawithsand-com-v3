@@ -1,68 +1,89 @@
-import React, { useMemo } from "react"
-
-import GalleryNavigation, {
-	GalleryMode,
-} from "@app/components/gallery/GalleryNavigation"
+import React, { useMemo, useState } from "react"
 
 import * as styles from "./gallery.module.scss"
 import { DissolveGalleryDisplay } from "@app/components/gallery/GalleryDisplay"
 import GalleryItemProvider from "@app/components/gallery/ItemProvider"
 import GalleryItemDisplay from "@app/components/gallery/GalleryItemDisplay"
 import classnames from "@app/util/lang/classnames"
+import { useFullscreen } from "@app/util/react/hook/useFullscreen"
+
+export type GalleryMode = "normal" | "fullscreen" | "zoom"
 
 export type GalleryProps = {
-	itemProvider: GalleryItemProvider
-	mode: GalleryMode
-	itemIndex: number
-	navigation?: GalleryNavigation
+	provider: GalleryItemProvider
 }
 
 const Gallery = (props: GalleryProps) => {
-	const { itemIndex, itemProvider, mode, navigation } = props
+	const { provider } = props
+
+	const [mode, setMode] = useState<GalleryMode>("normal")
+	const [itemIndex, setItemIndex] = useState<number>(0)
+
 	const currentItem = useMemo(
 		() =>
-			itemProvider.provideItem(itemIndex, "main", {
+			provider.provideItem(itemIndex, "main", {
 				mode,
 			}),
-		[mode, itemIndex, itemProvider]
+		[mode, itemIndex, provider]
 	)
 
 	const hiddenItems = useMemo(() => {
 		const items = []
-		for (let i = 0; i < itemProvider.itemCount; i++) {
+		for (let i = 0; i < provider.itemCount; i++) {
 			items.push(
-				itemProvider.provideItem(i, "main", {
-					mode: "normal",
+				provider.provideItem(i, "main-hidden", {
+					mode,
 				})
 			)
 		}
 		return items
-	}, [mode, itemIndex, itemProvider])
+	}, [mode, provider])
 
 	const thumbnails = useMemo(() => {
 		const items = []
-		for (let i = 0; i < itemProvider.itemCount; i++) {
+		for (let i = 0; i < provider.itemCount; i++) {
 			items.push(
-				itemProvider.provideItem(i, "summary", {
-					mode: "normal",
+				provider.provideItem(i, "thumbnail", {
+					mode,
 				})
 			)
 		}
 		return items
-	}, [itemProvider, mode])
+	}, [provider, mode])
 
-	const showControls = !!navigation
+	const fsc = useFullscreen({})
 
-	const maybeHideStyle = showControls ? {} : { display: "none" }
+	const showControls = provider.itemCount > 1
+	const hideIfNotShowControlsStyle = showControls ? {} : { display: "none" }
+
+	const onBottomBarTap = (i: number) => {
+		while (i < 0) {
+			i += provider.itemCount
+		}
+		setItemIndex(i % provider.itemCount)
+	}
+
+	const onRightSideTap = () => {
+		onBottomBarTap(itemIndex + 1)
+	}
+
+	const onLeftSideTap = () => {
+		onBottomBarTap(itemIndex - 1)
+	}
 
 	return (
-		<div className={classnames(styles.gallery, styles.gallerySmall)}>
+		<div
+			className={classnames(
+				styles.gallery,
+				mode === "fullscreen" ? styles.galleryFullscreen : null
+			)}
+		>
 			<div className={styles.mainBar}>
 				<div
 					className={styles.mainBarLeftOverlay}
-					style={{ ...maybeHideStyle }}
-				>
-				</div>
+					style={{ ...hideIfNotShowControlsStyle }}
+					onClick={() => onLeftSideTap()}
+				></div>
 
 				<div className={styles.mainBarDisplayedEntryWrapper}>
 					<DissolveGalleryDisplay item={currentItem} />
@@ -82,12 +103,17 @@ const Gallery = (props: GalleryProps) => {
 
 				<div
 					className={styles.mainBarRightOverlay}
-					style={{ ...maybeHideStyle }}
-				>
-				</div>
+					style={{ ...hideIfNotShowControlsStyle }}
+					onClick={() => onRightSideTap()}
+				></div>
 			</div>
-			<div className={styles.bottomBar}>
-				{thumbnails.map(i => (
+			<div
+				className={classnames(
+					styles.bottomBar,
+					showControls ? styles.bottomBarClickable : null
+				)}
+			>
+				{thumbnails.map((img, i) => (
 					// Quick note about that div:
 					//  It's required, since it makes chrome and firefox behave the same way
 					//  when it comes to displaying overflowing images with fixed width and/or height
@@ -97,8 +123,12 @@ const Gallery = (props: GalleryProps) => {
 					//  for css height parameter with percentage value
 					//
 					// I've spent too much time debugging it, so this div stays here.
-					<div key={i.key} className={styles.bottomBarEntryWrapper}>
-						<GalleryItemDisplay item={i} />
+					<div
+						key={img.key}
+						className={styles.bottomBarEntryWrapper}
+						onClick={() => onBottomBarTap(i)}
+					>
+						<GalleryItemDisplay item={img} />
 					</div>
 				))}
 			</div>

@@ -26,11 +26,11 @@
 	// image-rendering: high-quality;
 }
 
-$gallery-max-height: 75vh;
+$gallery-default-max-height: 75vh;
 $overlay-width: 20%;
 
 .gallery {
-	max-height: $gallery-max-height;
+	max-height: $gallery-default-max-height;
 	display: grid;
 	grid-template-columns: minmax(auto, 100vw);
 	overflow: hidden;
@@ -52,6 +52,33 @@ $overlay-width: 20%;
 	::selection {
 		background: transparent;
 	}
+	
+	&--max-height-35 {
+		max-height: 35vh;
+	}
+
+	&--max-height-50 {
+		max-height: 50vh;
+	}
+
+	&--max-height-75 {
+		max-height: 50vh;
+	}
+
+	&--max-height-100 {
+		max-height: 50vh;
+	}
+
+	&--fullscreen {
+		max-height: 100vh!important;
+		height: 100vh!important;
+
+		position: fixed;
+	
+		top: 0;
+		left: 0;
+		z-index: 10000; // Big z-index to make this element display on top of others
+	}
 }
 
 .main-bar {
@@ -67,6 +94,8 @@ $overlay-width: 20%;
 	height: 100%;
 
 	&__displayed-entry-wrapper {
+		pointer-events: none;
+
 		z-index: 0;
 		grid-row: 1;
 		grid-column: 1;
@@ -143,6 +172,8 @@ $overlay-width: 20%;
 		opacity: 0;
 		z-index: 1;
 
+		cursor: pointer;
+
 		// TODO(teawithsand): fix centering arrows
 		// looks like text is not centered to baseline but to
 		// it's top instead
@@ -179,6 +210,8 @@ $overlay-width: 20%;
 }
 
 .bottom-bar {
+	$this: &;
+
 	@include scrollbar.pretty-scrollbar-light();
 
 	height: 100%;
@@ -203,6 +236,12 @@ $overlay-width: 20%;
 	&__entry-wrapper {
 		display: inline;
 		overflow: hidden;
+
+		&--active {
+			img {
+				border: 1px solid whitesmoke;
+			}
+		}
 
 		// It has to be moved directly to element
 		// since we are inline
@@ -231,7 +270,10 @@ $overlay-width: 20%;
 			background-color: rebeccapurple;
 		}
 	}
-}
 
-.main-element-display {
+	&--clickable {
+		#{$this}__entry-wrapper {
+			cursor: pointer;
+		}
+	}
 }
