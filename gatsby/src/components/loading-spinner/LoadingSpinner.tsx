@@ -1,13 +1,14 @@
 import React from "react"
 
-import { StaticImage } from "gatsby-plugin-image"
 import * as styles from "./loadingSpinner.module.scss"
+import LoadingImage from "./loading.svg"
 
 export default () => {
-	console.log({ styles })
 	return (
 		<div className={styles.spinner}>
-			<StaticImage
+			<LoadingImage
+				width={150}
+				height={150}
 				alt={"Loading..."}
 				src="./loading.svg"
 				className={styles.spinnerImage}

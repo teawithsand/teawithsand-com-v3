@@ -118,8 +118,10 @@ exports.createSchemaCustomization = ({ actions }) => {
   `)
 }
 
-exports.onCreateWebpackConfig = ({ actions, getConfig }) => {
+exports.onCreateWebpackConfig = ({ actions, getConfig, rules }) => {
 	const config = getConfig()
+	const imgsRule = rules.images()
+
 	config.plugins = [
 		...(config.plugins ?? []),
 		new CompressionPlugin({
@@ -143,6 +145,25 @@ exports.onCreateWebpackConfig = ({ actions, getConfig }) => {
 				},
 			},
 		}),
+	]
+	
+	const newUrlLoaderRule = {
+		...imgsRule,
+		test: new RegExp(imgsRule.test.toString().replace('svg|', '').slice(1, -1))
+	}
+
+	config.module.rules = [
+		...(config.module.rules ?? []).filter(rule => {
+			if (rule.test) {
+				return rule.test.toString() !== imgsRule.test.toString()
+			}
+			return true
+		}),
+		{
+			test: /.svg$/,
+			use: ["@svgr/webpack"],
+		},
+		newUrlLoaderRule,
 	]
 	config.resolve.plugins = [
 		...(config.resolve.plugins ?? []),
