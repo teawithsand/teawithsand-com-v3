@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "teawithsand <teawithsand@gmail.com>",
   "dependencies": {
+    "bootstrap": "^5.1.3",
     "gatsby": "^4.13.0",
     "gatsby-plugin-feed": "^4.13.0",
     "gatsby-plugin-gatsby-cloud": "^4.13.0",
