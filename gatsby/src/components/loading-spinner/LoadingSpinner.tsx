@@ -1,7 +1,7 @@
 import React from "react"
 
 import { StaticImage } from "gatsby-plugin-image"
-import styles from "./loadingSpinner.module.scss"
+import * as styles from "./loadingSpinner.module.scss"
 
 export default () => {
 	console.log({ styles })
