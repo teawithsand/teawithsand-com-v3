@@ -3,6 +3,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 
 const zlib = require("zlib")
 const CompressionPlugin = require("compression-webpack-plugin")
+const TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
 	const { createPage } = actions
@@ -142,6 +143,7 @@ exports.onCreateWebpackConfig = ({ actions, getConfig }) => {
 				},
 			},
 		}),
+		new TSConfigPathsPlugin(),
 	]
 
 	actions.replaceWebpackConfig(config)
