@@ -5,9 +5,10 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import TeaAnimation from "@app/components/tea-animation/TeaAnimation"
+import LoadingSpinner from "@app/components/loading-spinner/LoadingSpinner"
 
 const BlogIndex = (props: any) => {
-	return <TeaAnimation />
+	return <LoadingSpinner />
 }
 
 export default BlogIndex
