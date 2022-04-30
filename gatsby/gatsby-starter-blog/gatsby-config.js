@@ -128,5 +128,14 @@ module.exports = {
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        // Override the file regex for Sass
+        sassRuleTest: /\.global\.s(a|c)ss$/,
+        // Override the file regex for CSS modules
+        sassRuleModulesTest: /\.mod\.s?(a|c)ss$/,
+      },
+    },
   ],
 }
