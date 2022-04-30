@@ -20,6 +20,7 @@ export const GalleryItemDisplay = (props: {
 		return (
 			<img
 				src={item.src}
+				alt={item.alt}
 				srcSet={item.srcSet}
 				className={className}
 				style={style}
