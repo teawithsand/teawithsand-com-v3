@@ -1,12 +1,9 @@
 {
-  "name": "gatsby-starter-blog",
+  "name": "tws-blog",
   "private": true,
-  "description": "A starter for a blog powered by Gatsby and Markdown",
+  "description": "TWS blog/portfolio/utils website; now with gatsby",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
-  },
+  "author": "teawithsand <teawithsand@gmail.com>",
   "dependencies": {
     "gatsby": "^4.13.0",
     "gatsby-plugin-feed": "^4.13.0",
@@ -38,15 +35,6 @@
   "devDependencies": {
     "prettier": "^2.6.2"
   },
-  "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "0BSD",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gatsbyjs/gatsby-starter-blog.git"
-  },
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
@@ -55,5 +43,13 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
-  }
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
