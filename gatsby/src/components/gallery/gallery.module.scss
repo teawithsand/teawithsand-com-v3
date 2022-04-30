@@ -5,7 +5,7 @@
 //  on the other hand, in firefox it works ok as-is
 //  BTW I also noticed that it changes depending on image used
 //  while lena scales ok
-//  this weeb sh*t picture
+//  this anime picture
 //  https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png
 //  Works best with image-rendering: auto on ff
 //  and with -webkit-optimize-contrast on chrome
@@ -19,32 +19,34 @@
 	// image-rendering: high-quality;
 }
 
-$bottom-bar-height: 200px;
+$bottom-bar-min-height: 200px;
+$gallery-max-height: 75vh;
 
-$gallery-row-gap: map-get(def.$spacers, 2);
-$gallery-padding: map-get(def.$spacers, 2);
-$gallery-max-height: 100vh;
-
-$main-row-max-height: calc(
-	$gallery-max-height - $bottom-bar-height - scrollbar.$height -
-		$gallery-row-gap - $gallery-padding
-);
+$overlay-width: 20%;
 
 .gallery {
+	max-height: $gallery-max-height;
 	display: grid;
 	grid-template-columns: minmax(auto, 100vw);
+	overflow: hidden;
+	/*
 	grid-template-rows:
 		minmax(
 			max-content,
 			$main-row-max-height
 		)
 		$bottom-bar-height;
+	*/
+	// Note: using inverse (1/x) values causes top to grow for bottom, rather than reverse
+	grid-template-rows: minmax(0, 1fr) minmax(100px, 0.2fr); // for older browsers with no min
+	grid-template-rows: minmax(0, 1fr) minmax(Min(100px, 10vh), 0.2fr);
 
 	background-color: black;
 	color: white;
 
-	row-gap: $gallery-row-gap;
-	padding: $gallery-padding;
+	row-gap: map-get(def.$spacers, 2);
+	padding: map-get(def.$spacers, 2);
+	padding-bottom: calc(map-get(def.$spacers, 2) - scrollbar.$height);
 
 	user-select: none;
 	::selection {
@@ -63,11 +65,6 @@ $main-row-max-height: calc(
 
 	width: 100%;
 	height: 100%;
-    // For some reason this row won't obey to minmax's max part
-    // computed using calc
-    // but adding this 
-    // makes it work
-    max-height: $main-row-max-height;
 
 	&__displayed-entry-wrapper {
 		z-index: 0;
@@ -120,8 +117,6 @@ $main-row-max-height: calc(
 			object-fit: contain;
 		}
 	}
-
-	$overlay-width: 33%;
 
 	// TODO(teawithsand): use less hacky solutions like svg images instead
 	// of ::before content and flexbox for centering.
@@ -187,39 +182,59 @@ $main-row-max-height: calc(
 .bottom-bar {
 	@include scrollbar.pretty-scrollbar-light();
 
-	height: $bottom-bar-height;
+	height: 100%;
+	width: 100%; // must not be 100% for element centering
 	overflow-x: scroll;
 	overflow-y: hidden;
-
-	margin-left: auto;
-	margin-right: auto;
 
 	grid-row: 2;
 	grid-column: 1;
 
+	// Screw grid
+	// I could't make it work
+	// In grid/flex images
+	// even when object-fit: contain is set
+	// still have their "original"(like object-fit: cover) width
+	// which makes it impossible to handle it sensibly
+	// so display inline/inline-block is used instead.
+	/*	
 	display: grid;
 	grid-template-rows: 1fr;
-	grid-auto-columns: max-content;
+	grid-auto-columns: minmax(min-content, 33vw);
 	grid-auto-flow: column;
 
+	
 	column-gap: map-get(def.$spacers, 2);
+	*/
+
+	display: inline;
+	text-align: center;
 
 	&__entry-wrapper {
+		display: inline;
 		overflow: hidden;
 
-		border: 1px solid white;
-		border-radius: map-get(def.$spacers, 1);
+		// It has to be moved directly to element
+		// since wer are inline
+		// border-radius: map-get(def.$spacers, 1);
+		// border: 1px solid white;
+		// and inline-block in ff works as-if it was block element, when it comes to width computation
+		// unlike chrome...
 
-		height: 100%;
 		max-width: 33vw;
+		height: 100%;
+		margin-left: map-get(def.$spacers, 1);
+		margin-right: map-get(def.$spacers, 1);
 
 		img {
+			border-radius: map-get(def.$spacers, 1);
+			border: 1px solid white;
+
 			@include downscaled-image();
-			width: fit-content;
-			height: fit-content;
-			max-width: 100%;
-			max-height: 100%;
 			object-fit: cover;
+			height: 100%;
+
+			max-width: 33vw;
 		}
 	}
 }
