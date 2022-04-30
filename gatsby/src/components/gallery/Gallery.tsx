@@ -62,29 +62,12 @@ const Gallery = (props: GalleryProps) => {
 					className={styles.mainBarLeftOverlay}
 					style={{ ...maybeHideStyle }}
 				>
-					{
-						// This div is required, in order to bypass firefox hover bug
-						// and also because chrome and ff differently understand height
-						// when it comes to flexbox
-						// in firefox, these are centered(when centered with display: flex on grid item)
-						// in context of grid item
-						// but in chrome, they are centered in context of entire grid parent(?!!?)
-						// So let's just center this with margin auto and whatever.
-						//
-						// Apparently it was some weird FF bug
-						// since after refreshing is gone
-						// but still, differently centering arrows in ff and chrome
-						// is a fact
-						// but it's also different when using margin...
-					}
 				</div>
 
-				{
-					// Below wrapper note also applies to this div, which wraps display.
-				}
 				<div className={styles.mainBarDisplayedEntryWrapper}>
 					<DissolveGalleryDisplay item={currentItem} />
 				</div>
+
 				{
 					// Another trick here: load all elements to DOM
 					// with visibility: hidden
@@ -101,16 +84,13 @@ const Gallery = (props: GalleryProps) => {
 					className={styles.mainBarRightOverlay}
 					style={{ ...maybeHideStyle }}
 				>
-					{
-						// See notice above
-					}
 				</div>
 			</div>
 			<div className={styles.bottomBar}>
 				{thumbnails.map(i => (
 					// Quick note about that div:
 					//  It's required, since it makes chrome and firefox behave the same way
-					//  when it comes to displaying overflowing images/setting image width and/or height
+					//  when it comes to displaying overflowing images with fixed width and/or height
 					//  if that is not done, object-fit: contain will work on ff,
 					//  but it won't on chrome
 					//  it's like that, because chrome and ff differently understand specification

@@ -1,8 +1,15 @@
 @use "@app/styles/defines.scss" as def;
 @use "@app/styles/scrollbar.scss" as scrollbar;
 
+// Small note at the beginning:
+// This CSS is fiesta of chrome behaving different than firefox
+// and me trying to somewhat make it work in both browsers
+// I've found behavior, which differs between chrome and ff 22(sic!) times
+// which is my web dev norm ever(take into consideration that I've never been testing on IE)
+
 // Required, otherwise webkit(safari/chrome) will display blurry images while downscaling
 //  on the other hand, in firefox it works ok as-is
+//
 //  BTW I also noticed that it changes depending on image used
 //  while lena scales ok
 //  this anime picture
@@ -19,9 +26,7 @@
 	// image-rendering: high-quality;
 }
 
-$bottom-bar-min-height: 200px;
 $gallery-max-height: 75vh;
-
 $overlay-width: 20%;
 
 .gallery {
@@ -37,6 +42,10 @@ $overlay-width: 20%;
 
 	row-gap: map-get(def.$spacers, 2);
 	padding: map-get(def.$spacers, 2);
+	// FIXME(teawithsand): scrollbar height is not known on firefox
+	// since it can't be precisely set there
+	// only normal and thin scrollbar are there
+	// this approximately works and looks ok when I've tested it
 	padding-bottom: calc(map-get(def.$spacers, 2) - scrollbar.$height);
 
 	user-select: none;
@@ -120,9 +129,8 @@ $overlay-width: 20%;
 		box-sizing: border-box;
 		height: 100%;
 
-		text-align: center;
-
 		overflow: hidden;
+
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -219,6 +227,8 @@ $overlay-width: 20%;
 			height: 100%;
 
 			max-width: 33vw;
+			min-width: 5vh; // for super thin images
+			background-color: rebeccapurple;
 		}
 	}
 }
