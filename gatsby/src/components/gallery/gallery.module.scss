@@ -29,15 +29,6 @@ $overlay-width: 20%;
 	display: grid;
 	grid-template-columns: minmax(auto, 100vw);
 	overflow: hidden;
-	/*
-	grid-template-rows:
-		minmax(
-			max-content,
-			$main-row-max-height
-		)
-		$bottom-bar-height;
-	*/
-	// Note: using inverse (1/x) values causes top to grow for bottom, rather than reverse
 	grid-template-rows: minmax(0, 1fr) minmax(100px, 0.2fr); // for older browsers with no min
 	grid-template-rows: minmax(0, 1fr) minmax(Min(100px, 10vh), 0.2fr);
 
@@ -197,15 +188,6 @@ $overlay-width: 20%;
 	// still have their "original"(like object-fit: cover) width
 	// which makes it impossible to handle it sensibly
 	// so display inline/inline-block is used instead.
-	/*	
-	display: grid;
-	grid-template-rows: 1fr;
-	grid-auto-columns: minmax(min-content, 33vw);
-	grid-auto-flow: column;
-
-	
-	column-gap: map-get(def.$spacers, 2);
-	*/
 
 	display: inline;
 	text-align: center;
@@ -215,11 +197,13 @@ $overlay-width: 20%;
 		overflow: hidden;
 
 		// It has to be moved directly to element
-		// since wer are inline
+		// since we are inline
 		// border-radius: map-get(def.$spacers, 1);
 		// border: 1px solid white;
 		// and inline-block in ff works as-if it was block element, when it comes to width computation
 		// unlike chrome...
+		// border-radius: map-get(def.$spacers, 1);
+		// border: 1px solid white;
 
 		max-width: 33vw;
 		height: 100%;
