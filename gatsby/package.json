@@ -25,15 +25,26 @@
     "gatsby-transformer-remark": "^5.13.0",
     "gatsby-transformer-sharp": "^4.13.0",
     "prismjs": "^1.28.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
     "sass": "^1.51.0",
     "typeface-merriweather": "0.0.72",
     "typeface-montserrat": "0.0.75"
   },
   "devDependencies": {
-    "prettier": "^2.6.2"
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.1.1",
+    "@types/jest": "^27.4.1",
+    "@types/react-test-renderer": "^18.0.0",
+    "babel-jest": "^28.0.3",
+    "babel-preset-gatsby": "^2.13.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^28.0.3",
+    "jest-environment-jsdom": "^28.0.2",
+    "prettier": "^2.6.2",
+    "react-test-renderer": "^18.1.0",
+    "ts-jest": "^27.1.4"
   },
   "scripts": {
     "build": "gatsby build",
@@ -42,7 +53,7 @@
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "jest"
   },
   "browserslist": [
     "> 0.5%",
