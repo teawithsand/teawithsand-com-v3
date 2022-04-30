@@ -135,6 +135,7 @@ module.exports = {
         sassRuleTest: /\.global\.s(a|c)ss$/,
         // Override the file regex for CSS modules
         sassRuleModulesTest: /\.mod\.s?(a|c)ss$/,
+        useResolveUrlLoader: true,
       },
     },
   ],
