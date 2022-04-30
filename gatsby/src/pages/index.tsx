@@ -1,13 +1,57 @@
-import * as React from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { graphql } from "gatsby"
 
-import TeaAnimation from "@app/components/tea-animation/TeaAnimation"
 import Layout from "@app/components/layout/Layout"
+import { GalleryItem } from "@app/components/gallery"
+import { DissolveGalleryDisplay } from "@app/components/gallery/GalleryDisplay"
+import Gallery from "@app/components/gallery/Gallery"
+import { ArrayGalleryItemProvider } from "@app/components/gallery/ItemProvider"
 
 const BlogIndex = () => {
+	const items: GalleryItem[] = [
+		{
+			type: "image",
+			src: "https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png",
+			alt: "Lena image",
+			key: "one",
+		},
+		{
+			type: "image",
+			src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png",
+			alt: "Weebu shitto",
+			key: "two",
+		},
+		{
+			type: "image",
+			src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png",
+			alt: "Weebu shitto",
+			key: "two",
+		},
+	]
+
+	/*
+	const itemIndex = useRef(0)
+	const [item, setItem] = useState(items[0])
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			itemIndex.current++
+			itemIndex.current = itemIndex.current % items.length
+			setItem(items[itemIndex.current])
+		}, 1000)
+
+		return () => {
+			clearTimeout(timeoutId)
+		}
+	})
+	*/
+
 	return (
 		<Layout>
-			<TeaAnimation />
+			<Gallery
+				itemProvider={new ArrayGalleryItemProvider(items)}
+				mode="normal"
+				itemIndex={0}
+			/>
 		</Layout>
 	)
 }
