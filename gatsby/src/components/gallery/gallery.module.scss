@@ -1,4 +1,23 @@
 @use "@app/styles/defines.scss" as def;
+@use "@app/styles/scrollbar.scss" as scrollbar;
+
+// Required, otherwise webkit(safari/chrome) will display blurry images while downscaling
+//  on the other hand, in firefox it works ok as-is
+//  BTW I also noticed that it changes depending on image used
+//  while lena scales ok
+//  this weeb sh*t picture
+//  https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png
+//  Works best with image-rendering: auto on ff
+//  and with -webkit-optimize-contrast on chrome
+@mixin downscaled-image {
+	// See
+	// https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering
+	image-rendering: auto;
+	image-rendering: -webkit-optimize-contrast;
+	// see comments above
+	// image-rendering: smooth;
+	// image-rendering: high-quality;
+}
 
 .gallery {
 	display: grid;
@@ -17,27 +36,85 @@
 	grid-row: 1;
 	grid-column: 1;
 
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: auto;
+
 	&__entry-wrapper {
+        z-index: 0;
+		grid-row: 1;
+		grid-column: 1;
+
 		overflow: hidden;
 
 		width: fit-content;
 		height: fit-content;
 
-        margin: auto;
+		margin: auto;
 
 		img {
+			@include downscaled-image();
 			width: fit-content;
 			height: fit-content;
-            max-width: 100%;
-            max-height: 100%;
+			max-width: 100%;
+			max-height: 100%;
 			object-fit: contain;
+		}
+	}
+
+	$overlay-width: 33%;
+
+    // TODO(teawithsand): use less hacky solutions like svg images instead
+    // of ::before content and flexbox for centering.
+	@mixin overlay {
+        grid-row: 1;
+		grid-column: 1;
+        width: $overlay-width;
+        background-color: rgba(255, 255, 255, 0.3);
+
+        text-align: center;
+        
+        overflow: hidden;
+        display: flex;
+        align-items: center; 
+        justify-content: center;
+
+        font-size: 20em;
+
+        opacity: 0.2; // can't be zero; hover does not work
+        z-index: 10000;
+
+        &:hover {
+            opacity: 1;
+        }
+	}
+
+	&__left-overlay {
+        @include overlay();
+
+		margin-right: auto;
+		&::before {
+			content: "←";
+		}
+	}
+
+	&__right-overlay {
+        @include overlay();
+		margin-left: auto;
+		&::before {
+            content: "→";
 		}
 	}
 }
 
 .bottom-bar {
-	overflow: scroll;
+	@include scrollbar.pretty-scrollbar-light();
+
+	overflow-x: scroll;
 	overflow-y: hidden;
+
+    margin-left: auto;
+    margin-right: auto;
 
 	grid-row: 2;
 	grid-column: 1;
@@ -46,26 +123,27 @@
 
 	display: grid;
 	grid-template-rows: 1fr;
-	grid-auto-columns: minmax(
-		50px,
-		20vw
-	); // TODO(teawithsand): increase it on smaller devices with media query
+	grid-auto-columns: max-content;
 	grid-auto-flow: column;
 
 	column-gap: map-get(def.$spacers, 2);
 
 	&__entry-wrapper {
-		width: 100%;
-		height: 100%;
 		overflow: hidden;
 
 		border: 1px solid white;
-		border-radius: 2px;
+		border-radius: map-get(def.$spacers, 1);
+
+		height: 100%;
+		max-width: 33vw;
 
 		img {
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
+			@include downscaled-image();
+			width: fit-content;
+			height: fit-content;
+			max-width: 100%;
+			max-height: 100%;
+			object-fit: cover;
 		}
 	}
 }

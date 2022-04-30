@@ -1,5 +1,5 @@
 import React from "react"
-import { GatsbyImage, IGatsbyImageData, StaticImage } from "gatsby-plugin-image"
+import { IGatsbyImageData } from "gatsby-plugin-image"
 
 export type GalleryItem = (
 	| {
@@ -8,11 +8,6 @@ export type GalleryItem = (
 				style?: React.CSSProperties
 				className?: string
 			}>
-	  }
-	| {
-			type: "static-image"
-			src: string
-			alt: string
 	  }
 	| {
 			type: "fluid-image"

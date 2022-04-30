@@ -1,5 +1,5 @@
 import React from "react"
-import { GatsbyImage, StaticImage } from "gatsby-plugin-image"
+import { GatsbyImage } from "gatsby-plugin-image"
 import { GalleryItem } from "@app/components/gallery/GalleryItem"
 
 /**
@@ -30,15 +30,6 @@ export const GalleryItemDisplay = (props: {
 		return (
 			<GatsbyImage
 				image={item.image}
-				alt={item.alt}
-				className={className}
-				style={style}
-			/>
-		)
-	} else if (item.type === "static-image") {
-		return (
-			<StaticImage
-				src={item.src}
 				alt={item.alt}
 				className={className}
 				style={style}

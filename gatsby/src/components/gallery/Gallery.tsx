@@ -38,11 +38,20 @@ const Gallery = (props: GalleryProps) => {
 	return (
 		<div className={styles.gallery}>
 			<div className={styles.mainBar}>
+				
+				<div className={styles.mainBarLeftOverlay}>
+
+				</div>
+
 				{
 					// Below wrapper note also applies to this div, which wraps display.
 				}
 				<div className={styles.mainBarEntryWrapper}>
 					<DissolveGalleryDisplay item={currentItem} />
+				</div>
+
+				<div className={styles.mainBarRightOverlay}>
+
 				</div>
 			</div>
 			<div className={styles.bottomBar}>
