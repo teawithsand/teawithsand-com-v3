@@ -138,11 +138,22 @@ module.exports = {
 		{
 			resolve: `gatsby-plugin-sass`,
 			options: {
+				/*
 				// Override the file regex for Sass
 				sassRuleTest: /\.global\.s(a|c)ss$/,
 				// Override the file regex for CSS modules
 				sassRuleModulesTest: /\.module\.s?(a|c)ss$/,
+				*/
 				useResolveUrlLoader: true,
+				cssLoaderOptions: {
+					// camelCase: true,
+					modules: {
+						exportLocalsConvention: "camelCaseOnly",
+					},
+				},
+				postCssPlugins: [
+					require('postcss-preset-env')({ stage: 4 })
+				],
 			},
 		},
 		{
