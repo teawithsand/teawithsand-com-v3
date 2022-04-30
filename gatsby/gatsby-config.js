@@ -38,7 +38,7 @@ module.exports = {
               withWebp: {
                 quality: 80,
               },
-              widthAvif: {
+              withAvif: {
                 quality: 80,
               },
               tracedSVG: true,
