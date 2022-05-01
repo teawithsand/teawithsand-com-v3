@@ -1,5 +1,6 @@
 @use "@app/styles/defines.scss" as def;
 @use "@app/styles/scrollbar.scss" as scrollbar;
+@use "@app/styles/bs.scss" as bs;
 
 // Small note at the beginning:
 // This CSS is fiesta of chrome behaving different than firefox
@@ -34,8 +35,16 @@ $overlay-width: 20%;
 	display: grid;
 	grid-template-columns: minmax(auto, 100vw);
 	overflow: hidden;
-	grid-template-rows: minmax(0, 1fr) minmax(100px, 0.2fr); // for older browsers with no min
-	grid-template-rows: minmax(0, 1fr) minmax(Min(100px, 10vh), 0.2fr);
+	grid-template-rows: min-content minmax(0, 1fr) minmax(100px, 0.2fr); // for older browsers with no min
+	grid-template-rows: min-content minmax(0, 1fr) minmax(Min(100px, 10vh), 0.2fr);
+
+	&--bottom-bar-hidden {
+		& > .bottom-bar {
+			display: none;
+		}
+
+		grid-template-rows: min-content minmax(0, 1fr);
+	}
 
 	background-color: black;
 	color: white;
@@ -52,7 +61,7 @@ $overlay-width: 20%;
 	::selection {
 		background: transparent;
 	}
-	
+
 	&--max-height-35 {
 		max-height: 35vh;
 	}
@@ -70,20 +79,101 @@ $overlay-width: 20%;
 	}
 
 	&--fullscreen {
-		max-height: 100vh!important;
-		height: 100vh!important;
+		max-height: 100vh !important;
+		height: 100vh !important;
 
 		position: fixed;
-	
+
 		top: 0;
 		left: 0;
 		z-index: 10000; // Big z-index to make this element display on top of others
 	}
 }
 
+.top-bar {
+	grid-row: 1;
+	grid-column: 1;
+
+	display: grid;
+	grid-template-columns: min-content auto;
+	grid-template-rows: min-content min-content;
+
+	&__counter {
+		grid-row: 1;
+		grid-column: 1;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		vertical-align: middle;
+		text-align: center;
+	}
+
+	&__options {
+		grid-row: 1;
+		grid-column: 2;
+
+		margin-left: auto;
+
+		display: grid;
+		grid-auto-rows: min-content;
+		grid-auto-columns: fit-content;
+		grid-auto-flow: column;
+
+		column-gap: map-get(def.$spacers, 1);
+
+		&__btn {
+			@extend .btn;
+			@extend .btn-outline-light;
+			@extend .btn-sm;
+		}
+	}
+
+	&__auto-switch-progress {
+		grid-row: 2;
+		grid-column: 1 / 3;
+
+		@keyframes progress-animation {
+			0% {
+				width: 0;
+			}
+
+			100% {
+				width: 100%;
+			}
+		}
+
+		background: rgb(0, 0, 0);
+		background: linear-gradient(
+			90deg,
+			rgba(0, 0, 0, 1) 0%,
+			rgba(255, 255, 255, 1) 100%,
+			rgba(255, 255, 255, 1) 100%
+		);
+
+		transition: height 0.5s, margin-top 0.5s;
+		margin-top: map-get(def.$spacers, 1);
+
+		width: 100%;
+		border-radius: 10px;
+
+		&--disabled {
+			padding-top: 0;
+			height: 0px;
+			background: transparent;
+		}
+
+		&--enabled {
+			animation: progress-animation var(--progress-animation-duration) linear
+				infinite;
+			height: 5px;
+		}
+	}
+}
+
 .main-bar {
 	overflow: hidden;
-	grid-row: 1;
+	grid-row: 2;
 	grid-column: 1;
 
 	display: grid;
@@ -94,7 +184,7 @@ $overlay-width: 20%;
 	height: 100%;
 
 	&__displayed-entry-wrapper {
-		pointer-events: none;
+		touch-action: none;
 
 		z-index: 0;
 		grid-row: 1;
@@ -219,7 +309,7 @@ $overlay-width: 20%;
 	overflow-x: scroll;
 	overflow-y: hidden;
 
-	grid-row: 2;
+	grid-row: 3;
 	grid-column: 1;
 
 	// Screw grid
@@ -237,12 +327,6 @@ $overlay-width: 20%;
 		display: inline;
 		overflow: hidden;
 
-		&--active {
-			img {
-				border: 1px solid whitesmoke;
-			}
-		}
-
 		// It has to be moved directly to element
 		// since we are inline
 		// border-radius: map-get(def.$spacers, 1);
@@ -252,14 +336,18 @@ $overlay-width: 20%;
 		// border-radius: map-get(def.$spacers, 1);
 		// border: 1px solid white;
 
-		max-width: 33vw;
 		height: 100%;
 		margin-left: map-get(def.$spacers, 1);
 		margin-right: map-get(def.$spacers, 1);
 
+		$border-color: rgba(255, 255, 255, 1);
+
+		transition: margin-left 0.3s, margin-right 0.3s;
+
 		img {
 			border-radius: map-get(def.$spacers, 1);
-			border: 1px solid white;
+
+			border: 1px solid $border-color;
 
 			@include downscaled-image();
 			object-fit: cover;
@@ -268,6 +356,11 @@ $overlay-width: 20%;
 			max-width: 33vw;
 			min-width: 5vh; // for super thin images
 			background-color: rebeccapurple;
+		}
+
+		&--active {
+			margin-left: map-get(def.$spacers, 3);
+			margin-right: map-get(def.$spacers, 3);
 		}
 	}
 
