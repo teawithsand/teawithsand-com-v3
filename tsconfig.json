@@ -20,7 +20,8 @@
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "strictPropertyInitialization": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "skipLibCheck": true,
   },
   "include": [
     "assets/**/*"
