@@ -6,7 +6,7 @@ import { GalleryItem } from "@app/components/gallery"
 import Gallery from "@app/components/gallery/Gallery"
 import { ArrayGalleryItemProvider } from "@app/components/gallery/ItemProvider"
 
-const BlogIndex = () => {
+const GalleryPage = () => {
 	const items: GalleryItem[] = [
 		{
 			type: "image",
@@ -37,7 +37,7 @@ const BlogIndex = () => {
 	)
 }
 
-export default BlogIndex
+export default GalleryPage
 
 export const pageQuery = graphql`
 	query {
