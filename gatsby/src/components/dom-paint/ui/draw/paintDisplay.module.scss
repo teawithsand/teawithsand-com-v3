@@ -1,0 +1,76 @@
+@use "@app/styles/scrollbar.scss" as scrollbar;
+@use "@app/styles/bs.scss" as bs;
+@use "@app/styles/defines.scss" as def;
+
+
+.paint-display {  
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 100vw;
+    grid-template-rows: minmax(max-content, auto) minmax(min-content, fit-content);
+    overflow: hidden;
+
+    & * {
+        user-select: none;
+        touch-action: none;
+    }
+
+    &__canvas-parent {
+        z-index: 1;
+        grid-column: 1;
+        grid-row: 1;
+
+        @include scrollbar.pretty-scrollbar-dark();
+        overflow: scroll;
+    }
+
+    &__overlay {
+        grid-column: 1;
+        grid-row: 2;
+
+        z-index: 2;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+    }
+}
+
+.paint-header {
+    text-align: center;
+}
+
+.paint-panel {
+    display: grid;
+    grid-template-columns: minmax(max-content, auto);
+    grid-auto-rows: minmax(min-content, auto);
+    grid-auto-flow: column;
+
+    padding: map-get(def.$spacers, 2);
+    overflow: auto;
+
+    &__button-primary {
+        @extend .btn;
+        @extend .btn-primary;
+    }
+
+    &--button-full {
+        height: max-content;
+    }
+
+    &__section {
+
+    }
+
+    &__section--list {
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: map-get(def.$spacers, 1);
+
+        justify-items: left;
+
+        & > * {
+            flex-grow: 0;
+            flex-shrink: 1;
+        }
+    }
+}
