@@ -3,11 +3,12 @@ import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneR
 import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
 import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
+import { usePathTool } from "@app/components/redux-dom-paint/ui/tool/path"
 import classnames from "@app/util/lang/classnames"
 import { useBreakpoint } from "@app/util/react/hook/dimensions/useBreakpoint"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import { findTransitionClasses } from "@app/util/react/transitionGroupClass"
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { CSSTransition } from "react-transition-group"
 
@@ -31,8 +32,11 @@ export default () => {
 	const [isAnimatingNow, setIsAnimatingNow] = useState(false)
 
 	const elementRef = useRef<HTMLDivElement | null>(null)
+
+	const pathTool = usePathTool()
+
 	const bind = usePaintDraw(elementRef, event => {
-		console.log({ event })
+		pathTool.onEvent(event)
 	})
 
 	return (
