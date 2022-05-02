@@ -10,7 +10,7 @@ import { WritableDraft } from "immer/dist/internal"
 
 const actionPrefix = "twsblog/dompaint"
 
-export const setUncommittedMutation = createAction<PrimPaintSceneMutation>(
+export const setUncommittedMutation = createAction<PrimPaintSceneMutation | null>(
 	`${actionPrefix}/setUncommittedMutations`
 )
 export const commitMutation = createAction<PrimPaintSceneMutation>(
