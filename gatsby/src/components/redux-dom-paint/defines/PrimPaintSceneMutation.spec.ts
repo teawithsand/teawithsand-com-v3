@@ -1,6 +1,15 @@
 import { PrimPaintElement } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
-import { initialPrimPaintScene, PrimPaintLayer, PrimPaintLayerData, PrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
-import PrimPaintSceneMutation, { applyMutationOnDraft, inverseMutation } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
+import {
+	initialPrimPaintScene,
+	PrimPaintLayer,
+	PrimPaintLayerData,
+	PrimPaintScene,
+} from "@app/components/redux-dom-paint/defines/PrimPaintScene"
+import PrimPaintSceneMutation, {
+	applyMutationOnDraft,
+	inverseMutation,
+} from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
+import { generateUUID } from "@app/util/lang/uuid"
 import produce from "immer"
 
 const doMutationTest = (data: {
@@ -100,6 +109,7 @@ const doInverseTest = (data: {
 // we do not really care about inner data
 const element = (i: number): PrimPaintElement => ({
 	type: "path",
+	id: "ids-are-not-part-of-testing-for-now",
 	data: {
 		entries: [
 			{
@@ -581,9 +591,7 @@ describe("PrimPaintScene", () => {
 				),
 			])
 
-			const elements = [
-				...Array(srcScene.layers[0].elements.length).keys(),
-			]
+			const elements = [...Array(srcScene.layers[0].elements.length).keys()]
 
 			// inter-layer move
 			for (const i of elements) {
