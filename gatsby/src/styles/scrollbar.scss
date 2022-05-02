@@ -3,6 +3,28 @@ $width: 6px;
 $box-shadow: 0px 1px 2px rgba(255, 255, 255, 0.75);
 $border-radius: 12px;
 
+
+@mixin pretty-scrollbar($background, $thumb) {
+	&::-webkit-scrollbar {
+		height: $height;
+		width: $width;
+		background: $background;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: $thumb;
+		border-radius: $border-radius;
+		box-shadow: $box-shadow;
+	}
+
+	&::-webkit-scrollbar-corner {
+		background: $background;
+	}
+
+	scrollbar-color: $thumb $background;
+	scrollbar-width: thin;
+}
+
 @mixin pretty-scrollbar-dark {
 	&::-webkit-scrollbar {
 		height: $height;
