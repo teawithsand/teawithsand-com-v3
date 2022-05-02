@@ -1,0 +1,91 @@
+@use "@app/styles/scrollbar.scss" as scrollbar;
+@use "@app/styles/defines.scss" as def;
+@use "@app/styles/bs.scss" as bs;
+
+.draw-container {
+	display: grid;
+	grid-template-columns: auto fit-content;
+	grid-template-rows: minmax(auto, 100vh);
+
+	max-width: 100vw;
+	max-height: 100vh;
+
+	overflow: hidden;
+
+	&__main-display {
+		grid-row: 1;
+		grid-column: 1;
+	
+		overflow: auto;
+	
+		> * {
+			overflow: hidden; // scroll parent, not child
+		}
+	}	
+
+	&__side-panel {
+		grid-row: 1;
+		grid-column: 2;
+	}
+
+	&__toggle-panel {
+		grid-row: 1;
+		grid-column: 1;
+
+		margin: map-get(def.$spacers, 2) map-get(def.$spacers, 3);
+
+		margin-left: auto;
+		margin-bottom: auto;
+
+		@extend .btn;
+		@extend .btn-primary;
+	}
+}
+
+
+
+@mixin move-out-styles($width) {
+    $move-out-duration: 500ms;
+	.move-out-appear {
+		width: $width;
+	}
+
+	.move-out-enter {
+		width: 0;
+	}
+
+	.move-out-enter-active {
+		width: $width;
+		transition: width $move-out-duration;
+	}
+
+	.move-out-enter-done {
+		width: $width;
+	}
+
+	.move-out-exit {
+		width: $width;
+	}
+
+	.move-out-exit-active {
+		width: 0;
+		transition: width $move-out-duration;
+	}
+}
+
+
+@include move-out-styles(100vw);
+
+@include bs.media-breakpoint-up(md) { 
+    @include move-out-styles(Max(50vw, 200px));
+}
+
+@include bs.media-breakpoint-up(lg) { 
+    @include move-out-styles(Max(20vw, 500px));
+}
+
+.move-out-exit-done {
+	width: 0;
+	padding: 0;
+	margin: 0;
+}

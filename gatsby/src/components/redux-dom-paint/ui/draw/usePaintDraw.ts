@@ -2,6 +2,8 @@ import { Point } from "@app/components/redux-dom-paint/primitive"
 import DrawEvent from "@app/components/dom-paint/ui/DrawEvent"
 import { RefObject, useCallback, useEffect, useRef } from "react"
 
+// TODO(teawithsand): do not emit mouse events if mouse is over scrollbar
+
 export default (
     elementRef: RefObject<null | HTMLElement>,
     onCanvasEvent: (data: DrawEvent & { type: "mouse" | "scroll" }) => void
@@ -128,7 +130,7 @@ export default (
         }
 
         document.addEventListener("mouseup", cb)
-        // note: this is required, since it preventd bug, which causes drawing when user presses RMB and moves mouse away
+        // note: this is required, since it prevents bug, which causes drawing when user presses RMB and moves mouse away
         document.addEventListener("mousemove", cb)
         return () => {
             document.removeEventListener("mouseup", cb)

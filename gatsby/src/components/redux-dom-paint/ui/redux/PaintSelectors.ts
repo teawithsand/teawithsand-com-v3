@@ -1,6 +1,7 @@
 import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
-import { PrimPaintScene } from "@app/components/redux-dom-paint/ui/redux/PrimPaintScene"
+import { useSelector } from "react-redux"
 
-export const paintSceneSelector = (state: PaintState): PrimPaintScene => {
-	return state.scene
-}
+/**
+ * Typed wrapper over useSelector from react-redux.
+ */
+export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) => useSelector<PaintState, T>(selector)
