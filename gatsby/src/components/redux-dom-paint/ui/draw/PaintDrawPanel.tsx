@@ -24,6 +24,8 @@ export default (props: {
 
 	const dispatch = useDispatch()
 
+	// TODO(teawithsand): add ctrl+z and ctrl+y hooks here
+
 	const { showToggleButton, onTogglePanel } = props
 	return (
 		<div className={styles.panel}>
@@ -31,8 +33,12 @@ export default (props: {
 				<h1 className={styles.sectionTopTitle}>TWS Paint App</h1>
 			</div>
 
-			{showToggleButton ? (
-				<div className={styles.section}>
+			<div className={styles.section}>
+				<h2 className={styles.sectionTitle}>General</h2>
+				<Link className={styles.sectionMainButton} to={homePath}>
+					Go to home page
+				</Link>
+				{showToggleButton ? (
 					<button
 						className={styles.sectionMainButton}
 						onClick={() => {
@@ -41,14 +47,7 @@ export default (props: {
 					>
 						Toggle panel
 					</button>
-				</div>
-			) : null}
-
-			<div className={styles.section}>
-				<h2 className={styles.sectionTitle}>General</h2>
-				<Link className={styles.sectionMainButton} to={homePath}>
-					Go to home page
-				</Link>
+				) : null}
 			</div>
 
 			<div className={styles.section}>
