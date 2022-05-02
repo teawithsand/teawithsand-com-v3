@@ -17,13 +17,16 @@ export type PaintToolPathState = {
 export type PrimPaintElement =
 	| {
 			type: "path"
+			id: string
 			data: PathPaintElementData
 	  }
 	| {
 			type: "image"
+			id: string
 			data: ImagePaintElementData
 	  }
 	| {
 			type: "text"
+			id: string
 			data: TextPaintElementData
 	  }
