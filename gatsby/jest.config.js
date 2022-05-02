@@ -1,7 +1,7 @@
 const { compilerOptions } = require("./tsconfig.json")
 const { pathsToModuleNameMapper } = require("ts-jest/utils")
 const paths = pathsToModuleNameMapper(compilerOptions.paths, {
-	prefix: "<rootDir>/",
+	prefix: "<rootDir>/src",
 })
 
 module.exports = {
