@@ -14,9 +14,9 @@ export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) =>
 export const usePathStrokeData = (): PathStrokeData =>
 	usePaintStateSelector(s => ({
 		color: s.uiState.drawColor,
-		linecap: s.uiState.pathToolState.lineCapStyle,
-		linejoin: s.uiState.pathToolState.lineJoinStyle,
-		size: s.uiState.pathToolState.strokeSize,
+		linecap: s.uiState.pathToolOptions.lineCapStyle,
+		linejoin: s.uiState.pathToolOptions.lineJoinStyle,
+		size: s.uiState.pathToolOptions.strokeSize,
 	}))
 
 export const usePathFillData = (): PathFillData | null =>

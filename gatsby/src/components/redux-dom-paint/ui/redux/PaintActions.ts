@@ -1,18 +1,19 @@
-import { PaintTool } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
 import { initialPrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import PrimPaintSceneMutation, {
 	applyMutationOnDraft,
 } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
+import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
 import { createAction, createReducer } from "@reduxjs/toolkit"
 import produce from "immer"
 import { WritableDraft } from "immer/dist/internal"
 
 const actionPrefix = "twsblog/dompaint"
 
-export const setUncommittedMutation = createAction<PrimPaintSceneMutation | null>(
-	`${actionPrefix}/setUncommittedMutations`
-)
+export const setUncommittedMutation =
+	createAction<PrimPaintSceneMutation | null>(
+		`${actionPrefix}/setUncommittedMutations`
+	)
 export const commitMutation = createAction<PrimPaintSceneMutation>(
 	`${actionPrefix}/commitMutation`
 )
@@ -25,7 +26,7 @@ export const redoUndoneMutation = createAction<void>(
 export const setSceneSize = createAction<{ width: number; height: number }>(
 	`${actionPrefix}/setSceneSize`
 )
-export const setTool = createAction<PaintTool>(`${actionPrefix}/setTool`)
+export const setTool = createAction<PaintToolName>(`${actionPrefix}/setTool`)
 export const setInitialMutations = createAction<PrimPaintSceneMutation[]>(
 	`${actionPrefix}/setInitialMutations`
 )
@@ -46,7 +47,7 @@ const initialPaintState: Readonly<PaintState> = {
 	uiState: {
 		drawColor: [0, 0, 0],
 		fillColor: null,
-		pathToolState: {
+		pathToolOptions: {
 			strokeSize: 5,
 			lineCapStyle: "round",
 			lineJoinStyle: "round",

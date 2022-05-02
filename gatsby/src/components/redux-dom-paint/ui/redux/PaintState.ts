@@ -1,10 +1,8 @@
-import {
-	PaintTool,
-	PaintToolPathState,
-} from "@app/components/redux-dom-paint/defines/PrimPaintElement"
 import { PrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import { Color } from "@app/components/redux-dom-paint/primitive"
+import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
+import { PathPaintToolOptions } from "@app/components/redux-dom-paint/ui/tool/path"
 
 /**
  * Contains all settings, which user may have changed during drawing,
@@ -17,7 +15,7 @@ export type PaintUIState = {
 	drawColor: Color
 	fillColor: Color | null
 
-	pathToolState: PaintToolPathState
+	pathToolOptions: PathPaintToolOptions
 }
 
 type PaintState = {
@@ -58,7 +56,7 @@ type PaintState = {
 	/**
 	 * What tool is used now.
 	 */
-	tool: PaintTool
+	tool: PaintToolName
 
 	/**
 	 * Scene computed from initial and committed mutations.
