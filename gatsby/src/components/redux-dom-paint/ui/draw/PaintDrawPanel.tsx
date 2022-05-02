@@ -95,16 +95,14 @@ export default (props: {
 					></div>
 
 					<div className={styles.colorShowcaseDescription}>Fill color:</div>
-					{fillColor ? (
-						<input
-							className={styles.colorShowcasePicker}
-							type="color"
-							value={encodeColor(fillColor ?? [0, 0, 0, 0])}
-							onChange={e => {
-								// TODO(teawithsand): implement it
-							}}
-						/>
-					) : null}
+					<input
+						className={styles.colorShowcasePicker}
+						type="color"
+						value={encodeColor(fillColor ?? [255, 255, 255, 0])}
+						onChange={e => {
+							// TODO(teawithsand): implement it
+						}}
+					/>
 					<div
 						className={styles.colorShowcaseElement}
 						style={{
