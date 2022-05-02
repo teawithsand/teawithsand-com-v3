@@ -1,4 +1,4 @@
-import { PrimPaintElement } from "@app/components/redux-dom-paint/ui/redux/PrimPaintElement"
+import { PrimPaintElement } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
 
 export type PrimPaintLayerMetadata = {
 	isHidden: boolean

@@ -1,9 +1,9 @@
 import {
 	PaintTool,
 	PaintToolPathState,
-} from "@app/components/redux-dom-paint/ui/redux/PrimPaintElement"
-import { PrimPaintScene } from "@app/components/redux-dom-paint/ui/redux/PrimPaintScene"
-import PrimPaintSceneMutation from "@app/components/redux-dom-paint/ui/redux/PrimPaintSceneMutation"
+} from "@app/components/redux-dom-paint/defines/PrimPaintElement"
+import { PrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
+import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import { Color } from "@app/components/redux-dom-paint/primitive"
 
 /**

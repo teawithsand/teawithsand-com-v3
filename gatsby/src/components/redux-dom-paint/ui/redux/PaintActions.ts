@@ -1,9 +1,9 @@
-import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
-import { PaintTool } from "@app/components/redux-dom-paint/ui/redux/PrimPaintElement"
-import { initialPrimPaintScene } from "@app/components/redux-dom-paint/ui/redux/PrimPaintScene"
+import { PaintTool } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
+import { initialPrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import PrimPaintSceneMutation, {
 	applyMutationOnDraft,
-} from "@app/components/redux-dom-paint/ui/redux/PrimPaintSceneMutation"
+} from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
+import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
 import { createAction, createReducer } from "@reduxjs/toolkit"
 import produce from "immer"
 import { WritableDraft } from "immer/dist/internal"

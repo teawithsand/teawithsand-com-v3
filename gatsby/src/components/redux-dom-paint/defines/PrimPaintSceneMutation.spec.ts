@@ -1,14 +1,6 @@
-import { PrimPaintElement } from "@app/components/redux-dom-paint/ui/redux/PrimPaintElement"
-import {
-	initialPrimPaintScene,
-	PrimPaintLayer,
-	PrimPaintLayerData,
-	PrimPaintScene,
-} from "@app/components/redux-dom-paint/ui/redux/PrimPaintScene"
-import PrimPaintSceneMutation, {
-	applyMutationOnDraft,
-	inverseMutation,
-} from "@app/components/redux-dom-paint/ui/redux/PrimPaintSceneMutation"
+import { PrimPaintElement } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
+import { initialPrimPaintScene, PrimPaintLayer, PrimPaintLayerData, PrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
+import PrimPaintSceneMutation, { applyMutationOnDraft, inverseMutation } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import produce from "immer"
 
 const doMutationTest = (data: {
