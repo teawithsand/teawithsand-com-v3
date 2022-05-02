@@ -1,7 +1,5 @@
 import { homePath } from "@app/components/paths"
-import {
-	encodeColor,
-} from "@app/components/redux-dom-paint/primitive"
+import { encodeColor } from "@app/components/redux-dom-paint/primitive"
 import {
 	redoUndoneMutation,
 	undoCommittedMutation,
@@ -29,6 +27,10 @@ export default (props: {
 	const { showToggleButton, onTogglePanel } = props
 	return (
 		<div className={styles.panel}>
+			<div className={styles.section}>
+				<h1 className={styles.sectionTopTitle}>TWS Paint App</h1>
+			</div>
+
 			{showToggleButton ? (
 				<div className={styles.section}>
 					<button
@@ -77,11 +79,13 @@ export default (props: {
 				<h2 className={styles.sectionTitle}>Global settings</h2>
 				<div className={styles.colorShowcase}>
 					<div className={styles.colorShowcaseDescription}>Stroke color:</div>
-                    <input
+					<input
 						className={styles.colorShowcasePicker}
 						type="color"
 						value={encodeColor(fillColor ?? [0, 0, 0, 0])}
-						onChange={e => {}}
+						onChange={e => {
+							// TODO(teawithsand): implement it
+						}}
 					/>
 					<div
 						className={styles.colorShowcaseElement}
@@ -91,12 +95,16 @@ export default (props: {
 					></div>
 
 					<div className={styles.colorShowcaseDescription}>Fill color:</div>
-					<input
-						className={styles.colorShowcasePicker}
-						type="color"
-						value={encodeColor(fillColor ?? [0, 0, 0, 0])}
-						onChange={e => {}}
-					/>
+					{fillColor ? (
+						<input
+							className={styles.colorShowcasePicker}
+							type="color"
+							value={encodeColor(fillColor ?? [0, 0, 0, 0])}
+							onChange={e => {
+								// TODO(teawithsand): implement it
+							}}
+						/>
+					) : null}
 					<div
 						className={styles.colorShowcaseElement}
 						style={{
@@ -106,6 +114,10 @@ export default (props: {
 						}}
 					></div>
 				</div>
+
+				<button className={styles.sectionMainButton} onClick={() => {}}>
+					Remove fill
+				</button>
 			</div>
 		</div>
 	)

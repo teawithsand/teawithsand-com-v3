@@ -26,6 +26,8 @@
 	&__side-panel {
 		grid-row: 1;
 		grid-column: 2;
+
+		overflow: hidden; // required for animation to work properly
 	}
 
 	&__toggle-panel {
@@ -46,30 +48,50 @@
 
 @mixin move-out-styles($width) {
     $move-out-duration: 500ms;
+
 	.move-out-appear {
+		// width: $width;
+
 		width: $width;
 	}
 
 	.move-out-enter {
-		width: 0;
+		// width: 0;
+
+		width: $width;
+		transform: translateX($width);
 	}
 
 	.move-out-enter-active {
+		// width: $width;
+		// transition: width $move-out-duration;
+
 		width: $width;
-		transition: width $move-out-duration;
+		transition: transform $move-out-duration;
+		transform: translateX(0);
 	}
 
 	.move-out-enter-done {
+		// width: $width;
+
 		width: $width;
+		transform: translateX(0);
 	}
 
 	.move-out-exit {
+		// width: $width;
+
 		width: $width;
+		transform: translateX(0);
+		transition: transform $move-out-duration;
 	}
 
 	.move-out-exit-active {
-		width: 0;
-		transition: width $move-out-duration;
+		// width: 0;
+		// transition: width $move-out-duration;
+
+		width: $width;
+		transform: translateX($width);
 	}
 }
 

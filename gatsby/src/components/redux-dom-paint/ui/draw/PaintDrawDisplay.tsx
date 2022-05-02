@@ -28,6 +28,7 @@ export default () => {
 		breakpoint === "sm" || breakpoint === "xs"
 
 	const [showSidePanel, setShowSidePanel] = useState(true)
+	const [isAnimatingNow, setIsAnimatingNow] = useState(false)
 
 	const elementRef = useRef<HTMLDivElement | null>(null)
 	const bind = usePaintDraw(elementRef, event => {
@@ -51,7 +52,7 @@ export default () => {
 			</div>
 
 			{/* TODO(teawithsand): make this pretty appear on small devices, right now it causes style flash */}
-			{!showSidePanel || !isSuperSmallToShowInnerButton ? (
+			{!isAnimatingNow && (!showSidePanel || !isSuperSmallToShowInnerButton) ? (
 				<button
 					className={styles.drawContainerTogglePanel}
 					onClick={() => setShowSidePanel(!showSidePanel)}
@@ -61,10 +62,14 @@ export default () => {
 			) : null}
 
 			<CSSTransition
-				timeout={300}
+				timeout={500}
 				in={showSidePanel}
 				appear={true}
 				classNames={moveOutClasses}
+				onEnter={() => setIsAnimatingNow(true)}
+				onEntered={() => setIsAnimatingNow(false)}
+				onExit={() => setIsAnimatingNow(true)}
+				onExited={() => setIsAnimatingNow(false)}
 			>
 				{/*
 					This div really simplifies css selectors hierarchy in pantDrawDisplay.module.scss

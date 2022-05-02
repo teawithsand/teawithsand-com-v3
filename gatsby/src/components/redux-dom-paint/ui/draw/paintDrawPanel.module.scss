@@ -66,6 +66,11 @@
 
 	row-gap: map-get(def.$spacers, 1);
 
+	&__top-title {
+		text-align: center;
+		font-size: 2rem;
+	}
+
 	&__title {
 		text-align: center;
 		font-size: 1.5rem;
@@ -101,8 +106,8 @@
 
 .color-showcase {
 	display: grid;
-	grid-template-rows: 1fr;
 	grid-template-columns: max-content min-content minmax(20px, auto);
+	grid-auto-rows: 1fr;
 
 	column-gap: map-get(def.$spacers, 2);
 	row-gap: map-get(def.$spacers, 2);
@@ -111,12 +116,15 @@
 
 	&__description {
 		grid-column: 1;
+		display: block;
+		margin: auto 0;
 	}
 
-    &__picker {
-        grid-column: 2;
-        display: block;
-    }
+	&__picker {
+		grid-column: 2;
+		display: block;
+		margin: auto 0;
+	}
 
 	&__element {
 		grid-column: 3;
