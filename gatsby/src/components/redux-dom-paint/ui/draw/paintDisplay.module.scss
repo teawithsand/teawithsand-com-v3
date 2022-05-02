@@ -1,76 +1,129 @@
 @use "@app/styles/scrollbar.scss" as scrollbar;
-@use "@app/styles/bs.scss" as bs;
 @use "@app/styles/defines.scss" as def;
+@use "@app/styles/bs.scss" as bs;
 
-
-.paint-display {  
-    height: 100vh;
-    width: 100vw;
-    display: grid;
-    grid-template-columns: 100vw;
-    grid-template-rows: minmax(max-content, auto) minmax(min-content, fit-content);
-    overflow: hidden;
-
-    & * {
-        user-select: none;
-        touch-action: none;
-    }
-
-    &__canvas-parent {
-        z-index: 1;
-        grid-column: 1;
-        grid-row: 1;
-
-        @include scrollbar.pretty-scrollbar-dark();
-        overflow: scroll;
-    }
-
-    &__overlay {
-        grid-column: 1;
-        grid-row: 2;
-
-        z-index: 2;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-    }
+.basic-button {
+	@extend .btn;
+	@extend .btn-primary;
 }
 
-.paint-header {
-    text-align: center;
+.parent-container {
+	display: grid;
+	grid-template-columns: auto fit-content;
+	grid-template-rows: auto;
+
+	overflow: hidden;
 }
 
-.paint-panel {
-    display: grid;
-    grid-template-columns: minmax(max-content, auto);
-    grid-auto-rows: minmax(min-content, auto);
-    grid-auto-flow: column;
+.paint-display {
+	grid-row: 1;
+	grid-column: 1;
 
-    padding: map-get(def.$spacers, 2);
-    overflow: auto;
+	overflow: scroll;
 
-    &__button-primary {
-        @extend .btn;
-        @extend .btn-primary;
-    }
+	> * {
+		overflow: hidden; // scroll parent, not child
+	}
 
-    &--button-full {
-        height: max-content;
-    }
+	&--toggle-panel {
+		grid-row: 1;
+		grid-column: 1;
 
-    &__section {
+		margin: map-get(def.$spacers, 2) map-get(def.$spacers, 3);
 
-    }
+		margin-left: auto;
+		margin-bottom: auto;
 
-    &__section--list {
-        width: fit-content;
-        display: flex;
-        flex-direction: column;
-        gap: map-get(def.$spacers, 1);
+		@extend .btn;
+		@extend .btn-primary;
+	}
+}
 
-        justify-items: left;
+@keyframes test-anim {
+	0% {
+		width: 200px;
+	}
+	100% {
+		width: 0px;
+	}
+}
 
-        & > * {
-            flex-grow: 0;
-            flex-shrink: 1;
-        }
-    }
+.tools-panel {
+	box-sizing: border-box;
+	// use this instead of margin
+	// so hiding this panel with width property works properly
+	padding: map-get(def.$spacers, 2);
+
+	grid-row: 1;
+	grid-column: 2;
+
+	overflow-x: hidden;
+    overflow-y: visible;
+
+	$steps: 10;
+	$offset: 120;
+	$limit: 300;
+	$colors: null;
+	@for $i from 0 through $steps {
+		$colors: append(
+			$colors,
+			hsl(calc($offset + (($limit - $offset) / $steps) * $i), 100%, 75%),
+			$separator: comma
+		);
+	}
+
+	background: white;
+	background: linear-gradient(360deg - 45deg, $colors);
+
+    &--toggle-panel {
+		@extend .btn;
+		@extend .btn-primary;
+	}
+}
+
+@mixin move-out-styles($width) {
+    $move-out-duration: 500ms;
+	.move-out-appear {
+		width: $width;
+	}
+
+	.move-out-enter {
+		width: 0;
+	}
+
+	.move-out-enter-active {
+		width: $width;
+		transition: width $move-out-duration;
+	}
+
+	.move-out-enter-done {
+		width: $width;
+	}
+
+	.move-out-exit {
+		width: $width;
+	}
+
+	.move-out-exit-active {
+		width: 0;
+		transition: width $move-out-duration;
+	}
+}
+
+
+
+@include move-out-styles(100vw);
+
+@include bs.media-breakpoint-up(md) { 
+    @include move-out-styles(50vw);
+}
+
+@include bs.media-breakpoint-up(lg) { 
+    @include move-out-styles(20vw);
+}
+
+.move-out-exit-done {
+	width: 0;
+	padding: 0;
+	margin: 0;
 }

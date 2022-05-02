@@ -85,11 +85,8 @@ const computeSceneSnapshotAndScene = (state: WritableDraft<PaintState>) => {
 
 const computeSceneFromSnapshot = (state: WritableDraft<PaintState>) => {
 	const m = state.uncommittedMutation
+	state.scene = state.sceneSnapshot
 	if (m) {
-		state.scene = {
-			...state.sceneSnapshot,
-			layers: [...state.sceneSnapshot.layers],
-		}
 		applyMutationOnDraft(state.scene, m)
 	}
 }
