@@ -1,4 +1,4 @@
-import { Point } from "../primitive"
+import { Point } from "../../redux-dom-paint/primitive"
 
 export type DrawEvent = {
     type: "mouse",

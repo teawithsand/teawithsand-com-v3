@@ -6,7 +6,7 @@ import PaintSceneMutation from "@app/components/dom-paint/element/scene/PaintSce
 import RenderHashable from "@app/components/dom-paint/element/RenderHashable";
 import PaintSceneQuery from "@app/components/dom-paint/element/scene/PaintSceneQuery";
 import PaintElement from "@app/components/dom-paint/element/PaintElement";
-import { Point } from "@app/components/dom-paint/primitive";
+import { Point } from "@app/components/redux-dom-paint/primitive";
 
 function insertAt<T>(array: T[], i: number, ...elements: T[]) {
     array.splice(i, 0, ...elements);

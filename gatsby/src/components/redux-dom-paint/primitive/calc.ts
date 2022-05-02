@@ -1,4 +1,4 @@
-import { Point, Rect } from "@app/components/dom-paint/primitive/primitive"
+import { Point, Rect } from "@app/components/redux-dom-paint/primitive/primitive"
 
 export const euclideanDistance = (...points: Point[]) => {
     if (points.length <= 1)

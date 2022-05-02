@@ -1,5 +1,5 @@
 import ImagePaintElement from "@app/components/dom-paint/element/impls/ImagePaintElement"
-import { NORM_RECT_MIN, rectDimensions, rectNormalize } from "@app/components/dom-paint/primitive/calc"
+import { NORM_RECT_MIN, rectDimensions, rectNormalize } from "@app/components/redux-dom-paint/primitive/calc"
 import SVGPaintDisplayElementProps from "@app/components/dom-paint/render/svgimpls/SVGPaintDisplayElementProps"
 import React from "react"
 

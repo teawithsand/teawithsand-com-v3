@@ -8,13 +8,13 @@ import {
 	encodeColor,
 	Point,
 	Rect,
-} from "@app/components/dom-paint/primitive"
+} from "@app/components/redux-dom-paint/primitive"
 import {
 	pointSegmentDistance,
 	rectContains,
 	rectGrow,
 	rectNormalize,
-} from "@app/components/dom-paint/primitive/calc"
+} from "@app/components/redux-dom-paint/primitive/calc"
 import { generateUUID } from "@app/util/lang/uuid"
 import React from "react"
 

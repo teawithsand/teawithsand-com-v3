@@ -1,4 +1,4 @@
-import { Point } from "@app/components/dom-paint/primitive"
+import { Point } from "@app/components/redux-dom-paint/primitive"
 import DrawEvent from "@app/components/dom-paint/ui/DrawEvent"
 import { RefObject, useCallback, useEffect, useRef } from "react"
 

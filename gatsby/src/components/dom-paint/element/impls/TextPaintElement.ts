@@ -1,7 +1,7 @@
 import { AABBPaintElement, PointCollisionPaintElement } from "@app/components/dom-paint/element/PaintElement";
 import PaintElementData from "@app/components/dom-paint/element/PaintElementData";
-import { Color, encodeColor, Point, Rect } from "@app/components/dom-paint/primitive";
-import { rectContains } from "@app/components/dom-paint/primitive/calc";
+import { Color, encodeColor, Point, Rect } from "@app/components/redux-dom-paint/primitive";
+import { rectContains } from "@app/components/redux-dom-paint/primitive/calc";
 import { generateUUID } from "@app/util/lang/uuid";
 
 export type TextPaintElementData = {

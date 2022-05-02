@@ -1,4 +1,4 @@
-import { Point } from "../../primitive"
+import { Point } from "../../../redux-dom-paint/primitive"
 import PaintSceneElementLocator from "./PaintSceneElementLocator"
 
 

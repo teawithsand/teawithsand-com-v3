@@ -1,6 +1,6 @@
 import PaintElementData from "@app/components/dom-paint/element/PaintElementData"
 import RenderHashable from "@app/components/dom-paint/element/RenderHashable"
-import { Point, Rect } from "@app/components/dom-paint/primitive"
+import { Point, Rect } from "@app/components/redux-dom-paint/primitive"
 
 /**
  * Element, which can be painted.

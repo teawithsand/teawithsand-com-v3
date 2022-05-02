@@ -1,4 +1,4 @@
-import { Point } from "@app/components/dom-paint/primitive"
+import { Point } from "@app/components/redux-dom-paint/primitive"
 import ActivateToolData from "@app/components/dom-paint/ui/tool/ActivateToolData"
 import { ToolActivationResult } from "@app/components/dom-paint/ui/tool/ActiveTool"
 import Tool from "@app/components/dom-paint/ui/tool/Tool"

@@ -4,7 +4,7 @@ import {
 } from "@app/components/redux-dom-paint/ui/redux/PrimPaintElement"
 import { PrimPaintScene } from "@app/components/redux-dom-paint/ui/redux/PrimPaintScene"
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/ui/redux/PrimPaintSceneMutation"
-import { Color } from "@app/components/dom-paint/primitive"
+import { Color } from "@app/components/redux-dom-paint/primitive"
 
 /**
  * Contains all settings, which user may have changed during drawing,
