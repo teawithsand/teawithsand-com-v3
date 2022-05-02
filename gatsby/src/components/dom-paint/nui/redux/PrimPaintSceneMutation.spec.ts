@@ -11,16 +11,6 @@ import PrimPaintSceneMutation, {
 } from "@app/components/dom-paint/nui/redux/PrimPaintSceneMutation"
 import produce from "immer"
 
-const makeMutationTest =
-	(data: {
-		initialScene?: PrimPaintScene | undefined
-		targetScene: PrimPaintScene
-		mutations: PrimPaintSceneMutation[]
-		disableNames?: boolean
-	}) =>
-	() =>
-		doMutationTest(data)
-
 const doMutationTest = (data: {
 	initialScene?: PrimPaintScene | undefined
 	targetScene: PrimPaintScene
@@ -54,14 +44,6 @@ const doMutationTest = (data: {
 
 	expect(targetScene).toEqual(initialScene)
 }
-
-const makeInverseTest =
-	(data: {
-		initialScene?: PrimPaintScene | undefined
-		mutations: PrimPaintSceneMutation[]
-	}) =>
-	() =>
-		doInverseTest(data)
 
 const doInverseTest = (data: {
 	initialScene?: PrimPaintScene | undefined
