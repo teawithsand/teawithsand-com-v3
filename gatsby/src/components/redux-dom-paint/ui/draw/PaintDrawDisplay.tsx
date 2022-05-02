@@ -1,17 +1,11 @@
-import PaintSceneMutation from "@app/components/dom-paint/element/scene/PaintSceneMutation"
-import {
-	paintSceneSelector,
-	PaintState,
-	redoUndoneMutation,
-	setTool,
-	setUncommittedElements,
-	undoCommittedMutation,
-} from "@app/components/dom-paint/nui/redux/redux"
+/*
 import { Point } from "@app/components/dom-paint/primitive"
 import SVGPaintDisplayScene from "@app/components/dom-paint/render/SVGPaintDisplayScene"
 import usePaintDraw from "@app/components/dom-paint/ui/draw/usePaintDraw"
 import DrawEvent from "@app/components/dom-paint/ui/DrawEvent"
 import { homePath } from "@app/components/paths"
+import { paintSceneSelector } from "@app/components/redux-dom-paint/nui/redux/PaintSelectors"
+import PaintState from "@app/components/redux-dom-paint/nui/redux/PaintState"
 
 import classnames from "@app/util/lang/classnames"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
@@ -151,3 +145,4 @@ export default (props: {}) => {
 		</div>
 	)
 }
+*/

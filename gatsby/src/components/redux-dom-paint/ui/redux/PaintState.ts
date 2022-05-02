@@ -1,9 +1,10 @@
-import PaintSceneMutation from "@app/components/dom-paint/element/scene/PaintSceneMutation"
-import { PaintTool, PaintToolPathState } from "@app/components/dom-paint/nui/redux/PrimPaintElement"
-import { PrimPaintScene } from "@app/components/dom-paint/nui/redux/PrimPaintScene"
-import PrimPaintSceneMutation from "@app/components/dom-paint/nui/redux/PrimPaintSceneMutation"
+import {
+	PaintTool,
+	PaintToolPathState,
+} from "@app/components/redux-dom-paint/ui/redux/PrimPaintElement"
+import { PrimPaintScene } from "@app/components/redux-dom-paint/ui/redux/PrimPaintScene"
+import PrimPaintSceneMutation from "@app/components/redux-dom-paint/ui/redux/PrimPaintSceneMutation"
 import { Color } from "@app/components/dom-paint/primitive"
-
 
 /**
  * Contains all settings, which user may have changed during drawing,
@@ -32,7 +33,9 @@ type PaintState = {
 
 	/**
 	 * Mutations, which were undone using ctrl + z
-	 * These reset once some mutations are committed
+	 * These are removed once some mutations are committed
+	 *
+	 * They are already inverted mutations using pre-commit mutation scene.
 	 */
 	redoStack: PrimPaintSceneMutation[]
 
@@ -40,7 +43,7 @@ type PaintState = {
 	 * Elements, which are not committed yet, since tool is running
 	 * they update often and are not subject of undo operation.
 	 */
-	uncommittedMutations: PaintSceneMutation[]
+	uncommittedMutation: PrimPaintSceneMutation | null
 	activeLayerIndex: number
 
 	sceneWidth: number
@@ -57,10 +60,15 @@ type PaintState = {
 	 */
 	tool: PaintTool
 
-    /**
-     * Scene computed from initial and committed mutations.
-     */
-    scene: PrimPaintScene,
+	/**
+	 * Scene computed from initial and committed mutations.
+	 */
+	scene: PrimPaintScene
+
+	/**
+	 * Scene without uncommittedMutation applied.
+	 */
+	sceneSnapshot: PrimPaintScene
 }
 
 export default PaintState

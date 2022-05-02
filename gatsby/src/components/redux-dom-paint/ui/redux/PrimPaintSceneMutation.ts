@@ -1,10 +1,10 @@
-import { PrimPaintElement } from "@app/components/dom-paint/nui/redux/PrimPaintElement"
+import { PrimPaintElement } from "@app/components/redux-dom-paint/ui/redux/PrimPaintElement"
 import {
 	PrimPaintLayer,
 	PrimPaintLayerData,
 	PrimPaintLayerMetadata,
 	PrimPaintScene,
-} from "@app/components/dom-paint/nui/redux/PrimPaintScene"
+} from "@app/components/redux-dom-paint/ui/redux/PrimPaintScene"
 import { generateUUID } from "@app/util/lang/uuid"
 import produce from "immer"
 import { WritableDraft } from "immer/dist/internal"
