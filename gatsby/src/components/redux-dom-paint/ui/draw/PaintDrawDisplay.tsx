@@ -7,7 +7,7 @@ import {
 	usePaintStateSelector,
 	useSceneInfo,
 	useSceneSelector,
-} from "@app/components/redux-dom-paint/ui/redux/PaintSelectors"
+} from "@app/components/redux-dom-paint/ui/redux/paintSelectors"
 import { usePathTool } from "@app/components/redux-dom-paint/ui/tool/path"
 import classnames from "@app/util/lang/classnames"
 import { useBreakpoint } from "@app/util/react/hook/dimensions/useBreakpoint"

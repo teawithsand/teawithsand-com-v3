@@ -10,7 +10,7 @@ import {
 	usePaintStateSelector,
 	usePathFillData,
 	usePathStrokeData,
-} from "@app/components/redux-dom-paint/ui/redux/PaintSelectors"
+} from "@app/components/redux-dom-paint/ui/redux/paintSelectors"
 import { generateUUID } from "@app/util/lang/uuid"
 import { useEffect, useRef } from "react"
 import { useDispatch } from "react-redux"
