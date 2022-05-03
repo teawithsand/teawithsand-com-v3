@@ -1,6 +1,7 @@
 @use "@app/styles/scrollbar.scss" as scrollbar;
 @use "@app/styles/defines.scss" as def;
 @use "@app/styles/bs.scss" as bs;
+@use "@app/styles/background.scss" as bg;
 
 .panel {
 	@include scrollbar.pretty-scrollbar(transparent, black);
@@ -134,23 +135,7 @@
 		height: 100%;
 		border-radius: 10000px; // a lot px
 
-		// For older browsers
-		// btw couldn't postcss do that for me?
-		background-image: linear-gradient(45deg, #808080 25%, transparent 25%),
-			linear-gradient(-45deg, #808080 25%, transparent 25%),
-			linear-gradient(45deg, transparent 75%, #808080 75%),
-			linear-gradient(-45deg, transparent 75%, #808080 75%);
-		background-size: 20px 20px;
-		background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-
-		$opaque-tile-one: #808080;
-		$opaque-tile-two: transparent;
-
-		background: repeating-conic-gradient(
-				$opaque-tile-one 0% 25%,
-				$opaque-tile-two 0% 50%
-			)
-			50% / 20px 20px;
+		@include bg.opaque-tile-background();
 
 		border: 2px solid black;
 
