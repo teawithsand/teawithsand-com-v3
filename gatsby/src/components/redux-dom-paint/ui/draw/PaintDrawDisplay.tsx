@@ -2,7 +2,7 @@ import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneR
 import PaintDrawNoDoomHooks from "@app/components/redux-dom-paint/ui/draw/PaintDrawNoDOMHooks"
 import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
-import { setRenderSize } from "@app/components/redux-dom-paint/ui/redux/PaintActions"
+import { setRenderSize } from "@app/components/redux-dom-paint/ui/redux/paintActions"
 import {
 	usePaintStateSelector,
 	useSceneInfo,

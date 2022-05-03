@@ -4,7 +4,7 @@ import {
 	redoUndoneMutation,
 	setZoomFactor,
 	undoCommittedMutation,
-} from "@app/components/redux-dom-paint/ui/redux/PaintActions"
+} from "@app/components/redux-dom-paint/ui/redux/paintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/ui/redux/paintSelectors"
 import { Link } from "gatsby"
 import React from "react"

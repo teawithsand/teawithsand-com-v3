@@ -5,7 +5,7 @@ import { euclideanDistance } from "@app/components/redux-dom-paint/primitive/cal
 import {
 	commitMutation,
 	setUncommittedMutation,
-} from "@app/components/redux-dom-paint/ui/redux/PaintActions"
+} from "@app/components/redux-dom-paint/ui/redux/paintActions"
 import {
 	usePaintStateSelector,
 	usePathFillData,
