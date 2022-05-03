@@ -2,13 +2,15 @@ import * as React from "react"
 import { Helmet } from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
 
-type MetaProps = {
-    content: string,
-    name: string
-} | {
-    property: string,
-    content: string,
-}
+type MetaProps =
+	| {
+			content: string
+			name: string
+	  }
+	| {
+			property: string
+			content: string
+	  }
 
 const Seo = (props: {
 	description?: string

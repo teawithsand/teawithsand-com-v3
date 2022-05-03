@@ -3,11 +3,13 @@ import SVGPaintDisplayElementProps from "@app/components/dom-paint/render/svgimp
 import React from "react"
 
 export default (props: SVGPaintDisplayElementProps<PathPaintElement>) => {
-    const { paintElement } = props
+	const { paintElement } = props
 
-    return <path
-        d={paintElement.stringPath}
-        style={paintElement.svgStyle}
-        onClick={props.onClick}
-    />
+	return (
+		<path
+			d={paintElement.stringPath}
+			style={paintElement.svgStyle}
+			onClick={props.onClick}
+		/>
+	)
 }

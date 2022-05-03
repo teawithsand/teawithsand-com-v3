@@ -30,7 +30,7 @@ export type PathPaintElementEntry =
 	| {
 			type: "Z"
 	  }
-      
+
 // TODO(teawithsand): more entries there, preferably some more complex values like circles or rectangles here
 
 export type PathPaintElementData = {

@@ -34,7 +34,6 @@ export const useFullscreen = ({
 
 	const enter = () => {
 		isFullscreenRequestedRef.current = true
-
 		;(document.documentElement.requestFullscreen() || Promise.resolve())
 			.then(() => {
 				setIsFullscreen(true)

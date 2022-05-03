@@ -15,7 +15,6 @@ const BlogPostTemplate = ({ data, location }) => {
 				title={post.frontmatter.title}
 				description={post.frontmatter.description || post.excerpt}
 			/>
-			
 		</Layout>
 	)
 }

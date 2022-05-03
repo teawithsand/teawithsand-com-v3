@@ -6,7 +6,11 @@ import {
 	commitMutation,
 	setUncommittedMutation,
 } from "@app/components/redux-dom-paint/ui/redux/PaintActions"
-import { usePaintStateSelector, usePathFillData, usePathStrokeData } from "@app/components/redux-dom-paint/ui/redux/PaintSelectors"
+import {
+	usePaintStateSelector,
+	usePathFillData,
+	usePathStrokeData,
+} from "@app/components/redux-dom-paint/ui/redux/PaintSelectors"
 import { generateUUID } from "@app/util/lang/uuid"
 import { useEffect, useRef } from "react"
 import { useDispatch } from "react-redux"
@@ -30,7 +34,7 @@ const usePathTool = () => {
 		elements: [
 			{
 				type: "path",
-                id: generateUUID(),
+				id: generateUUID(),
 				data: {
 					entries: pointsRef.current.map((v, i) => ({
 						type: i === 0 ? "M" : "L",
@@ -57,7 +61,7 @@ const usePathTool = () => {
 	useEffect(() => {
 		return () => {
 			// make sure no uncommitted mutation on unmount of tool owner
-			dispatch(setUncommittedMutation(null)) 
+			dispatch(setUncommittedMutation(null))
 		}
 	}, [])
 

@@ -146,10 +146,10 @@ exports.onCreateWebpackConfig = ({ actions, getConfig, rules }) => {
 			},
 		}),
 	]
-	
+
 	const newUrlLoaderRule = {
 		...imgsRule,
-		test: new RegExp(imgsRule.test.toString().replace('svg|', '').slice(1, -1))
+		test: new RegExp(imgsRule.test.toString().replace("svg|", "").slice(1, -1)),
 	}
 
 	config.module.rules = [

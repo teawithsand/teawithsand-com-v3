@@ -20,10 +20,12 @@ export default GalleryDisplay
 const dissolveClasses = findTransitionClasses("dissolve", styles)
 export const DissolveGalleryDisplay: GalleryDisplay = ({ item }) => {
 	return (
-		<TransitionGroup className={classnames(
-            styles.elementsContainer,
-            galleryStyles.mainElementDisplay,
-        )}>
+		<TransitionGroup
+			className={classnames(
+				styles.elementsContainer,
+				galleryStyles.mainElementDisplay
+			)}
+		>
 			<CSSTransition timeout={300} classNames={dissolveClasses} key={item.key}>
 				<GalleryItemDisplay item={item} />
 			</CSSTransition>

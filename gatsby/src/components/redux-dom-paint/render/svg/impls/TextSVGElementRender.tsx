@@ -11,7 +11,7 @@ export default (props: SVGElementRenderProps<"text">) => {
 	const style = useMemo(() => {
 		const res: React.CSSProperties = {}
 		res.color = encodeColor(element.data.color)
-		res.font =  `${element.data.fontSize}px ${element.data.fontName}`
+		res.font = `${element.data.fontSize}px ${element.data.fontName}`
 		return res
 	}, [element.data])
 

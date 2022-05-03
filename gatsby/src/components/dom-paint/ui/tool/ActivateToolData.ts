@@ -6,47 +6,47 @@ import Tool from "@app/components/dom-paint/ui/tool/Tool"
 import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 
 export interface ActiveToolSceneInteraction {
-    setUncommitedMutations: (mutations: PaintSceneMutation[]) => void
+	setUncommitedMutations: (mutations: PaintSceneMutation[]) => void
 
-    /**
-     * This action implicitly:
-     * 1. Unsets uncommited mutations
-     * 2. Clears ephemeral stack.
-     */
-    commitMutations: (mutations: PaintSceneMutation[]) => void
+	/**
+	 * This action implicitly:
+	 * 1. Unsets uncommited mutations
+	 * 2. Clears ephemeral stack.
+	 */
+	commitMutations: (mutations: PaintSceneMutation[]) => void
 
-    /**
-     * Pops single mutation from mutations stack to ephemeral stack.
-     * In other words, does ctrl+z;
-     * 
-     * Returns true if stack was modified.
-     */
-    popMutationOntoEphemeralStack(): boolean
+	/**
+	 * Pops single mutation from mutations stack to ephemeral stack.
+	 * In other words, does ctrl+z;
+	 *
+	 * Returns true if stack was modified.
+	 */
+	popMutationOntoEphemeralStack(): boolean
 
-    /***
-     * Pops single mutation from ephemeral stack onto mutations stack.
-     * In other words does ctrl+y;
-     * 
-     * Returns true if stack was modified.
-     */
-    popFromEphemeralStack(): boolean
+	/***
+	 * Pops single mutation from ephemeral stack onto mutations stack.
+	 * In other words does ctrl+y;
+	 *
+	 * Returns true if stack was modified.
+	 */
+	popFromEphemeralStack(): boolean
 }
 
 export interface ActiveToolGlobalUIInteraction {
-    mutateUIState(state: GlobalUIStateMutation): void
+	mutateUIState(state: GlobalUIStateMutation): void
 }
 
 export type ActivateToolData<P> = {
-    readonly globalUIState: StickySubscribable<GlobalUIState>
-    readonly scene: StickySubscribable<PaintScene>
+	readonly globalUIState: StickySubscribable<GlobalUIState>
+	readonly scene: StickySubscribable<PaintScene>
 
-    readonly sceneInteraction: ActiveToolSceneInteraction
-    readonly globalUIInteraction: ActiveToolGlobalUIInteraction
+	readonly sceneInteraction: ActiveToolSceneInteraction
+	readonly globalUIInteraction: ActiveToolGlobalUIInteraction
 
-    readonly sceneReference: { readonly current: HTMLElement | null }
+	readonly sceneReference: { readonly current: HTMLElement | null }
 
-    setTool(tool: Tool<any>): void
-    setDisplayPropsCallback: (props: P) => void
+	setTool(tool: Tool<any>): void
+	setDisplayPropsCallback: (props: P) => void
 }
 
 export default ActivateToolData

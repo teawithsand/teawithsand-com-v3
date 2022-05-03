@@ -1,9 +1,6 @@
 import { ImagePaintElementData } from "@app/components/dom-paint/element/impls/ImagePaintElement"
-import {
-	PathPaintElementData,
-} from "@app/components/dom-paint/element/impls/PathPaintElement"
+import { PathPaintElementData } from "@app/components/dom-paint/element/impls/PathPaintElement"
 import { TextPaintElementData } from "@app/components/dom-paint/element/impls/TextPaintElement"
-
 
 export type PrimPaintElement =
 	| {

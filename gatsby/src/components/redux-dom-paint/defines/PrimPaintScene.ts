@@ -6,7 +6,7 @@ export type PrimPaintLayerMetadata = {
 }
 
 export type PrimPaintLayerData = {
-    elements: PrimPaintElement[]
+	elements: PrimPaintElement[]
 	metadata: PrimPaintLayerMetadata
 }
 

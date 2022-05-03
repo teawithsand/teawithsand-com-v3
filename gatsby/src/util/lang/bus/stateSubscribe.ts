@@ -3,7 +3,6 @@ export type DeltaSubscriber<S> = (previousState: S, newState: S) => void
 export type Extractor<S, E> = (state: S) => E
 export type SubscriptionCanceler = () => void
 
-
 // note: this should be replaced with rxjs
 export interface StickySubscribable<T> extends Subscribable<T> {
 	readonly lastEvent: T

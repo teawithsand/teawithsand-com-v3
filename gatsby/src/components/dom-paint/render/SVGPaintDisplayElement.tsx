@@ -9,18 +9,20 @@ import TextSVGPaintDisplayElement from "@app/components/dom-paint/render/svgimpl
 import React from "react"
 
 export default (props: {
-    paintElement: PaintElement,
-    layerMetadata: PaintLayerMetadata,
+	paintElement: PaintElement
+	layerMetadata: PaintLayerMetadata
 }) => {
-    const { paintElement } = props
+	const { paintElement } = props
 
-    if (paintElement instanceof PathPaintElement) {
-        return <PathSVGPaintDisplayElement {...props} paintElement={paintElement} />
-    } else if (paintElement instanceof ImagePaintElement) {
-        return <ImageSVGPaintDisplayElement {...props} paintElement={paintElement} />
-    } else if(paintElement instanceof TextPaintElement) {
-        return <TextSVGPaintDisplayElement {...props} paintElement={paintElement} />
-    } else {
-        throw new Error(`unsupported element ${paintElement}`)
-    }
+	if (paintElement instanceof PathPaintElement) {
+		return <PathSVGPaintDisplayElement {...props} paintElement={paintElement} />
+	} else if (paintElement instanceof ImagePaintElement) {
+		return (
+			<ImageSVGPaintDisplayElement {...props} paintElement={paintElement} />
+		)
+	} else if (paintElement instanceof TextPaintElement) {
+		return <TextSVGPaintDisplayElement {...props} paintElement={paintElement} />
+	} else {
+		throw new Error(`unsupported element ${paintElement}`)
+	}
 }

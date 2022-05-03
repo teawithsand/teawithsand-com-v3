@@ -8,9 +8,9 @@ import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
  * 2. Interacting with scene
  */
 export default interface UISceneManager extends ActiveToolSceneInteraction {
-    /**
-     * Current scene.
-     * Users can subscribe to its changes.
-     */
-    readonly scene: StickySubscribable<PaintScene>
+	/**
+	 * Current scene.
+	 * Users can subscribe to its changes.
+	 */
+	readonly scene: StickySubscribable<PaintScene>
 }
