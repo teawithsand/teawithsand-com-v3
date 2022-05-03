@@ -1,6 +1,8 @@
 import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
+import PaintDrawNoDoomHooks from "@app/components/redux-dom-paint/ui/draw/PaintDrawNoDOMHooks"
 import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
+import { setRenderSize } from "@app/components/redux-dom-paint/ui/redux/PaintActions"
 import {
 	usePaintStateSelector,
 	useSceneInfo,
@@ -11,7 +13,8 @@ import classnames from "@app/util/lang/classnames"
 import { useBreakpoint } from "@app/util/react/hook/dimensions/useBreakpoint"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import { findTransitionClasses } from "@app/util/react/transitionGroupClass"
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import { useDispatch } from "react-redux"
 import { CSSTransition } from "react-transition-group"
 
 import * as styles from "./paintDrawDisplay.module.scss"
@@ -19,9 +22,8 @@ import * as styles from "./paintDrawDisplay.module.scss"
 const moveOutClasses = findTransitionClasses("moveOut", styles)
 
 export default () => {
-	const { height, width } = getUsefulDimensions()
-
-	const { sceneWidth, sceneHeight, viewBox } = useSceneInfo()
+	const dispatch = useDispatch()
+	const { renderWidth, renderHeight, viewBox } = useSceneInfo()
 
 	const breakpoint = useBreakpoint()
 	const isSuperSmallToShowInnerButton =
@@ -40,14 +42,31 @@ export default () => {
 
 	const scene = useSceneSelector()
 
+	const { height: windowHeight, width: windowWidth } = getUsefulDimensions()
+
+	// It can't be stored in PaintDrawNoDOMHooks, since it does not work with hot reload
+	// for some reason
+	// it would reload redux
+	// but wont call callback in useEffect again.
+	useEffect(() => {
+		dispatch(
+			setRenderSize({
+				width: windowWidth,
+				height: windowHeight,
+			})
+		)
+	}, [windowHeight, windowWidth])
+
 	return (
 		<div
 			className={classnames(styles.drawContainer)}
 			style={{
-				width: width,
-				height: height,
+				width: "100vw",
+				height: "100vh",
 			}}
 		>
+			{/* TODO(teawithsand): for sake of good code style, move this to the top of return of render function */}
+			<PaintDrawNoDoomHooks />
 			<div
 				className={styles.drawContainerMainDisplay}
 				ref={elementRef}
@@ -55,8 +74,8 @@ export default () => {
 			>
 				<SVGSceneRender
 					scene={scene}
-					height={sceneHeight}
-					width={sceneWidth}
+					height={renderHeight}
+					width={renderWidth}
 					viewBox={viewBox}
 				/>
 			</div>

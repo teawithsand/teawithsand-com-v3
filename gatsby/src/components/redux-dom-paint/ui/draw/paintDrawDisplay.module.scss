@@ -5,11 +5,11 @@
 
 .draw-container {
 	display: grid;
-	grid-template-columns: auto fit-content;
+	grid-template-columns: minmax(max-content, auto) fit-content;
 	grid-template-rows: minmax(auto, 100vh);
 
-	max-width: 100vw;
-	max-height: 100vh;
+	width: 100vw;
+	height: 100vh;
 
 	overflow: hidden;
 
@@ -20,6 +20,9 @@
 
 		grid-row: 1;
 		grid-column: 1;
+
+		width: 100%;
+		height: 100%;
 	
 		// hide overflow
 		// even though scrolling will be still performed
@@ -37,7 +40,6 @@
 		> * {
 			background-color: white;
 			border: 2px dashed black;
-			overflow: hidden; // scroll parent, not child
 		}
 	}	
 

@@ -8,6 +8,9 @@ export default (
 	elementRef: RefObject<null | HTMLElement>,
 	onCanvasEvent: (data: DrawEvent & { type: "mouse" | "scroll" }) => void
 ) => {
+	// TODO(teawithsand): to all events sent here apply redux correction, which takes into consideration
+	//  factors like zoom and x/y offsets
+
 	const isClickedRef = useRef(false)
 	const lastInCanvasPointRef = useRef<{
 		corrected: Point

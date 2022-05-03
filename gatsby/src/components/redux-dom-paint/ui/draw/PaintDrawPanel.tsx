@@ -2,6 +2,7 @@ import { homePath } from "@app/components/paths"
 import { encodeColor } from "@app/components/redux-dom-paint/primitive"
 import {
 	redoUndoneMutation,
+	setZoomFactor,
 	undoCommittedMutation,
 } from "@app/components/redux-dom-paint/ui/redux/PaintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/ui/redux/PaintSelectors"
@@ -15,7 +16,6 @@ export default (props: {
 	showToggleButton?: boolean
 	onTogglePanel?: () => void
 }) => {
-	const tool = usePaintStateSelector(s => s.tool)
 	const undoCount = usePaintStateSelector(s => s.committedMutations.length)
 	const redoCount = usePaintStateSelector(s => s.redoStack.length)
 
@@ -25,6 +25,8 @@ export default (props: {
 	const dispatch = useDispatch()
 
 	// TODO(teawithsand): add ctrl+z and ctrl+y hooks here
+
+	const zf = usePaintStateSelector(s => s.sceneParameters.zoomFactor)
 
 	const { showToggleButton, onTogglePanel } = props
 	return (
@@ -72,6 +74,22 @@ export default (props: {
 					<li>You can undo {undoCount} operations</li>
 					<li>You can redo {redoCount} operations</li>
 				</ul>
+				<div className={styles.sectionButtonBar}>
+					<button
+						onClick={() => {
+							dispatch(setZoomFactor(zf + 0.1))
+						}}
+					>
+						Zoom In
+					</button>
+					<button
+						onClick={() => {
+							dispatch(setZoomFactor(zf - 0.1))
+						}}
+					>
+						Zoom Out
+					</button>
+				</div>
 			</div>
 
 			<div className={styles.section}>
