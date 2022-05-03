@@ -15,10 +15,11 @@ import { configureStore } from "@reduxjs/toolkit"
 // TODO(teawithsand): type hinting for this redux store
 export const createPaintStore = () =>
 	configureStore({
-		// middleware: getDefaultMiddleware =>
-		// 	getDefaultMiddleware({
-		// 		immutableCheck: false,
-		// 		serializableCheck: false,
-		// 	}),
+		middleware: getDefaultMiddleware =>
+			getDefaultMiddleware({
+				immutableCheck: false,
+				serializableCheck: false,
+			}),
 		reducer: createPaintReducer(),
+		devTools: false,
 	})
