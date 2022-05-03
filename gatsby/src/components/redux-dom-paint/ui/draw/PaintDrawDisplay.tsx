@@ -3,6 +3,7 @@ import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPan
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
 import {
 	usePaintStateSelector,
+	useSceneInfo,
 	useSceneSelector,
 } from "@app/components/redux-dom-paint/ui/redux/PaintSelectors"
 import { usePathTool } from "@app/components/redux-dom-paint/ui/tool/path"
@@ -20,10 +21,7 @@ const moveOutClasses = findTransitionClasses("moveOut", styles)
 export default () => {
 	const { height, width } = getUsefulDimensions()
 
-	const [sceneWidth, sceneHeight] = usePaintStateSelector(s => [
-		s.sceneWidth,
-		s.sceneHeight,
-	])
+	const { sceneWidth, sceneHeight, viewBox } = useSceneInfo()
 
 	const breakpoint = useBreakpoint()
 	const isSuperSmallToShowInnerButton =
@@ -55,7 +53,12 @@ export default () => {
 				ref={elementRef}
 				{...bind}
 			>
-				<SVGSceneRender scene={scene} height={sceneHeight} width={sceneWidth} />
+				<SVGSceneRender
+					scene={scene}
+					height={sceneHeight}
+					width={sceneWidth}
+					viewBox={viewBox}
+				/>
 			</div>
 
 			{/* TODO(teawithsand): make this pretty appear on small devices, right now it causes style flash */}

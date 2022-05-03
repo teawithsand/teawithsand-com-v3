@@ -1,6 +1,6 @@
 import { PrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
-import { Color } from "@app/components/redux-dom-paint/primitive"
+import { Color, Rect } from "@app/components/redux-dom-paint/primitive"
 import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
 import { PathPaintToolOptions } from "@app/components/redux-dom-paint/ui/tool/path"
 
@@ -47,6 +47,8 @@ type PaintState = {
 	sceneWidth: number
 	sceneHeight: number
 
+	screenViewBox: Rect
+
 	// TODO(teawithsand): add viewbox here(AKA scrolling)
 	//  Note: scene position(AKA scrolling) is not managed by redux
 	//  instead react reference captures it and processes it on demand
@@ -57,16 +59,6 @@ type PaintState = {
 	 * What tool is used now.
 	 */
 	tool: PaintToolName
-
-	/**
-	 * Scene computed from initial and committed mutations.
-	 */
-	scene: PrimPaintScene
-
-	/**
-	 * Scene without uncommittedMutation applied.
-	 */
-	sceneSnapshot: PrimPaintScene
 }
 
 export default PaintState

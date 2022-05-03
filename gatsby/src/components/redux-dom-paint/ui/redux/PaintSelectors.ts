@@ -18,6 +18,13 @@ import { useSelector } from "react-redux"
 export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) =>
 	useSelector<PaintState, T>(selector)
 
+export const useSceneInfo = () =>
+	usePaintStateSelector(s => ({
+		sceneWidth: s.sceneWidth,
+		sceneHeight: s.sceneHeight,
+		viewBox: s.screenViewBox,
+	}))
+
 /**
  * Selector, which does some magic to get scene from paint state.
  * It's computationally expensive, so it's preferably used only once.
@@ -25,9 +32,7 @@ export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) =>
 export const useSceneSelector = (): PrimPaintScene => {
 	const initialMutations = usePaintStateSelector(s => s.initialMutations)
 	const committedMutations = usePaintStateSelector(s => s.committedMutations)
-	const uncommittedMutation = usePaintStateSelector(
-		s => s.uncommittedMutation
-	)
+	const uncommittedMutation = usePaintStateSelector(s => s.uncommittedMutation)
 
 	const initialMutationsScene = useMemo(() => {
 		const scene = { ...initialPrimPaintScene }
