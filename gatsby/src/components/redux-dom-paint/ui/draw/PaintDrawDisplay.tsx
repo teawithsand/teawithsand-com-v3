@@ -1,15 +1,16 @@
-import { PrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
 import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
-import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
+import {
+	usePaintStateSelector,
+	useSceneSelector,
+} from "@app/components/redux-dom-paint/ui/redux/PaintSelectors"
 import { usePathTool } from "@app/components/redux-dom-paint/ui/tool/path"
 import classnames from "@app/util/lang/classnames"
 import { useBreakpoint } from "@app/util/react/hook/dimensions/useBreakpoint"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import { findTransitionClasses } from "@app/util/react/transitionGroupClass"
-import React, { useEffect, useRef, useState } from "react"
-import { useSelector } from "react-redux"
+import React, { useRef, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 
 import * as styles from "./paintDrawDisplay.module.scss"
@@ -19,10 +20,10 @@ const moveOutClasses = findTransitionClasses("moveOut", styles)
 export default () => {
 	const { height, width } = getUsefulDimensions()
 
-	const scene = useSelector<PaintState, PrimPaintScene>(s => s.scene)
-	const [sceneWidth, sceneHeight] = useSelector<PaintState, [number, number]>(
-		s => [s.sceneWidth, s.sceneHeight]
-	)
+	const [sceneWidth, sceneHeight] = usePaintStateSelector(s => [
+		s.sceneWidth,
+		s.sceneHeight,
+	])
 
 	const breakpoint = useBreakpoint()
 	const isSuperSmallToShowInnerButton =
@@ -38,6 +39,8 @@ export default () => {
 	const bind = usePaintDraw(elementRef, event => {
 		pathTool.onEvent(event)
 	})
+
+	const scene = useSceneSelector()
 
 	return (
 		<div

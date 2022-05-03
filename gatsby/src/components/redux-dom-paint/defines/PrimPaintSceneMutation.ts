@@ -1,5 +1,10 @@
 import { PrimPaintElement } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
-import { PrimPaintLayer, PrimPaintLayerData, PrimPaintLayerMetadata, PrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
+import {
+	PrimPaintLayer,
+	PrimPaintLayerData,
+	PrimPaintLayerMetadata,
+	PrimPaintScene,
+} from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import { generateUUID } from "@app/util/lang/uuid"
 import produce from "immer"
 import { WritableDraft } from "immer/dist/internal"
@@ -84,7 +89,7 @@ export class PaintSceneMutationApplyError extends Error {
 }
 
 const ensureSceneHasLayer = (
-	s: WritableDraft<PrimPaintScene>,
+	s: WritableDraft<PrimPaintScene> | PrimPaintScene,
 	i: number
 ): WritableDraft<PrimPaintLayer> => {
 	// TODO(teawithsand): make sure that this function is not needed, since it's not compatible with reversing mutations
@@ -95,8 +100,8 @@ const ensureSceneHasLayer = (
 }
 
 export const applyMutationOnDraft = (
-	scene: WritableDraft<PrimPaintScene>,
-	m: PrimPaintSceneMutation
+	scene: WritableDraft<PrimPaintScene> | PrimPaintScene,
+	m: Readonly<PrimPaintSceneMutation>
 ) => {
 	if (m.type === "drop-layer") {
 		if (m.layerIndex === undefined && scene.layers.length === 0) {
@@ -113,8 +118,8 @@ export const applyMutationOnDraft = (
 	} else if (m.type === "push-layer") {
 		const layer = {
 			id: generateUUID(),
-			elements: m.data.elements,
-			metadata: m.data.metadata,
+			elements: [...m.data.elements],
+			metadata: { ...m.data.metadata },
 		}
 		scene.layers.splice(m.beforeLayerIndex ?? scene.layers.length, 0, layer)
 	} else if (m.type === "set-layer-metadata") {
@@ -213,12 +218,12 @@ export const applyMutationOnDraft = (
 
 export const applyMutation = (
 	scene: PrimPaintScene,
-	m: PrimPaintSceneMutation
+	m: Readonly<PrimPaintSceneMutation>
 ) => produce(scene, draft => applyMutationOnDraft(draft, m))
 
 export const inverseMutation = (
 	scene: PrimPaintScene,
-	m: PrimPaintSceneMutation
+	m: Readonly<PrimPaintSceneMutation>
 ): PrimPaintSceneMutation => {
 	if (m.type === "push-layer") {
 		return {
@@ -290,8 +295,10 @@ export const inverseMutation = (
 	} else if (m.type === "move-layer-element") {
 		if (m.sourceLayerIndex === m.destinationLayerIndex) {
 			const index = m.sourceElementIndex
-			const beforeIndex = m.beforeDestinationElementIndex ?? scene.layers[m.sourceLayerIndex].elements.length
-	
+			const beforeIndex =
+				m.beforeDestinationElementIndex ??
+				scene.layers[m.sourceLayerIndex].elements.length
+
 			if (index === beforeIndex) {
 				return { type: "noop" }
 			} else if (index > beforeIndex) {

@@ -16,7 +16,10 @@
 		grid-row: 1;
 		grid-column: 1;
 	
-		overflow: auto;
+		// hide overflow
+		// even though scrolling will be still performed
+		// just programmatically, rather than by user using scrollbars
+		overflow: hidden;
 	
 		> * {
 			overflow: hidden; // scroll parent, not child

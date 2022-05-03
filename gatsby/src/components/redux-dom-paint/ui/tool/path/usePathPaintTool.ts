@@ -79,6 +79,7 @@ const usePathTool = () => {
 						dispatch(setUncommittedMutation(getMutation()))
 					} else if (wasPressedRef.current && !event.pressed) {
 						pointsRef.current.push(event.canvasPoint)
+
 						dispatch(commitMutation(getMutation()))
 
 						release()

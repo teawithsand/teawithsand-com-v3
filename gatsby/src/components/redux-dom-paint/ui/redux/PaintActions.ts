@@ -5,7 +5,7 @@ import PrimPaintSceneMutation, {
 import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
 import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
 import { createAction, createReducer } from "@reduxjs/toolkit"
-import produce from "immer"
+import produce, { isDraft, current, original } from "immer"
 import { WritableDraft } from "immer/dist/internal"
 
 const actionPrefix = "twsblog/dompaint"
@@ -73,23 +73,38 @@ const initialPaintState: Readonly<PaintState> = {
 // unless 100% history is needed in big drawings
 // which I've decided not to implement.
 
-const computeSceneSnapshotAndScene = (state: WritableDraft<PaintState>) => {
-	const scene = produce(initialPrimPaintScene, draft => {
-		for (const m of [...state.initialMutations, ...state.committedMutations]) {
-			applyMutationOnDraft(draft, m)
-		}
-	})
-	state.sceneSnapshot = scene
+/*
+const mts = [...state.initialMutations, ...state.committedMutations]
 
-	computeSceneFromSnapshot(state)
+let uncommitted = state.uncommittedMutation
+if(isDraft(uncommitted)) {
+	uncommitted = current(uncommitted)
+}
+
+const newScene = produce(initialPrimPaintScene, draft => {
+	for (const m of mts) {
+		applyMutationOnDraft(draft, m)
+	}
+
+	if (uncommitted) {
+		applyMutationOnDraft(draft, uncommitted)
+	}
+})
+
+// state.scene = JSON.parse(JSON.stringify(newScene))
+*/
+
+// TODO(teawithsand): move scene computation out of redux
+//  and manage is as separate object using react
+//  if it's needed in objects down there use some magic to get it there(context/props params)
+//  or just write powerful redux selector with useMemos and useRefs for these
+
+const computeSceneSnapshotAndScene = (state: WritableDraft<PaintState>) => {
+	// wont be implemented
 }
 
 const computeSceneFromSnapshot = (state: WritableDraft<PaintState>) => {
-	const m = state.uncommittedMutation
-	state.scene = state.sceneSnapshot
-	if (m) {
-		applyMutationOnDraft(state.scene, m)
-	}
+	// wont be implemented
 }
 
 export const createPaintReducer = () =>

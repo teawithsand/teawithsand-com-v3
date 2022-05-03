@@ -11,7 +11,21 @@ export default (props: { initialMutations?: PrimPaintSceneMutation[] }) => {
 	}, [])
 
 	useEffect(() => {
-		store.dispatch(setInitialMutations(props.initialMutations ?? []))
+		store.dispatch(
+			setInitialMutations([
+				{
+					type: "push-layer",
+					data: {
+						elements: [],
+						metadata: {
+							isHidden: false,
+							name: "l0",
+						},
+					},
+				},
+			])
+		)
+		// store.dispatch(setInitialMutations(props.initialMutations ?? []))
 	}, [props.initialMutations])
 
 	return (
