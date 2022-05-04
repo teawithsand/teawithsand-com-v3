@@ -119,7 +119,13 @@ exports.createSchemaCustomization = ({ actions }) => {
   `)
 }
 
-exports.onCreateWebpackConfig = ({ actions, getConfig, rules }) => {
+exports.onCreateWebpackConfig = ({
+	actions,
+	getConfig,
+	rules,
+	loaders,
+	stage,
+}) => {
 	const config = getConfig()
 	const imgsRule = rules.images()
 
@@ -173,12 +179,27 @@ exports.onCreateWebpackConfig = ({ actions, getConfig, rules }) => {
 		{
 			test: /.apk$/i,
 			type: "asset/resource",
-		}
+		},
 	]
 	config.resolve.plugins = [
 		...(config.resolve.plugins ?? []),
 		new TSConfigPathsPlugin(),
 	]
 
-	actions.replaceWebpackConfig(config)
+	if (stage === "build-html" || stage === "develop-html") {
+		config.module.rules = [
+			// {
+			// 	test: /react-transition-group/,
+			// 	use: loaders.null(),
+			// },
+			...config.module.rules,
+			// {
+			// 	test: /react-transition-group/,
+			// 	use: loaders.null(),
+			// },
+		]
+		actions.replaceWebpackConfig(config)
+	} else {
+		actions.replaceWebpackConfig(config)
+	}
 }
