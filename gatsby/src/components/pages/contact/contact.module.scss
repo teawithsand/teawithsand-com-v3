@@ -1,0 +1,15 @@
+@use "@app/styles/bs.scss";
+@use "@app/styles/defines.scss" as def;
+@use "@app/styles/hero.scss" as hero;
+@use "@app/styles/card.scss" as card;
+@use "@app/styles/page.scss" as page;
+
+.page-container {
+    @extend .m-page-container;
+}
+
+.header {
+    margin-top: map-get(def.$spacers, 5);
+    margin-bottom: map-get(def.$spacers, 3);
+    text-align: center;
+}
