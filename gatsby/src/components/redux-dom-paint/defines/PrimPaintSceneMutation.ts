@@ -95,7 +95,9 @@ const ensureSceneHasLayer = (
 	// TODO(teawithsand): make sure that this function is not needed, since it's not compatible with reversing mutations
 
 	if (i < 0 || i >= s.layers.length)
-		throw new PaintSceneMutationApplyError(`Can't find layer with index ${i}`)
+		throw new PaintSceneMutationApplyError(
+			`Can't find layer with index ${i}`
+		)
 	return s.layers[i]
 }
 
@@ -185,7 +187,8 @@ export const applyMutationOnDraft = (
 		const sl = ensureSceneHasLayer(scene, m.sourceLayerIndex)
 		const dl = ensureSceneHasLayer(scene, m.destinationLayerIndex)
 		if (m.sourceLayerIndex === m.destinationLayerIndex) {
-			const beforeIndex = m.beforeDestinationElementIndex ?? dl.elements.length
+			const beforeIndex =
+				m.beforeDestinationElementIndex ?? dl.elements.length
 			const index = m.sourceElementIndex
 			const arr = sl.elements
 			if (index === beforeIndex) {

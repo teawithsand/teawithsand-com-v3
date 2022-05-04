@@ -21,7 +21,13 @@ export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) =>
 
 export const useSceneInfo = () => {
 	return usePaintStateSelector(s => {
-		const { renderWidth, renderHeight, zoomFactor, sceneWidth, sceneHeight } = s.sceneParameters
+		const {
+			renderWidth,
+			renderHeight,
+			zoomFactor,
+			sceneWidth,
+			sceneHeight,
+		} = s.sceneParameters
 
 		const renderAspectRation = renderWidth / renderHeight
 		// TODO(teawithsand): code getting vb dimensions, scale and transform with compliance to aspect ratio
@@ -51,7 +57,9 @@ export const useSceneInfo = () => {
 export const useSceneSelector = (): PrimPaintScene => {
 	const initialMutations = usePaintStateSelector(s => s.initialMutations)
 	const committedMutations = usePaintStateSelector(s => s.committedMutations)
-	const uncommittedMutation = usePaintStateSelector(s => s.uncommittedMutation)
+	const uncommittedMutation = usePaintStateSelector(
+		s => s.uncommittedMutation
+	)
 
 	const initialMutationsScene = useMemo(() => {
 		const scene = { ...initialPrimPaintScene }

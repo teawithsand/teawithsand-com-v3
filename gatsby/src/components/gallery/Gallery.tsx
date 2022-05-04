@@ -195,7 +195,9 @@ const Gallery = (props: GalleryProps) => {
 							}
 						}}
 					>
-						{autoSwitchDelay > 0 ? "DISABLE AUTO SWITCH" : "ENABLE AUTO SWITCH"}
+						{autoSwitchDelay > 0
+							? "DISABLE AUTO SWITCH"
+							: "ENABLE AUTO SWITCH"}
 					</button>
 				</div>
 			</div>
@@ -206,7 +208,10 @@ const Gallery = (props: GalleryProps) => {
 					onClick={() => onLeftSideTap()}
 				></div>
 
-				<div className={styles.mainBarDisplayedEntryWrapper} {...bind()}>
+				<div
+					className={styles.mainBarDisplayedEntryWrapper}
+					{...bind()}
+				>
 					<DissolveGalleryDisplay item={currentItem} />
 				</div>
 
@@ -249,7 +254,9 @@ const Gallery = (props: GalleryProps) => {
 						key={img.key}
 						className={classnames(
 							styles.bottomBarEntryWrapper,
-							i === itemIndex ? styles.bottomBarEntryWrapperActive : null
+							i === itemIndex
+								? styles.bottomBarEntryWrapperActive
+								: null
 						)}
 						onClick={() => onBottomBarTap(i)}
 					>

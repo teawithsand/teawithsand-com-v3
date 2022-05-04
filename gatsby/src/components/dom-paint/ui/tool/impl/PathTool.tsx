@@ -52,17 +52,28 @@ export default class PathTool implements Tool<PathToolProps> {
 						try {
 							if (!wasPressed && event.pressed) {
 								points.push(event.canvasPoint)
-								env.sceneInteraction.setUncommitedMutations(getMutations())
+								env.sceneInteraction.setUncommitedMutations(
+									getMutations()
+								)
 							} else if (wasPressed && event.pressed) {
 								const lastPoint = points[points.length - 1]
-								if (euclideanDistance(event.canvasPoint, lastPoint) >= 1) {
+								if (
+									euclideanDistance(
+										event.canvasPoint,
+										lastPoint
+									) >= 1
+								) {
 									points.push(event.canvasPoint)
 								}
 
-								env.sceneInteraction.setUncommitedMutations(getMutations())
+								env.sceneInteraction.setUncommitedMutations(
+									getMutations()
+								)
 							} else if (wasPressed && !event.pressed) {
 								points.push(event.canvasPoint)
-								env.sceneInteraction.commitMutations(getMutations())
+								env.sceneInteraction.commitMutations(
+									getMutations()
+								)
 								points = []
 							}
 						} finally {

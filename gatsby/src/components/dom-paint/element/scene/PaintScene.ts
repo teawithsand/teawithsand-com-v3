@@ -93,18 +93,22 @@ export default class PaintScene
 				})
 			} else if (m.type === "drop-layer-elements") {
 				if (m.elementIndices.length === 1) {
-					this.ensureLayerNoNotify(m.layerIndex).updateData(layerData => {
-						removeAt(layerData.elements, m.elementIndices[0])
-						return layerData
-					})
+					this.ensureLayerNoNotify(m.layerIndex).updateData(
+						layerData => {
+							removeAt(layerData.elements, m.elementIndices[0])
+							return layerData
+						}
+					)
 				} else {
 					const indexSet = new Set(m.elementIndices)
-					this.ensureLayerNoNotify(m.layerIndex).updateData(layerData => {
-						layerData.elements = layerData.elements.filter(
-							(_, i) => !indexSet.has(i)
-						)
-						return layerData
-					})
+					this.ensureLayerNoNotify(m.layerIndex).updateData(
+						layerData => {
+							layerData.elements = layerData.elements.filter(
+								(_, i) => !indexSet.has(i)
+							)
+							return layerData
+						}
+					)
 				}
 			} else if (m.type === "push-layer-elements") {
 				this.ensureLayerNoNotify(m.layerIndex).updateData(layerData => {
@@ -118,10 +122,12 @@ export default class PaintScene
 			} else if (m.type === "move-layer-element") {
 				let e: PaintElement | null = null
 
-				this.ensureLayerNoNotify(m.sourceLayerIndex).updateData(layerData => {
-					e = removeAt(layerData.elements, m.sourceElementIndex)
-					return layerData
-				})
+				this.ensureLayerNoNotify(m.sourceLayerIndex).updateData(
+					layerData => {
+						e = removeAt(layerData.elements, m.sourceElementIndex)
+						return layerData
+					}
+				)
 
 				this.ensureLayerNoNotify(m.destinationLayerIndex).updateData(
 					layerData => {

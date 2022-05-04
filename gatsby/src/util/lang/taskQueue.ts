@@ -19,8 +19,7 @@ export class TaskQueue {
 	private runTask = (task: WrappedTask) => {
 		this.isRunning = true
 
-		task
-			.task()
+		task.task()
 			.then(task.resolve)
 			.catch(task.reject)
 			.finally(() => {

@@ -22,7 +22,9 @@ export default (
 
 	const fixCoordinates = (p: Point): Point => {
 		if (elementRef.current) {
-			const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
+			const bb = (
+				elementRef.current as HTMLElement
+			).getBoundingClientRect()
 
 			return [
 				p[0] - bb.left + elementRef.current.scrollLeft,
@@ -39,7 +41,9 @@ export default (
 			let p: Point = [...abs]
 
 			if (onCanvasEvent && elementRef.current) {
-				const bb = (elementRef.current as HTMLElement).getBoundingClientRect()
+				const bb = (
+					elementRef.current as HTMLElement
+				).getBoundingClientRect()
 				// ensure our point is in bound of canvas
 				if (x < 0 || y < 0 || x > bb.width || y > bb.height) {
 					return

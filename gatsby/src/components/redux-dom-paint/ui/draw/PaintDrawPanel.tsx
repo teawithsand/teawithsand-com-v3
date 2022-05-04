@@ -95,7 +95,9 @@ export default (props: {
 			<div className={styles.section}>
 				<h2 className={styles.sectionTitle}>Global settings</h2>
 				<div className={styles.colorShowcase}>
-					<div className={styles.colorShowcaseDescription}>Stroke color:</div>
+					<div className={styles.colorShowcaseDescription}>
+						Stroke color:
+					</div>
 					<input
 						className={styles.colorShowcasePicker}
 						type="color"
@@ -107,11 +109,14 @@ export default (props: {
 					<div
 						className={styles.colorShowcaseElement}
 						style={{
-							["--showcase-color" as any]: encodeColor(strokeColor),
+							["--showcase-color" as any]:
+								encodeColor(strokeColor),
 						}}
 					></div>
 
-					<div className={styles.colorShowcaseDescription}>Fill color:</div>
+					<div className={styles.colorShowcaseDescription}>
+						Fill color:
+					</div>
 					<input
 						className={styles.colorShowcasePicker}
 						type="color"

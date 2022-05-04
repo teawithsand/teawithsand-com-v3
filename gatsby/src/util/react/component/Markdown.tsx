@@ -12,6 +12,9 @@ export const Markdown = (props: { markdown: string; className?: string }) => {
 	)
 
 	return (
-		<div className={className} dangerouslySetInnerHTML={{ __html: html }}></div>
+		<div
+			className={className}
+			dangerouslySetInnerHTML={{ __html: html }}
+		></div>
 	)
 }

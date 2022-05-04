@@ -47,7 +47,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 	if (posts.length > 0) {
 		posts.forEach((post, index) => {
 			const previousPostId = index === 0 ? null : posts[index - 1].id
-			const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id
+			const nextPostId =
+				index === posts.length - 1 ? null : posts[index + 1].id
 
 			createPage({
 				path: post.fields.slug,
@@ -149,7 +150,9 @@ exports.onCreateWebpackConfig = ({ actions, getConfig, rules }) => {
 
 	const newUrlLoaderRule = {
 		...imgsRule,
-		test: new RegExp(imgsRule.test.toString().replace("svg|", "").slice(1, -1)),
+		test: new RegExp(
+			imgsRule.test.toString().replace("svg|", "").slice(1, -1)
+		),
 	}
 
 	config.module.rules = [

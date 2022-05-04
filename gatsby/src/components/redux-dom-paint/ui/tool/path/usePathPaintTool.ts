@@ -75,8 +75,11 @@ const usePathTool = () => {
 						pointsRef.current.push(event.canvasPoint)
 						dispatch(setUncommittedMutation(getMutation()))
 					} else if (wasPressedRef.current && event.pressed) {
-						const lastPoint = pointsRef.current[pointsRef.current.length - 1]
-						if (euclideanDistance(event.canvasPoint, lastPoint) >= 1) {
+						const lastPoint =
+							pointsRef.current[pointsRef.current.length - 1]
+						if (
+							euclideanDistance(event.canvasPoint, lastPoint) >= 1
+						) {
 							pointsRef.current.push(event.canvasPoint)
 						}
 

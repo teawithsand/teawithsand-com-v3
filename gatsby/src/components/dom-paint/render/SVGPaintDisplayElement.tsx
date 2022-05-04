@@ -15,13 +15,26 @@ export default (props: {
 	const { paintElement } = props
 
 	if (paintElement instanceof PathPaintElement) {
-		return <PathSVGPaintDisplayElement {...props} paintElement={paintElement} />
+		return (
+			<PathSVGPaintDisplayElement
+				{...props}
+				paintElement={paintElement}
+			/>
+		)
 	} else if (paintElement instanceof ImagePaintElement) {
 		return (
-			<ImageSVGPaintDisplayElement {...props} paintElement={paintElement} />
+			<ImageSVGPaintDisplayElement
+				{...props}
+				paintElement={paintElement}
+			/>
 		)
 	} else if (paintElement instanceof TextPaintElement) {
-		return <TextSVGPaintDisplayElement {...props} paintElement={paintElement} />
+		return (
+			<TextSVGPaintDisplayElement
+				{...props}
+				paintElement={paintElement}
+			/>
+		)
 	} else {
 		throw new Error(`unsupported element ${paintElement}`)
 	}

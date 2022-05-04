@@ -81,7 +81,8 @@ export default () => {
 			</div>
 
 			{/* TODO(teawithsand): make this pretty appear on small devices, right now it causes style flash */}
-			{!isAnimatingNow && (!showSidePanel || !isSuperSmallToShowInnerButton) ? (
+			{!isAnimatingNow &&
+			(!showSidePanel || !isSuperSmallToShowInnerButton) ? (
 				<button
 					className={styles.drawContainerTogglePanel}
 					onClick={() => setShowSidePanel(!showSidePanel)}

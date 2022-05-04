@@ -102,7 +102,10 @@ export default <P extends Object>(props: {
 			{OverlayComponent ? <OverlayComponent {...toolProps} /> : null}
 
 			<div
-				className={classnames(styles.paintDisplayOverlay, styles.paintPanel)}
+				className={classnames(
+					styles.paintDisplayOverlay,
+					styles.paintPanel
+				)}
 			>
 				<div className={styles.paintPanelSection}>
 					<h6 className={styles.paintPanelSectionTitle}>General</h6>
@@ -160,7 +163,9 @@ export default <P extends Object>(props: {
 						styles.paintPanelSectionList
 					)}
 				>
-					<h6 className={styles.paintPanelSectionTitle}>Operations</h6>
+					<h6 className={styles.paintPanelSectionTitle}>
+						Operations
+					</h6>
 					<button
 						className={classnames(styles.paintPanelButtonPrimary)}
 						onClick={() =>

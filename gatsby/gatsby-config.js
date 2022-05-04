@@ -34,7 +34,12 @@ module.exports = {
 					{
 						resolve: `gatsby-remark-images`,
 						options: {
-							srcSetBreakpoints: [1920 / 8, 1920 / 4, 1920 / 2, 1920],
+							srcSetBreakpoints: [
+								1920 / 8,
+								1920 / 4,
+								1920 / 2,
+								1920,
+							],
 							withWebp: {
 								quality: 80,
 							},
@@ -86,9 +91,15 @@ module.exports = {
 								return Object.assign({}, node.frontmatter, {
 									description: node.excerpt,
 									date: node.frontmatter.date,
-									url: site.siteMetadata.siteUrl + node.fields.slug,
-									guid: site.siteMetadata.siteUrl + node.fields.slug,
-									custom_elements: [{ "content:encoded": node.html }],
+									url:
+										site.siteMetadata.siteUrl +
+										node.fields.slug,
+									guid:
+										site.siteMetadata.siteUrl +
+										node.fields.slug,
+									custom_elements: [
+										{ "content:encoded": node.html },
+									],
 								})
 							})
 						},

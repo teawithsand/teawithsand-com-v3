@@ -13,6 +13,8 @@ export default (props: SVGElementRenderProps<string>) => {
 	} else if (element.type === "text") {
 		return <TextSVGElementRender element={element} {...others} />
 	} else {
-		throw new Error(`Unknown SVG element: ${(element as unknown as any).type}`)
+		throw new Error(
+			`Unknown SVG element: ${(element as unknown as any).type}`
+		)
 	}
 }

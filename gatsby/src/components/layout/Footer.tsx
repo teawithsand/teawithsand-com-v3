@@ -10,13 +10,21 @@ export default () => {
 		<footer className={style.footer}>
 			<hr></hr>
 			<div className={style.footerLeft}>
-				<a href={linkGithub} title="Github" className={style.footerIcon}>
+				<a
+					href={linkGithub}
+					title="Github"
+					className={style.footerIcon}
+				>
 					<img
 						src={`data:image/svg+xml;utf8,${icons.github.toSvg()}`}
 						alt="Github"
 					/>
 				</a>
-				<a href={linkLinkedIn} title="LinkedIn" className={style.footerIcon}>
+				<a
+					href={linkLinkedIn}
+					title="LinkedIn"
+					className={style.footerIcon}
+				>
 					<img
 						src={`data:image/svg+xml;utf8,${icons.linkedin.toSvg()}`}
 						alt="LinkedIn"

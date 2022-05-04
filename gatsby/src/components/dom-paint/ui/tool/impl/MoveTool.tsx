@@ -33,15 +33,21 @@ export default class MoveTool implements Tool<MoveToolProps> {
 						if (parent) {
 							try {
 								if (!wasPressed && event.pressed) {
-									startPressPoint = [...event.screenPoint] as Point
-									startScroll = [parent.scrollLeft, parent.scrollTop]
+									startPressPoint = [
+										...event.screenPoint,
+									] as Point
+									startScroll = [
+										parent.scrollLeft,
+										parent.scrollTop,
+									]
 								} else if (event.pressed) {
 									parent.scrollLeft = Math.min(
 										parent.scrollWidth,
 										Math.max(
 											0,
 											startScroll[0] +
-												(startPressPoint[0] - event.screenPoint[0])
+												(startPressPoint[0] -
+													event.screenPoint[0])
 										)
 									)
 									parent.scrollTop = Math.min(
@@ -49,7 +55,8 @@ export default class MoveTool implements Tool<MoveToolProps> {
 										Math.max(
 											0,
 											startScroll[1] +
-												(startPressPoint[1] - event.screenPoint[1])
+												(startPressPoint[1] -
+													event.screenPoint[1])
 										)
 									)
 								}

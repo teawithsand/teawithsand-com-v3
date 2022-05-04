@@ -26,7 +26,11 @@ export const DissolveGalleryDisplay: GalleryDisplay = ({ item }) => {
 				galleryStyles.mainElementDisplay
 			)}
 		>
-			<CSSTransition timeout={300} classNames={dissolveClasses} key={item.key}>
+			<CSSTransition
+				timeout={300}
+				classNames={dissolveClasses}
+				key={item.key}
+			>
 				<GalleryItemDisplay item={item} />
 			</CSSTransition>
 		</TransitionGroup>

@@ -65,7 +65,9 @@ const doInverseTest = (data: {
 			} else {
 				scene = scenes[i - 1]
 			}
-			const newScene = produce(scene, draft => applyMutationOnDraft(draft, m))
+			const newScene = produce(scene, draft =>
+				applyMutationOnDraft(draft, m)
+			)
 			scenes.push(newScene)
 		} finally {
 			i++
@@ -240,7 +242,9 @@ describe("PrimPaintScene", () => {
 			for (let i = 0; i < srcScene.layers.length; i++) {
 				doMutationTest({
 					initialScene: srcScene,
-					targetScene: scene(srcScene.layers.filter((v, j) => j !== i)),
+					targetScene: scene(
+						srcScene.layers.filter((v, j) => j !== i)
+					),
 					mutations: [
 						{
 							type: "drop-layer",
@@ -550,7 +554,11 @@ describe("PrimPaintScene", () => {
 			]
 			for (const i of elements) {
 				for (const j of elements) {
-					if (typeof i === "number" && typeof j === "number" && i > j) {
+					if (
+						typeof i === "number" &&
+						typeof j === "number" &&
+						i > j
+					) {
 						continue
 					}
 					doInverseTest({
@@ -591,7 +599,9 @@ describe("PrimPaintScene", () => {
 				),
 			])
 
-			const elements = [...Array(srcScene.layers[0].elements.length).keys()]
+			const elements = [
+				...Array(srcScene.layers[0].elements.length).keys(),
+			]
 
 			// inter-layer move
 			for (const i of elements) {
