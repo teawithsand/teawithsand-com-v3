@@ -4,3 +4,10 @@ declare module "*.svg" {
 }
 
 declare const __PATH_PREFIX__: string
+
+
+declare module '*.apk' {
+    const fooUrl: string
+    namespace fooUrl { }
+    export = fooUrl
+}

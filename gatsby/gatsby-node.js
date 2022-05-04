@@ -168,6 +168,13 @@ exports.onCreateWebpackConfig = ({ actions, getConfig, rules }) => {
 		},
 		newUrlLoaderRule,
 	]
+	config.module.rules = [
+		...config.module.rules,
+		{
+			test: /.apk$/i,
+			type: "asset/resource",
+		}
+	]
 	config.resolve.plugins = [
 		...(config.resolve.plugins ?? []),
 		new TSConfigPathsPlugin(),

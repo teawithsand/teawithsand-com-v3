@@ -1,0 +1,14 @@
+@use "@app/styles/bs.scss";
+@use "@app/styles/defines.scss" as def;
+@use "@app/styles/hero.scss" as hero;
+@use "@app/styles/card.scss" as card;
+@use "@app/styles/page.scss" as page;
+
+.parent-container {
+    margin-top: map-get(def.$spacers, 5);
+}
+
+.home-link {
+    @extend .btn;
+    @extend .btn-primary;
+}
