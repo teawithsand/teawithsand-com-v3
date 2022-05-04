@@ -9,7 +9,6 @@ import {
 import { applyMutationOnDraft } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import { rectNormalize } from "@app/components/redux-dom-paint/primitive/calc"
 import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
-import useUsefulDimensions from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import produce from "immer"
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
@@ -21,11 +20,14 @@ export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) =>
 	useSelector<PaintState, T>(selector)
 
 export const useSceneInfo = () => {
-	// const { width: windowWidth, height: windowHeight } = useUsefulDimensions()
 	return usePaintStateSelector(s => {
-		const { renderWidth, renderHeight, zoomFactor } = s.sceneParameters
-		const virtualDisplayWidth = renderWidth / zoomFactor
-		const virtualDisplayHeight = renderHeight / zoomFactor
+		const { renderWidth, renderHeight, zoomFactor, sceneWidth, sceneHeight } = s.sceneParameters
+
+		const renderAspectRation = renderWidth / renderHeight
+		// TODO(teawithsand): code getting vb dimensions, scale and transform with compliance to aspect ratio
+
+		const vbDisplayWidth = sceneWidth / zoomFactor
+		const vbDisplayHeight = sceneHeight / zoomFactor
 
 		return {
 			renderWidth,
@@ -36,7 +38,7 @@ export const useSceneInfo = () => {
 			scale: 1,
 			viewBox: rectNormalize([
 				[0, 0],
-				[virtualDisplayWidth, virtualDisplayHeight],
+				[vbDisplayWidth, vbDisplayHeight],
 			]),
 		}
 	})
