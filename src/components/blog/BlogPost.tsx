@@ -1,6 +1,7 @@
+import { homePath } from "@app/components/paths"
 import Seo from "@app/components/seo"
 import { Link } from "gatsby"
-import React from "react"
+import React, { useEffect } from "react"
 
 import * as styles from "./blogPost.module.scss"
 
@@ -40,8 +41,9 @@ export default (props: {
 
 			<main className={styles.postContainer}>
 				<aside className={styles.blogInfoHeader}>
-					You are at blog part of this website. You can find blog post
-					list <a href="#">here</a>.
+					You are at blog part of this website. You can find blog
+					post list <a href="#">here</a> or go to{" "}
+					<Link to={homePath}>home page here</Link>.
 				</aside>
 				<article itemScope itemType="http://schema.org/Article">
 					<header>

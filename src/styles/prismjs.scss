@@ -1,0 +1,37 @@
+// Styles from
+// https://www.gatsbyjs.com/plugins/gatsby-remark-prismjs/
+// to make prismjs work with gatsby.
+// These must be included to global scope.
+
+/*
+.gatsby-highlight-code-line {
+	background-color: #feb;
+	display: block;
+	margin-right: -1em;
+	margin-left: -1em;
+	padding-right: 1em;
+	padding-left: 0.75em;
+	border-left: 0.25em solid #f99;
+}
+
+// Adjust the position of the line numbers 
+.gatsby-highlight pre[class*="language-"].line-numbers {
+	padding-left: 2.8em;
+}
+*/
+
+/*
+.gatsby-highlight {
+	background-color: white;
+	border-radius: 0.3em;
+	margin: 0.5em 0;
+	padding: 1em;
+	overflow: auto;
+}
+*/
+
+.gatsby-highlight pre[class*="language-"].line-numbers {
+	padding: 0;
+	padding-left: 2.8em;
+	overflow: initial;
+}

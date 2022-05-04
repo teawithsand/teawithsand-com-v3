@@ -49,6 +49,7 @@
     "yarn": "^1.22.18"
   },
   "devDependencies": {
+    "babel-plugin-prismjs": "^2.1.0",
     "@svgr/webpack": "^6.2.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
@@ -56,6 +57,7 @@
     "@types/feather-icons": "^4.7.0",
     "@types/jest": "^27.4.1",
     "@types/loadable__component": "^5.13.4",
+    "@types/prismjs": "^1.26.0",
     "@types/react-helmet": "^6.1.5",
     "@types/react-test-renderer": "^18.0.0",
     "@types/react-transition-group": "^4.4.4",
