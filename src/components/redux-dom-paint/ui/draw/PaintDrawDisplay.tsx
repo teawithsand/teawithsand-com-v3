@@ -2,12 +2,12 @@ import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneR
 import PaintDrawNoDoomHooks from "@app/components/redux-dom-paint/ui/draw/PaintDrawNoDOMHooks"
 import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
-import { setRenderSize } from "@app/components/redux-dom-paint/ui/redux/paintActions"
+import { setRenderSize } from "@app/components/redux-dom-paint/redux/paintActions"
 import {
 	usePaintStateSelector,
 	useSceneInfo,
 	useSceneSelector,
-} from "@app/components/redux-dom-paint/ui/redux/paintSelectors"
+} from "@app/components/redux-dom-paint/redux/paintSelectors"
 import { usePathTool } from "@app/components/redux-dom-paint/ui/tool/path"
 import classnames from "@app/util/lang/classnames"
 import { useBreakpoint } from "@app/util/react/hook/dimensions/useBreakpoint"

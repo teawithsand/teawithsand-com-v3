@@ -1,4 +1,4 @@
-import { createPaintReducer } from "@app/components/redux-dom-paint/ui/redux/paintActions"
+import { createPaintReducer } from "@app/components/redux-dom-paint/redux/paintActions"
 import { configureStore } from "@reduxjs/toolkit"
 
 // Please note that in general

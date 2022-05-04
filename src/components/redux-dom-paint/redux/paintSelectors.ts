@@ -8,7 +8,7 @@ import {
 } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import { applyMutationOnDraft } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import { rectNormalize } from "@app/components/redux-dom-paint/primitive/calc"
-import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
+import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
 import produce from "immer"
 import { useMemo } from "react"
 import { useSelector } from "react-redux"

@@ -1,7 +1,7 @@
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import { Rect } from "@app/components/redux-dom-paint/primitive"
 import { rectNormalize } from "@app/components/redux-dom-paint/primitive/calc"
-import PaintState from "@app/components/redux-dom-paint/ui/redux/PaintState"
+import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
 import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
 import { createAction, createReducer } from "@reduxjs/toolkit"
 import { number } from "prop-types"

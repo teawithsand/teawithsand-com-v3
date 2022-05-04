@@ -5,12 +5,12 @@ import { euclideanDistance } from "@app/components/redux-dom-paint/primitive/cal
 import {
 	commitMutation,
 	setUncommittedMutation,
-} from "@app/components/redux-dom-paint/ui/redux/paintActions"
+} from "@app/components/redux-dom-paint/redux/paintActions"
 import {
 	usePaintStateSelector,
 	usePathFillData,
 	usePathStrokeData,
-} from "@app/components/redux-dom-paint/ui/redux/paintSelectors"
+} from "@app/components/redux-dom-paint/redux/paintSelectors"
 import { generateUUID } from "@app/util/lang/uuid"
 import { useEffect, useRef } from "react"
 import { useDispatch } from "react-redux"
