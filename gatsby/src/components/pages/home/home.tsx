@@ -4,8 +4,10 @@ import { Link } from "gatsby"
 import * as styles from "./home.module.scss"
 import EmailImage from "./email.svg"
 
-import TeaAnimation from "@app/components/tea-animation/TeaAnimation"
 import { blogHomePath, contactPath, email, galleryPath, linkEmail, paintPath, portfolioPath } from "@app/components/paths"
+import loadable from '@loadable/component'
+
+const TeaAnimation = loadable(() => import("@app/components/tea-animation/TeaAnimation"))
 
 export default () => {
 	const firstSectionRef = useRef<HTMLElement | null>(null)

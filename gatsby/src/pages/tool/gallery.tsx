@@ -3,8 +3,11 @@ import { graphql } from "gatsby"
 
 import Layout from "@app/components/layout/Layout"
 import { GalleryItem } from "@app/components/gallery"
-import Gallery from "@app/components/gallery/Gallery"
 import { ArrayGalleryItemProvider } from "@app/components/gallery/ItemProvider"
+import loadable from "@loadable/component"
+import Gallery from "@app/components/gallery/Gallery"
+
+// const Gallery = loadable(() => import("@app/components/gallery/Gallery"))
 
 const GalleryPage = () => {
 	const items: GalleryItem[] = [
@@ -29,10 +32,10 @@ const GalleryPage = () => {
 	]
 
 	const provider = useMemo(() => new ArrayGalleryItemProvider(items), [items])
-
+	
 	return (
 		<Layout>
-			<Gallery provider={provider} />
+			 <Gallery provider={provider} />
 		</Layout>
 	)
 }

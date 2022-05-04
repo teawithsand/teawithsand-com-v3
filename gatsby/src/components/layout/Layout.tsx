@@ -6,7 +6,7 @@ export default (props: { children: ReactNode }) => {
 	return (
 		<>
 			<Navbar />
-			<main>{props.children}</main>
+			<main>{props.children ?? null}</main>
 			<Footer />
 		</>
 	)

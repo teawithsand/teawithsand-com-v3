@@ -162,7 +162,9 @@ module.exports = {
 						exportLocalsConvention: "camelCaseOnly",
 					},
 				},
-				postCssPlugins: [require("postcss-preset-env")({ stage: 4 })],
+				postCssPlugins: [
+					require("postcss-preset-env")({ stage: 4 })
+				],
 			},
 		},
 		{

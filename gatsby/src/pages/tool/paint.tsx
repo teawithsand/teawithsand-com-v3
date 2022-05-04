@@ -1,48 +1,52 @@
-import PaintDraw from "@app/components/redux-dom-paint/ui/draw/PaintDraw"
 import { generateUUID } from "@app/util/lang/uuid"
 import React from "react"
+import loadable from "@loadable/component"
+
+const PaintDraw = loadable(() => import("@app/components/redux-dom-paint/ui/draw/PaintDraw"))
 
 const PaintPage = () => {
 	return (
-		<PaintDraw
-			initialMutations={[
-				{
-					type: "push-layer",
-					data: {
-						metadata: {
-							isHidden: false,
-							name: "l1",
-						},
-						elements: [
-							{
-								id: generateUUID(),
-								type: "path",
-								data: {
-									entries: [
-										{
-											type: "M",
-											point: [0, 0],
+		<main>
+			<PaintDraw
+				initialMutations={[
+					{
+						type: "push-layer",
+						data: {
+							metadata: {
+								isHidden: false,
+								name: "l1",
+							},
+							elements: [
+								{
+									id: generateUUID(),
+									type: "path",
+									data: {
+										entries: [
+											{
+												type: "M",
+												point: [0, 0],
+											},
+											{
+												type: "L",
+												point: [1000, 1000],
+											},
+										],
+										fill: null,
+										filters: [],
+										stroke: {
+											color: [0, 0, 0],
+											linecap: "round",
+											linejoin: "round",
+											size: 10,
 										},
-										{
-											type: "L",
-											point: [1000, 1000],
-										},
-									],
-									fill: null,
-									filters: [],
-									stroke: {
-										color: [0, 0, 0],
-										linecap: "round",
-										linejoin: "round",
-										size: 10,
 									},
 								},
-							},
-						],
+							],
+						},
 					},
-				},
-			]}
-		/>
+				]}
+			/>
+		</main>
 	)
 }
 
