@@ -22,8 +22,7 @@ export const DissolveGalleryDisplay: GalleryDisplay = ({ item }) => {
 	return (
 		<TransitionGroup
 			className={classnames(
-				styles.elementsContainer,
-				galleryStyles.mainElementDisplay
+				styles.elementsContainer
 			)}
 		>
 			<CSSTransition

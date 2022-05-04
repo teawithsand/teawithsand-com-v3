@@ -566,7 +566,6 @@ export default () => {
 					</Collapse>
 				</div>
 			</div>
-			<div className={styles.footer}></div>
 		</article>
 	)
 }

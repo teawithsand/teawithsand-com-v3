@@ -13,7 +13,6 @@ export default () => {
 				<a
 					href={linkGithub}
 					title="Github"
-					className={style.footerIcon}
 				>
 					<img
 						src={`data:image/svg+xml;utf8,${icons.github.toSvg()}`}
@@ -23,7 +22,6 @@ export default () => {
 				<a
 					href={linkLinkedIn}
 					title="LinkedIn"
-					className={style.footerIcon}
 				>
 					<img
 						src={`data:image/svg+xml;utf8,${icons.linkedin.toSvg()}`}

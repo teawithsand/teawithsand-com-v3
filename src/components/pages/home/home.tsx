@@ -13,7 +13,7 @@ export default () => {
 	const firstSectionRef = useRef<HTMLElement | null>(null)
 
 	return (
-		<main className={styles["page-container"]}>
+		<main>
 			<article className={styles.header}>
 				<div className={styles.headerBackground}>
 					<TeaAnimation />
@@ -105,7 +105,7 @@ export default () => {
 						<p>Via email</p>
 					</header>
 					<div className={styles.contactContainer}>
-						<div className={styles.contactEmail}>
+						<div>
 							<div>
 								<a href={linkEmail}>
 									<EmailImage width={100} height={100} />

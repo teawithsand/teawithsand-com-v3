@@ -25,6 +25,7 @@ $feature-border-color: rgba(0, 0, 0, 0.4);
 
 .feature {
     $this: &;
+    --var-xasdf-one: 1;
 
     &--active {
         #{$this}__header {
