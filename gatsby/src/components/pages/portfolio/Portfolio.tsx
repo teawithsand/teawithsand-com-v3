@@ -19,7 +19,12 @@ import { graphql, useStaticQuery } from "gatsby"
 import { getImage } from "gatsby-plugin-image"
 import Gallery from "@app/components/gallery/Gallery"
 import { ArrayGalleryItemProvider } from "@app/components/gallery/ItemProvider"
-import { homePath, linkGithub, paintPath } from "@app/components/paths"
+import {
+	galleryPath,
+	homePath,
+	linkGithub,
+	paintPath,
+} from "@app/components/paths"
 
 // TODO(teawithsand): fix display on phone devices using media breakpoints
 
@@ -130,7 +135,7 @@ export default () => {
 								simple vector-graphics paint(new features are in
 								development)
 							</Link>{" "}
-							and <Link to={homePath}>homepage animation.</Link>
+							and <Link to={homePath}>homepage animation</Link> and more
 							<br />
 							<a href="https://github.com/teawithsand/teawithsand-com-v3">
 								See code on github
@@ -141,19 +146,14 @@ export default () => {
 						<div className={styles.featureContent}>
 							<p>
 								Aside from being a portfolio, it's also my blog
-								and a few utils. I have created simple static
-								website generator{" "}
+								and a few utils. In the past it used my simple static side generator
 								<a href="https://github.com/teawithsand/handmd">
 									handmd
 								</a>{" "}
-								in order to create this website. There is also a{" "}
-								<Link to="/posts/2022-06-04/blogging-like-a-programmer">
-									post on my blog
-								</Link>{" "}
-								about it.
+								Now it runs on gatsby.
 							</p>
 							<p>
-								Technologies used: Go, TypeScript, Webpack, SASS
+								Technologies used:  TypeScript, Webpack, SASS, Gatsby, React
 							</p>
 							<p>
 								<Link
@@ -169,6 +169,14 @@ export default () => {
 									to={homePath}
 								>
 									Go to home page
+								</Link>
+							</p>
+							<p>
+								<Link
+									className={styles.downloadButton}
+									to={galleryPath}
+								>
+									Go to gallery example
 								</Link>
 							</p>
 							<p>

@@ -4,6 +4,7 @@ export const portfolioPath = "/portfolio"
 export const contactPath = "/contact"
 export const aboutMePath = "/about-me"
 export const paintPath = "/tool/paint"
+export const galleryPath = "/tool/gallery"
 export const homePath = "/"
 
 export const linkGithub = "https://github.com/teawithsand"
