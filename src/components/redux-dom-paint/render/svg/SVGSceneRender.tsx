@@ -35,6 +35,10 @@ export default (
 			className={className}
 			ref={ref}
 			viewBox={`${vb[NORM_RECT_MIN][0]} ${vb[NORM_RECT_MIN][1]} ${rectWidth} ${rectHeight}`}
+			onDrag={(e) => {
+				e.preventDefault()
+				return false
+			}}
 		>
 			{scene.layers.map(e => (
 				<SVGLayerRender layer={e} key={e.id} />
