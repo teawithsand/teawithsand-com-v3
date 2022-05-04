@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 
 import * as styles from "./gallery.module.scss"
 import { DissolveGalleryDisplay } from "@app/components/gallery/GalleryDisplay"
@@ -31,40 +31,32 @@ const Gallery = (props: GalleryProps) => {
 	const showControls = provider.itemCount > 1
 	const hideIfNotShowControlsStyle = showControls ? {} : { display: "none" }
 
-	// TODO(teawithsand): remove it
-	const mode = "normal"
 
 	const currentItem = useMemo(
 		() =>
-			provider.provideItem(itemIndex, "main", {
-				mode,
-			}),
-		[mode, itemIndex, provider]
+			provider.provideItem(itemIndex, "main", {}),
+		[itemIndex, provider]
 	)
 
 	const hiddenItems = useMemo(() => {
 		const items = []
 		for (let i = 0; i < provider.itemCount; i++) {
 			items.push(
-				provider.provideItem(i, "main-hidden", {
-					mode,
-				})
+				provider.provideItem(i, "main-hidden", {})
 			)
 		}
 		return items
-	}, [mode, provider])
+	}, [provider])
 
 	const thumbnails = useMemo(() => {
 		const items = []
 		for (let i = 0; i < provider.itemCount; i++) {
 			items.push(
-				provider.provideItem(i, "thumbnail", {
-					mode,
-				})
+				provider.provideItem(i, "thumbnail", {})
 			)
 		}
 		return items
-	}, [provider, mode])
+	}, [provider])
 
 	const onBottomBarTap = (i: number) => {
 		while (i < 0) {
@@ -260,7 +252,7 @@ const Gallery = (props: GalleryProps) => {
 						)}
 						onClick={() => onBottomBarTap(i)}
 					>
-						<GalleryItemDisplay item={img} />
+						<GalleryItemDisplay isBottomBar={true} item={img} />
 					</div>
 				))}
 			</div>

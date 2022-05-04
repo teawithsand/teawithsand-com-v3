@@ -31,7 +31,7 @@ export const DissolveGalleryDisplay: GalleryDisplay = ({ item }) => {
 				classNames={dissolveClasses}
 				key={item.key}
 			>
-				<GalleryItemDisplay item={item} />
+				<GalleryItemDisplay isBottomBar={false} item={item} />
 			</CSSTransition>
 		</TransitionGroup>
 	)

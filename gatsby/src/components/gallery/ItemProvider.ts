@@ -1,9 +1,6 @@
-import { GalleryMode } from "@app/components/gallery/Gallery"
 import { GalleryItem } from "@app/components/gallery/GalleryItem"
 
-export type GalleryItemProviderOptions = {
-	mode: GalleryMode
-}
+export type GalleryItemProviderOptions = {}
 
 export type GalleryItemProviderContext = "main" | "thumbnail" | "main-hidden"
 

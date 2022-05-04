@@ -27,6 +27,51 @@
 	// image-rendering: high-quality;
 }
 
+@mixin main-bar-gatsby-image-fix {
+	& div[data-gatsby-image-wrapper] {
+		width: 100%;
+		height: 100%;
+		max-width: 100%;
+		max-height: 100%;
+
+		& img {
+			object-fit: contain !important;
+			width: 100% !important;
+			height: 100% !important;
+			max-width: 100% !important;
+			max-height: 100% !important;
+		}
+
+		& > picture {
+			display: block;
+			width: 100%;
+			height: 100%;
+			max-width: 100%;
+			max-height: 100%;
+
+			& > img,
+			source {
+				display: block;
+				margin: auto;
+			}
+		}
+	}
+}
+
+@mixin gatsby-image-fix {
+	& > div[data-gatsby-image-wrapper] {
+		display: contents!important;
+
+		> div {
+			display: none!important;
+		}
+
+		> picture {
+			display: contents!important;
+		}
+	}
+}
+
 $gallery-default-max-height: 75vh;
 $overlay-width: 20%;
 
@@ -36,7 +81,10 @@ $overlay-width: 20%;
 	grid-template-columns: minmax(auto, 100vw);
 	overflow: hidden;
 	grid-template-rows: min-content minmax(0, 1fr) minmax(100px, 0.2fr); // for older browsers with no min
-	grid-template-rows: min-content minmax(0, 1fr) minmax(Min(100px, 10vh), 0.2fr);
+	grid-template-rows: min-content minmax(0, 1fr) minmax(
+			Min(100px, 10vh),
+			0.2fr
+		);
 
 	&--bottom-bar-hidden {
 		& > .bottom-bar {
@@ -164,8 +212,8 @@ $overlay-width: 20%;
 		}
 
 		&--enabled {
-			animation: progress-animation var(--progress-animation-duration) linear
-				infinite;
+			animation: progress-animation var(--progress-animation-duration)
+				linear infinite;
 			height: 5px;
 		}
 	}
@@ -183,6 +231,20 @@ $overlay-width: 20%;
 	width: 100%;
 	height: 100%;
 
+	@mixin main-bar-img {
+		@include main-bar-gatsby-image-fix();
+
+		img {
+			@include downscaled-image();
+			width: fit-content !important;
+			height: fit-content !important;
+			max-width: 100% !important;
+			max-height: 100% !important;
+			object-fit: contain !important;
+			margin: auto !important;
+		}
+	}
+
 	&__displayed-entry-wrapper {
 		touch-action: none;
 
@@ -195,16 +257,7 @@ $overlay-width: 20%;
 		width: 100%;
 		height: 100%;
 
-		margin: auto;
-
-		img {
-			@include downscaled-image();
-			width: fit-content;
-			height: fit-content;
-			max-width: 100%;
-			max-height: 100%;
-			object-fit: contain;
-		}
+		@include main-bar-img();
 	}
 
 	&__hidden-elements {
@@ -227,14 +280,7 @@ $overlay-width: 20%;
 			height: 100%;
 		}
 
-		img {
-			@include downscaled-image();
-			width: fit-content;
-			height: fit-content;
-			max-width: 100%;
-			max-height: 100%;
-			object-fit: contain;
-		}
+		@include main-bar-img();
 	}
 
 	// TODO(teawithsand): use less hacky solutions like svg images instead
@@ -305,60 +351,49 @@ $overlay-width: 20%;
 	@include scrollbar.pretty-scrollbar-light();
 
 	height: 100%;
-	width: 100%; // must not be 100% for element centering
+	width: 100%;
 	overflow-x: scroll;
 	overflow-y: hidden;
 
 	grid-row: 3;
 	grid-column: 1;
 
-	// Screw grid
-	// I could't make it work
-	// In grid/flex images
-	// even when object-fit: contain is set
-	// still have their "original"(like object-fit: cover) width
-	// which makes it impossible to handle it sensibly
-	// so display inline/inline-block is used instead.
+	// TODO(teawithsand): no matter what I do firefox won't shrink parent div
+	// to size of image, which has it's height set to 100% and width to auto
+	// Display inline is the only solution that seems to work in both chrome and firefox
+	// on the other hand,
+	// Actually, it can be bypassed by using display: contents on wrapper container.
 
-	display: inline;
-	text-align: center;
+	// display: inline;
+	// text-align: center;
+
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	align-items: center;
 
 	&__entry-wrapper {
-		display: inline;
-		overflow: hidden;
-
-		// It has to be moved directly to element
-		// since we are inline
-		// border-radius: map-get(def.$spacers, 1);
-		// border: 1px solid white;
-		// and inline-block in ff works as-if it was block element, when it comes to width computation
-		// unlike chrome...
-		// border-radius: map-get(def.$spacers, 1);
-		// border: 1px solid white;
-
-		height: 100%;
-		margin-left: map-get(def.$spacers, 1);
-		margin-right: map-get(def.$spacers, 1);
-
+		display: contents;
 		$border-color: rgba(255, 255, 255, 1);
 
-		transition: margin-left 0.3s, margin-right 0.3s;
-
-		img {
+		& img {
+			margin-left: map-get(def.$spacers, 1);
+			margin-right: map-get(def.$spacers, 1);
 			border-radius: map-get(def.$spacers, 1);
 
 			border: 1px solid $border-color;
 
 			@include downscaled-image();
-			object-fit: cover;
+			object-fit: contain;
 			height: 100%;
 
 			max-width: 33vw;
-			min-width: 5vh; // for super thin images
-			background-color: rebeccapurple;
+			min-width: Max(3vw, 20px); // for super thin images to be clickable
+
+			transition: margin-left 0.3s, margin-right 0.3s;
 		}
 
-		&--active {
+		&--active img {
 			margin-left: map-get(def.$spacers, 3);
 			margin-right: map-get(def.$spacers, 3);
 		}

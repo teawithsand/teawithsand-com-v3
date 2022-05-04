@@ -10,8 +10,9 @@ export const GalleryItemDisplay = (props: {
 	item: GalleryItem
 	className?: string
 	style?: React.CSSProperties
+	isBottomBar?: boolean
 }) => {
-	const { item, className, style } = props
+	const { item, className, style, isBottomBar } = props
 
 	if (item.type === "element") {
 		const Element = item.element
@@ -27,10 +28,26 @@ export const GalleryItemDisplay = (props: {
 			/>
 		)
 	} else if (item.type === "fluid-image") {
+		if (!isBottomBar) {
+			return <GatsbyImage image={item.image} alt={item.alt} />
+		}
+
+		// HACK: I wasn't able to style gatsby image
+		// so instead I've rendered id to image myself
+		//
+		// well, in fact I was able to style it in the end
+		// but gatsby sometimes won't render this image until it's shown in top panel
+		// which is bad
+		// 
+		// in the end bypass here is ok, the only thing needed here is picture element
+		// for multiple format support
+		const sources = item.image.images.sources
+		let source = sources?.find(s => s.type === "image/webp")
+		if (!source && sources && sources.length > 0) source = sources[0]
 		return (
-			<GatsbyImage
-				image={item.image}
+			<img
 				alt={item.alt}
+				srcSet={source?.srcSet ?? ""}
 				className={className}
 				style={style}
 			/>
