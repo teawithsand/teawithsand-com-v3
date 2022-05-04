@@ -4,7 +4,6 @@ import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPan
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
 import { setRenderSize } from "@app/components/redux-dom-paint/redux/paintActions"
 import {
-	usePaintStateSelector,
 	useSceneInfo,
 	useSceneSelector,
 } from "@app/components/redux-dom-paint/redux/paintSelectors"
@@ -19,7 +18,7 @@ import { CSSTransition } from "react-transition-group"
 
 import * as styles from "./paintDrawDisplay.module.scss"
 
-const moveOutClasses = findTransitionClasses("moveOut", styles)
+const panelAnimationClasses = findTransitionClasses("panelAnimation", styles)
 
 export default () => {
 	const dispatch = useDispatch()
@@ -29,9 +28,7 @@ export default () => {
 	const isSuperSmallToShowInnerButton =
 		breakpoint === "sm" || breakpoint === "xs"
 
-	const [showSidePanel, setShowSidePanel] = useState(true)
-	const [isAnimatingNow, setIsAnimatingNow] = useState(false)
-
+	const [hideSidePanel, setHideSidePanel] = useState(true)
 	const elementRef = useRef<HTMLDivElement | null>(null)
 
 	const pathTool = usePathTool()
@@ -81,25 +78,19 @@ export default () => {
 			</div>
 
 			{/* TODO(teawithsand): make this pretty appear on small devices, right now it causes style flash */}
-			{!isAnimatingNow &&
-			(!showSidePanel || !isSuperSmallToShowInnerButton) ? (
-				<button
-					className={styles.drawContainerTogglePanel}
-					onClick={() => setShowSidePanel(!showSidePanel)}
-				>
-					Toggle panel
-				</button>
-			) : null}
+
+			<button
+				className={styles.toggleButton}
+				onClick={() => setHideSidePanel(!hideSidePanel)}
+			>
+				Options / Exit
+			</button>
 
 			<CSSTransition
 				timeout={500}
-				in={showSidePanel}
+				in={hideSidePanel}
 				appear={true}
-				classNames={moveOutClasses}
-				onEnter={() => setIsAnimatingNow(true)}
-				onEntered={() => setIsAnimatingNow(false)}
-				onExit={() => setIsAnimatingNow(true)}
-				onExited={() => setIsAnimatingNow(false)}
+				classNames={panelAnimationClasses}
 			>
 				{/*
 					This div really simplifies css selectors hierarchy in pantDrawDisplay.module.scss
@@ -107,10 +98,11 @@ export default () => {
 
 					It wouldn't be that bad do pass className down the hierarchy, but who needs that?
 				*/}
-				<div className={styles.drawContainerSidePanel}>
+
+				<div className={classnames(styles.sidePanel, styles.panelAnimation)}>
 					<PaintDrawPanel
-						showToggleButton={isSuperSmallToShowInnerButton}
-						onTogglePanel={() => setShowSidePanel(!showSidePanel)}
+						showToggleButton={true}
+						onTogglePanel={() => setHideSidePanel(!hideSidePanel)}
 					/>
 				</div>
 			</CSSTransition>
