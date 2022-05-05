@@ -12,12 +12,12 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 	const blogPost = path.resolve(`./src/templates/blog-post.js`)
 
 	// Get all markdown blog posts sorted by date
-	const result = await graphql`
+	const result = await graphql(`
 			query {
 				allFile(
 					filter: {
 						sourceInstanceName: { eq: "blog" }
-						relativePath: { regex: "/\\.md/" }
+						relativePath: { regex: "/\\\\.md/" }
 					}
 					sort: {
 						fields: [childMarkdownRemark___frontmatter___date]
@@ -34,7 +34,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 					}
 				}
 			}
-		`
+		`)
 
 	if (result.errors) {
 		reporter.panicOnBuild(
