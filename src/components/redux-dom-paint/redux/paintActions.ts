@@ -1,11 +1,9 @@
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
-import { Rect } from "@app/components/redux-dom-paint/primitive"
-import { rectNormalize } from "@app/components/redux-dom-paint/primitive/calc"
 import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
 import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
 import { createAction, createReducer } from "@reduxjs/toolkit"
-import { number } from "prop-types"
-import { create } from "react-test-renderer"
+import { PathPaintToolOptions } from "@app/components/redux-dom-paint/ui/tool/path"
+import { Color } from "@app/components/redux-dom-paint/primitive"
 
 const actionPrefix = "twsblog/dompaint"
 
@@ -39,6 +37,13 @@ export const setSceneOffsets = createAction<[number, number]>(
 )
 export const setZoomFactor = createAction<number>(
 	`${actionPrefix}/setZoomFactor`
+)
+export const setPathPaintToolOptions = createAction<PathPaintToolOptions>(
+	`${actionPrefix}/setPathPaintToolOptions`
+)
+export const setDrawColor = createAction<Color>(`${actionPrefix}/setDrawColor`)
+export const setFillColor = createAction<Color | null>(
+	`${actionPrefix}/setFillColor`
 )
 
 const initialPaintState: Readonly<PaintState> = {
@@ -124,5 +129,14 @@ export const createPaintReducer = () =>
 			.addCase(setRenderSize, (state, action) => {
 				state.sceneParameters.viewportHeight = action.payload.height
 				state.sceneParameters.viewportWidth = action.payload.width
+			})
+			.addCase(setPathPaintToolOptions, (state, action) => {
+				state.uiState.pathToolOptions = action.payload
+			})
+			.addCase(setDrawColor, (state, action) => {
+				state.uiState.drawColor = action.payload
+			})
+			.addCase(setFillColor, (state, action) => {
+				state.uiState.fillColor = action.payload
 			})
 	})
