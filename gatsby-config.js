@@ -1,11 +1,11 @@
 module.exports = {
 	siteMetadata: {
-		title: `TWS Blog`,
+		title: `TWS website & blog`,
 		author: {
 			name: `Teawithsand`,
 			summary: `programmer, who sometimes makes something useful`,
 		},
-		description: `teawithsand's blog`,
+		description: `teawithsand's website with blog, portfolio and some utils`,
 		siteUrl: `https://www.teawithsand.com/`,
 	},
 	plugins: [
@@ -75,55 +75,68 @@ module.exports = {
 			resolve: `gatsby-plugin-feed`,
 			options: {
 				query: `
-          {
-            site {
-              siteMetadata {
-                title
-                description
-                siteUrl
-                site_url: siteUrl
-              }
-            }
-          }
-        `,
+					{
+						site {
+						siteMetadata {
+							title
+							description
+							siteUrl
+							site_url: siteUrl
+						}
+						}
+					}
+				`,
 				feeds: [
 					{
-						serialize: ({ query: { site, allMarkdownRemark } }) => {
-							return allMarkdownRemark.nodes.map(node => {
-								return Object.assign({}, node.frontmatter, {
-									description: node.excerpt,
-									date: node.frontmatter.date,
-									url:
-										site.siteMetadata.siteUrl +
-										node.fields.slug,
-									guid:
-										site.siteMetadata.siteUrl +
-										node.fields.slug,
-									custom_elements: [
-										{ "content:encoded": node.html },
-									],
+						serialize: ({ query: { site, allFile } }) => {
+							return allFile.nodes
+								.map(node => node.childMarkdownRemark)
+								.map(node => {
+									return Object.assign({}, node.frontmatter, {
+										description: node.excerpt,
+										date: node.frontmatter.date,
+										url:
+											site.siteMetadata.siteUrl +
+											"blog/post" +
+											node.fields.slug,
+										guid:
+											site.siteMetadata.siteUrl +
+											"blog/post" +
+											node.fields.slug,
+										custom_elements: [
+											{ "content:encoded": node.html },
+										],
+									})
 								})
-							})
 						},
 						query: `
-              {
-                allMarkdownRemark(
-                  sort: { order: DESC, fields: [frontmatter___date] },
-                ) {
-                  nodes {
-                    excerpt
-                    html
-                    fields {
-                      slug
-                    }
-                    frontmatter {
-                      title
-                      date
-                    }
-                  }
-                }
-              }
-            `,
+							query {
+								allFile(
+									filter: {
+										sourceInstanceName: { eq: "blog" }
+										relativePath: { regex: "/\\\\.md/" }
+									}
+									sort: {
+										fields: [childMarkdownRemark___frontmatter___date]
+										order: ASC
+									}
+								) {
+									nodes {
+										childMarkdownRemark {
+											excerpt
+											html
+											fields {
+												slug
+											}
+											frontmatter {
+												title
+												date
+											}
+										}
+									}
+								}
+							}
+						`,
 						output: "/rss.xml",
 						title: "teawithsand's blog RSS feed",
 					},
@@ -133,8 +146,8 @@ module.exports = {
 		{
 			resolve: `gatsby-plugin-manifest`,
 			options: {
-				name: `Gatsby Starter Blog`,
-				short_name: `GatsbyJS`,
+				name: `Teawithsand's website`,
+				short_name: `teaiwthsand.com`,
 				start_url: `/`,
 				background_color: `#ffffff`,
 				// This will impact how browsers show your PWA/website
