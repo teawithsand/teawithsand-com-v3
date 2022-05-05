@@ -6,7 +6,7 @@ import {
 } from "@app/components/redux-dom-paint/primitive/calc"
 import { SceneRenderProps } from "@app/components/redux-dom-paint/render/SceneRender"
 import SVGLayerRender from "@app/components/redux-dom-paint/render/svg/SVGLayerRender"
-import React, { Ref, useEffect, useState } from "react"
+import React, { MutableRefObject, Ref, useEffect, useState } from "react"
 
 export type SVGElementRenderProps<T extends string> = {
 	element: PrimPaintElement & { type: T }
@@ -18,10 +18,18 @@ export default (
 	props: SceneRenderProps & {
 		style?: React.CSSProperties
 		className?: string
-		ref?: Ref<SVGSVGElement>
+		svgElementRef?: MutableRefObject<SVGSVGElement>
 	}
 ) => {
-	const { scene, width, height, style, className, ref, viewBox } = props
+	const {
+		scene,
+		width,
+		height,
+		style,
+		className,
+		svgElementRef: ref,
+		viewBox,
+	} = props
 
 	const vb = rectNormalize(viewBox)
 	const { width: rectWidth, height: rectHeight } = rectDimensions(vb)
@@ -35,7 +43,7 @@ export default (
 			className={className}
 			ref={ref}
 			viewBox={`${vb[NORM_RECT_MIN][0]} ${vb[NORM_RECT_MIN][1]} ${rectWidth} ${rectHeight}`}
-			onDrag={(e) => {
+			onDrag={e => {
 				e.preventDefault()
 				return false
 			}}

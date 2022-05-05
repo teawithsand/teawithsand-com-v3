@@ -1,20 +1,39 @@
 import { homePath } from "@app/components/paths"
-import { encodeColor } from "@app/components/redux-dom-paint/primitive"
+import {
+	Color,
+	encodeColor,
+	encodeColorForInput,
+	parseColor,
+} from "@app/components/redux-dom-paint/primitive"
 import {
 	redoUndoneMutation,
+	setDrawColor,
+	setFillColor,
 	setZoomFactor,
 	undoCommittedMutation,
 } from "@app/components/redux-dom-paint/redux/paintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import { Link } from "gatsby"
-import React from "react"
+import React, { useMemo } from "react"
 import { useDispatch } from "react-redux"
 
 import * as styles from "./paintDrawPanel.module.scss"
 
+// TODO(teawithsand): move this hack somewhere else
+const download = (filename: string, url: string) => {
+	var element = document.createElement("a")
+	element.setAttribute("href", url)
+	element.setAttribute("download", filename)
+	document.body.appendChild(element)
+	element.click()
+	document.body.removeChild(element)
+}
+
 export default (props: {
 	showToggleButton?: boolean
 	onTogglePanel?: () => void
+
+	svgDataURLHackGetter: () => string
 }) => {
 	const undoCount = usePaintStateSelector(s => s.committedMutations.length)
 	const redoCount = usePaintStateSelector(s => s.redoStack.length)
@@ -26,12 +45,17 @@ export default (props: {
 
 	const zoomFactor = usePaintStateSelector(s => s.sceneParameters.zoomFactor)
 
+	const pathToolOptions = usePaintStateSelector(
+		s => s.uiState.pathToolOptions
+	)
+
 	const { sceneWidth, sceneHeight } = usePaintStateSelector(s => ({
 		sceneWidth: s.sceneParameters.sceneWidth,
 		sceneHeight: s.sceneParameters.sceneHeight,
 	}))
 
 	const { showToggleButton, onTogglePanel } = props
+
 	// TODO(teawithsand): allow swipes to hide this panel with useGesture
 	return (
 		<div className={styles.panel}>
@@ -105,9 +129,9 @@ export default (props: {
 					<input
 						className={styles.colorShowcasePicker}
 						type="color"
-						value={encodeColor(fillColor ?? [0, 0, 0, 0])}
+						value={encodeColorForInput(strokeColor)}
 						onChange={e => {
-							// TODO(teawithsand): implement it
+							dispatch(setDrawColor(parseColor(e.target.value)))
 						}}
 					/>
 					<div
@@ -124,9 +148,11 @@ export default (props: {
 					<input
 						className={styles.colorShowcasePicker}
 						type="color"
-						value={encodeColor(fillColor ?? [255, 255, 255, 0])}
+						value={encodeColorForInput(
+							fillColor ?? [255, 255, 255, 0]
+						)}
 						onChange={e => {
-							// TODO(teawithsand): implement it
+							dispatch(setFillColor(parseColor(e.target.value)))
 						}}
 					/>
 					<div
@@ -142,18 +168,19 @@ export default (props: {
 				<button
 					className={styles.sectionMainButton}
 					onClick={() => {
-						// TODO(teawithsand): implement it
+						dispatch(setFillColor(null))
 					}}
 				>
 					Remove fill
 				</button>
 			</div>
+			{/*
 			<div className={styles.section}>
 				<ul className={styles.sectionInfoTextList}>
 					<li>Scene width: {sceneWidth}</li>
 					<li>Scene height: {sceneHeight}</li>
 				</ul>
-				{/*
+				
 				Zoom:
 				<input
 					type="range"
@@ -166,7 +193,18 @@ export default (props: {
 						dispatch(setZoomFactor(v))
 					}}
 				/>			
-				*/}
+			</div>
+			*/}
+			<div className={styles.section}>
+				<h2 className={styles.sectionTitle}>Export</h2>
+				<button
+					className={styles.sectionMainButton}
+					onClick={() => {
+						download("drawing.svg", props.svgDataURLHackGetter())
+					}}
+				>
+					Download image
+				</button>
 			</div>
 		</div>
 	)

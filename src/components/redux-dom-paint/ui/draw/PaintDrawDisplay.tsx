@@ -22,7 +22,11 @@ const panelAnimationClasses = findTransitionClasses("panelAnimation", styles)
 
 export default () => {
 	const dispatch = useDispatch()
-	const { viewportWidth: renderWidth, viewportHeight: renderHeight, viewBox } = useSceneInfo()
+	const {
+		viewportWidth: renderWidth,
+		viewportHeight: renderHeight,
+		viewBox,
+	} = useSceneInfo()
 
 	const [hideSidePanel, setHideSidePanel] = useState(true)
 	const elementRef = useRef<HTMLDivElement | null>(null)
@@ -51,22 +55,27 @@ export default () => {
 		)
 	}, [windowHeight, windowWidth])
 
+	const sceneRef = useRef<any>(null)
+
+	const svgDataURLGetter = () =>
+		sceneRef.current
+			? "data:image/svg+xml;base64," +
+			  window.btoa(
+					new XMLSerializer().serializeToString(sceneRef.current)
+			  )
+			: ""
+
 	return (
-		<div
-			className={classnames(styles.drawContainer)}
-		>
+		<div className={classnames(styles.drawContainer)}>
 			{/* TODO(teawithsand): for sake of good code style, move this to the top of return of render function */}
 			<PaintDrawNoDoomHooks />
-			<div
-				className={styles.mainDisplay}
-				ref={elementRef}
-				{...bind}
-			>
+			<div className={styles.mainDisplay} ref={elementRef} {...bind}>
 				<SVGSceneRender
 					scene={scene}
 					height={renderHeight}
 					width={renderWidth}
 					viewBox={viewBox}
+					svgElementRef={sceneRef}
 				/>
 			</div>
 
@@ -92,10 +101,16 @@ export default () => {
 					It wouldn't be that bad do pass className down the hierarchy, but who needs that?
 				*/}
 
-				<div className={classnames(styles.sidePanel, styles.panelAnimation)}>
+				<div
+					className={classnames(
+						styles.sidePanel,
+						styles.panelAnimation
+					)}
+				>
 					<PaintDrawPanel
 						showToggleButton={true}
 						onTogglePanel={() => setHideSidePanel(!hideSidePanel)}
+						svgDataURLHackGetter={svgDataURLGetter}
 					/>
 				</div>
 			</CSSTransition>
