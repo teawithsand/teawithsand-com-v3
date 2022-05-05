@@ -1,0 +1,11 @@
+@use "@app/styles/defines.scss" as def;
+@use "@app/styles/bs.scss" as bs;
+
+.main-container {
+    @extend .container;
+	padding-top: map-get(def.$spacers, 5);
+
+    &__header {
+        text-align: center;
+    }
+}

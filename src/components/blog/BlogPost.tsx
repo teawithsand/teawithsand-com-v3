@@ -3,12 +3,16 @@ import Seo from "@app/components/seo"
 import { Link } from "gatsby"
 import React, { useEffect } from "react"
 
+import DisqusTemplate from "./Disqus"
 import * as styles from "./blogPost.module.scss"
 
 export interface BlogPostData {
 	id: string
 	excerpt: string
 	html: string
+	fields: {
+		slug: string
+	}
 	frontmatter: {
 		title: string
 		date: string
@@ -99,6 +103,17 @@ export default (props: {
 						) : null}
 					</footer>
 				</article>
+				<aside>
+					<DisqusTemplate
+						pageIdentifier={post.fields.slug}
+						pageURL={
+							"https://www.teawithsand.com" +
+							"/blog/post" +
+							post.fields.slug
+						}
+						pageTitle={post.frontmatter.title}
+					/>
+				</aside>
 			</main>
 		</>
 	)
