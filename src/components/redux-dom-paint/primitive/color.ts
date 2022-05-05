@@ -17,6 +17,19 @@ export const encodeColor = (c: Color): string => {
 	}
 }
 
+export const encodeColorForInput = (c: Color): string => {
+	const c2h = (c: number) => {
+		const hex = c.toString(16)
+		return hex.length == 1 ? "0" + hex : hex
+	}
+
+	if (c.length === 3) {
+		return `#${c2h(c[0])}${c2h(c[1])}${c2h(c[2])}`
+	} else {
+		return `#${c2h(c[0])}${c2h(c[1])}${c2h(c[2])}` // input does not support alpha, so do not encode it
+	}
+}
+
 export const parseColor = (input: string): Color => {
 	if (input.substring(0, 1) == "#") {
 		const columnLength = (input.length - 1) / 3
