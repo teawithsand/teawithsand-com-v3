@@ -146,14 +146,14 @@ export default () => {
 						<div className={styles.featureContent}>
 							<p>
 								Aside from being a portfolio, it's also my blog
-								and a few utils. In the past it used my simple static side generator
+								and a few utils. In the past it used my simple static site generator{" "}
 								<a href="https://github.com/teawithsand/handmd">
 									handmd
 								</a>{" "}
 								Now it runs on gatsby.
 							</p>
 							<p>
-								Technologies used:  TypeScript, Webpack, SASS, Gatsby, React
+								Technologies used: TypeScript, Webpack, SASS, Gatsby, React
 							</p>
 							<p>
 								<Link
