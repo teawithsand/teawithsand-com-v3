@@ -388,7 +388,7 @@ $overlay-width: 20%;
 			height: 100%;
 
 			max-width: 33vw;
-			min-width: Max(3vw, 20px); // for super thin images to be clickable
+			min-width: Max(3vw, 90px); // for super thin images to be clickable
 
 			transition: margin-left 0.3s, margin-right 0.3s;
 		}
