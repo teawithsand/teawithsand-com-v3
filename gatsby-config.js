@@ -1,15 +1,12 @@
 module.exports = {
 	siteMetadata: {
-		title: `Gatsby Starter Blog`,
+		title: `TWS Blog`,
 		author: {
-			name: `Kyle Mathews`,
-			summary: `who lives and works in San Francisco building useful things.`,
+			name: `Teawithsand`,
+			summary: `programmer, who sometimes makes something useful`,
 		},
-		description: `A starter blog demonstrating what Gatsby can do.`,
-		siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
-		social: {
-			twitter: `kylemathews`,
-		},
+		description: `teawithsand's blog`,
+		siteUrl: `https://www.teawithsand.com/`,
 	},
 	plugins: [
 		`gatsby-plugin-image`,
@@ -128,7 +125,7 @@ module.exports = {
               }
             `,
 						output: "/rss.xml",
-						title: "Gatsby Starter Blog RSS Feed",
+						title: "teawithsand's blog RSS feed",
 					},
 				],
 			},
@@ -148,6 +145,12 @@ module.exports = {
 			},
 		},
 		`gatsby-plugin-react-helmet`,
+		{
+			resolve: "gatsby-plugin-remove-generator",
+			options: {
+				removeVersionOnly: true, // this is what I wanted tbh
+			},
+		},
 		// this (optional) plugin enables Progressive Web App + Offline functionality
 		// To learn more, visit: https://gatsby.dev/offline
 		// `gatsby-plugin-offline`,

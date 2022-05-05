@@ -13,28 +13,28 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
 	// Get all markdown blog posts sorted by date
 	const result = await graphql(`
-			query {
-				allFile(
-					filter: {
-						sourceInstanceName: { eq: "blog" }
-						relativePath: { regex: "/\\\\.md/" }
-					}
-					sort: {
-						fields: [childMarkdownRemark___frontmatter___date]
-						order: ASC
-					}
-				) {
-					nodes {
-						childMarkdownRemark {
-							id
-							fields {
-								slug
-							}
+		query {
+			allFile(
+				filter: {
+					sourceInstanceName: { eq: "blog" }
+					relativePath: { regex: "/\\\\.md/" }
+				}
+				sort: {
+					fields: [childMarkdownRemark___frontmatter___date]
+					order: ASC
+				}
+			) {
+				nodes {
+					childMarkdownRemark {
+						id
+						fields {
+							slug
 						}
 					}
 				}
 			}
-		`)
+		}
+	`)
 
 	if (result.errors) {
 		reporter.panicOnBuild(
@@ -195,7 +195,7 @@ exports.onCreateWebpackConfig = ({
 		new TSConfigPathsPlugin(),
 	]
 
-	if(config.mode === "production") {
+	if (config.mode === "production") {
 		config.devtool = false
 	}
 
