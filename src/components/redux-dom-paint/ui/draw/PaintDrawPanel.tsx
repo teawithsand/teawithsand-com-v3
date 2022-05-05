@@ -24,11 +24,15 @@ export default (props: {
 
 	const dispatch = useDispatch()
 
-	// TODO(teawithsand): add ctrl+z and ctrl+y hooks here
+	const zoomFactor = usePaintStateSelector(s => s.sceneParameters.zoomFactor)
 
-	const zf = usePaintStateSelector(s => s.sceneParameters.zoomFactor)
+	const { sceneWidth, sceneHeight } = usePaintStateSelector(s => ({
+		sceneWidth: s.sceneParameters.sceneWidth,
+		sceneHeight: s.sceneParameters.sceneHeight,
+	}))
 
 	const { showToggleButton, onTogglePanel } = props
+	// TODO(teawithsand): allow swipes to hide this panel with useGesture
 	return (
 		<div className={styles.panel}>
 			<div className={styles.section}>
@@ -77,14 +81,14 @@ export default (props: {
 				<div className={styles.sectionButtonBar}>
 					<button
 						onClick={() => {
-							dispatch(setZoomFactor(zf + 0.1))
+							dispatch(setZoomFactor(zoomFactor + 0.1))
 						}}
 					>
 						Zoom In
 					</button>
 					<button
 						onClick={() => {
-							dispatch(setZoomFactor(zf - 0.1))
+							dispatch(setZoomFactor(zoomFactor - 0.1))
 						}}
 					>
 						Zoom Out
@@ -135,9 +139,34 @@ export default (props: {
 					></div>
 				</div>
 
-				<button className={styles.sectionMainButton} onClick={() => {}}>
+				<button
+					className={styles.sectionMainButton}
+					onClick={() => {
+						// TODO(teawithsand): implement it
+					}}
+				>
 					Remove fill
 				</button>
+			</div>
+			<div className={styles.section}>
+				<ul className={styles.sectionInfoTextList}>
+					<li>Scene width: {sceneWidth}</li>
+					<li>Scene height: {sceneHeight}</li>
+				</ul>
+				{/*
+				Zoom:
+				<input
+					type="range"
+					min="0.1"
+					max="2"
+					step="0.1"
+					value={zoomFactor}
+					onChange={e => {
+						const v = parseFloat(e.target.value)
+						dispatch(setZoomFactor(v))
+					}}
+				/>			
+				*/}
 			</div>
 		</div>
 	)

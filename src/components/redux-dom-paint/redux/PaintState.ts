@@ -18,12 +18,15 @@ export type PaintStateUI = {
 }
 
 export type PaintStateSceneParameters = {
-	renderWidth: number
-	renderHeight: number
+	// Target render container size. Usually screen size.
+	viewportWidth: number
+	viewportHeight: number
 
+	// User-requested scene parameters
 	sceneWidth: number
 	sceneHeight: number
 
+	// Offsets used for user-based canvas dragging
 	offsetX: number
 	offsetY: number
 

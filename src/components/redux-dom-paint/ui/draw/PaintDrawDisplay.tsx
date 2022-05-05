@@ -22,11 +22,7 @@ const panelAnimationClasses = findTransitionClasses("panelAnimation", styles)
 
 export default () => {
 	const dispatch = useDispatch()
-	const { renderWidth, renderHeight, viewBox } = useSceneInfo()
-
-	const breakpoint = useBreakpoint()
-	const isSuperSmallToShowInnerButton =
-		breakpoint === "sm" || breakpoint === "xs"
+	const { viewportWidth: renderWidth, viewportHeight: renderHeight, viewBox } = useSceneInfo()
 
 	const [hideSidePanel, setHideSidePanel] = useState(true)
 	const elementRef = useRef<HTMLDivElement | null>(null)
@@ -34,6 +30,7 @@ export default () => {
 	const pathTool = usePathTool()
 
 	const bind = usePaintDraw(elementRef, event => {
+		// console.log("mouse event", event)
 		pathTool.onEvent(event)
 	})
 
@@ -57,15 +54,11 @@ export default () => {
 	return (
 		<div
 			className={classnames(styles.drawContainer)}
-			style={{
-				width: "100vw",
-				height: "100vh",
-			}}
 		>
 			{/* TODO(teawithsand): for sake of good code style, move this to the top of return of render function */}
 			<PaintDrawNoDoomHooks />
 			<div
-				className={styles.drawContainerMainDisplay}
+				className={styles.mainDisplay}
 				ref={elementRef}
 				{...bind}
 			>

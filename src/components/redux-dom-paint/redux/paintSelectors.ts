@@ -13,6 +13,8 @@ import produce from "immer"
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
 
+const posOrZero = (n: number) => (n > 0 ? n : 0)
+
 /**
  * Typed wrapper over useSelector from react-redux.
  */
@@ -22,31 +24,97 @@ export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) =>
 export const useSceneInfo = () => {
 	return usePaintStateSelector(s => {
 		const {
-			renderWidth,
-			renderHeight,
+			viewportWidth,
+			viewportHeight,
 			zoomFactor,
 			sceneWidth,
 			sceneHeight,
+			offsetX,
+			offsetY,
 		} = s.sceneParameters
 
-		const renderAspectRation = renderWidth / renderHeight
-		// TODO(teawithsand): code getting vb dimensions, scale and transform with compliance to aspect ratio
+		const targetViewportWidth = Math.round(viewportWidth / zoomFactor)
+		const targetViewportHeight = Math.round(viewportHeight / zoomFactor)
 
-		const vbDisplayWidth = sceneWidth / zoomFactor
-		const vbDisplayHeight = sceneHeight / zoomFactor
+		const viewboxOffsetX = offsetX
+		const viewboxOffsetY = offsetY
 
-		return {
-			renderWidth,
-			renderHeight,
+		const freeSpaceLeftX = posOrZero(-offsetX)
+		const freeSpaceTopY = posOrZero(-offsetY)
+		if (freeSpaceLeftX || freeSpaceTopY)
+			throw new Error("unexpected free space")
 
-			transformX: 0,
-			transformY: 0,
-			scale: 1,
+		const freeSpaceRightX = posOrZero(
+			targetViewportWidth + offsetX - sceneWidth
+		)
+		const freeSpaceBottomY = posOrZero(
+			targetViewportHeight + offsetY - sceneHeight
+		)
+
+		const viewboxStartOffsetX = Math.min(
+			viewboxOffsetX + freeSpaceLeftX,
+			sceneWidth
+		)
+		const viewboxStartOffsetY = Math.min(
+			viewboxOffsetY + freeSpaceTopY,
+			sceneHeight
+		)
+
+		const freeSpaceRatio = viewportWidth / (viewportWidth + freeSpaceRightX)
+
+		const res = {
+			viewportWidth: posOrZero(
+				viewportWidth * freeSpaceRatio
+			),
+			viewportHeight: posOrZero(
+				viewportHeight * freeSpaceRatio
+			),
+
+			transformX: freeSpaceLeftX,
+			transformY: freeSpaceTopY,
+			scale: 1, // base zero scale
 			viewBox: rectNormalize([
-				[0, 0],
-				[vbDisplayWidth, vbDisplayHeight],
+				[viewboxStartOffsetX, viewboxStartOffsetY],
+				[
+					Math.min(
+						sceneWidth,
+						Math.max(
+							viewboxStartOffsetX,
+							targetViewportWidth +
+								viewboxStartOffsetX -
+								freeSpaceRightX
+						)
+					),
+					Math.min(
+						sceneHeight,
+						Math.max(
+							viewboxStartOffsetY,
+							targetViewportHeight +
+								viewboxStartOffsetY -
+								freeSpaceBottomY
+						)
+					),
+				],
 			]),
+
+			// In some cases, canvas has to be 100% hidden
+			// then it would be expressed as scale 0, which is not valid
+			// hence this parameter
+			// hide: false,
+			// hide can be expressed by zero width/height viewport
 		}
+
+		// console.log("inp", s.sceneParameters, "res", {
+		// 	targetViewportHeight,
+		// 	targetViewportWidth,
+		// 	freeSpaceBottomY,
+		// 	freeSpaceTopY,
+		// 	freeSpaceLeftX,
+		// 	freeSpaceRightX,
+		// 	...res,
+		// })
+
+		return res
 	})
 }
 

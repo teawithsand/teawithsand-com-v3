@@ -50,8 +50,8 @@ const initialPaintState: Readonly<PaintState> = {
 	sceneParameters: {
 		offsetX: 0,
 		offsetY: 0,
-		renderHeight: 1,
-		renderWidth: 1,
+		viewportHeight: 1,
+		viewportWidth: 1,
 
 		sceneHeight: 4000,
 		sceneWidth: 4000,
@@ -122,7 +122,7 @@ export const createPaintReducer = () =>
 				state.sceneParameters.zoomFactor = action.payload
 			})
 			.addCase(setRenderSize, (state, action) => {
-				state.sceneParameters.renderHeight = action.payload.height
-				state.sceneParameters.renderWidth = action.payload.width
+				state.sceneParameters.viewportHeight = action.payload.height
+				state.sceneParameters.viewportWidth = action.payload.width
 			})
 	})
