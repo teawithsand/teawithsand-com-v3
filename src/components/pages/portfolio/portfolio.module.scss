@@ -25,7 +25,7 @@ $feature-border-color: rgba(0, 0, 0, 0.4);
 
 .feature {
     $this: &;
-    --var-xasdf-one: 1;
+    --var-xasdf-one: 1; // so gatsby does not emit warning
 
     &--active {
         #{$this}__header {
@@ -81,7 +81,6 @@ $feature-border-color: rgba(0, 0, 0, 0.4);
 
     &__content {
         margin-top: map-get(def.$spacers, 1);
-        padding-left: map-get(def.$spacers, 3);
     }
 }
 
