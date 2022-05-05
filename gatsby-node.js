@@ -195,6 +195,10 @@ exports.onCreateWebpackConfig = ({
 		new TSConfigPathsPlugin(),
 	]
 
+	if(config.mode === "production") {
+		config.devtool = false
+	}
+
 	if (stage === "build-html" || stage === "develop-html") {
 		config.module.rules = [
 			// {
