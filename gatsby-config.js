@@ -97,11 +97,11 @@ module.exports = {
 										date: node.frontmatter.date,
 										url:
 											site.siteMetadata.siteUrl +
-											"blog/post" +
+											"/blog/post" +
 											node.fields.slug,
 										guid:
 											site.siteMetadata.siteUrl +
-											"blog/post" +
+											"/blog/post" +
 											node.fields.slug,
 										custom_elements: [
 											{ "content:encoded": node.html },
