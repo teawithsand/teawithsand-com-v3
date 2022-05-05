@@ -155,6 +155,10 @@ $overlay-width: 20%;
 		justify-content: center;
 		vertical-align: middle;
 		text-align: center;
+
+		@include bs.media-breakpoint-down(sm) {
+			display: none;
+		}
 	}
 
 	&__options {
