@@ -102,7 +102,9 @@ export default (props: {
 					<li>You can undo {undoCount} operations</li>
 					<li>You can redo {redoCount} operations</li>
 				</ul>
-				<div className={styles.sectionButtonBar}>
+				{/*
+				
+					<div className={styles.sectionButtonBar}>
 					<button
 						onClick={() => {
 							dispatch(setZoomFactor(zoomFactor + 0.1))
@@ -117,7 +119,8 @@ export default (props: {
 					>
 						Zoom Out
 					</button>
-				</div>
+					</div>
+					*/}
 			</div>
 
 			<div className={styles.section}>
