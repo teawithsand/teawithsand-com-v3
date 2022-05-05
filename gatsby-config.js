@@ -181,5 +181,20 @@ module.exports = {
 				allExtensions: true, // defaults to false
 			},
 		},
+		// Note: brotil is not used for now
+		// since nginx does not support it by default
+		// and I am to lazy to compile plugin in dockerfile
+		// so gzip must be enough
+		{
+			resolve: "gatsby-plugin-zopfli",
+			options: {
+				extensions: ["css", "html", "js", "svg", "txt", "json"],
+				compression: {
+					numiterations: 15,
+					blocksplitting: true,
+					blocksplittingmax: 15,
+				},
+			},
+		},
 	],
 }

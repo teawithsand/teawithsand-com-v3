@@ -1,8 +1,5 @@
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
-
-const zlib = require("zlib")
-const CompressionPlugin = require("compression-webpack-plugin")
 const TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
@@ -140,27 +137,6 @@ exports.onCreateWebpackConfig = ({
 
 	config.plugins = [
 		...(config.plugins ?? []),
-		new CompressionPlugin({
-			filename: "[path][base].gz",
-			test: /\.(js|css|svg|json|html|xml).*$/i,
-			threshold: 0,
-			algorithm: "gzip",
-			compressionOptions: {
-				level: 9,
-			},
-		}),
-		new CompressionPlugin({
-			filename: "[path][base].br",
-			test: /\.(js|css|svg|json|html|xml).*$/i,
-			threshold: 0,
-			algorithm: "brotliCompress",
-			compressionOptions: {
-				params: {
-					[zlib.constants.BROTLI_PARAM_QUALITY]:
-						zlib.constants.BROTLI_MAX_QUALITY,
-				},
-			},
-		}),
 	]
 
 	const newUrlLoaderRule = {
