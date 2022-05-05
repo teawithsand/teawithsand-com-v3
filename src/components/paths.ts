@@ -20,3 +20,8 @@ export const linkEmail = `mailto:${email}`
 export const blogPostPath = (slug: string) => {
 	return innerBlogPostPath(slug)
 }
+
+export const blogTagPath = (tag: string) => {
+	// TODO(teawithsand): implement this path
+	return `/blog/tag/${tag}`
+}

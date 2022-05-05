@@ -40,6 +40,7 @@ export const pageQuery = graphql`
 				title
 				date(formatString: "MMMM DD, YYYY")
 				description
+				tags
 			}
 		}
 		previous: markdownRemark(id: { eq: $previousPostId }) {
@@ -48,6 +49,7 @@ export const pageQuery = graphql`
 			}
 			frontmatter {
 				title
+				tags
 			}
 		}
 		next: markdownRemark(id: { eq: $nextPostId }) {
@@ -56,6 +58,7 @@ export const pageQuery = graphql`
 			}
 			frontmatter {
 				title
+				tags
 			}
 		}
 	}

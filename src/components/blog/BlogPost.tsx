@@ -1,10 +1,11 @@
-import { blogPostListPath, homePath } from "@app/components/paths"
+import { blogPostListPath, blogPostPath, homePath } from "@app/components/paths"
 import Seo from "@app/components/seo"
 import { Link } from "gatsby"
-import React, { useEffect } from "react"
+import React from "react"
 
 import DisqusTemplate from "./Disqus"
 import * as styles from "./blogPost.module.scss"
+import PostTags from "@app/components/blog/PostTags"
 
 export interface BlogPostData {
 	id: string
@@ -17,6 +18,7 @@ export interface BlogPostData {
 		title: string
 		date: string
 		description: string
+		tags?: string[] | undefined | null
 	}
 }
 
@@ -53,7 +55,12 @@ export default (props: {
 					<header>
 						<h1 itemProp="headline">{post.frontmatter.title}</h1>
 						<p>Created at: {post.frontmatter.date}</p>
+						<p>
+							<PostTags tags={post.frontmatter.tags} />
+						</p>
 					</header>
+					<hr />
+
 					<section
 						dangerouslySetInnerHTML={{ __html: post.html }}
 						itemProp="articleBody"
@@ -65,7 +72,7 @@ export default (props: {
 							<div className={styles.postFooterPrev}>
 								<div className={styles.postFooterPrevTitle}>
 									<Link
-										to={"/blog/post" + prev.fields.slug}
+										to={blogPostPath(prev.fields.slug)}
 										rel="prev"
 									>
 										{prev.frontmatter.title}
@@ -73,7 +80,7 @@ export default (props: {
 								</div>
 								<div className={styles.postFooterPrevDesc}>
 									<Link
-										to={"/blog/post" + prev.fields.slug}
+										to={blogPostPath(prev.fields.slug)}
 										rel="prev"
 									>
 										Previous post
@@ -85,7 +92,7 @@ export default (props: {
 							<div className={styles.postFooterNext}>
 								<div className={styles.postFooterPrevTitle}>
 									<Link
-										to={"/blog/post" + next.fields.slug}
+										to={blogPostPath(next.fields.slug)}
 										rel="next"
 									>
 										{next.frontmatter.title}
@@ -93,7 +100,7 @@ export default (props: {
 								</div>
 								<div className={styles.postFooterPrevDesc}>
 									<Link
-										to={"/blog/post" + next.fields.slug}
+										to={blogPostPath(next.fields.slug)}
 										rel="next"
 									>
 										Next post
@@ -108,8 +115,7 @@ export default (props: {
 						pageIdentifier={post.fields.slug}
 						pageURL={
 							"https://www.teawithsand.com" +
-							"/blog/post" +
-							post.fields.slug
+							blogPostPath(post.fields.slug)
 						}
 						pageTitle={post.frontmatter.title}
 					/>

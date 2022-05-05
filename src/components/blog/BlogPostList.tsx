@@ -1,3 +1,4 @@
+import PostTags from "@app/components/blog/PostTags"
 import classnames from "@app/util/lang/classnames"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import React from "react"
@@ -26,6 +27,7 @@ export default () => {
                     frontmatter{
                         title
                         date(formatString: "YYYY-MM-DD")
+						tags
                     }
                     excerpt(pruneLength: 160)
                 }
@@ -61,6 +63,9 @@ export default () => {
 								<h3>{e.frontmatter.title}</h3>
 							</Link>
 							<h6>Created at {e.frontmatter.date}</h6>
+							<p>
+								<PostTags tags={e.frontmatter.tags} />
+							</p>
 							<p className={styles.postEntryExcerpt}>
 								{e.excerpt}
 							</p>
