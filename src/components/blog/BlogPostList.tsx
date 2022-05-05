@@ -1,3 +1,4 @@
+import classnames from "@app/util/lang/classnames"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import React from "react"
 
@@ -47,14 +48,26 @@ export default () => {
 			</header>
 			<section>
 				<ul className={styles.postList}>
-					{entries.map((e: any) => (
-						<li key={e.id} className={styles.postEntry}>
+					{entries.map((e: any, i: number) => (
+						<li
+							key={e.id}
+							className={classnames(
+								styles.postEntry,
+								styles.postListEntry
+							)}
+						>
+							{i !== 0 ? <hr /> : null}
 							<Link to={"/blog/post" + e.fields.slug}>
 								<h3>{e.frontmatter.title}</h3>
 							</Link>
 							<h6>Created at {e.frontmatter.date}</h6>
-							<p className={styles.postEntryExcerpt}>{e.excerpt}</p>
-							<Link to={"/blog/post" + e.fields.slug} className={styles.postEntrySeePost}>
+							<p className={styles.postEntryExcerpt}>
+								{e.excerpt}
+							</p>
+							<Link
+								to={"/blog/post" + e.fields.slug}
+								className={styles.postEntrySeePost}
+							>
 								See post
 							</Link>
 						</li>

@@ -2,7 +2,7 @@
 @use "@app/styles/bs.scss" as bs;
 
 .post-list-container {
-    @extend .container;
+	@extend .container;
 	padding-top: map-get(def.$spacers, 5);
 }
 
@@ -10,20 +10,29 @@
 	list-style: none;
 	margin: 0;
 	padding: 0;
+
+	display: grid;
+	row-gap: map-get(def.$spacers, 3);
+	grid-template-columns: auto;
+	grid-auto-rows: auto;
+	grid-auto-flow: row;
+
+	&__entry {
+	}
 }
 
 .post-list-header {
-    text-align: center;
+	text-align: center;
 }
 
 .post-entry {
-    &__excerpt {
-        @extend .text-muted;
-        font-size: 0.8rem;
-    }
+	&__excerpt {
+		@extend .text-muted;
+		font-size: 0.8rem;
+	}
 
-    &__see-post {
-        @extend .btn;
-        @extend .btn-primary;
-    }
+	&__see-post {
+		@extend .btn;
+		@extend .btn-primary;
+	}
 }
