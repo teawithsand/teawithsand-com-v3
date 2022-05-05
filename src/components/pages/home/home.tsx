@@ -78,7 +78,7 @@ export default () => {
                     <div className={styles.featuresFeature}>
 						<h3>Gallery</h3>
 						<p>
-							Simple, but extendable gallery for showing images
+							Simple, but extendable gallery for showing images, with support for gestures
 						</p>
 						<Link className={styles.featuresBtn} to={galleryPath}>
 							Go to gallery
@@ -87,8 +87,7 @@ export default () => {
 					<div className={styles.featuresFeature}>
 						<h3>Paint</h3>
 						<p>
-							Simple paint using vector, for painting simple
-							schematics
+							Simple SVG paint, for drawing some sketches
 						</p>
 						<Link className={styles.featuresBtn} to={paintPath}>
 							Go to paint
