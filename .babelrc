@@ -4,8 +4,8 @@
 		[
 			"prismjs",
 			{
-				"languages": ["javascript", "css", "markup"],
-				"plugins": ["show-language"],
+				"languages": ["javascript", "css", "sass", "markup"],
+				"plugins": ["show-language", "line-numbers"],
 				"theme": "okaidia",
 				"css": true
 			}
