@@ -1,37 +1,16 @@
 const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
+const blogUtil = require(path.resolve("./src/common/blogUtil.js"))
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
 	const { createPage } = actions
 
 	// Define a template for blog post
-	const blogPost = path.resolve(`./src/templates/blog-post.js`)
+	const templatePath = path.resolve(`./src/templates/blog-post.js`)
 
 	// Get all markdown blog posts sorted by date
-	const result = await graphql(`
-		query {
-			allFile(
-				filter: {
-					sourceInstanceName: { eq: "blog" }
-					relativePath: { regex: "/\\\\.md/" }
-				}
-				sort: {
-					fields: [childMarkdownRemark___frontmatter___date]
-					order: ASC
-				}
-			) {
-				nodes {
-					childMarkdownRemark {
-						id
-						fields {
-							slug
-						}
-					}
-				}
-			}
-		}
-	`)
+	const result = await graphql(blogUtil.blogPostPagesQueryString)
 
 	if (result.errors) {
 		reporter.panicOnBuild(
@@ -55,10 +34,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 			const nextPostId =
 				index === posts.length - 1 ? null : posts[index + 1].id
 
-			console.log("Post path", "/blog/post" + post.fields.slug)
+			const postPath = blogUtil.blogPostPath(post.fields.slug)
+			console.log("Post path", postPath)
 			createPage({
-				path: "/blog/post" + post.fields.slug,
-				component: blogPost,
+				path: postPath,
+				component: templatePath,
 				context: {
 					id: post.id,
 					previousPostId,
@@ -135,9 +115,7 @@ exports.onCreateWebpackConfig = ({
 	const config = getConfig()
 	const imgsRule = rules.images()
 
-	config.plugins = [
-		...(config.plugins ?? []),
-	]
+	config.plugins = [...(config.plugins ?? [])]
 
 	const newUrlLoaderRule = {
 		...imgsRule,

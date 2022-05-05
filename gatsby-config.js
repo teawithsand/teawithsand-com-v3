@@ -1,3 +1,6 @@
+const path = require(`path`)
+const util = require(path.resolve("./src/common/blogUtil.js"))
+
 module.exports = {
 	siteMetadata: {
 		title: `TWS website & blog`,
@@ -77,12 +80,12 @@ module.exports = {
 				query: `
 					{
 						site {
-						siteMetadata {
-							title
-							description
-							siteUrl
-							site_url: siteUrl
-						}
+							siteMetadata {
+								title
+								description
+								siteUrl
+								site_url: siteUrl
+							}
 						}
 					}
 				`,
@@ -97,58 +100,29 @@ module.exports = {
 										date: node.frontmatter.date,
 										url:
 											site.siteMetadata.siteUrl +
-											"/blog/post" +
-											node.fields.slug,
+											util.blogPostPath(node.fields.slug),
 										guid:
 											site.siteMetadata.siteUrl +
-											"/blog/post" +
-											node.fields.slug,
+											util.blogPostPath(node.fields.slug),
 										custom_elements: [
 											{ "content:encoded": node.html },
 										],
 									})
 								})
 						},
-						query: `
-							query {
-								allFile(
-									filter: {
-										sourceInstanceName: { eq: "blog" }
-										relativePath: { regex: "/\\\\.md/" }
-									}
-									sort: {
-										fields: [childMarkdownRemark___frontmatter___date]
-										order: ASC
-									}
-								) {
-									nodes {
-										childMarkdownRemark {
-											excerpt
-											html
-											fields {
-												slug
-											}
-											frontmatter {
-												title
-												date
-											}
-										}
-									}
-								}
-							}
-						`,
+						query: util.blogPostFeedQueryString,
 						output: "/rss.xml",
 						title: "teawithsand's blog RSS feed",
 					},
 				],
 			},
 		},
-		'gatsby-plugin-sitemap',
+		"gatsby-plugin-sitemap",
 		{
 			resolve: `gatsby-plugin-manifest`,
 			options: {
 				name: `Teawithsand's website`,
-				short_name: `teaiwthsand.com`,
+				short_name: `teawithsand.com`,
 				start_url: `/`,
 				background_color: `#ffffff`,
 				// This will impact how browsers show your PWA/website
@@ -195,7 +169,7 @@ module.exports = {
 				allExtensions: true, // defaults to false
 			},
 		},
-		// Note: brotil is not used for now
+		// Note: brotli is not used for now
 		// since nginx does not support it by default
 		// and I am to lazy to compile plugin in dockerfile
 		// so gzip must be enough
