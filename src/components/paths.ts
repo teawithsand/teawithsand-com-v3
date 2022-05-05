@@ -1,4 +1,4 @@
-import { blogPostPath as innerBlogPostPath } from "@app/common/blogUtil"
+import { blogPostPath as innerBlogPostPath } from "../common/blogUtil"
 
 export const blogPostListPath = "/blog/post-list"
 export const blogHomePath = "/blog/post-list"
