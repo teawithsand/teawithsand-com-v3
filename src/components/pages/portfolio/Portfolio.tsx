@@ -467,26 +467,6 @@ export default () => {
 								are generated automatically by most blogging
 								software.
 							</p>
-							<p>
-								PalmABooks2 also had small Spring Boot backend,
-								which scrapped{" "}
-								<a
-									target="_blank"
-									href="https://librivox.org/api/info"
-								>
-									librivox
-								</a>{" "}
-								and{" "}
-								<a
-									href="https://wolnelektury.pl/api/"
-									target="_blank"
-								>
-									wolnelektury.pl
-								</a>{" "}
-								APIs, stored data in PostgreSQL and exposed
-								simple REST API, which android app could query
-								for free ABooks.
-							</p>
 							<p>It implemented features like:</p>
 							<ul>
 								<li>
@@ -555,7 +535,7 @@ export default () => {
 					<Collapse in={othersToggle.toggled}>
 						<div className={styles.featureContent}>
 							<p>
-								I've created lots of OSS projects, but only one
+								I've created lots of OSS projects, but only one of them
 								got some wide spread attention:{" "}
 								<a href={torutCratesIOLink}>torut</a>. At the
 								moment of writing this text, it has more than
