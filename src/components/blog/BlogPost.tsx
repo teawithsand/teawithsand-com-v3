@@ -1,4 +1,4 @@
-import { homePath } from "@app/components/paths"
+import { blogPostListPath, homePath } from "@app/components/paths"
 import Seo from "@app/components/seo"
 import { Link } from "gatsby"
 import React, { useEffect } from "react"
@@ -41,8 +41,8 @@ export default (props: {
 
 			<main className={styles.postContainer}>
 				<aside className={styles.blogInfoHeader}>
-					You are at blog part of this website. You can find blog
-					post list <a href="#">here</a> or go to{" "}
+					You are at blog part of this website. You can find blog post
+					list <Link to={blogPostListPath}>here</Link> or go to{" "}
 					<Link to={homePath}>home page here</Link>.
 				</aside>
 				<article itemScope itemType="http://schema.org/Article">

@@ -12,26 +12,29 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 	const blogPost = path.resolve(`./src/templates/blog-post.js`)
 
 	// Get all markdown blog posts sorted by date
-	const result = await graphql(
-		`
+	const result = await graphql`
 			query {
-				allFile(filter: { 
-					sourceInstanceName: { eq: "blog" }
-					relativePath: { regex: "/\\\\.md/" }
-				}) {
+				allFile(
+					filter: {
+						sourceInstanceName: { eq: "blog" }
+						relativePath: { regex: "/\\.md/" }
+					}
+					sort: {
+						fields: [childMarkdownRemark___frontmatter___date]
+						order: ASC
+					}
+				) {
 					nodes {
 						childMarkdownRemark {
 							id
 							fields {
 								slug
-							}   
+							}
 						}
 					}
 				}
 			}
-
 		`
-	)
 
 	if (result.errors) {
 		reporter.panicOnBuild(
@@ -41,12 +44,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 		return
 	}
 
-	const posts = result.data.allFile.nodes.map(n => n.childMarkdownRemark)
+	const posts = result.data.allFile.nodes
+		.map(n => n.childMarkdownRemark)
+		.filter(n => !!n)
 
 	// Create blog posts pages
 	// But only if there's at least one markdown file found at "content/blog" (defined in gatsby-config.js)
 	// `context` is available in the template as a prop and as a variable in GraphQL
-
 
 	if (posts.length > 0) {
 		posts.forEach((post, index) => {
@@ -54,9 +58,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 			const nextPostId =
 				index === posts.length - 1 ? null : posts[index + 1].id
 
-			console.log("Post path", '/blog/post' + post.fields.slug)
+			console.log("Post path", "/blog/post" + post.fields.slug)
 			createPage({
-				path: '/blog/post' + post.fields.slug,
+				path: "/blog/post" + post.fields.slug,
 				component: blogPost,
 				context: {
 					id: post.id,
@@ -65,7 +69,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 				},
 			})
 		})
-	} 
+	}
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
