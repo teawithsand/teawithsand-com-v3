@@ -69,12 +69,6 @@ export default () => {
 							<p className={styles.postEntryExcerpt}>
 								{e.excerpt}
 							</p>
-							<Link
-								to={"/blog/post" + e.fields.slug}
-								className={styles.postEntrySeePost}
-							>
-								See post
-							</Link>
 						</li>
 					))}
 				</ul>
