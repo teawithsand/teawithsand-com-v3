@@ -110,6 +110,7 @@ export default (props: {
 						) : null}
 					</footer>
 				</article>
+				<hr />
 				<aside>
 					<DisqusTemplate
 						pageIdentifier={post.fields.slug}
