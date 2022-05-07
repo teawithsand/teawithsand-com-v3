@@ -1,4 +1,4 @@
-import { Point } from "../../redux-dom-paint/primitive"
+import { Point } from "@app/util/geometry"
 
 export type DrawEvent =
 	| {

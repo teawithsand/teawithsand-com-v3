@@ -1,5 +1,5 @@
 import { Point } from "@app/components/redux-dom-paint/primitive"
-import DrawEvent from "@app/components/dom-paint/ui/DrawEvent"
+import DrawEvent from "@app/components/redux-dom-paint/ui/tool/DrawEvent"
 import { RefObject, useCallback, useEffect, useRef } from "react"
 
 // TODO(teawithsand): do not emit mouse events if mouse is over scrollbar
