@@ -1,2 +1,2 @@
 export * from "./primitive"
-export * from "./color"
+export * from "../../../util/color"
