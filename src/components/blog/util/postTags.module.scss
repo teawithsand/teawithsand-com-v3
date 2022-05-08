@@ -6,14 +6,17 @@
 }
 
 .tags {
+	margin-top: map-get(def.$spacers, 2);
+	margin-bottom: map-get(def.$spacers, 2);
+
 	&__list {
 		list-style: none;
-		margin: 0;
-		padding: 0;
+		margin-left: 0;
+		padding-left: 0;
 
 		display: flex;
 		flex-direction: row;
-        align-items: center;
+		align-items: center;
 		gap: map-get(def.$spacers, 2);
 	}
 

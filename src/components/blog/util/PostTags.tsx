@@ -1,4 +1,5 @@
 import { blogTagPath } from "@app/components/paths"
+import classnames from "@app/util/lang/classnames"
 import { Link } from "gatsby"
 import React from "react"
 
@@ -15,19 +16,24 @@ export default (props: {
 		if (emptyIfNoTags) {
 			return <></>
 		} else {
-			return <span className={styles.noTags}>No Tags</span>
+			return (
+				<span className={classnames(styles.tags, styles.noTags)}>
+					No Tags
+				</span>
+			)
 		}
 
 	return (
-        <ul className={styles.tagsList}>
-            <li className={styles.tagsHeader}>Tags: </li>
-            {tags.map((t, i) => (
-                <li key={i}>
-                    <Link className={styles.tagsTag} to={blogTagPath(t)}>
-                        {"#"}{t}
-                    </Link>
-                </li>
-            ))}
-        </ul>
+		<ul className={classnames(styles.tags, styles.tagsList)}>
+			<li className={styles.tagsHeader}>Tags: </li>
+			{tags.map((t, i) => (
+				<li key={i}>
+					<Link className={styles.tagsTag} to={blogTagPath(t)}>
+						{"#"}
+						{t}
+					</Link>
+				</li>
+			))}
+		</ul>
 	)
 }
