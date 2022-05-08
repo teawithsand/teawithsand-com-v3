@@ -5,7 +5,7 @@ import React from "react"
 
 import DisqusTemplate from "./Disqus"
 import * as styles from "./blogPost.module.scss"
-import PostTags from "@app/components/blog/PostTags"
+import PostTags from "@app/components/blog/util/PostTags"
 
 export interface BlogPostData {
 	id: string
@@ -73,18 +73,12 @@ export default (props: {
 						{prev ? (
 							<div className={styles.postFooterPrev}>
 								<div className={styles.postFooterPrevTitle}>
-									<Link
-										to={prev.fields.path}
-										rel="prev"
-									>
+									<Link to={prev.fields.path} rel="prev">
 										{prev.frontmatter.title}
 									</Link>
 								</div>
 								<div className={styles.postFooterPrevDesc}>
-									<Link
-										to={prev.fields.path}
-										rel="prev"
-									>
+									<Link to={prev.fields.path} rel="prev">
 										Previous post
 									</Link>
 								</div>
@@ -93,18 +87,12 @@ export default (props: {
 						{next ? (
 							<div className={styles.postFooterNext}>
 								<div className={styles.postFooterPrevTitle}>
-									<Link
-										to={next.fields.path}
-										rel="next"
-									>
+									<Link to={next.fields.path} rel="next">
 										{next.frontmatter.title}
 									</Link>
 								</div>
 								<div className={styles.postFooterPrevDesc}>
-									<Link
-										to={next.fields.path}
-										rel="next"
-									>
+									<Link to={next.fields.path} rel="next">
 										Next post
 									</Link>
 								</div>
@@ -118,8 +106,7 @@ export default (props: {
 						pageIdentifier={post.fields.slug}
 						pageURL={
 							// TODO(teawithsand): replace this with metadata entry
-							"https://www.teawithsand.com" +
-							post.fields.path
+							"https://www.teawithsand.com" + post.fields.path
 						}
 						pageTitle={post.frontmatter.title}
 					/>
