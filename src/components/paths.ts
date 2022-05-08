@@ -1,5 +1,3 @@
-import { blogPostPath as innerBlogPostPath } from "../common/blogUtil"
-
 export const blogPostListPath = "/blog/post-list"
 export const blogHomePath = "/blog/post-list"
 export const portfolioPath = "/portfolio"
@@ -16,10 +14,6 @@ export const linkLinkedIn =
 
 export const email = "contact@przemyslawglowacki.com"
 export const linkEmail = `mailto:${email}`
-
-export const blogPostPath = (slug: string) => {
-	return innerBlogPostPath(slug)
-}
 
 export const blogTagPath = (tag: string) => {
 	// TODO(teawithsand): implement this path

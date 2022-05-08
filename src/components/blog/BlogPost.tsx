@@ -1,4 +1,4 @@
-import { blogPostListPath, blogPostPath, homePath } from "@app/components/paths"
+import { blogPostListPath, homePath } from "@app/components/paths"
 import Seo from "@app/components/seo"
 import { Link } from "gatsby"
 import React from "react"
@@ -13,6 +13,7 @@ export interface BlogPostData {
 	html: string
 	fields: {
 		slug: string
+		path: string
 	}
 	frontmatter: {
 		title: string
@@ -25,6 +26,7 @@ export interface BlogPostData {
 export interface RefBlogPostData {
 	fields: {
 		slug: string
+		path: string
 	}
 	frontmatter: {
 		title: string
@@ -72,7 +74,7 @@ export default (props: {
 							<div className={styles.postFooterPrev}>
 								<div className={styles.postFooterPrevTitle}>
 									<Link
-										to={blogPostPath(prev.fields.slug)}
+										to={prev.fields.path}
 										rel="prev"
 									>
 										{prev.frontmatter.title}
@@ -80,7 +82,7 @@ export default (props: {
 								</div>
 								<div className={styles.postFooterPrevDesc}>
 									<Link
-										to={blogPostPath(prev.fields.slug)}
+										to={prev.fields.path}
 										rel="prev"
 									>
 										Previous post
@@ -92,7 +94,7 @@ export default (props: {
 							<div className={styles.postFooterNext}>
 								<div className={styles.postFooterPrevTitle}>
 									<Link
-										to={blogPostPath(next.fields.slug)}
+										to={next.fields.path}
 										rel="next"
 									>
 										{next.frontmatter.title}
@@ -100,7 +102,7 @@ export default (props: {
 								</div>
 								<div className={styles.postFooterPrevDesc}>
 									<Link
-										to={blogPostPath(next.fields.slug)}
+										to={next.fields.path}
 										rel="next"
 									>
 										Next post
@@ -115,8 +117,9 @@ export default (props: {
 					<DisqusTemplate
 						pageIdentifier={post.fields.slug}
 						pageURL={
+							// TODO(teawithsand): replace this with metadata entry
 							"https://www.teawithsand.com" +
-							blogPostPath(post.fields.slug)
+							post.fields.path
 						}
 						pageTitle={post.frontmatter.title}
 					/>

@@ -35,6 +35,7 @@ export const pageQuery = graphql`
 			html
 			fields {
 				slug
+				path
 			}
 			frontmatter {
 				title
@@ -46,6 +47,7 @@ export const pageQuery = graphql`
 		previous: markdownRemark(id: { eq: $previousPostId }) {
 			fields {
 				slug
+				path
 			}
 			frontmatter {
 				title
@@ -55,6 +57,7 @@ export const pageQuery = graphql`
 		next: markdownRemark(id: { eq: $nextPostId }) {
 			fields {
 				slug
+				path
 			}
 			frontmatter {
 				title

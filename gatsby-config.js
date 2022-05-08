@@ -91,26 +91,43 @@ module.exports = {
 				`,
 				feeds: [
 					{
-						serialize: ({ query: { site, allFile } }) => {
-							return allFile.nodes
-								.map(node => node.childMarkdownRemark)
-								.map(node => {
-									return Object.assign({}, node.frontmatter, {
-										description: node.excerpt,
-										date: node.frontmatter.date,
-										url:
-											site.siteMetadata.siteUrl +
-											util.blogPostPath(node.fields.slug),
-										guid:
-											site.siteMetadata.siteUrl +
-											util.blogPostPath(node.fields.slug),
-										custom_elements: [
-											{ "content:encoded": node.html },
-										],
-									})
+						serialize: ({ query: { site, allMarkdownRemark } }) => {
+							return allMarkdownRemark.nodes.map(node => {
+								return Object.assign({}, node.frontmatter, {
+									description: node.excerpt,
+									date: node.frontmatter.date,
+									url:
+										site.siteMetadata.siteUrl +
+										node.fields.path,
+									guid:
+										site.siteMetadata.siteUrl +
+										node.fields.path,
+									custom_elements: [
+										{ "content:encoded": node.html },
+									],
 								})
+							})
 						},
-						query: util.blogPostFeedQueryString,
+						query: `
+							{
+								allMarkdownRemark(
+									filter: {
+										fields: { sourceName: { eq: "blog" } }
+									}
+								) {
+									nodes {
+										fields {
+											slug
+											path
+										}
+										frontmatter {
+											date
+											title
+										}
+									}
+								}
+							}
+						`,
 						output: "/rss.xml",
 						title: "teawithsand's blog RSS feed",
 					},
