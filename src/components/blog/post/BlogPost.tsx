@@ -6,7 +6,6 @@ import React from "react"
 import DisqusTemplate from "./Disqus"
 import * as styles from "./blogPost.module.scss"
 import PostTags from "@app/components/blog/util/PostTags"
-import WithSidePanel from "@app/components/blog/util/WithSidePanel"
 
 export interface BlogPostData {
 	id: string

@@ -1,0 +1,114 @@
+@use "@app/styles/bs.scss" as bs;
+@use "@app/styles/defines.scss" as def;
+
+.outer {
+	@extend .container;
+
+	margin-top: map-get(def.$spacers, 3);
+
+	display: grid;
+	grid-template-columns: minmax(auto, 100%);
+	grid-template-rows: auto;
+
+	&__side-panel {
+		display: none;
+
+		margin-left: map-get(def.$spacers, 2);
+	}
+
+	&__article {
+		grid-row: 1;
+		grid-column: 1;
+	}
+
+	@include bs.media-breakpoint-up(lg) {
+		grid-template-columns: minmax(auto, 100%) minmax(0, auto);
+
+		&__side-panel {
+			display: block;
+			grid-row: 1;
+			grid-column: 2;
+		}
+
+		&__article {
+			grid-row: 1;
+			grid-column: 1;
+		}
+	}
+}
+
+.article {
+	&__header {
+		display: flex;
+		flex-flow: column;
+
+		&__title {
+		}
+
+		&__created-at {
+		}
+
+		&__tags {
+		}
+	}
+
+	&__footer {
+		display: grid;
+		grid-template-rows: 1fr;
+		grid-template-columns: minmax(0, auto) minmax(0, auto);
+		row-gap: map-get(def.$spacers, 3);
+
+		@mixin widget {
+			display: grid;
+			grid-template-rows: auto auto;
+			grid-template-columns: 1fr;
+
+			row-gap: map-get(def.$spacers, 2);
+
+			&__title {
+				grid-row: 1;
+				grid-column: 1;
+				text-align: center;
+
+				font-size: 1.2rem;
+				text-transform: capitalize;
+			}
+
+			&__desc {
+				grid-row: 2;
+				grid-column: 1;
+				text-align: center;
+
+				@extend .btn;
+				@extend .btn-outline-secondary;
+			}
+		}
+
+		&__prev {
+			grid-row: 1;
+			grid-column: 1;
+
+			width: fit-content;
+
+			@include widget();
+		}
+
+		&__next {
+			grid-row: 1;
+			grid-column: 2;
+
+			width: fit-content;
+			text-align: right;
+			margin-left: auto;
+
+			@include widget();
+		}
+	}
+
+	&__content {
+	}
+
+	&__comments {
+		margin-top: map-get(def.$spacers, 3);
+	}
+}
