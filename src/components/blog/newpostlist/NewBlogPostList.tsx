@@ -1,15 +1,10 @@
+import Bio from "@app/components/blog/bio/Bio"
 import PostTags from "@app/components/blog/util/PostTags"
-import classnames from "@app/util/lang/classnames"
 import { Link } from "gatsby"
-import {
-	GatsbyImage,
-	getImage,
-	IGatsbyImageData,
-	ImageDataLike,
-} from "gatsby-plugin-image"
+import { getImage, ImageDataLike } from "gatsby-plugin-image"
 import React from "react"
 
-import * as styles from "./blogPostListDisplay.module.scss"
+import * as styles from "./newBlogPostList.module.scss"
 
 export type BlogPostListEntry = {
 	id: string
@@ -28,41 +23,23 @@ export type BlogPostListEntry = {
 	excerpt: string
 }
 
+
 const BlogPostListEntryDisplay = (props: { data: BlogPostListEntry }) => {
 	const { data } = props
-	/*
-	const image =
-		(data.frontmatter?.featuredImage?.childImageSharp
-			? getImage(data.frontmatter.featuredImage.childImageSharp)
-			: null) || null
-	*/
-	const image = null
-
-	/*
-	{image ? (
-		<GatsbyImage
-			className={styles.postEntryImage}
-			image={image}
-			alt={data.frontmatter.title}
-		/>
-	) : (
-		<div className={styles.postEntryImagePolyfill}></div>
-	)}
-	*/
 
 	return (
-		<li className={styles.postEntry}>
-			<Link to={data.fields.path} className={styles.postEntryHeader}>
+		<li className={styles.entry}>
+			<Link to={data.fields.path} className={styles.entryHeader}>
 				<h3>{data.frontmatter.title}</h3>
 			</Link>
-			<h6 className={styles.postEntryCreatedAt}>
+			<h6 className={styles.entryCreatedAt}>
 				Created at {data.frontmatter.date}
 			</h6>
 			<PostTags
-				className={styles.postEntryTags}
+				className={styles.entryTags}
 				tags={data.frontmatter.tags}
 			/>
-			<p className={styles.postEntryExcerpt}>{data.excerpt}</p>
+			<p className={styles.entryExcerpt}>{data.excerpt}</p>
 		</li>
 	)
 }
@@ -75,15 +52,18 @@ export default (props: {
 	const { entries, title, subtitle } = props
 
 	return (
-		<main className={styles.postListContainer}>
-			<header className={styles.postListHeader}>
-				<h1>
-					{title} ({entries.length})
-				</h1>
-				<p>{subtitle}</p>
-				<hr />
-			</header>
-			<section>
+		<main className={styles.outer}>
+			<aside className={styles.outerSidePanel}>
+				<Bio orientation="vertical" />
+			</aside>
+			<section className={styles.outerList}>
+				<header className={styles.outerHeader}>
+					<h1>
+						{title} ({entries.length})
+					</h1>
+					<p>{subtitle}</p>
+					<hr />
+				</header>
 				<ul className={styles.postList}>
 					{entries
 						.map(e => ({
@@ -100,9 +80,10 @@ export default (props: {
 							<BlogPostListEntryDisplay key={e.id} data={e} />
 						))}
 				</ul>
+
+				<hr />
+				<footer>Total {entries.length} posts</footer>
 			</section>
-			<hr />
-			<footer>Total {entries.length} posts</footer>
 		</main>
 	)
 }

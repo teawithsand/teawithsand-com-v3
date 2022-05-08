@@ -2,13 +2,13 @@ import * as React from "react"
 import { graphql } from "gatsby"
 
 import Layout from "@app/components/layout/Layout"
-import BlogPostListWithTag from "@app/components/blog/post/BlogPostListWithTag"
+import NewBlogPostListWithTag from "@app/components/blog/newpostlist/NewBlogPostListWithTag"
 
 const BlogPostTemplate = props => {
 	const { data, pageContext } = props
 	return (
 		<Layout withNoMain={true}>
-			<BlogPostListWithTag
+			<NewBlogPostListWithTag
 				tag={pageContext.tag}
 				entries={data.allMarkdownRemark.nodes}
 			/>
