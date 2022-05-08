@@ -5,7 +5,7 @@
 .outer {
 	@extend .container;
 	
-	margin-top: map-get(def.$spacers, 3);
+	margin-top: map-get(def.$spacers, 5);
 
 	@include sp.side-panel();
 }
