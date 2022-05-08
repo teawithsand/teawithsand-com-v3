@@ -1,6 +1,3 @@
-const path = require(`path`)
-const util = require(path.resolve("./src/common/blogUtil.js"))
-
 module.exports = {
 	siteMetadata: {
 		title: `TWS website & blog`,
