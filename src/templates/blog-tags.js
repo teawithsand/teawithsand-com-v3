@@ -3,13 +3,17 @@ import { graphql } from "gatsby"
 
 import Layout from "@app/components/layout/Layout"
 import BlogPost from "@app/components/blog/post/BlogPost"
+import BlogPostListWithTag from "@app/components/blog/post/BlogPostListWithTag"
 
 const BlogPostTemplate = ({ data }) => {
+	/*
+	<code>
+		<pre>{JSON.stringify(data, null, "\t")}</pre>
+	</code>
+	*/
 	return (
 		<Layout withNoMain={true}>
-			<code>
-				<pre>{JSON.stringify(data, null, "\t")}</pre>
-			</code>
+			<BlogPostListWithTag entries={data.allMarkdownRemark.nodes} />
 		</Layout>
 	)
 }
@@ -31,6 +35,8 @@ export const pageQuery = graphql`
 				}
 				frontmatter {
 					title
+					date(formatString: "YYYY-MM-DD")
+					tags
 				}
 				excerpt(pruneLength: 160)
 			}

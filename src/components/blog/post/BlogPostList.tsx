@@ -1,9 +1,6 @@
-import PostTags from "@app/components/blog/util/PostTags"
-import classnames from "@app/util/lang/classnames"
-import { graphql, Link, useStaticQuery } from "gatsby"
+import BlogPostListDisplay from "@app/components/blog/post/BlogPostListDisplay"
+import { graphql, useStaticQuery } from "gatsby"
 import React from "react"
-
-import * as styles from "./blogPostList.module.scss"
 
 export default () => {
 	const data = useStaticQuery(graphql`
@@ -28,45 +25,7 @@ export default () => {
 			}
 		}
 	`)
-
+	
 	const entries = data.allMarkdownRemark.nodes
-		.filter((e: any) => !!e)
-	return (
-		<main className={styles.postListContainer}>
-			<header className={styles.postListHeader}>
-				<h1>Blog post list</h1>
-				<p>
-					For now it's short, so no search aside from ctrl+f is needed
-				</p>
-				<hr />
-			</header>
-			<section>
-				<ul className={styles.postList}>
-					{entries.map((e: any, i: number) => (
-						<li
-							key={e.id}
-							className={classnames(
-								styles.postEntry,
-								styles.postListEntry
-							)}
-						>
-							{i !== 0 ? <hr /> : null}
-							<Link to={e.fields.path}>
-								<h3>{e.frontmatter.title}</h3>
-							</Link>
-							<h6>Created at {e.frontmatter.date}</h6>
-							<p>
-								<PostTags tags={e.frontmatter.tags} />
-							</p>
-							<p className={styles.postEntryExcerpt}>
-								{e.excerpt}
-							</p>
-						</li>
-					))}
-				</ul>
-			</section>
-			<hr />
-			<footer>Total {entries.length} posts</footer>
-		</main>
-	)
+	return <BlogPostListDisplay entries={entries} />
 }
