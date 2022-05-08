@@ -2,18 +2,16 @@ import * as React from "react"
 import { graphql } from "gatsby"
 
 import Layout from "@app/components/layout/Layout"
-import BlogPost from "@app/components/blog/post/BlogPost"
 import BlogPostListWithTag from "@app/components/blog/post/BlogPostListWithTag"
 
-const BlogPostTemplate = ({ data }) => {
-	/*
-	<code>
-		<pre>{JSON.stringify(data, null, "\t")}</pre>
-	</code>
-	*/
+const BlogPostTemplate = props => {
+	const { data, pageContext } = props
 	return (
 		<Layout withNoMain={true}>
-			<BlogPostListWithTag entries={data.allMarkdownRemark.nodes} />
+			<BlogPostListWithTag
+				tag={pageContext.tag}
+				entries={data.allMarkdownRemark.nodes}
+			/>
 		</Layout>
 	)
 }
