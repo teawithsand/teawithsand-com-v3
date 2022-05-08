@@ -18,6 +18,8 @@ export const BREAKPOINTS = [
 	BREAKPOINT_XXL,
 ]
 
+export const breakpointIndex = (breakpoint: Breakpoint): number => BREAKPOINTS.indexOf(breakpoint)
+
 const resolveBreakpointIndex = (width: number): number => {
 	if (width < 576) {
 		return 0
