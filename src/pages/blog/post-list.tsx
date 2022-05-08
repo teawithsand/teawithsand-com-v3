@@ -1,12 +1,12 @@
 import React from "react"
 
 import Layout from "@app/components/layout/Layout"
-import NewAllBlogPostList from "@app/components/blog/newpostlist/NewAllBlogPostList"
+import AllBlogPostList from "@app/components/blog/list/AllBlogPostList"
 
 const PostListPage = () => {
 	return (
 		<Layout withNoMain={true}>
-			<NewAllBlogPostList />
+			<AllBlogPostList />
 		</Layout>
 	)
 }

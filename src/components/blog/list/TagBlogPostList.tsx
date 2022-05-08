@@ -1,4 +1,4 @@
-import NewBlogPostList, { BlogPostListEntry } from "@app/components/blog/newpostlist/NewBlogPostList";
+import BlogPostList, { BlogPostListEntry } from "@app/components/blog/list/BlogPostList";
 import { blogPostListPath, blogTagPath } from "@app/components/paths";
 import { Link } from "gatsby"
 import React from "react"
@@ -6,7 +6,7 @@ import React from "react"
 export default (props: { tag: string; entries: BlogPostListEntry[] }) => {
 	const { entries, tag } = props
 	return (
-		<NewBlogPostList
+		<BlogPostList
 			title={
 				<>
 					Posts with tag <Link to={blogTagPath(tag)}>{tag}</Link>

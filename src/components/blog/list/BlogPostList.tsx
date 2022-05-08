@@ -4,7 +4,7 @@ import { Link } from "gatsby"
 import { getImage, ImageDataLike } from "gatsby-plugin-image"
 import React from "react"
 
-import * as styles from "./newBlogPostList.module.scss"
+import * as styles from "./blogPostList.module.scss"
 
 export type BlogPostListEntry = {
 	id: string
