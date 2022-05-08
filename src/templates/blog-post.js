@@ -2,12 +2,12 @@ import * as React from "react"
 import { graphql } from "gatsby"
 
 import Layout from "@app/components/layout/Layout"
-import NewBlogPost from "@app/components/blog/newpost/NewBlogPost"
+import BlogPost from "@app/components/blog/post/BlogPost"
 
 const BlogPostTemplate = ({ data }) => {
 	return (
 		<Layout withNoMain={true}>
-			<NewBlogPost
+			<BlogPost
 				post={data.markdownRemark}
 				prev={data.previous}
 				next={data.next}
