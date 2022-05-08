@@ -19,6 +19,15 @@ export default () => {
 						title
 						date(formatString: "YYYY-MM-DD")
 						tags
+						featuredImage {
+							childImageSharp {
+								gatsbyImageData(
+									layout: CONSTRAINED
+									placeholder: BLURRED
+									formats: [AUTO, WEBP, AVIF]
+								)
+							}
+						}
 					}
 					excerpt(pruneLength: 160)
 				}
@@ -27,10 +36,5 @@ export default () => {
 	`)
 
 	const entries = data.allMarkdownRemark.nodes
-	return (
-		<BlogPostListDisplay
-			title={"All posts"}
-			entries={entries}
-		/>
-	)
+	return <BlogPostListDisplay title={"All posts"} entries={entries} />
 }
