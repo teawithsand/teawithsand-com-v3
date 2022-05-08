@@ -1,0 +1,9 @@
+@use "@app/styles/bs.scss" as bs;
+
+.outer-container {
+	@extend .container;
+}
+.inner-container {
+	display: flex;
+	flex-direction: row;
+}

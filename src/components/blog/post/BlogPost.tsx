@@ -6,6 +6,7 @@ import React from "react"
 import DisqusTemplate from "./Disqus"
 import * as styles from "./blogPost.module.scss"
 import PostTags from "@app/components/blog/util/PostTags"
+import WithSidePanel from "@app/components/blog/util/WithSidePanel"
 
 export interface BlogPostData {
 	id: string
@@ -49,13 +50,15 @@ export default (props: {
 
 			<main className={styles.postContainer}>
 				<aside className={styles.blogInfoHeader}>
-					You are at blog part of this website. You can find blog post
-					list <Link to={blogPostListPath}>here</Link> or go to{" "}
-					<Link to={homePath}>home page here</Link>.
+					You are at blog part of this website. You can find blog
+					post list <Link to={blogPostListPath}>here</Link> or go
+					to <Link to={homePath}>home page here</Link>.
 				</aside>
 				<article itemScope itemType="http://schema.org/Article">
 					<header>
-						<h1 itemProp="headline">{post.frontmatter.title}</h1>
+						<h1 itemProp="headline">
+							{post.frontmatter.title}
+						</h1>
 						<p>Created at: {post.frontmatter.date}</p>
 						<p>
 							<PostTags tags={post.frontmatter.tags} />
@@ -101,7 +104,7 @@ export default (props: {
 					</footer>
 				</article>
 				<hr />
-				<aside>
+				<section>
 					<DisqusTemplate
 						pageIdentifier={post.fields.slug}
 						pageURL={
@@ -110,7 +113,7 @@ export default (props: {
 						}
 						pageTitle={post.frontmatter.title}
 					/>
-				</aside>
+				</section>
 			</main>
 		</>
 	)
