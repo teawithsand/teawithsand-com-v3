@@ -28,6 +28,7 @@ export const pageQuery = graphql`
 			sort: { order: DESC, fields: frontmatter___date }
 		) {
 			nodes {
+				id
 				fields {
 					path
 				}
