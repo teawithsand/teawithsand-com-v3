@@ -19,16 +19,20 @@ export type BlogPostListEntry = {
 	excerpt: string
 }
 
-export default (props: { entries: BlogPostListEntry[] }) => {
-	const { entries } = props
+export default (props: {
+	entries: BlogPostListEntry[]
+	title?: React.ReactNode
+	subtitle?: React.ReactNode
+}) => {
+	const { entries, title, subtitle } = props
 
 	return (
 		<main className={styles.postListContainer}>
 			<header className={styles.postListHeader}>
-				<h1>Blog post list</h1>
-				<p>
-					For now it's short, so no search aside from ctrl+f is needed
-				</p>
+				<h1>
+					{title} ({entries.length})
+				</h1>
+				<p>{subtitle}</p>
 				<hr />
 			</header>
 			<section>
@@ -46,9 +50,7 @@ export default (props: { entries: BlogPostListEntry[] }) => {
 								<h3>{e.frontmatter.title}</h3>
 							</Link>
 							<h6>Created at {e.frontmatter.date}</h6>
-							<p>
-								<PostTags tags={e.frontmatter.tags} />
-							</p>
+							<PostTags tags={e.frontmatter.tags} />
 							<p className={styles.postEntryExcerpt}>
 								{e.excerpt}
 							</p>

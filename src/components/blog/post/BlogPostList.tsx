@@ -25,7 +25,12 @@ export default () => {
 			}
 		}
 	`)
-	
+
 	const entries = data.allMarkdownRemark.nodes
-	return <BlogPostListDisplay entries={entries} />
+	return (
+		<BlogPostListDisplay
+			title={"All posts"}
+			entries={entries}
+		/>
+	)
 }
