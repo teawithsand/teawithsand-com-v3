@@ -6775,6 +6775,11 @@ functions-have-names@^1.2.2:
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
+fuse.js@^6.6.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.6.1.tgz#6b94cb80eb064f1b9c31bbe651f6e5857702c0a8"
+  integrity sha512-3PXxXYsdKm68JHY6o2I9gIY+z9LcPs/ROITSzwFZyo0McjShwPFJU2i81Iu4h4si5X7JrrgXtOLDkeiTjdnWFQ==
+
 gatsby-cli@^4.13.0:
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/gatsby-cli/-/gatsby-cli-4.13.0.tgz#0dfeaea1122ec8c8abf66940ed329dab717e666e"
