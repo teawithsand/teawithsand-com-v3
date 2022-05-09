@@ -14,7 +14,7 @@ export type SVGElementRenderProps<T extends string> = {
 	className?: string
 }
 
-export default (
+const SVGSceneRender = (
 	props: SceneRenderProps & {
 		style?: React.CSSProperties
 		className?: string
@@ -54,3 +54,5 @@ export default (
 		</svg>
 	)
 }
+
+export default SVGSceneRender

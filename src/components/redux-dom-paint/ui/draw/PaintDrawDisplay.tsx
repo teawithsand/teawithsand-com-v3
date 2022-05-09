@@ -1,8 +1,12 @@
 import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
 import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
-import { setRenderSize } from "@app/components/redux-dom-paint/redux/paintActions"
 import {
+	setRenderSize,
+	setSceneOffsets,
+} from "@app/components/redux-dom-paint/redux/paintActions"
+import {
+	useCursorCorrectPos,
 	useSceneInfo,
 	useSceneSelector,
 } from "@app/components/redux-dom-paint/redux/paintSelectors"
@@ -24,21 +28,36 @@ const PaintDrawDisplay = () => {
 		viewportWidth: renderWidth,
 		viewportHeight: renderHeight,
 		viewBox,
+		transformX,
+		transformY,
 	} = useSceneInfo()
 
 	const [hideSidePanel, setHideSidePanel] = useState(true)
 	const elementRef = useRef<HTMLDivElement | null>(null)
 
 	const pathTool = usePathTool()
+	const correctPos = useCursorCorrectPos()
 
 	const bind = usePaintDraw(elementRef, event => {
 		// console.log("mouse event", event)
+		if (event.type === "mouse") {
+			const np = correctPos(event.canvasPoint)
+			if (!np) return
+			event = {
+				...event,
+				canvasPoint: np,
+			}
+		}
 		pathTool.onEvent(event)
 	})
 
 	const scene = useSceneSelector()
 
 	const { height: windowHeight, width: windowWidth } = getUsefulDimensions()
+
+	useEffect(() => {
+		dispatch(setSceneOffsets([300, 100]))
+	})
 
 	// It can't be stored in PaintDrawNoDOMHooks, since it does not work with hot reload
 	// for some reason
@@ -72,6 +91,9 @@ const PaintDrawDisplay = () => {
 					width={renderWidth}
 					viewBox={viewBox}
 					svgElementRef={sceneRef}
+					style={{
+						transform: `translateX(${transformX}px) translateY(${transformY}px)`,
+					}}
 				/>
 			</div>
 

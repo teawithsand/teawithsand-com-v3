@@ -7,8 +7,18 @@ import {
 	PrimPaintScene,
 } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import { applyMutationOnDraft } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
-import { rectNormalize } from "@app/components/redux-dom-paint/primitive/calc"
+import {
+	rectContains,
+	rectNormalize,
+} from "@app/components/redux-dom-paint/primitive/calc"
 import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
+import {
+	Point,
+	Rect,
+	rectDimensions,
+	rectIntersection,
+	rectRelativeOffsets,
+} from "@app/util/geometry"
 import produce from "immer"
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
@@ -20,6 +30,46 @@ const posOrZero = (n: number) => (n > 0 ? n : 0)
  */
 export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) =>
 	useSelector<PaintState, T>(selector)
+
+export const useCursorCorrectPos = () => {
+	return usePaintStateSelector(s => {
+		const {
+			zoomFactor,
+			offsetX,
+			offsetY,
+			sceneHeight,
+			sceneWidth,
+			viewportWidth,
+			viewportHeight,
+		} = s.sceneParameters
+
+		const targetViewportWidth = Math.round(viewportWidth / zoomFactor)
+		const targetViewportHeight = Math.round(viewportHeight / zoomFactor)
+
+		const desiredViewboxRect = rectNormalize([
+			[offsetX, offsetY],
+			[offsetX + targetViewportWidth, offsetY + targetViewportHeight],
+		])
+
+		return (p: Point): Point | null => {
+			const sf = 1 / zoomFactor
+			const np: Point = [p[0] * sf + offsetX, p[1] * sf + offsetY]
+
+			const chk = rectContains(desiredViewboxRect, np)
+
+			if (!chk) {
+				return null
+			}
+
+			return np
+		}
+	})
+}
+
+const rectAR = (rect: Rect): number => {
+	const { width, height } = rectDimensions(rect)
+	return width / height
+}
 
 export const useSceneInfo = () => {
 	return usePaintStateSelector(s => {
@@ -36,81 +86,70 @@ export const useSceneInfo = () => {
 		const targetViewportWidth = Math.round(viewportWidth / zoomFactor)
 		const targetViewportHeight = Math.round(viewportHeight / zoomFactor)
 
-		const viewboxOffsetX = offsetX
-		const viewboxOffsetY = offsetY
+		const desiredViewboxRect = rectNormalize([
+			[posOrZero(offsetX), posOrZero(offsetY)],
+			[
+				posOrZero(offsetX) + targetViewportWidth,
+				posOrZero(offsetY) + targetViewportHeight,
+			],
+		])
 
-		const freeSpaceLeftX = posOrZero(-offsetX)
-		const freeSpaceTopY = posOrZero(-offsetY)
-		if (freeSpaceLeftX || freeSpaceTopY)
-			throw new Error("unexpected free space")
+		const sceneRect = rectNormalize([
+			[0, 0],
+			[sceneWidth, sceneHeight],
+		])
 
-		const freeSpaceRightX = posOrZero(
-			targetViewportWidth + offsetX - sceneWidth
-		)
-		const freeSpaceBottomY = posOrZero(
-			targetViewportHeight + offsetY - sceneHeight
-		)
+		const viewBox = rectIntersection(desiredViewboxRect, sceneRect)
 
-		const viewboxStartOffsetX = Math.min(
-			viewboxOffsetX + freeSpaceLeftX,
-			sceneWidth
-		)
-		const viewboxStartOffsetY = Math.min(
-			viewboxOffsetY + freeSpaceTopY,
-			sceneHeight
-		)
+		// TODO(teawithsand): debug rectRelativeOffsets as it's most likely buggy(mixed top and bottom values)
+		const rectSpaces = rectRelativeOffsets(sceneRect, desiredViewboxRect)
+		const viewportScalingFactor =
+			sceneWidth / (sceneWidth + posOrZero(rectSpaces.right))
 
-		const freeSpaceRatio = viewportWidth / (viewportWidth + freeSpaceRightX)
+		const finalViewportWidth = viewportWidth * viewportScalingFactor
+		const finalViewportHeight = viewportHeight * viewportScalingFactor
 
-		const res = {
-			viewportWidth: posOrZero(viewportWidth * freeSpaceRatio),
-			viewportHeight: posOrZero(viewportHeight * freeSpaceRatio),
-
-			transformX: freeSpaceLeftX,
-			transformY: freeSpaceTopY,
-			scale: 1, // base zero scale
-			viewBox: rectNormalize([
-				[viewboxStartOffsetX, viewboxStartOffsetY],
-				[
-					Math.min(
-						sceneWidth,
-						Math.max(
-							viewboxStartOffsetX,
-							targetViewportWidth +
-								viewboxStartOffsetX -
-								freeSpaceRightX
-						)
-					),
-					Math.min(
-						sceneHeight,
-						Math.max(
-							viewboxStartOffsetY,
-							targetViewportHeight +
-								viewboxStartOffsetY -
-								freeSpaceBottomY
-						)
-					),
-				],
-			]),
-
-			// In some cases, canvas has to be 100% hidden
-			// then it would be expressed as scale 0, which is not valid
-			// hence this parameter
-			// hide: false,
-			// hide can be expressed by zero width/height viewport
+		if (!viewBox) {
+			return {
+				viewportHeight: 0,
+				viewportWidth: 0,
+				transformX: 0,
+				transformY: 0,
+				viewBox: [
+					[0, 0],
+					[0, 0],
+				] as Rect,
+			}
 		}
+		/*
 
-		// console.log("inp", s.sceneParameters, "res", {
-		// 	targetViewportHeight,
-		// 	targetViewportWidth,
-		// 	freeSpaceBottomY,
-		// 	freeSpaceTopY,
-		// 	freeSpaceLeftX,
-		// 	freeSpaceRightX,
-		// 	...res,
-		// })
+		console.log(
+			"vb",
+			viewBox,
+			viewBox[0],
+			viewBox[1],
+			"AR",
+			rectAR(viewBox)
+		)
+		console.log(
+			"corrected AR",
+			rectAR([
+				[viewBox[0][0], viewBox[0][1]],
+				[viewBox[1][0], viewBox[1][1]],
+			])
+		)
+		*/
 
-		return res
+		// TODO(teawithsand): fix incorrect aspect ratio of display bug when viewportScalingFactor is not equal to 1
+
+		return {
+			viewportWidth: finalViewportWidth,
+			viewportHeight: finalViewportHeight,
+
+			transformX: posOrZero(-offsetX),
+			transformY: posOrZero(-offsetY),
+			viewBox,
+		}
 	})
 }
 

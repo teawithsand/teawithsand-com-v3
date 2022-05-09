@@ -8,12 +8,13 @@ import {
 	redoUndoneMutation,
 	setDrawColor,
 	setFillColor,
+	setSceneOffsets,
 	setZoomFactor,
 	undoCommittedMutation,
 } from "@app/components/redux-dom-paint/redux/paintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import { Link } from "gatsby"
-import React from "react"
+import React, { useEffect } from "react"
 import { useDispatch } from "react-redux"
 
 import * as styles from "./paintDrawPanel.module.scss"
@@ -54,6 +55,7 @@ const PaintDrawPanel = (props: {
 	}))
 
 	const { showToggleButton, onTogglePanel } = props
+
 
 	// TODO(teawithsand): allow swipes to hide this panel with useGesture
 	return (
