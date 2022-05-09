@@ -17,7 +17,7 @@ export const rectNormalize = (rect: Readonly<Rect>): Rect => {
 }
 
 export const rectTranslate = (rect: Readonly<Rect>, ...vec: Point[]) => {
-	let rectCopy: Rect = [[...rect[0]], [...rect[1]]]
+	const rectCopy: Rect = [[...rect[0]], [...rect[1]]]
 	for (const v of vec) {
 		rectCopy[0] = pointTranslate(rectCopy[0], v)
 		rectCopy[1] = pointTranslate(rectCopy[1], v)
