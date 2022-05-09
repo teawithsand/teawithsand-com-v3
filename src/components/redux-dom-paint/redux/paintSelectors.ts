@@ -1,7 +1,7 @@
 import {
 	PathFillData,
 	PathStrokeData,
-} from "@app/components/dom-paint/element/impls/PathPaintElement"
+} from "@app/components/redux-dom-paint/defines/PrimPaintElement"
 import {
 	initialPrimPaintScene,
 	PrimPaintScene,
@@ -63,12 +63,8 @@ export const useSceneInfo = () => {
 		const freeSpaceRatio = viewportWidth / (viewportWidth + freeSpaceRightX)
 
 		const res = {
-			viewportWidth: posOrZero(
-				viewportWidth * freeSpaceRatio
-			),
-			viewportHeight: posOrZero(
-				viewportHeight * freeSpaceRatio
-			),
+			viewportWidth: posOrZero(viewportWidth * freeSpaceRatio),
+			viewportHeight: posOrZero(viewportHeight * freeSpaceRatio),
 
 			transformX: freeSpaceLeftX,
 			transformY: freeSpaceTopY,
