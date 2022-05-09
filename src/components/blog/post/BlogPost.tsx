@@ -33,7 +33,7 @@ export interface RefBlogPostData {
 	}
 }
 
-export default (props: {
+const BlogPost = (props: {
 	next?: RefBlogPostData | null | undefined
 	prev?: RefBlogPostData | null | undefined
 	post: BlogPostData
@@ -70,6 +70,8 @@ export default (props: {
 					</div>
 				</div>
 			) : null}
+
+			{prev || next ? <hr /> : null}
 		</>
 	)
 
@@ -85,7 +87,7 @@ export default (props: {
 	)
 	return (
 		<main className={styles.outer}>
-            <RightSideBio />
+			<RightSideBio />
 			<article
 				className={classnames(styles.outerArticle, styles.article)}
 			>
@@ -120,8 +122,6 @@ export default (props: {
 					<Footer />
 				</footer>
 
-				<hr />
-
 				<BottomBio />
 
 				<hr />
@@ -140,3 +140,5 @@ export default (props: {
 		</main>
 	)
 }
+
+export default BlogPost
