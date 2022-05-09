@@ -71,6 +71,9 @@
 
 	overflow: hidden; // required for animation to work properly
 	margin-left: auto;
+
+	// Required, since FF causes side panel text to select when we intercept cursor events
+	user-select: none;
 }
 
 .panel-animation {
