@@ -1,13 +1,25 @@
-.outer {
+@use "@app/styles/defines.scss" as def;
 
+.outer {
+	&::after {
+		display: block;
+		content: "";
+		clear: both;
+	}
+
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    align-content: center;
 }
 
 .image {
-    border-radius: 1000px;
-    width: auto;
-    height: auto;
+	border-radius: 1000px;
+	width: auto;
+	height: auto;
+    margin: map-get(def.$spacers, 2);
 }
 
 .description {
-
+    flex: 1 1;
 }
