@@ -55,10 +55,6 @@ const PaintDrawDisplay = () => {
 
 	const { height: windowHeight, width: windowWidth } = getUsefulDimensions()
 
-	useEffect(() => {
-		dispatch(setSceneOffsets([300, 100]))
-	})
-
 	// It can't be stored in PaintDrawNoDOMHooks, since it does not work with hot reload
 	// for some reason
 	// it would reload redux
