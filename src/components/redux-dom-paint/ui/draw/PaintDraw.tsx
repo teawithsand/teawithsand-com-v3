@@ -5,7 +5,7 @@ import { createPaintStore } from "@app/components/redux-dom-paint/redux/redux"
 import React, { useEffect, useMemo } from "react"
 import { Provider } from "react-redux"
 
-export default (props: { initialMutations?: PrimPaintSceneMutation[] }) => {
+const PaintDraw = (props: { initialMutations?: PrimPaintSceneMutation[] }) => {
 	const store = useMemo(() => {
 		return createPaintStore()
 	}, [])
@@ -34,3 +34,5 @@ export default (props: { initialMutations?: PrimPaintSceneMutation[] }) => {
 		</Provider>
 	)
 }
+
+export default PaintDraw

@@ -1,6 +1,5 @@
 import { homePath } from "@app/components/paths"
 import {
-	Color,
 	encodeColor,
 	encodeColorForInput,
 	parseColor,
@@ -14,14 +13,14 @@ import {
 } from "@app/components/redux-dom-paint/redux/paintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import { Link } from "gatsby"
-import React, { useMemo } from "react"
+import React from "react"
 import { useDispatch } from "react-redux"
 
 import * as styles from "./paintDrawPanel.module.scss"
 
 // TODO(teawithsand): move this hack somewhere else
 const download = (filename: string, url: string) => {
-	var element = document.createElement("a")
+	const element = document.createElement("a")
 	element.setAttribute("href", url)
 	element.setAttribute("download", filename)
 	document.body.appendChild(element)
@@ -29,7 +28,7 @@ const download = (filename: string, url: string) => {
 	document.body.removeChild(element)
 }
 
-export default (props: {
+const PaintDrawPanel = (props: {
 	showToggleButton?: boolean
 	onTogglePanel?: () => void
 
@@ -177,15 +176,14 @@ export default (props: {
 					Remove fill
 				</button>
 			</div>
-			{/*
 			<div className={styles.section}>
 				<ul className={styles.sectionInfoTextList}>
 					<li>Scene width: {sceneWidth}</li>
 					<li>Scene height: {sceneHeight}</li>
 				</ul>
-				
 				Zoom:
 				<input
+					className={styles.sectionInput}
 					type="range"
 					min="0.1"
 					max="2"
@@ -195,9 +193,16 @@ export default (props: {
 						const v = parseFloat(e.target.value)
 						dispatch(setZoomFactor(v))
 					}}
-				/>			
+				/>
+				<button
+					className={styles.sectionMainButton}
+					onClick={() => {
+						dispatch(setZoomFactor(1))
+					}}
+				>
+					Reset zoom
+				</button>
 			</div>
-			*/}
 			<div className={styles.section}>
 				<h2 className={styles.sectionTitle}>Export</h2>
 				<button
@@ -212,3 +217,5 @@ export default (props: {
 		</div>
 	)
 }
+
+export default PaintDrawPanel

@@ -1,5 +1,4 @@
 import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
-import PaintDrawNoDoomHooks from "@app/components/redux-dom-paint/ui/draw/PaintDrawNoDOMHooks"
 import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
 import { setRenderSize } from "@app/components/redux-dom-paint/redux/paintActions"
@@ -9,7 +8,6 @@ import {
 } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import { usePathTool } from "@app/components/redux-dom-paint/ui/tool/path"
 import classnames from "@app/util/lang/classnames"
-import { useBreakpoint } from "@app/util/react/hook/dimensions/useBreakpoint"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import { findTransitionClasses } from "@app/util/react/transitionGroupClass"
 import React, { useEffect, useRef, useState } from "react"
@@ -20,7 +18,7 @@ import * as styles from "./paintDrawDisplay.module.scss"
 
 const panelAnimationClasses = findTransitionClasses("panelAnimation", styles)
 
-export default () => {
+const PaintDrawDisplay = () => {
 	const dispatch = useDispatch()
 	const {
 		viewportWidth: renderWidth,
@@ -67,8 +65,6 @@ export default () => {
 
 	return (
 		<div className={classnames(styles.drawContainer)}>
-			{/* TODO(teawithsand): for sake of good code style, move this to the top of return of render function */}
-			<PaintDrawNoDoomHooks />
 			<div className={styles.mainDisplay} ref={elementRef} {...bind}>
 				<SVGSceneRender
 					scene={scene}
@@ -117,3 +113,5 @@ export default () => {
 		</div>
 	)
 }
+
+export default PaintDrawDisplay
