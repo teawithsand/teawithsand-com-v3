@@ -75,7 +75,7 @@ export const rectGrow = (rect: Readonly<Rect>, by: number): Rect => {
 export const rectContainsPoint = (
 	rect: Readonly<Rect>,
 	p: Readonly<Point>,
-	bordersAllowed: boolean = true
+	bordersAllowed = true
 ) => {
 	rect = rectNormalize(rect)
 	if (
