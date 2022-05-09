@@ -4,12 +4,22 @@ import { Link } from "gatsby"
 import * as styles from "./home.module.scss"
 import EmailImage from "./email.svg"
 
-import { blogHomePath, contactPath, email, galleryPath, linkEmail, paintPath, portfolioPath } from "@app/components/paths"
-import loadable from '@loadable/component'
+import {
+	blogHomePath,
+	contactPath,
+	email,
+	galleryPath,
+	linkEmail,
+	paintPath,
+	portfolioPath,
+} from "@app/components/paths"
+import loadable from "@loadable/component"
 
-const TeaAnimation = loadable(() => import("@app/components/tea-animation/TeaAnimation"))
+const TeaAnimation = loadable(
+	() => import("@app/components/tea-animation/TeaAnimation")
+)
 
-export default () => {
+const Home = () => {
 	const firstSectionRef = useRef<HTMLElement | null>(null)
 
 	return (
@@ -21,8 +31,7 @@ export default () => {
 				<div className={styles.headerOverlay}>
 					<h1>Teawithsand's website</h1>
 					<p>
-						Some notes, utils, blog and portfolio. Everything that
-						simple programmer needs in single webpack project.
+						Some notes, utils, blog and portfolio on single website.
 					</p>
 					<button
 						className={styles.headerScrollButton}
@@ -55,10 +64,7 @@ export default () => {
 							Blog consists of programming contents in {">"}90%.
 							You have been warned.
 						</p>
-						<Link
-							className={styles.featuresBtn}
-							to={blogHomePath}
-						>
+						<Link className={styles.featuresBtn} to={blogHomePath}>
 							See posts
 						</Link>
 					</div>
@@ -68,17 +74,15 @@ export default () => {
 							Summary of projects that I've created, along with
 							other useful links.
 						</p>
-						<Link
-							className={styles.featuresBtn}
-							to={portfolioPath}
-						>
+						<Link className={styles.featuresBtn} to={portfolioPath}>
 							See portfolio
 						</Link>
 					</div>
-                    <div className={styles.featuresFeature}>
+					<div className={styles.featuresFeature}>
 						<h3>Gallery</h3>
 						<p>
-							Simple, but extendable gallery for showing images, with support for gestures
+							Simple, but extendable gallery for showing images,
+							with support for gestures
 						</p>
 						<Link className={styles.featuresBtn} to={galleryPath}>
 							Go to gallery
@@ -86,13 +90,11 @@ export default () => {
 					</div>
 					<div className={styles.featuresFeature}>
 						<h3>Paint</h3>
-						<p>
-							Simple SVG paint, for drawing some sketches
-						</p>
+						<p>Simple SVG paint, for drawing some sketches</p>
 						<Link className={styles.featuresBtn} to={paintPath}>
 							Go to paint
 						</Link>
-					</div>         
+					</div>
 				</div>
 			</article>
 			<article className={styles.contact}>
@@ -120,3 +122,5 @@ export default () => {
 		</main>
 	)
 }
+
+export default Home
