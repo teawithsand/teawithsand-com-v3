@@ -48,8 +48,6 @@ export const useCursorCorrectPos = () => {
 
 			const chk = rectContainsPoint(desiredViewboxRect, np)
 
-			console.log(np)
-
 			if (!chk) {
 				return null
 			}
