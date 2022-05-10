@@ -1,5 +1,7 @@
 import React from "react"
 
-export default () => {
+const PathPaintToolPanel = () => {
 	return <div></div>
 }
+
+export default PathPaintToolPanel
