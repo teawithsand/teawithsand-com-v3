@@ -2,8 +2,6 @@ import { useEffect, useRef } from "react"
 import { useDispatch } from "react-redux"
 
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
-import { Point } from "@app/components/redux-dom-paint/primitive"
-import { euclideanDistance } from "@app/components/redux-dom-paint/primitive/calc"
 import {
 	commitMutation,
 	setUncommittedMutation,
@@ -14,6 +12,8 @@ import {
 	usePathStrokeData,
 } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import DrawEvent from "@app/components/redux-dom-paint/ui/tool/DrawEvent"
+import { Point } from "@app/util/geometry"
+import { euclideanDistance } from "@app/util/geometry/distance"
 import { generateUUID } from "@app/util/lang/uuid"
 
 const usePathTool = () => {

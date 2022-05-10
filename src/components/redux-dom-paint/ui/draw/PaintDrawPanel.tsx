@@ -1,22 +1,17 @@
 import { Link } from "gatsby"
-import React, { useEffect } from "react"
+import React from "react"
 import { useDispatch } from "react-redux"
 
 import { homePath } from "@app/components/paths"
 import {
-	encodeColor,
-	encodeColorForInput,
-	parseColor,
-} from "@app/components/redux-dom-paint/primitive"
-import {
 	redoUndoneMutation,
 	setDrawColor,
 	setFillColor,
-	setSceneOffsets,
 	setZoomFactor,
 	undoCommittedMutation,
 } from "@app/components/redux-dom-paint/redux/paintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors"
+import { encodeColor, encodeColorForInput, parseColor } from "@app/util/color"
 
 import * as styles from "./paintDrawPanel.module.scss"
 

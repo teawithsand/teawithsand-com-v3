@@ -2,7 +2,7 @@ import React from "react"
 
 import * as styles from "./commentPolicy.module.scss"
 
-export default () => {
+const CommentPolicy = () => {
 	return (
 		<main className={styles.mainContainer}>
 			<header className={styles.mainContainerHeader}>
@@ -10,7 +10,7 @@ export default () => {
 			</header>
 			<section>
 				<p>
-					The comment policy is simple: I'll remove comments I
+					The comment policy is simple: I{"'"}ll remove comments I
 					consider bad/offending and stuff. Aside from that, comments
 					should be ok.
 				</p>
@@ -25,3 +25,5 @@ export default () => {
 		</main>
 	)
 }
+
+export default CommentPolicy

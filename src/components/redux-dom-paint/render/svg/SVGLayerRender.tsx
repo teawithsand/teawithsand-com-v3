@@ -3,7 +3,7 @@ import React from "react"
 import { PrimPaintLayer } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import SVGElementRender from "@app/components/redux-dom-paint/render/svg/SVGElementRender"
 
-export default (props: { layer: PrimPaintLayer }) => {
+const SVGLayerRender = (props: { layer: PrimPaintLayer }) => {
 	const { layer } = props
 
 	return (
@@ -14,3 +14,5 @@ export default (props: { layer: PrimPaintLayer }) => {
 		</>
 	)
 }
+
+export default SVGLayerRender

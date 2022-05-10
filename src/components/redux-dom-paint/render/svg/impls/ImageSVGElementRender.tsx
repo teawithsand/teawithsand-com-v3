@@ -1,13 +1,15 @@
 import React from "react"
 
+import { SVGElementRenderProps } from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
 import {
 	NORM_RECT_MIN,
 	rectDimensions,
 	rectNormalize,
-} from "@app/components/redux-dom-paint/primitive/calc"
-import { SVGElementRenderProps } from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
+} from "@app/util/geometry"
 
-export default (props: SVGElementRenderProps<"image">) => {
+export const ImageSVGElementRender = (
+	props: SVGElementRenderProps<"image">,
+) => {
 	const { element } = props
 
 	const normalizedRect = rectNormalize(element.data.rect)
@@ -29,3 +31,5 @@ export default (props: SVGElementRenderProps<"image">) => {
 		/>
 	)
 }
+
+export default ImageSVGElementRender

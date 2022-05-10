@@ -5,7 +5,7 @@ import PathSVGElementRender from "@app/components/redux-dom-paint/render/svg/imp
 import TextSVGElementRender from "@app/components/redux-dom-paint/render/svg/impls/TextSVGElementRender"
 import { SVGElementRenderProps } from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
 
-export default (props: SVGElementRenderProps<string>) => {
+const SVGElementRender = (props: SVGElementRenderProps<string>) => {
 	const { element, ...others } = props
 	if (element.type === "path") {
 		return <PathSVGElementRender element={element} {...others} />
@@ -19,3 +19,5 @@ export default (props: SVGElementRenderProps<string>) => {
 		)
 	}
 }
+
+export default SVGElementRender

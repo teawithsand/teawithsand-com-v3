@@ -21,9 +21,7 @@ export class ArrayGalleryItemProvider implements GalleryItemProvider {
 		return this.items.length
 	}
 
-	provideItem = (
-		i: number,
-	): GalleryItem => {
+	provideItem = (i: number): GalleryItem => {
 		return this.items[i]
 	}
 }

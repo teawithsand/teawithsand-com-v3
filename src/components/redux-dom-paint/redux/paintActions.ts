@@ -1,10 +1,10 @@
 import { createAction, createReducer } from "@reduxjs/toolkit"
 
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
-import { Color } from "@app/components/redux-dom-paint/primitive"
 import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
 import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
 import { PathPaintToolOptions } from "@app/components/redux-dom-paint/ui/tool/path"
+import { Color } from "@app/util/color"
 
 const actionPrefix = "twsblog/dompaint"
 

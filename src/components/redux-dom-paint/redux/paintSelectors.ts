@@ -11,15 +11,13 @@ import {
 	PrimPaintScene,
 } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import { applyMutationOnDraft } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
-import {
-	rectContains,
-	rectNormalize,
-} from "@app/components/redux-dom-paint/primitive/calc"
 import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
 import {
 	Point,
 	Rect,
+	rectContainsPoint,
 	rectIntersection,
+	rectNormalize,
 	rectTransformDistances,
 } from "@app/util/geometry"
 
@@ -48,7 +46,7 @@ export const useCursorCorrectPos = () => {
 			const sf = 1 / zoomFactor
 			const np: Point = [p[0] * sf + offsetX, p[1] * sf + offsetY]
 
-			const chk = rectContains(desiredViewboxRect, np)
+			const chk = rectContainsPoint(desiredViewboxRect, np)
 
 			if (!chk) {
 				return null
@@ -80,7 +78,7 @@ export const useSceneInfo = () => {
 	//
 	// You should keep that in mind, when using values called top or bottom.
 	// X axis is not flipped, hence left and right are still the same.
-	
+
 	return usePaintStateSelector(s => {
 		const {
 			viewportWidth,

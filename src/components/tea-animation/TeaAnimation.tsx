@@ -6,7 +6,7 @@ import useCssVar from "@app/util/react/hook/useCssVar"
 
 import "./tea-animation.global.scss"
 
-export default (props: { className?: string }) => {
+const TeaAnimation = (props: { className?: string }) => {
 	const range = (n: number) => Array.from(Array(n).keys())
 
 	const maxColumn = parseInt(useCssVar("--app-tea-columns", [])) || 0
@@ -76,3 +76,4 @@ export default (props: { className?: string }) => {
 		</div>
 	)
 }
+export default TeaAnimation

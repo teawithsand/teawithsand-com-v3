@@ -1,9 +1,9 @@
 import React, { useMemo } from "react"
 
-import { encodeColor } from "@app/components/redux-dom-paint/primitive"
 import { SVGElementRenderProps } from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
+import { encodeColor } from "@app/util/color"
 
-export default (props: SVGElementRenderProps<"path">) => {
+const PathSVGElementRender = (props: SVGElementRenderProps<"path">) => {
 	const { element } = props
 
 	const stringPath = useMemo(
@@ -49,3 +49,4 @@ export default (props: SVGElementRenderProps<"path">) => {
 		/>
 	)
 }
+export default PathSVGElementRender
