@@ -58,6 +58,7 @@
     "@svgr/webpack": "^6.2.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
+    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@trust/webcrypto": "^0.9.2",
     "@types/feather-icons": "^4.7.0",
     "@types/jest": "^27.4.1",
