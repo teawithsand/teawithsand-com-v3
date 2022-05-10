@@ -137,12 +137,37 @@ export const rectIntersection = (
  * Computes offsets, which once they are added to rectangle edges,
  * transform source rectangle into destination rectangle.
  */
-export const rectRelativeOffsets = (
+export const rectTransformOffsets = (
 	sourceRect: Readonly<Rect>,
 	destRect: Readonly<Rect>,
-) => ({
-	left: destRect[NORM_RECT_MIN][0] - sourceRect[NORM_RECT_MIN][0],
-	right: destRect[NORM_RECT_MAX][0] - sourceRect[NORM_RECT_MAX][0],
-	bottom: destRect[NORM_RECT_MIN][1] - sourceRect[NORM_RECT_MIN][1],
-	top: destRect[NORM_RECT_MAX][1] - sourceRect[NORM_RECT_MAX][1],
-})
+) => {
+	sourceRect = rectNormalize(sourceRect)
+	destRect = rectNormalize(destRect)
+
+	return {
+		left: destRect[NORM_RECT_MIN][0] - sourceRect[NORM_RECT_MIN][0],
+		right: destRect[NORM_RECT_MAX][0] - sourceRect[NORM_RECT_MAX][0],
+		bottom: destRect[NORM_RECT_MIN][1] - sourceRect[NORM_RECT_MIN][1],
+		top: destRect[NORM_RECT_MAX][1] - sourceRect[NORM_RECT_MAX][1],
+	}
+}
+
+/**
+ * Just like rectTransformOffsets, but:
+ * - returns positive number when source rectangle, once applied transformation, will have given edge's length increased by that number
+ * - returns negative number when source rectangle, once applied transformation, will have given edge's length decreased by that number
+ */
+export const rectTransformDistances = (
+	sourceRect: Readonly<Rect>,
+	destRect: Readonly<Rect>,
+) => {
+	sourceRect = rectNormalize(sourceRect)
+	destRect = rectNormalize(destRect)
+
+	const data = rectTransformOffsets(sourceRect, destRect)
+	return {
+		...data,
+		left: -data.left,
+		bottom: -data.bottom,
+	}
+}

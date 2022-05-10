@@ -6,8 +6,10 @@ import {
 } from "@app/components/redux-dom-paint/primitive/calc"
 import {
 	rectArea,
+	rectDimensions,
 	rectIntersection,
-	rectRelativeOffsets,
+	rectTransformDistances,
+	rectTransformOffsets,
 	rectTranslate,
 } from "@app/util/geometry/rect/simple"
 
@@ -20,12 +22,141 @@ const randomRect = () => {
 }
 
 describe("rectangle op", () => {
-	describe("rectRelativeOffsets", () => {
-		it("computes correct relative offsets", () => {
+	describe("rectTransformOffsets", () => {
+		it("computes correct offset values for test data", () => {
+			const tests: [
+				Rect,
+				Rect,
+				{
+					left: number
+					right: number
+					top: number
+					bottom: number
+				},
+			][] = [
+				[
+					[
+						[0, 0],
+						[0, 0],
+					],
+					[
+						[0, 0],
+						[0, 0],
+					],
+					{
+						bottom: 0,
+						left: 0,
+						right: 0,
+						top: 0,
+					},
+				],
+				[
+					[
+						[0, 0],
+						[10, 10],
+					],
+					[
+						[0, 0],
+						[0, 0],
+					],
+					{
+						bottom: 0,
+						left: 0,
+						right: -10,
+						top: -10,
+					},
+				],
+				[
+					[
+						[-10, -10],
+						[10, 10],
+					],
+					[
+						[0, 0],
+						[0, 0],
+					],
+					{
+						bottom: 10,
+						left: 10,
+						right: -10,
+						top: -10,
+					},
+				],
+				[
+					[
+						[-10, -10],
+						[10, 10],
+					],
+					[
+						[-5, -5],
+						[5, 5],
+					],
+					{
+						bottom: 5,
+						left: 5,
+						right: -5,
+						top: -5,
+					},
+				],
+				[
+					[
+						[-10, -10],
+						[0, 0],
+					],
+					[
+						[0, 0],
+						[0, 0],
+					],
+					{
+						bottom: 10,
+						left: 10,
+						right: 0,
+						top: 0,
+					},
+				],
+				[
+					[
+						[0, 0],
+						[0, 0],
+					],
+					[
+						[-10, -10],
+						[0, 0],
+					],
+					{
+						bottom: -10,
+						left: -10,
+						right: 0,
+						top: 0,
+					},
+				],
+			]
+
+			for (const t of tests) {
+				const res = rectTransformOffsets(t[0], t[1])
+				expect(res).toEqual(t[2])
+			}
+		})
+
+		it("gives zero for same rect", () => {
+			for (let i = 0; i < 100; i++) {
+				const destRect = randomRect()
+				const offsets = rectTransformOffsets(destRect, destRect)
+
+				expect(offsets).toEqual({
+					left: 0,
+					right: 0,
+					top: 0,
+					bottom: 0,
+				})
+			}
+		})
+
+		it("computes correct relative offsets for random data", () => {
 			for (let i = 0; i < 100; i++) {
 				const sourceRect = randomRect()
 				const destRect = randomRect()
-				const offsets = rectRelativeOffsets(sourceRect, destRect)
+				const offsets = rectTransformOffsets(sourceRect, destRect)
 
 				const newRect = rectNormalize([
 					[
@@ -42,6 +173,27 @@ describe("rectangle op", () => {
 			}
 		})
 	})
+
+	describe("rectTransformDistances", () => {
+		it("computes correct values for random data", () => {
+			for (let i = 0; i < 100; i++) {
+				const sourceRect = randomRect()
+				const destRect = randomRect()
+				const distances = rectTransformDistances(sourceRect, destRect)
+
+				const srcRectDim = rectDimensions(sourceRect)
+				const dstRectDim = rectDimensions(destRect)
+
+				expect(
+					srcRectDim.height + distances.top + distances.bottom,
+				).toStrictEqual(dstRectDim.height)
+				expect(
+					srcRectDim.width + distances.left + distances.right,
+				).toStrictEqual(dstRectDim.width)
+			}
+		})
+	})
+
 	describe("rectIntersection", () => {
 		it("computes ok rect intersection", () => {
 			const tests: [Rect, Rect, Rect | null][] = [
