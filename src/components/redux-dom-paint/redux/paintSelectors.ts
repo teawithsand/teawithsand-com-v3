@@ -48,6 +48,8 @@ export const useCursorCorrectPos = () => {
 
 			const chk = rectContainsPoint(desiredViewboxRect, np)
 
+			console.log(np)
+
 			if (!chk) {
 				return null
 			}
@@ -78,7 +80,6 @@ export const useSceneInfo = () => {
 	//
 	// You should keep that in mind, when using values called top or bottom.
 	// X axis is not flipped, hence left and right are still the same.
-
 	return usePaintStateSelector(s => {
 		const {
 			viewportWidth,
