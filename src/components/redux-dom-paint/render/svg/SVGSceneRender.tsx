@@ -44,6 +44,10 @@ const SVGSceneRender = (
 			className={className}
 			ref={ref}
 			viewBox={`${vb[NORM_RECT_MIN][0]} ${vb[NORM_RECT_MIN][1]} ${rectWidth} ${rectHeight}`}
+			onDragStart={e => {
+				e.preventDefault()
+				return false
+			}}
 			onDrag={e => {
 				e.preventDefault()
 				return false
