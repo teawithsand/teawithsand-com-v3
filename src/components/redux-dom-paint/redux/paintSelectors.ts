@@ -19,9 +19,8 @@ import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
 import {
 	Point,
 	Rect,
-	rectDimensions,
 	rectIntersection,
-	rectRelativeOffsets,
+	rectTransformDistances,
 } from "@app/util/geometry"
 
 const posOrZero = (n: number) => (n > 0 ? n : 0)
@@ -34,15 +33,8 @@ export const usePaintStateSelector = <T>(selector: (ps: PaintState) => T) =>
 
 export const useCursorCorrectPos = () => {
 	return usePaintStateSelector(s => {
-		const {
-			zoomFactor,
-			offsetX,
-			offsetY,
-			sceneHeight,
-			sceneWidth,
-			viewportWidth,
-			viewportHeight,
-		} = s.sceneParameters
+		const { zoomFactor, offsetX, offsetY, viewportWidth, viewportHeight } =
+			s.sceneParameters
 
 		const targetViewportWidth = Math.round(viewportWidth / zoomFactor)
 		const targetViewportHeight = Math.round(viewportHeight / zoomFactor)
@@ -67,12 +59,28 @@ export const useCursorCorrectPos = () => {
 	})
 }
 
-const rectAR = (rect: Rect): number => {
-	const { width, height } = rectDimensions(rect)
-	return width / height
-}
-
 export const useSceneInfo = () => {
+	// Quick note to computation performed here
+	// They use somewhat different coordinate system than display one
+	//
+	// Display/Mouse:
+	//(0,0)
+	//  |――――――――→ X
+	//  |
+	//  | image here
+	//  ↓
+	//  Y
+	// Computation:
+	//  Y
+	//  ↑
+	//  |  image here
+	//  |
+	//  |――――――――→ X
+	// (0,0)
+	//
+	// You should keep that in mind, when using values called top or bottom.
+	// X axis is not flipped, hence left and right are still the same.
+	
 	return usePaintStateSelector(s => {
 		const {
 			viewportWidth,
@@ -101,14 +109,15 @@ export const useSceneInfo = () => {
 		])
 
 		const viewBox = rectIntersection(desiredViewboxRect, sceneRect)
+		const rectSpaces = rectTransformDistances(sceneRect, desiredViewboxRect)
 
-		// TODO(teawithsand): debug rectRelativeOffsets as it's most likely buggy(mixed top and bottom values)
-		const rectSpaces = rectRelativeOffsets(sceneRect, desiredViewboxRect)
-		const viewportScalingFactor =
+		const widthFactor =
 			sceneWidth / (sceneWidth + posOrZero(rectSpaces.right))
+		const heightFactor =
+			sceneHeight / (sceneHeight + posOrZero(rectSpaces.top))
 
-		const finalViewportWidth = viewportWidth * viewportScalingFactor
-		const finalViewportHeight = viewportHeight * viewportScalingFactor
+		const finalViewportWidth = viewportWidth * widthFactor
+		const finalViewportHeight = viewportHeight * heightFactor
 
 		if (!viewBox) {
 			return {
@@ -122,26 +131,6 @@ export const useSceneInfo = () => {
 				] as Rect,
 			}
 		}
-		/*
-
-		console.log(
-			"vb",
-			viewBox,
-			viewBox[0],
-			viewBox[1],
-			"AR",
-			rectAR(viewBox)
-		)
-		console.log(
-			"corrected AR",
-			rectAR([
-				[viewBox[0][0], viewBox[0][1]],
-				[viewBox[1][0], viewBox[1][1]],
-			])
-		)
-		*/
-
-		// TODO(teawithsand): fix incorrect aspect ratio of display bug when viewportScalingFactor is not equal to 1
 
 		return {
 			viewportWidth: finalViewportWidth,
