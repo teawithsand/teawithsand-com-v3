@@ -1,6 +1,7 @@
+import React, { useMemo } from "react"
+
 import { encodeColor } from "@app/components/redux-dom-paint/primitive"
 import { SVGElementRenderProps } from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
-import React, { useMemo } from "react"
 
 /**
  * Note: this renderer renders SVG element.

@@ -1,12 +1,13 @@
+import { RefObject, useCallback, useEffect, useRef } from "react"
+
 import { Point } from "@app/components/redux-dom-paint/primitive"
 import DrawEvent from "@app/components/redux-dom-paint/ui/tool/DrawEvent"
-import { RefObject, useCallback, useEffect, useRef } from "react"
 
 // TODO(teawithsand): do not emit mouse events if mouse is over scrollbar
 
 export default (
 	elementRef: RefObject<null | HTMLElement>,
-	onCanvasEvent: (data: DrawEvent & { type: "mouse" | "scroll" }) => void
+	onCanvasEvent: (data: DrawEvent & { type: "mouse" | "scroll" }) => void,
 ) => {
 	// TODO(teawithsand): to all events sent here apply redux correction, which takes into consideration
 	//  factors like zoom and x/y offsets
@@ -66,7 +67,7 @@ export default (
 				}
 			}
 		},
-		[onCanvasEvent]
+		[onCanvasEvent],
 	)
 
 	const handleOnPointerUp = useCallback(() => {
@@ -107,7 +108,7 @@ export default (
 				})
 			}
 		},
-		[onCanvasEvent]
+		[onCanvasEvent],
 	)
 
 	const handleOnScroll = useCallback(() => {

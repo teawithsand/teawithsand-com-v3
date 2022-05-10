@@ -1,5 +1,6 @@
-import { createPaintReducer } from "@app/components/redux-dom-paint/redux/paintActions"
 import { configureStore } from "@reduxjs/toolkit"
+
+import { createPaintReducer } from "@app/components/redux-dom-paint/redux/paintActions"
 
 // Please note that in general
 //  creating multiple redux stores is anti-pattern

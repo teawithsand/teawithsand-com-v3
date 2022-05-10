@@ -1,7 +1,7 @@
 import React from "react"
 
-import Layout from "@app/components/layout/Layout"
 import AllBlogPostList from "@app/components/blog/list/AllBlogPostList"
+import Layout from "@app/components/layout/Layout"
 
 const PostListPage = () => {
 	return (

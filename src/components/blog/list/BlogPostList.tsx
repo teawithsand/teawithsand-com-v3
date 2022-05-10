@@ -1,8 +1,9 @@
-import Bio from "@app/components/blog/bio/Bio"
-import PostTags from "@app/components/blog/util/PostTags"
 import { Link } from "gatsby"
 import { getImage, ImageDataLike } from "gatsby-plugin-image"
 import React from "react"
+
+import Bio from "@app/components/blog/bio/Bio"
+import PostTags from "@app/components/blog/util/PostTags"
 
 import * as styles from "./blogPostList.module.scss"
 
@@ -22,7 +23,6 @@ export type BlogPostListEntry = {
 	}
 	excerpt: string
 }
-
 
 const BlogPostListEntryDisplay = (props: { data: BlogPostListEntry }) => {
 	const { data } = props
@@ -72,7 +72,7 @@ export default (props: {
 								(e.frontmatter?.featuredImage?.childImageSharp
 									? getImage(
 											e.frontmatter.featuredImage
-												.childImageSharp
+												.childImageSharp,
 									  )
 									: null) || null,
 						}))

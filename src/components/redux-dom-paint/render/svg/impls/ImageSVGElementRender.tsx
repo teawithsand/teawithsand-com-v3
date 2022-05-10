@@ -1,10 +1,11 @@
+import React from "react"
+
 import {
 	NORM_RECT_MIN,
 	rectDimensions,
 	rectNormalize,
 } from "@app/components/redux-dom-paint/primitive/calc"
 import { SVGElementRenderProps } from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
-import React from "react"
 
 export default (props: SVGElementRenderProps<"image">) => {
 	const { element } = props

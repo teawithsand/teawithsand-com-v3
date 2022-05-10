@@ -27,7 +27,7 @@ export const rectTranslate = (rect: Readonly<Rect>, ...vec: Point[]) => {
 }
 
 export const rectDimensions = (
-	rect: Readonly<Rect>
+	rect: Readonly<Rect>,
 ): {
 	width: number
 	height: number
@@ -75,7 +75,7 @@ export const rectGrow = (rect: Readonly<Rect>, by: number): Rect => {
 export const rectContainsPoint = (
 	rect: Readonly<Rect>,
 	p: Readonly<Point>,
-	bordersAllowed = true
+	bordersAllowed = true,
 ) => {
 	rect = rectNormalize(rect)
 	if (
@@ -139,7 +139,7 @@ export const rectIntersection = (
  */
 export const rectRelativeOffsets = (
 	sourceRect: Readonly<Rect>,
-	destRect: Readonly<Rect>
+	destRect: Readonly<Rect>,
 ) => ({
 	left: destRect[NORM_RECT_MIN][0] - sourceRect[NORM_RECT_MIN][0],
 	right: destRect[NORM_RECT_MAX][0] - sourceRect[NORM_RECT_MAX][0],

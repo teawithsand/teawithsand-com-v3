@@ -4,7 +4,8 @@
 In the past it used [handmd](https://github.com/teawithsand/handmd).
 But now it runs on gatsby.
 
-## Running 
+## Running
+
 1. Clone this repository
 2. Install deps via `yarn`
 3. Run `yarn run develop`

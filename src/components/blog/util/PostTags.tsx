@@ -1,13 +1,14 @@
-import { blogTagPath } from "@app/components/paths"
-import classnames from "@app/util/lang/classnames"
 import { Link } from "gatsby"
 import React from "react"
+
+import { blogTagPath } from "@app/components/paths"
+import classnames from "@app/util/lang/classnames"
 
 import * as styles from "./postTags.module.scss"
 
 export default (props: {
 	emptyIfNoTags?: boolean
-	tags?: string[] | null | undefined,
+	tags?: string[] | null | undefined
 	className?: string
 }) => {
 	let { tags, emptyIfNoTags, className } = props
@@ -18,7 +19,13 @@ export default (props: {
 			return <></>
 		} else {
 			return (
-				<span className={classnames(styles.tags, styles.noTags, className)}>
+				<span
+					className={classnames(
+						styles.tags,
+						styles.noTags,
+						className,
+					)}
+				>
 					No Tags
 				</span>
 			)

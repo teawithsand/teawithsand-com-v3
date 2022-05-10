@@ -1,12 +1,10 @@
 // Adopted from
 // https://github.com/react-bootstrap/react-router-bootstrap/blob/master/src/LinkContainer.js
 // for
-
-import React, { ReactNode } from "react"
 // Adopted from
 // https://github.com/react-bootstrap/react-router-bootstrap/blob/master/src/LinkContainer.js
-
 import { navigate } from "gatsby"
+import React, { ReactNode } from "react"
 
 const isModifiedEvent = (event: any) =>
 	!!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)

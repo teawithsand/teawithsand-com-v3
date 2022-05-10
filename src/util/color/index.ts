@@ -36,25 +36,25 @@ export const parseColor = (input: string): Color => {
 		const fact = [17, 1, 0.062272][columnLength - 1]
 		return [
 			Math.round(
-				parseInt(input.substring(1, 1 + columnLength), 16) * fact
+				parseInt(input.substring(1, 1 + columnLength), 16) * fact,
 			),
 			Math.round(
 				parseInt(
 					input.substring(
 						1 + columnLength,
-						1 + columnLength + columnLength
+						1 + columnLength + columnLength,
 					),
-					16
-				) * fact
+					16,
+				) * fact,
 			),
 			Math.round(
 				parseInt(
 					input.substring(
 						1 + 2 * columnLength,
-						1 + 2 * columnLength + columnLength
+						1 + 2 * columnLength + columnLength,
 					),
-					16
-				) * fact
+					16,
+				) * fact,
 			),
 		]
 	} else {

@@ -1,4 +1,5 @@
 import { Subscriber } from "final-form"
+
 import EventBus, { SimpleEventBus } from "./EventBus"
 import {
 	StickySubscribable,

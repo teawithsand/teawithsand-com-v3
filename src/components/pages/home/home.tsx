@@ -1,8 +1,6 @@
-import React, { useRef } from "react"
+import loadable from "@loadable/component"
 import { Link } from "gatsby"
-
-import * as styles from "./home.module.scss"
-import EmailImage from "./email.svg"
+import React, { useRef } from "react"
 
 import {
 	blogHomePath,
@@ -13,10 +11,12 @@ import {
 	paintPath,
 	portfolioPath,
 } from "@app/components/paths"
-import loadable from "@loadable/component"
+
+import * as styles from "./home.module.scss"
+import EmailImage from "./email.svg"
 
 const TeaAnimation = loadable(
-	() => import("@app/components/tea-animation/TeaAnimation")
+	() => import("@app/components/tea-animation/TeaAnimation"),
 )
 
 const Home = () => {

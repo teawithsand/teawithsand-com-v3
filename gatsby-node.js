@@ -37,7 +37,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 		if (result.errors) {
 			reporter.panicOnBuild(
 				`There was an error loading blog posts`,
-				result.errors
+				result.errors,
 			)
 			return
 		}
@@ -89,7 +89,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 		if (result.errors) {
 			reporter.panicOnBuild(
 				`There was an error loading blog posts by tags`,
-				result.errors
+				result.errors,
 			)
 			return
 		}
@@ -190,7 +190,7 @@ exports.onCreateWebpackConfig = ({
 	const newUrlLoaderRule = {
 		...imgsRule,
 		test: new RegExp(
-			imgsRule.test.toString().replace("svg|", "").slice(1, -1)
+			imgsRule.test.toString().replace("svg|", "").slice(1, -1),
 		),
 	}
 

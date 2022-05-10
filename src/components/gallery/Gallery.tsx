@@ -1,13 +1,13 @@
+import { useGesture } from "@use-gesture/react"
 import React, { useMemo, useState } from "react"
 
-import * as styles from "./gallery.module.scss"
 import { DissolveGalleryDisplay } from "@app/components/gallery/GalleryDisplay"
-import GalleryItemProvider from "@app/components/gallery/ItemProvider"
 import GalleryItemDisplay from "@app/components/gallery/GalleryItemDisplay"
+import GalleryItemProvider from "@app/components/gallery/ItemProvider"
 import classnames from "@app/util/lang/classnames"
 import { useFullscreen } from "@app/util/react/hook/useFullscreen"
 
-import { useGesture } from "@use-gesture/react"
+import * as styles from "./gallery.module.scss"
 
 export type GalleryProps = {
 	provider: GalleryItemProvider
@@ -23,7 +23,7 @@ const Gallery = (props: GalleryProps) => {
 	const [showBottomBar, setShowBottomBar] = useState<boolean>(true)
 
 	const [autoSwitchDelay, setAutoSwitchDelay] = useState(
-		autoSwitchInitializer ?? defaultAutoSwitchDelay
+		autoSwitchInitializer ?? defaultAutoSwitchDelay,
 	)
 
 	const fsc = useFullscreen({})
@@ -31,19 +31,15 @@ const Gallery = (props: GalleryProps) => {
 	const showControls = provider.itemCount > 1
 	const hideIfNotShowControlsStyle = showControls ? {} : { display: "none" }
 
-
 	const currentItem = useMemo(
-		() =>
-			provider.provideItem(itemIndex, "main", {}),
-		[itemIndex, provider]
+		() => provider.provideItem(itemIndex, "main", {}),
+		[itemIndex, provider],
 	)
 
 	const hiddenItems = useMemo(() => {
 		const items = []
 		for (let i = 0; i < provider.itemCount; i++) {
-			items.push(
-				provider.provideItem(i, "main-hidden", {})
-			)
+			items.push(provider.provideItem(i, "main-hidden", {}))
 		}
 		return items
 	}, [provider])
@@ -51,9 +47,7 @@ const Gallery = (props: GalleryProps) => {
 	const thumbnails = useMemo(() => {
 		const items = []
 		for (let i = 0; i < provider.itemCount; i++) {
-			items.push(
-				provider.provideItem(i, "thumbnail", {})
-			)
+			items.push(provider.provideItem(i, "thumbnail", {}))
 		}
 		return items
 	}, [provider])
@@ -131,7 +125,7 @@ const Gallery = (props: GalleryProps) => {
 				preventDefault: true,
 			},
 			pinch: {},
-		}
+		},
 	) as unknown as () => unknown
 
 	return (
@@ -139,7 +133,7 @@ const Gallery = (props: GalleryProps) => {
 			className={classnames(
 				styles.gallery,
 				fsc.isFullscreen ? styles.galleryFullscreen : null,
-				!showBottomBar ? styles.galleryBottomBarHidden : null
+				!showBottomBar ? styles.galleryBottomBarHidden : null,
 			)}
 		>
 			<div className={styles.topBar}>
@@ -151,7 +145,7 @@ const Gallery = (props: GalleryProps) => {
 						styles.topBarAutoSwitchProgress,
 						autoSwitchDelay > 0
 							? styles.topBarAutoSwitchProgressEnabled
-							: styles.topBarAutoSwitchProgressDisabled
+							: styles.topBarAutoSwitchProgressDisabled,
 					)}
 					onAnimationIteration={() => {
 						onRightSideTap()
@@ -229,7 +223,7 @@ const Gallery = (props: GalleryProps) => {
 				className={classnames(
 					styles.bottomBar,
 					showControls ? styles.bottomBarClickable : null,
-					!showBottomBar ? styles.bottomBarHidden : null
+					!showBottomBar ? styles.bottomBarHidden : null,
 				)}
 			>
 				{thumbnails.map((img, i) => (
@@ -248,7 +242,7 @@ const Gallery = (props: GalleryProps) => {
 							styles.bottomBarEntryWrapper,
 							i === itemIndex
 								? styles.bottomBarEntryWrapperActive
-								: null
+								: null,
 						)}
 						onClick={() => onBottomBarTap(i)}
 					>

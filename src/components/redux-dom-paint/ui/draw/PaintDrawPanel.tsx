@@ -1,3 +1,7 @@
+import { Link } from "gatsby"
+import React, { useEffect } from "react"
+import { useDispatch } from "react-redux"
+
 import { homePath } from "@app/components/paths"
 import {
 	encodeColor,
@@ -13,9 +17,6 @@ import {
 	undoCommittedMutation,
 } from "@app/components/redux-dom-paint/redux/paintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors"
-import { Link } from "gatsby"
-import React, { useEffect } from "react"
-import { useDispatch } from "react-redux"
 
 import * as styles from "./paintDrawPanel.module.scss"
 
@@ -46,7 +47,7 @@ const PaintDrawPanel = (props: {
 	const zoomFactor = usePaintStateSelector(s => s.sceneParameters.zoomFactor)
 
 	const pathToolOptions = usePaintStateSelector(
-		s => s.uiState.pathToolOptions
+		s => s.uiState.pathToolOptions,
 	)
 
 	const { sceneWidth, sceneHeight } = usePaintStateSelector(s => ({
@@ -55,7 +56,6 @@ const PaintDrawPanel = (props: {
 	}))
 
 	const { showToggleButton, onTogglePanel } = props
-
 
 	// TODO(teawithsand): allow swipes to hide this panel with useGesture
 	return (
@@ -153,7 +153,7 @@ const PaintDrawPanel = (props: {
 						className={styles.colorShowcasePicker}
 						type="color"
 						value={encodeColorForInput(
-							fillColor ?? [255, 255, 255, 0]
+							fillColor ?? [255, 255, 255, 0],
 						)}
 						onChange={e => {
 							dispatch(setFillColor(parseColor(e.target.value)))
@@ -163,7 +163,7 @@ const PaintDrawPanel = (props: {
 						className={styles.colorShowcaseElement}
 						style={{
 							["--showcase-color" as any]: encodeColor(
-								fillColor ?? [0, 0, 0, 0]
+								fillColor ?? [0, 0, 0, 0],
 							),
 						}}
 					></div>

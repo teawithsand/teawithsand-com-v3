@@ -26,7 +26,7 @@ export const getUsefulDimensions = () => {
 
 export default function useUsefulDimensions(): UsefulDimensions {
 	const [windowDimensions, setWindowDimensions] = useState(
-		getUsefulDimensions()
+		getUsefulDimensions(),
 	)
 
 	useEffect(() => {

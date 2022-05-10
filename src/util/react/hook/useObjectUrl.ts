@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react"
  * URL is revoked, once src is changed or component is unmounted.
  */
 export default (
-	src: Blob | MediaSource
+	src: Blob | MediaSource,
 ): {
 	readonly current: string | null
 } => {

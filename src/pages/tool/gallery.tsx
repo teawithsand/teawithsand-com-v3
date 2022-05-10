@@ -1,11 +1,11 @@
-import React, { useMemo } from "react"
-import { graphql } from "gatsby"
-
-import Layout from "@app/components/layout/Layout"
-import { GalleryItem } from "@app/components/gallery"
-import { ArrayGalleryItemProvider } from "@app/components/gallery/ItemProvider"
 import loadable from "@loadable/component"
+import { graphql } from "gatsby"
+import React, { useMemo } from "react"
+
+import { GalleryItem } from "@app/components/gallery"
 import Gallery from "@app/components/gallery/Gallery"
+import { ArrayGalleryItemProvider } from "@app/components/gallery/ItemProvider"
+import Layout from "@app/components/layout/Layout"
 
 // const Gallery = loadable(() => import("@app/components/gallery/Gallery"))
 
@@ -32,10 +32,10 @@ const GalleryPage = () => {
 	]
 
 	const provider = useMemo(() => new ArrayGalleryItemProvider(items), [items])
-	
+
 	return (
 		<Layout>
-			 <Gallery provider={provider} />
+			<Gallery provider={provider} />
 		</Layout>
 	)
 }

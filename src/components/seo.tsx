@@ -1,6 +1,6 @@
 import * as React from "react"
+import { graphql, useStaticQuery } from "gatsby"
 import { Helmet } from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
 
 type MetaProps =
 	| {
@@ -28,7 +28,7 @@ const Seo = (props: {
 					}
 				}
 			}
-		`
+		`,
 	)
 
 	const { description, lang, meta, title } = props

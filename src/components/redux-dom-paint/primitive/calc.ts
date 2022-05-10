@@ -36,7 +36,7 @@ export const NORM_RECT_MAX = 1
 
 export const pointSegmentDistance = (
 	p: Readonly<Point>,
-	segment: Readonly<[Readonly<Point>, Readonly<Point>]>
+	segment: Readonly<[Readonly<Point>, Readonly<Point>]>,
 ) => {
 	const [x, y] = p
 	const [[x1, y1], [x2, y2]] = segment
@@ -83,7 +83,7 @@ export const rectNormalize = (rect: Readonly<Rect>): Rect => {
 }
 
 export const rectDimensions = (
-	rect: Rect
+	rect: Rect,
 ): {
 	width: number
 	height: number
@@ -100,7 +100,7 @@ export const rectDimensions = (
 export const rectContains = (
 	rect: Readonly<Rect>,
 	p: Readonly<Point>,
-	bordersAllowed: boolean = true
+	bordersAllowed = true,
 ) => {
 	rect = rectNormalize(rect)
 	if (

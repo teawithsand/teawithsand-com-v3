@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react"
-import Navbar from "@app/components/layout/Navbar"
+
 import Footer from "@app/components/layout/Footer"
+import Navbar from "@app/components/layout/Navbar"
 
 const Layout = (props: { children: ReactNode; withNoMain?: boolean }) => {
 	if (!props.withNoMain) {

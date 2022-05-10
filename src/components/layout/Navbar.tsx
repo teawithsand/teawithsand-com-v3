@@ -1,4 +1,6 @@
 import React from "react"
+import { Navbar as Bar, Container, Nav } from "react-bootstrap"
+
 import {
 	blogHomePath,
 	contactPath,
@@ -6,10 +8,9 @@ import {
 	paintPath,
 	portfolioPath,
 } from "@app/components/paths"
-import { Container, Nav, Navbar as Bar } from "react-bootstrap"
+import LinkContainer from "@app/components/util/LinkContainer"
 
 import * as styles from "./navbar.module.scss"
-import LinkContainer from "@app/components/util/LinkContainer"
 
 const Navbar = () => {
 	return (

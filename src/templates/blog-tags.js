@@ -1,8 +1,8 @@
 import * as React from "react"
 import { graphql } from "gatsby"
 
-import Layout from "@app/components/layout/Layout"
 import TagBlogPostList from "@app/components/blog/list/TagBlogPostList"
+import Layout from "@app/components/layout/Layout"
 
 const BlogPostTemplate = props => {
 	const { data, pageContext } = props

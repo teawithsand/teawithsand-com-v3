@@ -4,7 +4,7 @@
 export const latePromise = <T>(): [
 	Promise<T>,
 	(value: T) => void,
-	(e: any) => void
+	(e: any) => void,
 ] => {
 	let rejector: null | ((error: any) => void) = null
 	let resolver: null | ((value: T) => void) = null

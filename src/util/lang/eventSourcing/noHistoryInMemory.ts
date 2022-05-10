@@ -10,7 +10,7 @@ export class NoHistoryInMemoryEventSourcing<A, E>
 
 	constructor(
 		private readonly adapter: EventSourcingAdapter<A, E>,
-		private readonly initialAggregate: A
+		private readonly initialAggregate: A,
 	) {
 		this.innerBus = new DefaultStickyEventBus(this.initialAggregate)
 	}

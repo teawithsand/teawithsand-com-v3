@@ -12,7 +12,7 @@ export class CanvasUtil {
 						resolve(blob)
 					},
 					type,
-					quality
+					quality,
 				)
 			} catch (e) {
 				reject(e)

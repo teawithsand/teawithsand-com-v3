@@ -4,6 +4,6 @@ import { useEffect, useLayoutEffect, useMemo } from "react"
 export default <P extends Array<any>>(name: string, params: P): string => {
 	return useMemo(
 		() => getComputedStyle(document.documentElement).getPropertyValue(name),
-		params
+		params,
 	)
 }

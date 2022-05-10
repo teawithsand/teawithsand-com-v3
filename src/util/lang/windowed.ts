@@ -1,6 +1,6 @@
 export default function* windowed<T>(
 	iter: Iterable<T>,
-	sz: number
+	sz: number,
 ): Generator<T[], void, void> {
 	const arr: T[] = []
 	for (const e of iter) {

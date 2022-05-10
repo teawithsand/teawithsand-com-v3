@@ -1,11 +1,12 @@
-import PostTags from "@app/components/blog/util/PostTags"
-import classnames from "@app/util/lang/classnames"
 import { Link } from "gatsby"
 import React from "react"
-import * as styles from "./blogPost.module.scss"
 
-import DisqusTemplate from "./Disqus"
 import Bio from "@app/components/blog/bio/Bio"
+import PostTags from "@app/components/blog/util/PostTags"
+import classnames from "@app/util/lang/classnames"
+
+import * as styles from "./blogPost.module.scss"
+import DisqusTemplate from "./Disqus"
 
 export interface BlogPostData {
 	id: string
@@ -94,7 +95,7 @@ const BlogPost = (props: {
 				<header
 					className={classnames(
 						styles.articleHeader,
-						styles.articleHeaderTitle
+						styles.articleHeaderTitle,
 					)}
 				>
 					<h1 className={styles.articleHeaderTitle}>

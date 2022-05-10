@@ -24,7 +24,7 @@ export const findTransitionClasses = (
 	prefix: string,
 	obj: {
 		[key: string]: string
-	}
+	},
 ): TransitionGroupClasses => {
 	let res: any = {}
 	for (const k in obj) {

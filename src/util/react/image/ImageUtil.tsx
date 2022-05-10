@@ -1,5 +1,7 @@
-import classnames from "@app/util/lang/classnames"
 import * as React from "react"
+
+import classnames from "@app/util/lang/classnames"
+
 import { ResponsiveImage } from "./responsive"
 
 /**

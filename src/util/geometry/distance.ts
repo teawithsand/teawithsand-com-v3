@@ -2,7 +2,7 @@ import { Point } from "@app/util/geometry/point"
 
 export const pointSegmentDistance = (
 	p: Readonly<Point>,
-	segment: Readonly<[Readonly<Point>, Readonly<Point>]>
+	segment: Readonly<[Readonly<Point>, Readonly<Point>]>,
 ) => {
 	const [x, y] = p
 	const [[x1, y1], [x2, y2]] = segment

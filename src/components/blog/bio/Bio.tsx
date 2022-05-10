@@ -1,6 +1,7 @@
-import * as styles from "./bio.module.scss"
-import React from "react"
 import { StaticImage } from "gatsby-plugin-image"
+import React from "react"
+
+import * as styles from "./bio.module.scss"
 
 const Bio = (props: { orientation: "horizontal" | "vertical" }) => {
 	const { orientation } = props

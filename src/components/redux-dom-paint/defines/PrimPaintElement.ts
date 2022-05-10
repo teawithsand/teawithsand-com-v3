@@ -2,13 +2,13 @@ import { Color } from "@app/util/color"
 import { Point, Rect } from "@app/util/geometry"
 
 export type PaintElementData = {
-	filters: Array<string>,
+	filters: Array<string>
 }
 
 export type ImagePaintElementData = {
 	url: string
 	rect: Rect
-} 
+}
 
 export type PathLineCapType = "butt" | "square" | "round"
 export type PathLineJoinType = "miter" | "round" | "bevel"
@@ -40,13 +40,12 @@ export type PathPaintElementData = {
 	entries: PathPaintElementEntry[]
 	stroke: PathStrokeData
 	fill: PathFillData | null
-} 
-
+}
 
 export type TextPaintElementData = {
 	text: string
 	color: Color
-	startPoint: Point 
+	startPoint: Point
 
 	dominantBaseline:
 		| "auto"
@@ -65,7 +64,7 @@ export type TextPaintElementData = {
 	length: number | null
 	lengthAdjust: number | null
 	glyphRotate: number | null
-} 
+}
 
 export type PrimPaintElement =
 	| {

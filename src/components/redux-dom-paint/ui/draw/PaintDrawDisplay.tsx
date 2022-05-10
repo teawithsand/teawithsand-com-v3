@@ -1,6 +1,7 @@
-import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
-import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
-import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
+import React, { useEffect, useRef, useState } from "react"
+import { useDispatch } from "react-redux"
+import { CSSTransition } from "react-transition-group"
+
 import {
 	setRenderSize,
 	setSceneOffsets,
@@ -10,13 +11,13 @@ import {
 	useSceneInfo,
 	useSceneSelector,
 } from "@app/components/redux-dom-paint/redux/paintSelectors"
+import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
+import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
+import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
 import { usePathTool } from "@app/components/redux-dom-paint/ui/tool/path"
 import classnames from "@app/util/lang/classnames"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import { findTransitionClasses } from "@app/util/react/transitionGroupClass"
-import React, { useEffect, useRef, useState } from "react"
-import { useDispatch } from "react-redux"
-import { CSSTransition } from "react-transition-group"
 
 import * as styles from "./paintDrawDisplay.module.scss"
 
@@ -64,7 +65,7 @@ const PaintDrawDisplay = () => {
 			setRenderSize({
 				width: windowWidth,
 				height: windowHeight,
-			})
+			}),
 		)
 	}, [windowHeight, windowWidth])
 
@@ -74,7 +75,7 @@ const PaintDrawDisplay = () => {
 		sceneRef.current
 			? "data:image/svg+xml;base64," +
 			  window.btoa(
-					new XMLSerializer().serializeToString(sceneRef.current)
+					new XMLSerializer().serializeToString(sceneRef.current),
 			  )
 			: ""
 
@@ -118,7 +119,7 @@ const PaintDrawDisplay = () => {
 				<div
 					className={classnames(
 						styles.sidePanel,
-						styles.panelAnimation
+						styles.panelAnimation,
 					)}
 				>
 					<PaintDrawPanel

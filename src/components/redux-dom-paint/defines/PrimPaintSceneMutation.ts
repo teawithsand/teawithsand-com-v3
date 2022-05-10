@@ -1,3 +1,6 @@
+import produce from "immer"
+import { WritableDraft } from "immer/dist/internal"
+
 import { PrimPaintElement } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
 import {
 	PrimPaintLayer,
@@ -6,8 +9,6 @@ import {
 	PrimPaintScene,
 } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import { generateUUID } from "@app/util/lang/uuid"
-import produce from "immer"
-import { WritableDraft } from "immer/dist/internal"
 
 type PrimLayerMutation =
 	| {
@@ -90,20 +91,20 @@ export class PaintSceneMutationApplyError extends Error {
 
 const ensureSceneHasLayer = (
 	s: WritableDraft<PrimPaintScene> | PrimPaintScene,
-	i: number
+	i: number,
 ): WritableDraft<PrimPaintLayer> => {
 	// TODO(teawithsand): make sure that this function is not needed, since it's not compatible with reversing mutations
 
 	if (i < 0 || i >= s.layers.length)
 		throw new PaintSceneMutationApplyError(
-			`Can't find layer with index ${i}`
+			`Can't find layer with index ${i}`,
 		)
 	return s.layers[i]
 }
 
 export const applyMutationOnDraft = (
 	scene: WritableDraft<PrimPaintScene> | PrimPaintScene,
-	m: Readonly<PrimPaintSceneMutation>
+	m: Readonly<PrimPaintSceneMutation>,
 ) => {
 	if (m.type === "drop-layer") {
 		if (m.layerIndex === undefined && scene.layers.length === 0) {
@@ -164,7 +165,7 @@ export const applyMutationOnDraft = (
 		l.elements.splice(
 			m.beforeElementIndex ?? l.elements.length,
 			0,
-			...m.elements
+			...m.elements,
 		)
 	} /*
 	 else if (m.type === "drop-layer-elements-targets") {
@@ -177,7 +178,7 @@ export const applyMutationOnDraft = (
 		const toIndex = m.toElementIndex ?? l.elements.length
 		if (fromIndex > toIndex) {
 			throw new PaintSceneMutationApplyError(
-				`Can't drop from ${fromIndex} to ${toIndex}, from index > to index`
+				`Can't drop from ${fromIndex} to ${toIndex}, from index > to index`,
 			)
 		}
 		if (fromIndex !== toIndex) {
@@ -209,7 +210,7 @@ export const applyMutationOnDraft = (
 			dl.elements.splice(
 				m.beforeDestinationElementIndex ?? dl.elements.length,
 				0,
-				...elementArray
+				...elementArray,
 			)
 		}
 	} else if (m.type === "noop") {
@@ -221,12 +222,12 @@ export const applyMutationOnDraft = (
 
 export const applyMutation = (
 	scene: PrimPaintScene,
-	m: Readonly<PrimPaintSceneMutation>
+	m: Readonly<PrimPaintSceneMutation>,
 ) => produce(scene, draft => applyMutationOnDraft(draft, m))
 
 export const inverseMutation = (
 	scene: PrimPaintScene,
-	m: Readonly<PrimPaintSceneMutation>
+	m: Readonly<PrimPaintSceneMutation>,
 ): PrimPaintSceneMutation => {
 	if (m.type === "push-layer") {
 		return {
@@ -291,7 +292,7 @@ export const inverseMutation = (
 			layerIndex: m.layerIndex,
 			elements: l.elements.slice(
 				m.fromElementIndex ?? 0,
-				m.toElementIndex ?? l.elements.length
+				m.toElementIndex ?? l.elements.length,
 			),
 			beforeElementIndex: m.fromElementIndex ?? 0,
 		}

@@ -1,5 +1,6 @@
-import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 import { useEffect, useState } from "react"
+
+import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 
 /**
  * Subscribes to specified StickySubscribable using react.

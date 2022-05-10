@@ -1,3 +1,6 @@
+import { useEffect, useRef } from "react"
+import { useDispatch } from "react-redux"
+
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import { Point } from "@app/components/redux-dom-paint/primitive"
 import { euclideanDistance } from "@app/components/redux-dom-paint/primitive/calc"
@@ -12,8 +15,6 @@ import {
 } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import DrawEvent from "@app/components/redux-dom-paint/ui/tool/DrawEvent"
 import { generateUUID } from "@app/util/lang/uuid"
-import { useEffect, useRef } from "react"
-import { useDispatch } from "react-redux"
 
 const usePathTool = () => {
 	const dispatch = useDispatch()

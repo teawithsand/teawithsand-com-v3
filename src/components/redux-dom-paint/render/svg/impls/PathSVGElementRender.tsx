@@ -1,6 +1,7 @@
+import React, { useMemo } from "react"
+
 import { encodeColor } from "@app/components/redux-dom-paint/primitive"
 import { SVGElementRenderProps } from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
-import React, { useMemo } from "react"
 
 export default (props: SVGElementRenderProps<"path">) => {
 	const { element } = props
@@ -16,7 +17,7 @@ export default (props: SVGElementRenderProps<"path">) => {
 					}
 				})
 				.join(" "),
-		[element.data.entries]
+		[element.data.entries],
 	)
 
 	const style = useMemo(() => {

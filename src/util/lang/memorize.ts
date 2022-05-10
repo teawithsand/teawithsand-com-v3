@@ -14,7 +14,7 @@ export function Memoize() {
 	return (
 		target: Object,
 		propertyKey: string,
-		descriptor: TypedPropertyDescriptor<any>
+		descriptor: TypedPropertyDescriptor<any>,
 	) => {
 		if (descriptor.value != null) {
 			descriptor.value = getFun(descriptor.value)

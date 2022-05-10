@@ -3,7 +3,7 @@ const alphabeth = "abcdefghijklmnopqrstuvwxyz0123456789"
 export const randomString = (
 	min: number,
 	max: number,
-	spaces = false
+	spaces = false,
 ): string => {
 	;[min, max] = [Math.min(min, max), Math.max(min, max)]
 

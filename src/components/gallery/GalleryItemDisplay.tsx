@@ -1,5 +1,6 @@
-import React from "react"
 import { GatsbyImage } from "gatsby-plugin-image"
+import React from "react"
+
 import { GalleryItem } from "@app/components/gallery/GalleryItem"
 
 /**
@@ -38,7 +39,7 @@ export const GalleryItemDisplay = (props: {
 		// well, in fact I was able to style it in the end
 		// but gatsby sometimes won't render this image until it's shown in top panel
 		// which is bad
-		// 
+		//
 		// in the end bypass here is ok, the only thing needed here is picture element
 		// for multiple format support
 		const sources = item.image.images.sources

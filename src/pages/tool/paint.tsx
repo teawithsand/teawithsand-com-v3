@@ -1,8 +1,11 @@
-import { generateUUID } from "@app/util/lang/uuid"
-import React from "react"
 import loadable from "@loadable/component"
+import React from "react"
 
-const PaintDraw = loadable(() => import("@app/components/redux-dom-paint/ui/draw/PaintDraw"))
+import { generateUUID } from "@app/util/lang/uuid"
+
+const PaintDraw = loadable(
+	() => import("@app/components/redux-dom-paint/ui/draw/PaintDraw"),
+)
 
 const PaintPage = () => {
 	return (

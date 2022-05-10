@@ -1,49 +1,50 @@
+import { createAction, createReducer } from "@reduxjs/toolkit"
+
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
+import { Color } from "@app/components/redux-dom-paint/primitive"
 import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
 import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
-import { createAction, createReducer } from "@reduxjs/toolkit"
 import { PathPaintToolOptions } from "@app/components/redux-dom-paint/ui/tool/path"
-import { Color } from "@app/components/redux-dom-paint/primitive"
 
 const actionPrefix = "twsblog/dompaint"
 
 export const setUncommittedMutation =
 	createAction<PrimPaintSceneMutation | null>(
-		`${actionPrefix}/setUncommittedMutations`
+		`${actionPrefix}/setUncommittedMutations`,
 	)
 export const commitMutation = createAction<PrimPaintSceneMutation>(
-	`${actionPrefix}/commitMutation`
+	`${actionPrefix}/commitMutation`,
 )
 export const undoCommittedMutation = createAction<void>(
-	`${actionPrefix}/undoCommittedMutation`
+	`${actionPrefix}/undoCommittedMutation`,
 )
 export const redoUndoneMutation = createAction<void>(
-	`${actionPrefix}/redoUndoneMutation`
+	`${actionPrefix}/redoUndoneMutation`,
 )
 
 export const setTool = createAction<PaintToolName>(`${actionPrefix}/setTool`)
 export const setInitialMutations = createAction<PrimPaintSceneMutation[]>(
-	`${actionPrefix}/setInitialMutations`
+	`${actionPrefix}/setInitialMutations`,
 )
 
 export const setRenderSize = createAction<{ width: number; height: number }>(
-	`${actionPrefix}/setRenderSize`
+	`${actionPrefix}/setRenderSize`,
 )
 export const setSceneSize = createAction<{ width: number; height: number }>(
-	`${actionPrefix}/setSceneSize`
+	`${actionPrefix}/setSceneSize`,
 )
 export const setSceneOffsets = createAction<[number, number]>(
-	`${actionPrefix}/setSceneOffsets`
+	`${actionPrefix}/setSceneOffsets`,
 )
 export const setZoomFactor = createAction<number>(
-	`${actionPrefix}/setZoomFactor`
+	`${actionPrefix}/setZoomFactor`,
 )
 export const setPathPaintToolOptions = createAction<PathPaintToolOptions>(
-	`${actionPrefix}/setPathPaintToolOptions`
+	`${actionPrefix}/setPathPaintToolOptions`,
 )
 export const setDrawColor = createAction<Color>(`${actionPrefix}/setDrawColor`)
 export const setFillColor = createAction<Color | null>(
-	`${actionPrefix}/setFillColor`
+	`${actionPrefix}/setFillColor`,
 )
 
 const initialPaintState: Readonly<PaintState> = {

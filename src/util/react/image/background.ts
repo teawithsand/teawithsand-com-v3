@@ -1,7 +1,7 @@
 import { ImageSource } from "./ImageUtil"
 
 export const getBackgroundImageStyle = (
-	source: ImageSource
+	source: ImageSource,
 ): {
 	backgroundImage: string
 } => {

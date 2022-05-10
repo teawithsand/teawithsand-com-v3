@@ -1,6 +1,7 @@
-import BlogPostList from "@app/components/blog/list/BlogPostList"
 import { graphql, useStaticQuery } from "gatsby"
 import React from "react"
+
+import BlogPostList from "@app/components/blog/list/BlogPostList"
 
 export default () => {
 	const data = useStaticQuery(graphql`

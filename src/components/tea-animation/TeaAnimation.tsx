@@ -1,9 +1,10 @@
-import "./tea-animation.global.scss"
+import React, { useMemo } from "react"
 
 import classnames from "@app/util/lang/classnames"
-import useCssVar from "@app/util/react/hook/useCssVar"
-import React, { useMemo } from "react"
 import { useBreakpointIndex } from "@app/util/react/hook/dimensions/useBreakpoint"
+import useCssVar from "@app/util/react/hook/useCssVar"
+
+import "./tea-animation.global.scss"
 
 export default (props: { className?: string }) => {
 	const range = (n: number) => Array.from(Array(n).keys())
@@ -48,7 +49,7 @@ export default (props: { className?: string }) => {
 					className={classnames(
 						`app-tea__sand`,
 						`app-tea__sand--flow-${randomSands[0][i]}`,
-						`app-tea__sand--col-${i + 1}`
+						`app-tea__sand--col-${i + 1}`,
 					)}
 				></div>
 			))}
@@ -58,7 +59,7 @@ export default (props: { className?: string }) => {
 					className={classnames(
 						`app-tea__sand`,
 						`app-tea__sand--flow-${randomSands[1][i]}`,
-						`app-tea__sand--col-${i + 1}`
+						`app-tea__sand--col-${i + 1}`,
 					)}
 				></div>
 			))}
@@ -68,7 +69,7 @@ export default (props: { className?: string }) => {
 					className={classnames(
 						`app-tea__sand`,
 						`app-tea__sand--flow-${randomSands[2][i]}`,
-						`app-tea__sand--col-${randomColumns[i]}`
+						`app-tea__sand--col-${randomColumns[i]}`,
 					)}
 				></div>
 			))}

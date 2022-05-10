@@ -1,7 +1,10 @@
-import BlogPostList, { BlogPostListEntry } from "@app/components/blog/list/BlogPostList";
-import { blogPostListPath, blogTagPath } from "@app/components/paths";
 import { Link } from "gatsby"
 import React from "react"
+
+import BlogPostList, {
+	BlogPostListEntry,
+} from "@app/components/blog/list/BlogPostList"
+import { blogPostListPath, blogTagPath } from "@app/components/paths"
 
 export default (props: { tag: string; entries: BlogPostListEntry[] }) => {
 	const { entries, tag } = props

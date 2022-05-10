@@ -1,6 +1,7 @@
+import React from "react"
+
 import { PrimPaintScene } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import { Rect } from "@app/components/redux-dom-paint/primitive"
-import React from "react"
 
 export type SceneRenderProps = {
 	scene: PrimPaintScene

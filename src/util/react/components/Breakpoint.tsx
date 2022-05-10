@@ -1,9 +1,10 @@
+import React, { ReactFragment, useMemo } from "react"
+
 import {
 	Breakpoint,
-	useBreakpointIndex,
 	breakpointIndex,
+	useBreakpointIndex,
 } from "@app/util/react/hook/dimensions/useBreakpoint"
-import React, { ReactFragment, useMemo } from "react"
 
 export default (props: {
 	breakpoint: Breakpoint
@@ -13,7 +14,7 @@ export default (props: {
 	// True, if element should be shown
 	comparator: (
 		givenBreakpointIndex: number,
-		currentBreakpointIndex: number
+		currentBreakpointIndex: number,
 	) => boolean
 }) => {
 	const { comparator, children, onHidden } = props
@@ -22,7 +23,7 @@ export default (props: {
 
 	const show = useMemo(
 		() => comparator(givenBreakpoint, currentBreakpoint),
-		[comparator, currentBreakpoint, givenBreakpoint]
+		[comparator, currentBreakpoint, givenBreakpoint],
 	)
 
 	if (show) {

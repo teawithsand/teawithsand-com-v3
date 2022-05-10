@@ -1,22 +1,9 @@
-import React, { useMemo } from "react"
-
-import Palmabooks2LatestAPK from "@app/static/palmabooks2_latest.apk"
 import { Link } from "gatsby"
-import * as styles from "./portfolio.module.scss"
-import { Collapse } from "react-bootstrap"
-import { useNamedToggle } from "@app/util/react/hook/toggleHook"
-import classnames from "@app/util/lang/classnames"
-
-const palmabooksComArchiveOrgLink =
-	"https://web.archive.org/web/20180307161225/https://palmabooks.com/"
-const torutCratesIOLink = "https://crates.io/crates/torut"
-const teawithsandComV1GithubLink =
-	"https://github.com/teawithsand/teawithsand-com-v1"
-const teawithsandComV2GithubLink =
-	"https://github.com/teawithsand/teawithsand-com-v2"
-
 import { graphql, useStaticQuery } from "gatsby"
 import { getImage } from "gatsby-plugin-image"
+import React, { useMemo } from "react"
+import { Collapse } from "react-bootstrap"
+
 import Gallery from "@app/components/gallery/Gallery"
 import { ArrayGalleryItemProvider } from "@app/components/gallery/ItemProvider"
 import {
@@ -25,6 +12,19 @@ import {
 	linkGithub,
 	paintPath,
 } from "@app/components/paths"
+import Palmabooks2LatestAPK from "@app/static/palmabooks2_latest.apk"
+import classnames from "@app/util/lang/classnames"
+import { useNamedToggle } from "@app/util/react/hook/toggleHook"
+
+import * as styles from "./portfolio.module.scss"
+
+const palmabooksComArchiveOrgLink =
+	"https://web.archive.org/web/20180307161225/https://palmabooks.com/"
+const torutCratesIOLink = "https://crates.io/crates/torut"
+const teawithsandComV1GithubLink =
+	"https://github.com/teawithsand/teawithsand-com-v1"
+const teawithsandComV2GithubLink =
+	"https://github.com/teawithsand/teawithsand-com-v2"
 
 // TODO(teawithsand): fix display on phone devices using media breakpoints
 
@@ -68,9 +68,9 @@ export default () => {
 						key: i.key,
 						image: i.image,
 						alt: i.key,
-					}))
+					})),
 			),
-		[]
+		[],
 	)
 
 	const teawithsandComV1ImagesProvider = useMemo(
@@ -86,9 +86,9 @@ export default () => {
 						key: i.key,
 						image: i.image,
 						alt: i.key,
-					}))
+					})),
 			),
-		[]
+		[],
 	)
 
 	const othersToggle = useNamedToggle()
@@ -113,7 +113,7 @@ export default () => {
 						styles.feature,
 						teawithsandComV3Toggle.toggled
 							? styles.featureActive
-							: null
+							: null,
 					)}
 				>
 					<div className={styles.featureHeader}>
@@ -135,7 +135,8 @@ export default () => {
 								simple vector-graphics paint(new features are in
 								development)
 							</Link>{" "}
-							and <Link to={homePath}>homepage animation</Link> and more
+							and <Link to={homePath}>homepage animation</Link>{" "}
+							and more
 							<br />
 							<a href="https://github.com/teawithsand/teawithsand-com-v3">
 								See code on github
@@ -146,14 +147,16 @@ export default () => {
 						<div className={styles.featureContent}>
 							<p>
 								Aside from being a portfolio, it's also my blog
-								and a few utils. In the past it used my simple static site generator{" "}
+								and a few utils. In the past it used my simple
+								static site generator{" "}
 								<a href="https://github.com/teawithsand/handmd">
 									handmd
 								</a>{" "}
 								Now it runs on gatsby.
 							</p>
 							<p>
-								Technologies used: TypeScript, Webpack, SASS, Gatsby, React
+								Technologies used: TypeScript, Webpack, SASS,
+								Gatsby, React
 							</p>
 							<p>
 								<Link
@@ -196,7 +199,7 @@ export default () => {
 						styles.feature,
 						teawithsandComV12Toggle.toggled
 							? styles.featureActive
-							: null
+							: null,
 					)}
 				>
 					<div className={styles.featureHeader}>
@@ -296,7 +299,7 @@ export default () => {
 						styles.feature,
 						palmabooksABookToggle.toggled
 							? styles.featureActive
-							: null
+							: null,
 					)}
 				>
 					<div className={styles.featureHeader}>
@@ -431,7 +434,7 @@ export default () => {
 						styles.feature,
 						palmabooksComToggle.toggled
 							? styles.featureActive
-							: null
+							: null,
 					)}
 				>
 					<div className={styles.featureHeader}>
@@ -514,7 +517,7 @@ export default () => {
 				<div
 					className={classnames(
 						styles.feature,
-						othersToggle.toggled ? styles.featureActive : null
+						othersToggle.toggled ? styles.featureActive : null,
 					)}
 				>
 					<div className={styles.featureHeader}>
@@ -535,8 +538,8 @@ export default () => {
 					<Collapse in={othersToggle.toggled}>
 						<div className={styles.featureContent}>
 							<p>
-								I've created lots of OSS projects, but only one of them
-								got some wide spread attention:{" "}
+								I've created lots of OSS projects, but only one
+								of them got some wide spread attention:{" "}
 								<a href={torutCratesIOLink}>torut</a>. At the
 								moment of writing this text, it has more than
 								48k downloads on{" "}

@@ -25,7 +25,7 @@ export const getClientDimensions = () => {
 
 export default function useClientDimensions(): ClientDimensions {
 	const [windowDimensions, setWindowDimensions] = useState(
-		getClientDimensions()
+		getClientDimensions(),
 	)
 
 	useEffect(() => {

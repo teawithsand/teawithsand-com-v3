@@ -9,7 +9,7 @@ export const generateUUID = () => {
 					c ^
 					(crypto.getRandomValues(new Uint8Array(1))[0] &
 						(15 >> (c / 4)))
-				).toString(16)
+				).toString(16),
 		) as string
 	} else {
 		var d = new Date().getTime() //Timestamp
@@ -32,7 +32,7 @@ export const generateUUID = () => {
 					d2 = Math.floor(d2 / 16)
 				}
 				return (c === "x" ? r : (r & 0x3) | 0x8).toString(16)
-			}
+			},
 		)
 	}
 }

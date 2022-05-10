@@ -1,3 +1,7 @@
+import produce from "immer"
+import { useMemo } from "react"
+import { useSelector } from "react-redux"
+
 import {
 	PathFillData,
 	PathStrokeData,
@@ -19,9 +23,6 @@ import {
 	rectIntersection,
 	rectRelativeOffsets,
 } from "@app/util/geometry"
-import produce from "immer"
-import { useMemo } from "react"
-import { useSelector } from "react-redux"
 
 const posOrZero = (n: number) => (n > 0 ? n : 0)
 
@@ -161,7 +162,7 @@ export const useSceneSelector = (): PrimPaintScene => {
 	const initialMutations = usePaintStateSelector(s => s.initialMutations)
 	const committedMutations = usePaintStateSelector(s => s.committedMutations)
 	const uncommittedMutation = usePaintStateSelector(
-		s => s.uncommittedMutation
+		s => s.uncommittedMutation,
 	)
 
 	const initialMutationsScene = useMemo(() => {
@@ -211,7 +212,7 @@ export const usePathFillData = (): PathFillData | null =>
 			? {
 					color: s.uiState.fillColor,
 			  }
-			: null
+			: null,
 	)
 
 // TODO(teawithsand): here add selector for stroke

@@ -1,3 +1,5 @@
+import produce from "immer"
+
 import { PrimPaintElement } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
 import {
 	initialPrimPaintScene,
@@ -10,7 +12,6 @@ import PrimPaintSceneMutation, {
 	inverseMutation,
 } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import { generateUUID } from "@app/util/lang/uuid"
-import produce from "immer"
 
 const doMutationTest = (data: {
 	initialScene?: PrimPaintScene | undefined
@@ -25,7 +26,7 @@ const doMutationTest = (data: {
 
 	for (const m of mutations) {
 		initialScene = produce(initialScene, draft =>
-			applyMutationOnDraft(draft, m)
+			applyMutationOnDraft(draft, m),
 		)
 	}
 
@@ -66,7 +67,7 @@ const doInverseTest = (data: {
 				scene = scenes[i - 1]
 			}
 			const newScene = produce(scene, draft =>
-				applyMutationOnDraft(draft, m)
+				applyMutationOnDraft(draft, m),
 			)
 			scenes.push(newScene)
 		} finally {
@@ -88,7 +89,7 @@ const doInverseTest = (data: {
 
 		const inv = inverseMutation(originalScene, m)
 		let invertedScene = produce(mutatedScene, draft =>
-			applyMutationOnDraft(draft, inv)
+			applyMutationOnDraft(draft, inv),
 		)
 
 		invertedScene = produce(invertedScene, draft => {
@@ -136,7 +137,7 @@ const element = (i: number): PrimPaintElement => ({
 
 const layerData = (
 	name: string,
-	elements: PrimPaintElement[]
+	elements: PrimPaintElement[],
 ): PrimPaintLayerData => ({
 	elements,
 	metadata: {
@@ -243,7 +244,7 @@ describe("PrimPaintScene", () => {
 				doMutationTest({
 					initialScene: srcScene,
 					targetScene: scene(
-						srcScene.layers.filter((v, j) => j !== i)
+						srcScene.layers.filter((v, j) => j !== i),
 					),
 					mutations: [
 						{
@@ -372,7 +373,7 @@ describe("PrimPaintScene", () => {
 						element(i++),
 						element(i++),
 						element(i++),
-					])
+					]),
 				),
 			])
 
@@ -544,7 +545,7 @@ describe("PrimPaintScene", () => {
 						element(i++),
 						element(i++),
 						element(i++),
-					])
+					]),
 				),
 			])
 
@@ -586,7 +587,7 @@ describe("PrimPaintScene", () => {
 						element(i++),
 						element(i++),
 						element(i++),
-					])
+					]),
 				),
 				layer(
 					layerData("l0", [
@@ -595,7 +596,7 @@ describe("PrimPaintScene", () => {
 						element(i++),
 						element(i++),
 						element(i++),
-					])
+					]),
 				),
 			])
 

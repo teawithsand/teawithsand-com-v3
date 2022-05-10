@@ -1,3 +1,5 @@
+import React, { MutableRefObject, Ref, useEffect, useState } from "react"
+
 import { PrimPaintElement } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
 import {
 	NORM_RECT_MIN,
@@ -6,7 +8,6 @@ import {
 } from "@app/components/redux-dom-paint/primitive/calc"
 import { SceneRenderProps } from "@app/components/redux-dom-paint/render/SceneRender"
 import SVGLayerRender from "@app/components/redux-dom-paint/render/svg/SVGLayerRender"
-import React, { MutableRefObject, Ref, useEffect, useState } from "react"
 
 export type SVGElementRenderProps<T extends string> = {
 	element: PrimPaintElement & { type: T }
@@ -19,7 +20,7 @@ const SVGSceneRender = (
 		style?: React.CSSProperties
 		className?: string
 		svgElementRef?: MutableRefObject<SVGSVGElement>
-	}
+	},
 ) => {
 	const {
 		scene,

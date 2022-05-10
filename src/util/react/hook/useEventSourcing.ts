@@ -1,5 +1,6 @@
-import { NoHistoryEventSourcing } from "@app/util/lang/eventSourcing"
 import { useEffect, useState } from "react"
+
+import { NoHistoryEventSourcing } from "@app/util/lang/eventSourcing"
 
 /**
  * Subscribes to specified event sourcing using react.

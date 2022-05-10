@@ -30,7 +30,7 @@ export class StateSubscriptionManager<S> {
 	addExtractorSubscriber = <E>(
 		extractor: Extractor<S, E>,
 		subscriber: Subscriber<E>,
-		comparator?: (lhs: E, rhs: E) => boolean
+		comparator?: (lhs: E, rhs: E) => boolean,
 	): SubscriptionCanceler => {
 		const mustComparator = comparator ?? ((l, r) => l === r)
 
@@ -50,7 +50,7 @@ export class StateSubscriptionManager<S> {
 	addOnChangedSubscriber = <E>(
 		extractor: Extractor<S, E>,
 		subscriber: Subscriber<S>,
-		comparator?: (lhs: E, rhs: E) => boolean
+		comparator?: (lhs: E, rhs: E) => boolean,
 	): SubscriptionCanceler => {
 		const mustComparator = comparator ?? ((l, r) => l === r)
 
@@ -70,7 +70,7 @@ export class StateSubscriptionManager<S> {
 	addEagerOnChangedSubscriber = <E>(
 		extractor: Extractor<S, E>,
 		subscriber: Subscriber<S>,
-		comparator?: (lhs: E, rhs: E) => boolean
+		comparator?: (lhs: E, rhs: E) => boolean,
 	): SubscriptionCanceler => {
 		const mustComparator = comparator ?? ((l, r) => l === r)
 

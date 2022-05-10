@@ -15,10 +15,10 @@ export class InMemoryEventSourcing<A, E>
 	constructor(
 		private readonly adapter: EventSourcingAdapter<A, E>,
 		private readonly initialAggregate: A,
-		private eventStack: E[]
+		private eventStack: E[],
 	) {
 		this.innerBus = new DefaultStickyEventBus(
-			this.adapter.copy(this.initialAggregate)
+			this.adapter.copy(this.initialAggregate),
 		)
 		this.recomputeCurrentAggregate()
 	}
@@ -71,7 +71,7 @@ export class InMemoryEventSourcing<A, E>
 			const copy = this.adapter.copy(this.innerBus.lastEvent)
 			for (const event of this.eventStack.slice(
 				this.currentAggregateVersion,
-				this.eventStack.length
+				this.eventStack.length,
 			)) {
 				this.adapter.applyEvent(copy, event)
 				this.currentAggregateVersion++

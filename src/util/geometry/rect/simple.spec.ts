@@ -129,7 +129,7 @@ describe("rectangle op", () => {
 							[0, 0],
 							[3, 3],
 						],
-						[2, 2]
+						[2, 2],
 					),
 					[
 						[0, 0],
@@ -171,7 +171,7 @@ describe("rectangle op", () => {
 					expect(resArea).toEqual(rectArea(r1))
 				} else {
 					expect(resArea).toBeLessThanOrEqual(
-						Math.min(rectArea(r1), rectArea(r2))
+						Math.min(rectArea(r1), rectArea(r2)),
 					)
 				}
 			}

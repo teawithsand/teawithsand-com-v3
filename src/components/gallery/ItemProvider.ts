@@ -10,7 +10,7 @@ export default interface GalleryItemProvider {
 	provideItem(
 		i: number,
 		context: GalleryItemProviderContext,
-		options: GalleryItemProviderOptions
+		options: GalleryItemProviderOptions,
 	): GalleryItem
 }
 
@@ -24,7 +24,7 @@ export class ArrayGalleryItemProvider implements GalleryItemProvider {
 	provideItem = (
 		i: number,
 		context: GalleryItemProviderContext,
-		options: GalleryItemProviderOptions
+		options: GalleryItemProviderOptions,
 	): GalleryItem => {
 		return this.items[i]
 	}

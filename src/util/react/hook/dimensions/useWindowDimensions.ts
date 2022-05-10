@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export type Orientation = "vertical" | "horizontal" | "square"
 export type WindowDimensions = {
@@ -24,7 +24,7 @@ export const getWindowDimensions = (): WindowDimensions => {
 
 export default function useWindowDimensions(): WindowDimensions {
 	const [windowDimensions, setWindowDimensions] = useState(
-		getWindowDimensions()
+		getWindowDimensions(),
 	)
 
 	useEffect(() => {
