@@ -1,6 +1,6 @@
 import { GalleryItem } from "@app/components/gallery/GalleryItem"
 
-export type GalleryItemProviderOptions = {}
+export type GalleryItemProviderOptions = Record<string, unknown>
 
 export type GalleryItemProviderContext = "main" | "thumbnail" | "main-hidden"
 
@@ -23,8 +23,6 @@ export class ArrayGalleryItemProvider implements GalleryItemProvider {
 
 	provideItem = (
 		i: number,
-		context: GalleryItemProviderContext,
-		options: GalleryItemProviderOptions,
 	): GalleryItem => {
 		return this.items[i]
 	}

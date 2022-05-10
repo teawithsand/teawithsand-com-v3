@@ -6,7 +6,6 @@ import GalleryItemDisplay from "@app/components/gallery/GalleryItemDisplay"
 import classnames from "@app/util/lang/classnames"
 import { findTransitionClasses } from "@app/util/react/transitionGroupClass"
 
-import * as galleryStyles from "./gallery.module.scss"
 import * as styles from "./galleryDisplay.module.scss"
 
 /**
