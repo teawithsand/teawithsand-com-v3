@@ -6,22 +6,22 @@ import {
 	paintPath,
 	portfolioPath,
 } from "@app/components/paths"
-import { Container, Nav, Navbar } from "react-bootstrap"
+import { Container, Nav, Navbar as Bar } from "react-bootstrap"
 
 import * as styles from "./navbar.module.scss"
 import LinkContainer from "@app/components/util/LinkContainer"
 
-export default () => {
+const Navbar = () => {
 	return (
-		<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+		<Bar collapseOnSelect expand="lg" bg="dark" variant="dark">
 			<Container fluid={true}>
 				<LinkContainer to={homePath}>
-					<Navbar.Brand href="#">teawithsand.com</Navbar.Brand>
+					<Bar.Brand href="#">teawithsand.com</Bar.Brand>
 				</LinkContainer>
 
-				<Navbar.Toggle />
+				<Bar.Toggle />
 
-				<Navbar.Collapse>
+				<Bar.Collapse>
 					<span className={styles.alignToEnd}></span>
 					<Nav>
 						<LinkContainer to={homePath}>
@@ -57,8 +57,10 @@ export default () => {
                     </LinkContainer>
                 </Nav>
                 */}
-				</Navbar.Collapse>
+				</Bar.Collapse>
 			</Container>
-		</Navbar>
+		</Bar>
 	)
 }
+
+export default Navbar

@@ -2,7 +2,7 @@ import React, { ReactNode } from "react"
 import Navbar from "@app/components/layout/Navbar"
 import Footer from "@app/components/layout/Footer"
 
-export default (props: { children: ReactNode; withNoMain?: boolean }) => {
+const Layout = (props: { children: ReactNode; withNoMain?: boolean }) => {
 	if (!props.withNoMain) {
 		return (
 			<>
@@ -21,3 +21,5 @@ export default (props: { children: ReactNode; withNoMain?: boolean }) => {
 		)
 	}
 }
+
+export default Layout

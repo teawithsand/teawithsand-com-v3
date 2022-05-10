@@ -5,7 +5,7 @@ import * as style from "./footer.module.scss"
 import { icons } from "feather-icons"
 import { linkGithub, linkLinkedIn } from "@app/components/paths"
 
-export default () => {
+const Footer = () => {
 	return (
 		<footer className={style.footer}>
 			<hr></hr>
@@ -35,3 +35,5 @@ export default () => {
 		</footer>
 	)
 }
+
+export default Footer
