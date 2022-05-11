@@ -7,6 +7,7 @@ import {
 	redoUndoneMutation,
 	setDrawColor,
 	setFillColor,
+	setSceneOffsets,
 	setSceneSize,
 	setZoomFactor,
 	undoCommittedMutation,
@@ -288,14 +289,24 @@ const PaintDrawPanel = (props: {
 								)}
 							</WithUniqueId>
 						</div>
-						<button
-							className={styles.sectionMainButton}
-							onClick={() => {
-								dispatch(setZoomFactor(1))
-							}}
-						>
-							Reset zoom
-						</button>
+						<div className={styles.sectionButtonBar}>
+							<button
+								className={styles.sectionMainButton}
+								onClick={() => {
+									dispatch(setZoomFactor(1))
+								}}
+							>
+								Reset zoom
+							</button>
+							<button
+								className={styles.sectionMainButton}
+								onClick={() => {
+									dispatch(setSceneOffsets([0, 0]))
+								}}
+							>
+								Reset scene position
+							</button>
+						</div>
 					</div>
 				</ButtonDropdown>
 			</div>
