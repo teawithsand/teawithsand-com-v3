@@ -4,7 +4,7 @@ import { CSSTransition } from "react-transition-group"
 
 import {
 	setRenderSize,
-	setSceneOffsets,
+	setTool,
 } from "@app/components/redux-dom-paint/redux/paintActions"
 import {
 	useCursorCorrectPos,
@@ -12,9 +12,10 @@ import {
 	useSceneSelector,
 } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import SVGSceneRender from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
-import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/PaintDrawPanel"
+import PaintDrawPanel from "@app/components/redux-dom-paint/ui/draw/Panel/PaintDrawPanel"
 import usePaintDraw from "@app/components/redux-dom-paint/ui/draw/usePaintDraw"
 import { usePathTool } from "@app/components/redux-dom-paint/ui/tool/path"
+import useScrollPaintTool from "@app/components/redux-dom-paint/ui/tool/scroll/useScrollPaintTool"
 import classnames from "@app/util/lang/classnames"
 import { getUsefulDimensions } from "@app/util/react/hook/dimensions/useUsefulDimensions"
 import { findTransitionClasses } from "@app/util/react/transitionGroupClass"
@@ -37,10 +38,10 @@ const PaintDrawDisplay = () => {
 	const elementRef = useRef<HTMLDivElement | null>(null)
 
 	const pathTool = usePathTool()
+	const scrollTool = useScrollPaintTool()
 	const correctPos = useCursorCorrectPos()
 
 	const bind = usePaintDraw(elementRef, event => {
-		// console.log("mouse event", event)
 		if (event.type === "mouse") {
 			const np = correctPos(event.canvasPoint)
 			if (!np) return
@@ -50,6 +51,7 @@ const PaintDrawDisplay = () => {
 			}
 		}
 		pathTool.onEvent(event)
+		scrollTool.onEvent(event)
 	})
 
 	const scene = useSceneSelector()
@@ -68,7 +70,7 @@ const PaintDrawDisplay = () => {
 			}),
 		)
 	}, [windowHeight, windowWidth])
-
+	
 	const sceneRef = useRef<any>(null)
 
 	const svgDataURLGetter = () =>

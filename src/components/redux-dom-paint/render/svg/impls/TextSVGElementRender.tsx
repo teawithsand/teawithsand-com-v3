@@ -20,10 +20,17 @@ const TextSVGElementRender = (props: SVGElementRenderProps<"text">) => {
 		<text
 			x={element.data.startPoint[0]}
 			y={element.data.startPoint[1]}
-			onDragStart={e => e.preventDefault()}
 			onClick={props.onClick}
 			style={style}
 			className={props.className}
+			onDragStart={e => {
+				e.preventDefault()
+				return false
+			}}
+			onDrag={e => {
+				e.preventDefault()
+				return false
+			}}
 		>
 			{element.data.text}
 		</text>

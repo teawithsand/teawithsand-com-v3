@@ -44,8 +44,15 @@ const PathSVGElementRender = (props: SVGElementRenderProps<"path">) => {
 			d={stringPath}
 			style={style}
 			onClick={props.onClick}
-			onDragStart={e => e.preventDefault()}
 			className={props.className}
+			onDragStart={e => {
+				e.preventDefault()
+				return false
+			}}
+			onDrag={e => {
+				e.preventDefault()
+				return false
+			}}
 		/>
 	)
 }

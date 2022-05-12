@@ -1,11 +1,12 @@
 @use "@app/styles/bs.scss" as bs;
+@use "@app/styles/defines.scss" as def;
 
 @mixin any-form() {
     $this: &;
 
-    &__input {
-        margin-bottom: map-get(bs.$spacers, 3);
-        margin-top: map-get(bs.$spacers, 3);
+    &__input-container {
+        margin-bottom: map-get(def.$spacers, 3);
+        margin-top: map-get(def.$spacers, 3);
 
         > input {
             @extend .form-control;

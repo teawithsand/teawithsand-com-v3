@@ -3,6 +3,8 @@
 @use "@app/styles/bs.scss" as bs;
 @use "@app/styles/background.scss" as bg;
 
+@use "sass:selector";
+
 .panel {
 	@include scrollbar.pretty-scrollbar(transparent, black);
 	box-sizing: border-box;
@@ -65,7 +67,7 @@
 	grid-auto-flow: row;
 	grid-auto-rows: auto;
 
-	row-gap: map-get(def.$spacers, 1);
+	row-gap: map-get(def.$spacers, 2);
 
 	&__top-title {
 		text-align: center;
@@ -94,6 +96,15 @@
 		width: 100%;
 	}
 
+	&__header-button {
+		@extend .btn;
+		@extend .btn-dark;
+		@extend .btn-lg;
+
+		width: 100%;
+		margin-bottom: map-get(def.$spacers, 2);
+	}
+
 	&__button-bar {
 		@extend .btn-group;
 		width: 100%;
@@ -101,6 +112,26 @@
 		> * {
 			@extend .btn;
 			@extend .btn-primary;
+		}
+	}
+
+	@mixin unify-parent($child) {
+		@at-root #{selector.unify(&, $child)} {
+			@content;
+		}
+	}
+
+	&__input-container {
+		& input[type="range"] {
+			@extend .form-range;
+		}
+		& input[type="text"],
+		& input[type="number"] {
+			@extend .form-control;
+		}
+
+		@include unify-parent("textarea") {
+			@extend .form-control;
 		}
 	}
 }
@@ -148,4 +179,8 @@
 			display: block;
 		}
 	}
+}
+
+.panel-form {
+	
 }

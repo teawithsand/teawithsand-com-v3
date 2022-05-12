@@ -25,9 +25,16 @@ export const ImageSVGElementRender = (
 			height={height}
 			x={offsetX}
 			y={offsetY}
-			onDragStart={e => e.preventDefault()}
 			onClick={props.onClick}
 			className={props.className}
+			onDragStart={e => {
+				e.preventDefault()
+				return false
+			}}
+			onDrag={e => {
+				e.preventDefault()
+				return false
+			}}
 		/>
 	)
 }
