@@ -70,11 +70,7 @@ const PaintDrawDisplay = () => {
 			}),
 		)
 	}, [windowHeight, windowWidth])
-
-	useEffect(() => {
-		dispatch(setTool("scroll"))
-	})
-
+	
 	const sceneRef = useRef<any>(null)
 
 	const svgDataURLGetter = () =>

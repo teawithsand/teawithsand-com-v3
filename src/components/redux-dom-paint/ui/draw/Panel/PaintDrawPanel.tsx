@@ -6,6 +6,7 @@ import ExportSection from "@app/components/redux-dom-paint/ui/draw/Panel/ExportS
 import GlobalDrawSettingsSection from "@app/components/redux-dom-paint/ui/draw/Panel/GlobalDrawSettingSection"
 import HistorySection from "@app/components/redux-dom-paint/ui/draw/Panel/HistorySection"
 import SceneSection from "@app/components/redux-dom-paint/ui/draw/Panel/SceneSection"
+import ToolSection from "@app/components/redux-dom-paint/ui/draw/Panel/ToolSection"
 
 import * as styles from "./paintDrawPanel.module.scss"
 
@@ -45,6 +46,7 @@ const PaintDrawPanel = (props: {
 			<HistorySection />
 			<SceneSection />
 			<ExportSection svgDataURLHackGetter={props.svgDataURLHackGetter} />
+			<ToolSection />
 		</div>
 	)
 }
