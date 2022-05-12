@@ -1,20 +1,19 @@
-import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useRef } from "react"
+import { useDispatch } from "react-redux"
 
-
-
-import { setSceneOffsets, setUncommittedMutation } from "@app/components/redux-dom-paint/redux/paintActions";
-import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors";
-import DrawEvent from "@app/components/redux-dom-paint/ui/tool/DrawEvent";
-import { Point } from "@app/util/geometry";
-
+import {
+	setSceneOffsets,
+	setUncommittedMutation,
+} from "@app/components/redux-dom-paint/redux/paintActions"
+import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors"
+import DrawEvent from "@app/components/redux-dom-paint/ui/tool/DrawEvent"
+import { Point } from "@app/util/geometry"
 
 const useScrollPaintTool = () => {
 	const dispatch = useDispatch()
 	const lastScreenPointRef = useRef<Point | null>(null)
 
-
-	// TODO(teawithsand): hook like useSelector, which selects state to ref rather than 
+	// TODO(teawithsand): hook like useSelector, which selects state to ref rather than
 	//  to variable. It also shouldn't trigger rerender.
 	const fetchedOffsetPoint: Point = usePaintStateSelector(s => [
 		s.sceneParameters.offsetX,
@@ -52,10 +51,10 @@ const useScrollPaintTool = () => {
 					if (!lastScreenPointRef.current && event.pressed) {
 						lastScreenPointRef.current = event.screenPoint
 						currentOffsetPoint.current = latestOffsetPoint.current
-
 					} else if (lastScreenPointRef.current && event.pressed) {
 						const offsetX =
-							currentOffsetPoint.current[0] + lastScreenPointRef.current[0] -
+							currentOffsetPoint.current[0] +
+							lastScreenPointRef.current[0] -
 							event.screenPoint[0]
 						const offsetY =
 							currentOffsetPoint.current[1] +

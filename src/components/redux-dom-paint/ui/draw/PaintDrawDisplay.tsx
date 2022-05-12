@@ -70,7 +70,7 @@ const PaintDrawDisplay = () => {
 			}),
 		)
 	}, [windowHeight, windowWidth])
-	
+
 	const sceneRef = useRef<any>(null)
 
 	const svgDataURLGetter = () =>
