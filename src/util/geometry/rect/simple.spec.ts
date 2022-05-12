@@ -1,13 +1,11 @@
-import { Rect } from "@app/components/redux-dom-paint/primitive"
+import { Rect } from "@app/util/geometry/rect/define"
 import {
 	NORM_RECT_MAX,
 	NORM_RECT_MIN,
-	rectNormalize,
-} from "@app/components/redux-dom-paint/primitive/calc"
-import {
 	rectArea,
 	rectDimensions,
 	rectIntersection,
+	rectNormalize,
 	rectTransformDistances,
 	rectTransformOffsets,
 	rectTranslate,
