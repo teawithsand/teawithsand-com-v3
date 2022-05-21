@@ -1,4 +1,6 @@
-import { simplePlayerNetworkStateFromNative } from "@app/components/player/simple/SimplePlayerNetworkState"
+import SimplePlayerNetworkState, {
+	simplePlayerNetworkStateFromNative,
+} from "@app/components/player/simple/SimplePlayerNetworkState"
 import SimplePlayerReadyState, {
 	simplePlayerReadyStateFromNative,
 } from "@app/components/player/simple/SimplePlayerReadyState"
@@ -22,7 +24,29 @@ const flattenBuffered = (ranges: TimeRanges) => {
 	return res
 }
 
-export const readHTMLPlayerState = (element: Element) => {
+export type HTMLPlayerState = {
+	error: MediaError | null
+	paused: boolean
+	networkState: number
+	readyState: number
+	seeking: boolean
+	ended: boolean
+
+	simpleNetworkState: SimplePlayerNetworkState
+	simpleReadyState: SimplePlayerReadyState
+
+	isPlaying: boolean
+
+	currentTime: number | null
+	duration: number | null
+
+	buffered: {
+		start: number
+		end: number
+	}[]
+}
+
+export const readHTMLPlayerState = (element: Element): HTMLPlayerState => {
 	const {
 		error,
 		paused,

@@ -1,16 +1,14 @@
-import React from "react";
+import React from "react"
 
-
-
-import Layout from "@app/components/layout/Layout";
-import HTMLSimplePlayer from "@app/components/player/simple/HTMLSimplePlayer";
-
+import Layout from "@app/components/layout/Layout"
+import HTMLSimplePlayer from "@app/components/player/simple/HTMLSimplePlayer"
 
 // const Gallery = loadable(() => import("@app/components/gallery/Gallery"))
 
 const PlayerPage = () => {
 	const element = new Audio()
 	const player = new HTMLSimplePlayer(element)
+	player.eventBus.addSubscriber(s => console.log(s))
 	player.setIsPlayingWhenReady(false)
 	player.setSource("https://samplelib.com/lib/preview/mp3/sample-3s.mp3")
 
@@ -26,7 +24,7 @@ const PlayerPage = () => {
 			<button
 				onClick={() => {
 					player.seek(0)
-                    player.setIsPlayingWhenReady(true)
+					player.setIsPlayingWhenReady(true)
 				}}
 			>
 				Click me to seek to the start

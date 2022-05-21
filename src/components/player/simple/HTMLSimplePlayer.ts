@@ -1,20 +1,22 @@
 import SimplePlayer from "@app/components/player/simple/SimplePlayer"
-import SimplePlayerEvent from "@app/components/player/simple/SimplePlayerEvent"
-import { simplePlayerNetworkStateFromNative } from "@app/components/player/simple/SimplePlayerNetworkState"
-import { simplePlayerReadyStateFromNative } from "@app/components/player/simple/SimplePlayerReadyState"
-import { SimpleEventBus } from "@app/util/lang/bus/EventBus"
-import { Subscribable } from "@app/util/lang/bus/stateSubscribe"
-import { readHTMLPlayerState } from "@app/util/player/readState"
+import SimplePlayerNetworkState from "@app/components/player/simple/SimplePlayerNetworkState"
+import SimplePlayerReadyState from "@app/components/player/simple/SimplePlayerReadyState"
+import SimplePlayerState from "@app/components/player/simple/SimplePlayerState"
+import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
+import { DefaultStickyEventBus } from "@app/util/lang/bus/StickyEventBus"
+import {
+	HTMLPlayerState,
+	readHTMLPlayerState,
+} from "@app/util/player/readState"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
-const sanitizeTime = (t: number): number | null =>
-	isFinite(t) && t >= 0 ? t : null
-
 export default class HTMLSimplePlayer implements SimplePlayer {
-	private innerEventBus = new SimpleEventBus<SimplePlayerEvent>()
+	private innerEventBus = new DefaultStickyEventBus<SimplePlayerState>({
+		type: "no-source",
+	})
 
-	get eventBus(): Subscribable<SimplePlayerEvent> {
+	get eventBus(): StickySubscribable<SimplePlayerState> {
 		return this.innerEventBus
 	}
 
@@ -24,7 +26,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	}[] = []
 
 	private isPlayingWhenReady = false
-	// protected error: MediaError | null = null
+	protected error: MediaError | null = null
 	// private rate = 1
 	private source = ""
 
@@ -34,15 +36,58 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 		this.hookToElement(element)
 	}
 
+	private lastState: HTMLPlayerState | null = null
+
+	private makeState = (): SimplePlayerState => {
+		if (this.isClosed) {
+			return { type: "closed" }
+		}
+		if (!this.source) {
+			return { type: "no-source" }
+		}
+		if (this.error) {
+			return { type: "error", error: this.error }
+		}
+		if (!this.lastState) {
+			return {
+				type: "running",
+				source: this.source,
+				currentTime: 0,
+				duration: 0,
+				ended: false,
+				isPlaying: false,
+				networkState: SimplePlayerNetworkState.EMPTY,
+				readyState: SimplePlayerReadyState.NOTHING,
+				seeking: false,
+				isPlayingWhenReady: this.isPlayingWhenReady,
+			}
+		}
+
+		return {
+			type: "running",
+			source: this.source,
+			...this.lastState,
+
+			// if we pause it will take effect in next tick, but for sake of simplicity
+			// emulate pause having effect right now
+			isPlaying: this.isPlayingWhenReady && this.lastState.isPlaying,
+			isPlayingWhenReady: this.isPlayingWhenReady,
+		}
+	}
+
+	private emitState = () => {
+		this.innerEventBus.emitEvent(this.makeState())
+	}
+
 	private hookToElement = (element: Element) => {
 		const regListener = (event: string, listener: (e: Event) => void) => {
 			const actualListener = (e: Event) => {
-				const data = readHTMLPlayerState(element)
-				console.log("Got event", {
-					name: event,
-					data: e,
-					...data,
-				})
+				// const data = readHTMLPlayerState(element)
+				// console.log("Got event", {
+				// 	name: event,
+				// 	data: e,
+				// 	...data,
+				// })
 				listener(e)
 			}
 
@@ -54,81 +99,46 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 		}
 
 		const handleStateChange = () => {
-			const networkState = simplePlayerNetworkStateFromNative(
-				element.networkState,
-			)
-			const readyState = simplePlayerReadyStateFromNative(
-				element.readyState,
-			)
+			if (this.isClosed) return // although it shouldn't, it may happen; exit then
+			const data = readHTMLPlayerState(element)
 
-			this.innerEventBus.emitEvent({
-				type: "stateChange",
-				networkState,
-				readyState,
-				seeking: element.seeking,
-			})
+			if (data.error) {
+				this.error = data.error
+				this.element.pause() // make sure we won't play after error. It may happen if data was buffered already.
+			} else {
+				// Allows remote controls to control audio element
+				// we from code here may not be the only, who change pause
+				if (!data.ended && data.paused) {
+					this.isPlayingWhenReady = false
+				} else if (!data.paused) {
+					this.isPlayingWhenReady = true
+				}
+			}
+
+			this.lastState = data
+			this.emitState()
 		}
 
-		regListener("error", () => {
-			const error = element.error
-			if (error) {
-				this.innerEventBus.emitEvent({
-					type: "error",
-					error,
-				})
-			}
-		})
-
-		regListener("timeupdate", () => {
-			const position = sanitizeTime(element.currentTime)
-			if (position) {
-				this.innerEventBus.emitEvent({
-					type: "positionChanged",
-					position,
-				})
-			}
-		})
-
-		regListener("durationchange", () => {
-			const duration = sanitizeTime(element.duration)
-			if (duration) {
-				this.innerEventBus.emitEvent({
-					type: "durationChanged",
-					duration,
-				})
-			}
-		})
-
-		regListener("ended", () => {
-			this.innerEventBus.emitEvent({
-				type: "ended",
-			})
-		})
-
+		regListener("error", () => handleStateChange())
+		regListener("timeupdate", () => handleStateChange())
+		regListener("durationchange", () => handleStateChange())
+		regListener("ended", () => handleStateChange())
 		regListener("seeking", () => handleStateChange())
 		regListener("seeked", () => handleStateChange())
 		regListener("progress", () => handleStateChange())
 		regListener("canplay", () => handleStateChange())
 		regListener("canplaythrough", () => handleStateChange())
 		regListener("waiting", () => handleStateChange())
+		regListener("pause", () => handleStateChange())
+		regListener("play", () => handleStateChange())
+	}
 
-		regListener("pause", () => {
-			if (this.source !== "" && this.isPlayingWhenReady) {
-				this.innerEventBus.emitEvent({
-					type: "isPlayingWhenReadyChanged",
-					isPlayingWhenReady: false,
-				})
-			}
-		})
-
-		regListener("play", () => {
-			if (this.source !== "" && !this.isPlayingWhenReady) {
-				this.innerEventBus.emitEvent({
-					type: "isPlayingWhenReadyChanged",
-					isPlayingWhenReady: true,
-				})
-			}
-		})
+	private syncIsPlayingWhenReady = () => {
+		if (this.isPlayingWhenReady) {
+			this.element.play()
+		} else {
+			this.element.pause()
+		}
 	}
 
 	release = () => {
@@ -146,12 +156,8 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	setIsPlayingWhenReady = (isPlayingWhenReady: boolean) => {
 		this.isPlayingWhenReady = isPlayingWhenReady
 
-		if (this.source !== "") {
-			if (isPlayingWhenReady) {
-				this.element.play()
-			} else {
-				this.element.pause()
-			}
+		if (this.source) {
+			this.syncIsPlayingWhenReady()
 		}
 	}
 
@@ -162,24 +168,19 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	setSource = (src: string) => {
 		if (this.isClosed) throw new Error("is closed")
 
-		this.innerEventBus.emitEvent({
-			type: "load",
-		})
-
 		this.source = src
 		this.element.src = src
 		this.element.load()
 
-		if (this.isPlayingWhenReady) {
-			this.element.play()
-		} else {
-			this.element.pause()
-		}
+		this.syncIsPlayingWhenReady()
+
+		this.emitState()
 	}
 
 	seek = (to: number) => {
-		if (this.source !== "") {
+		if (this.source) {
 			this.element.currentTime = to
+			this.syncIsPlayingWhenReady()
 		}
 	}
 }
