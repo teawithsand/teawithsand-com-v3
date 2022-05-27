@@ -1,26 +1,13 @@
-import FileStore, {
-	Path,
-	Reader,
-	WriteMode,
-	Writer,
-} from "@app/util/sfs/FileStore"
-import FileStoreError, {
-	FileStoreErrorCode,
-} from "@app/util/sfs/FileStoreError"
-import { canonizePath, makeAsyncIterable } from "@app/util/sfs/path"
+import FileStore, { Reader, WriteMode, Writer } from "@app/util/sfs/FileStore";
+import FileStoreError, { FileStoreErrorCode } from "@app/util/sfs/FileStoreError";
+import { canonizePathParts, makeAsyncIterable } from "@app/util/sfs/path";
 
-const innerCanonizePath = (path: Path): string => {
-	if (path instanceof Array) {
-		path = path.join("/")
-	}
-	return canonizePath(path)
-}
 
 export default class InMemoryFileStore implements FileStore {
 	private entries: Map<string, ArrayBuffer> = new Map()
 
 	openForReading = async (key: string | string[]): Promise<Reader> => {
-		const path = innerCanonizePath(key)
+		const path = canonizePathParts(key)
 
 		// memorizing file is ok I guess
 
@@ -74,7 +61,7 @@ export default class InMemoryFileStore implements FileStore {
 		key: string | string[],
 		mode: WriteMode,
 	): Promise<Writer> => {
-		const path = innerCanonizePath(key)
+		const path = canonizePathParts(key)
 
 		const file = this.entries.get(path)
 
@@ -110,7 +97,7 @@ export default class InMemoryFileStore implements FileStore {
 	}
 
 	delete = async (prefix: string | string[]): Promise<void> => {
-		const path = innerCanonizePath(prefix)
+		const path = canonizePathParts(prefix)
 		const toDelete = new Set<string>()
 		for (const k of this.entries.keys()) {
 			if (k.startsWith(path)) {
@@ -123,7 +110,7 @@ export default class InMemoryFileStore implements FileStore {
 	}
 
 	list = (prefix: string | string[]): AsyncIterable<string> => {
-		const path = innerCanonizePath(prefix)
+		const path = canonizePathParts(prefix)
 		return makeAsyncIterable(
 			[...this.entries.keys()]
 				.filter(k => k.startsWith(path))
