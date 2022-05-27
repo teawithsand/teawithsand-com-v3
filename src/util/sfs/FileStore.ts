@@ -2,7 +2,12 @@ export interface Reader {
 	/**
 	 * Returns amount of bytes read.
 	 */
-	read(buf: ArrayBufferLike): Promise<number>
+	readToBuffer(buf: ArrayBufferLike): Promise<number>
+
+	/**
+	 * Reads some amount of data to array buffer.
+	 */
+	read(): Promise<ArrayBuffer>
 
 	/**
 	 * Reads rest of reader to newly allocated ArrayBuffer.

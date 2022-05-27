@@ -22,7 +22,7 @@ describe("InMemoryFileStore", () => {
 		const rf = await fs.openForReading("/asdf.txt")
 		try {
 			const b = new ArrayBuffer(100)
-			const sz = await rf.read(b)
+			const sz = await rf.readToBuffer(b)
 			expect(b.slice(sz)).toEqual(data)
 		} finally {
 			await rf.close()

@@ -36,10 +36,10 @@ export default class InMemoryFileStore implements FileStore {
 
 		let pos = 0
 
-		return {
-			read: async buf => {
-				const file = getFile()
+		const file = getFile()
 
+		return {
+			readToBuffer: async buf => {
 				const bufView = new Uint8Array(buf)
 				const srcBuffer = new Uint8Array(
 					file.slice(pos, buf.byteLength),
@@ -50,7 +50,20 @@ export default class InMemoryFileStore implements FileStore {
 				pos += srcBuffer.length
 				return srcBuffer.length
 			},
-			readAll: async (): Promise<ArrayBuffer> => getFile().slice(pos),
+			read: async () => {
+				const buf = new ArrayBuffer(4096)
+
+				const bufView = new Uint8Array(buf)
+				const srcBuffer = new Uint8Array(
+					file.slice(pos, buf.byteLength),
+				)
+
+				bufView.set(srcBuffer)
+
+				pos += srcBuffer.length
+				return buf.slice(0, srcBuffer.length)
+			},
+			readAll: async (): Promise<ArrayBuffer> => file.slice(pos),
 			close: async (): Promise<void> => {
 				// it's in memory
 			},
@@ -112,7 +125,9 @@ export default class InMemoryFileStore implements FileStore {
 	list = (prefix: string | string[]): AsyncIterable<string> => {
 		const path = innerCanonizePath(prefix)
 		return makeAsyncIterable(
-			[...this.entries.keys()].filter(k => k.startsWith(path)).map(v => "/" + v),
+			[...this.entries.keys()]
+				.filter(k => k.startsWith(path))
+				.map(v => "/" + v),
 		)
 	}
 }
