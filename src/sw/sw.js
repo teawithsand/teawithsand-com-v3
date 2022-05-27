@@ -1,1 +1,1 @@
-console.log("I am service worker!")
+throw new Error("I am error bitch!")
