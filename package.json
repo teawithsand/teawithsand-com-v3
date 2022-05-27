@@ -34,6 +34,7 @@
     "gatsby-source-filesystem": "^4.13.0",
     "gatsby-transformer-remark": "^5.13.0",
     "gatsby-transformer-sharp": "^4.13.0",
+    "idb": "^7.0.1",
     "immer": "^9.0.12",
     "normalize.css": "^8.0.1",
     "postcss": "^8.4.13",
