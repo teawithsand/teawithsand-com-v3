@@ -13,3 +13,13 @@ export const collectReadableStream = async (
 		buffers.push(value)
 	}
 }
+
+export async function* iterateOverReader<T>(reader: ReadableStreamReader<T>) {
+	for (;;) {
+		const { value, done } = await reader.read()
+		if (done) {
+			return
+		}
+		yield value
+	}
+}

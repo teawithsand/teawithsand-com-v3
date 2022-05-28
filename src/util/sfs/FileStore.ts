@@ -21,8 +21,11 @@ export type WriteOptions = {
 
 export default interface FileStore {
 	stat(key: Path): Promise<FileInfo | null>
-	read(key: Path, options: ReadOptions): Promise<ReadableStream>
-	write(key: Path, options: WriteOptions): Promise<WritableStream>
+	read(key: Path, options?: ReadOptions): Promise<ReadableStream<ArrayBuffer>>
+	write(
+		key: Path,
+		options?: WriteOptions,
+	): Promise<WritableStream<ArrayBufferLike>>
 	delete(prefix: Path): Promise<void>
 	list(prefix: Path): AsyncIterable<string> // list of paths as string
 }
