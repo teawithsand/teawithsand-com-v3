@@ -3,3 +3,4 @@ global.___loader = {
 }
 
 global.crypto = require("@trust/webcrypto")
+require("web-streams-polyfill")
