@@ -10,6 +10,21 @@ export const disassemblePath = (path: Path): string[] => {
 	return path.split("/")
 }
 
+export const CURRENT_DIR_ENTRY = "."
+export const UPPER_DIR_ENTRY = ".."
+export const EMPTY_ENTRY = "" // works like current dir entry
+
+export function* reverseWalkOverPath(path: string) {
+	for (const e of path.split("/").reverse()) {
+		yield e
+	}
+}
+export function* walkOverPath(path: string) {
+	for (const e of path.split("/")) {
+		yield e
+	}
+}
+
 /*
 export function* iteratePathEntries(p: string) {
 	const entries = p.split("/")
