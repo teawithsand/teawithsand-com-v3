@@ -88,7 +88,7 @@ export default class InMemoryFileStore implements FileStore {
 		return makeAsyncIterable(
 			[...this.entries.keys()]
 				.filter(k => k.startsWith(path))
-				.map(v => "/" + v),
+				.map(v => v),
 		)
 	}
 }
