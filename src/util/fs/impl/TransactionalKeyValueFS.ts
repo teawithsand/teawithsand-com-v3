@@ -48,7 +48,7 @@ export type KeyValueEntryMetadata =
 			type: KeyValueEntryType.FILE_PARTIAL_CHUNK
 			buffer: ArrayBuffer
 	  }
-	  
+
 /**
  * A file system, which works on everything, which:
  * 1. Provides key-value storage of string to arbitrary binary data.

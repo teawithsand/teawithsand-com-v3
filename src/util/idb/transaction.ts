@@ -1,5 +1,4 @@
-import { unwrap } from "idb/with-async-ittr";
-
+import { unwrap } from "idb/with-async-ittr"
 
 type Base = {
 	done: Promise<unknown>

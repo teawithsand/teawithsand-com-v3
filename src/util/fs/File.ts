@@ -8,17 +8,17 @@ export default interface File {
 	 */
 	position(): Promise<number>
 
-    /**
-     * Sets position relatively to start of file.
-     * If pos is greater than file size, it's set to end of file.
-     */
-    setPosition(pos: number): Promise<void>
+	/**
+	 * Sets position relatively to start of file.
+	 * If pos is greater than file size, it's set to end of file.
+	 */
+	setPosition(pos: number): Promise<void>
 
-    /**
-     * Moves position by specified amount of size.
-     * It won't move file pointer before zero and after EOF.
-     */
-    movePosition(pos: number): Promise<void>
+	/**
+	 * Moves position by specified amount of size.
+	 * It won't move file pointer before zero and after EOF.
+	 */
+	movePosition(pos: number): Promise<void>
 
 	/**
 	 * Reads specified amount of bytes from file and yields array buffer.
@@ -34,7 +34,7 @@ export default interface File {
 
 	/**
 	 * Returns readable stream, which reads till the end of file.
-     * Closing stream, closes the file.
+	 * Closing stream, closes the file.
 	 * File should not be used once it was called.
 	 */
 	getReadStream(): ReadableStream<ArrayBuffer>

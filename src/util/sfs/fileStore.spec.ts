@@ -3,8 +3,6 @@ import { collectAsyncIterable } from "@app/util/lang/asyncIterator"
 import { arrayBufferFromBytes, randomBytesSync } from "@app/util/lang/buffer"
 import { iterateOverReader } from "@app/util/lang/readableStream"
 import FileStore from "@app/util/sfs/FileStore"
-import FilesDB from "@app/util/sfs/idb/FilesDB"
-import IndexedDBFileStore from "@app/util/sfs/idb/IndexedDBFileStore"
 import InMemoryFileStore from "@app/util/sfs/InMemoryFileStore"
 
 const testFileStore = <T extends FileStore>(
