@@ -1,11 +1,12 @@
-import { concatArrayBuffers } from "@app/util/lang/arrayBuffer"
-import { collectAsyncIterable } from "@app/util/lang/asyncIterator"
-import { arrayBufferFromBytes } from "@app/util/lang/buffer"
-import { iterateOverReader } from "@app/util/lang/readableStream"
-import FileStore from "@app/util/sfs/FileStore"
-import FilesDB from "@app/util/sfs/idb/FilesDB"
-import IndexedDBFileStore from "@app/util/sfs/idb/IndexedDBFileStore"
-import InMemoryFileStore from "@app/util/sfs/InMemoryFileStore"
+import { concatArrayBuffers } from "@app/util/lang/arrayBuffer";
+import { collectAsyncIterable } from "@app/util/lang/asyncIterator";
+import { arrayBufferFromBytes, randomBytesSync } from "@app/util/lang/buffer";
+import { iterateOverReader } from "@app/util/lang/readableStream";
+import FileStore from "@app/util/sfs/FileStore";
+import FilesDB from "@app/util/sfs/idb/FilesDB";
+import IndexedDBFileStore from "@app/util/sfs/idb/IndexedDBFileStore";
+import InMemoryFileStore from "@app/util/sfs/InMemoryFileStore";
+
 
 const testFileStore = <T extends FileStore>(
 	name: string,
@@ -22,31 +23,44 @@ const testFileStore = <T extends FileStore>(
 			await cleanup(fileStore)
 		})
 
-		it.each([[[arrayBufferFromBytes([10, 20, 30])]], [[]]])(
-			"can store and read file",
-			async chunks => {
-				const data = concatArrayBuffers(...chunks)
-				const writer = (await fileStore.write("/asdf.txt")).getWriter()
+		it.each([
+			[[]],
+			[[arrayBufferFromBytes([10, 20, 30])]],
+			[
+				[
+					randomBytesSync(10),
+					randomBytesSync(10),
+					randomBytesSync(10),
+					randomBytesSync(10),
+				],
+			],
+			[
+				[
+					randomBytesSync(1024 * 128 + 1),
+					randomBytesSync(1024 * 128),
+				],
+			],
+		])("can store and read file", async chunks => {
+			const data = concatArrayBuffers(...chunks)
+			const writer = (await fileStore.write("/asdf.txt")).getWriter()
 
-				for (const c of chunks) {
-					await writer.write(c)
-				}
-				await writer.close()
+			for (const c of chunks) {
+				await writer.write(c)
+			}
 
-				const reader = (await fileStore.read("/asdf.txt")).getReader()
-				try {
-					const readData = concatArrayBuffers(
-						...(await collectAsyncIterable(
-							iterateOverReader(reader),
-						)),
-					)
+			await writer.close()
 
-					expect(readData).toEqual(data)
-				} finally {
-					await reader.cancel()
-				}
-			},
-		)
+			const reader = (await fileStore.read("/asdf.txt")).getReader()
+			try {
+				const readData = concatArrayBuffers(
+					...(await collectAsyncIterable(iterateOverReader(reader))),
+				)
+
+				expect(readData).toEqual(data)
+			} finally {
+				await reader.cancel()
+			}
+		})
 	})
 }
 

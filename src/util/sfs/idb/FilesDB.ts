@@ -6,6 +6,7 @@ import {
 } from "idb/with-async-ittr"
 
 import {
+	preventTransactionCloseOnError,
 	useIDBPTransaction,
 	useIDBPTransactionAbortOnly,
 } from "@app/util/idb/transaction"
@@ -101,7 +102,7 @@ export default class FilesDB {
 		tx: IDBPTransaction<DBSchema, string[], "readonly" | "readwrite">,
 	) => {
 		const store = tx.objectStore(PARTIAL_CHUNK_STORE_NAME)
-		const res = (await store.get(path)) as
+		const res = (await preventTransactionCloseOnError(store.get(path))) as
 			| DBFilePartialChunk
 			| undefined
 			| null
@@ -147,37 +148,6 @@ export default class FilesDB {
 			return v.chunkOffset + 1
 		}
 		return 0
-	}
-
-	private appendChunk = async (
-		path: string,
-		data: ArrayBuffer,
-		tx: IDBPTransaction<DBSchema, string[], "readwrite">,
-	) => {
-		if (data.byteLength !== CHUNK_SIZE) {
-			throw new Error(
-				`Expected chunk to be ${CHUNK_SIZE} got ${data.byteLength}`,
-			)
-		}
-
-		let chunkOffset = 0
-
-		const store = tx.objectStore(CHUNK_STORE_NAME)
-		{
-			const index = store.index(PATH_OFFSET_CHUNK_INDEX_NAME)
-			const cursor = await index.openCursor([path], "prev")
-
-			if (cursor) {
-				const v: DBFileChunk = cursor.value
-				chunkOffset = v.chunkOffset + 1
-			}
-		}
-
-		await store.put({
-			data,
-			chunkOffset,
-			path,
-		})
 	}
 
 	private deleteChunks = async (
@@ -281,10 +251,39 @@ export default class FilesDB {
 				data,
 			)
 
+			const store = tx.objectStore(CHUNK_STORE_NAME)
+			const index = store.index(PATH_OFFSET_CHUNK_INDEX_NAME)
+
+			let chunkOffset = 0
+			{
+				const cursor = await index.openCursor(
+					IDBKeyRange.bound(
+						[path, 0],
+						[path, 2 ** 32 - 1],
+						false,
+						false,
+					),
+					"prev",
+				)
+
+				if (cursor) {
+					const v: DBFileChunk = cursor.value
+					chunkOffset = v.chunkOffset + 1
+				}
+			}
+
 			// actually, this shouldn't execute more than once
 			while (toWriteBuffer.byteLength >= CHUNK_SIZE) {
 				const writePart = toWriteBuffer.slice(0, CHUNK_SIZE)
-				await this.appendChunk(path, writePart, tx)
+
+				await preventTransactionCloseOnError(
+					store.put({
+						data: writePart,
+						chunkOffset,
+						path,
+					}),
+				)
+				chunkOffset++
 
 				toWriteBuffer = toWriteBuffer.slice(CHUNK_SIZE)
 			}
