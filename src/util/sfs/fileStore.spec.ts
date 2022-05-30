@@ -34,7 +34,6 @@ const testFileStore = <T extends FileStore>(
 				await writer.close()
 
 				const reader = (await fileStore.read("/asdf.txt")).getReader()
-				return
 				try {
 					const readData = concatArrayBuffers(
 						...(await collectAsyncIterable(
