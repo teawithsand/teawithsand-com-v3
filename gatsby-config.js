@@ -155,11 +155,11 @@ module.exports = {
 		},
 		// this (optional) plugin enables Progressive Web App + Offline functionality
 		// To learn more, visit: https://gatsby.dev/offline
-		{
-			resolve: `gatsby-plugin-offline`,
-			appendScript: require.resolve(`./src/sw/sw.js`),
-			// precachePages: [],
-		},
+		// {
+		// 	resolve: `gatsby-plugin-offline`,
+		// 	appendScript: require.resolve(`./src/sw/sw.js`),
+		// 	// precachePages: [],
+		// },
 		{
 			resolve: `gatsby-plugin-sass`,
 			options: {
