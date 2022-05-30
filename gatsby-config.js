@@ -155,10 +155,19 @@ module.exports = {
 		},
 		// this (optional) plugin enables Progressive Web App + Offline functionality
 		// To learn more, visit: https://gatsby.dev/offline
+		// For now offline functionality is disabled for main app
 		// {
 		// 	resolve: `gatsby-plugin-offline`,
-		// 	appendScript: require.resolve(`./src/sw/sw.js`),
 		// 	// precachePages: [],
+		// 	options: {
+		// 		appendScript: require.resolve(`./src/sw/sw.js`),
+		// 		workboxConfig: {
+		// 			cacheId: `gatsby-plugin-offline`,
+		// 			maximumFileSizeToCacheInBytes: 1024 * 1024 * 7, // 7MB limit
+		// 			skipWaiting: true,
+		// 			clientsClaim: true,
+		// 		},
+		// 	},
 		// },
 		{
 			resolve: `gatsby-plugin-sass`,
@@ -208,5 +217,7 @@ module.exports = {
 				shortname: `teawithsand-com`,
 			},
 		},
+		// TODO(teawithsand): configure this plugin to prevent page switching
+		// { resolve: "gatsby-plugin-layout" },
 	],
 }

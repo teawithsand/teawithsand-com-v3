@@ -16,8 +16,9 @@
     "gatsby-plugin-feed": "^4.13.0",
     "gatsby-plugin-gatsby-cloud": "^4.13.0",
     "gatsby-plugin-image": "^2.13.0",
+    "gatsby-plugin-layout": "^3.15.0",
     "gatsby-plugin-manifest": "^4.13.0",
-    "gatsby-plugin-offline": "^5.13.0",
+    "gatsby-plugin-offline": "^5.15.0",
     "gatsby-plugin-postcss": "^5.13.0",
     "gatsby-plugin-react-helmet": "^5.13.0",
     "gatsby-plugin-remove-generator": "^1.2.0",
@@ -52,9 +53,9 @@
     "redux-state-sync": "^3.1.2",
     "redux-toolkit-persist": "^1.1.0",
     "sass": "^1.51.0",
+    "styled-components": "^5.3.5",
     "typeface-merriweather": "0.0.72",
-    "typeface-montserrat": "0.0.75",
-    "yarn": "^1.22.18"
+    "typeface-montserrat": "0.0.75"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.2.1",
@@ -70,6 +71,7 @@
     "@types/react-test-renderer": "^18.0.0",
     "@types/react-transition-group": "^4.4.4",
     "@types/redux-state-sync": "^3.1.2",
+    "@types/styled-components": "^5.1.25",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "babel-jest": "^28.0.3",
@@ -88,7 +90,9 @@
     "ts-jest": "^27.1.4",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "^4.6.4",
-    "web-streams-polyfill": "^3.2.1"
+    "web-streams-polyfill": "^3.2.1",
+    "workbox-cli": "^6.5.3",
+    "workbox-webpack-plugin": "^6.5.3"
   },
   "scripts": {
     "build": "gatsby build",
