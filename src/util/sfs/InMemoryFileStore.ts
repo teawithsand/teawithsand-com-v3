@@ -66,6 +66,8 @@ export default class InMemoryFileStore implements FileStore {
 				? new ArrayBuffer(0)
 				: e ?? new ArrayBuffer(0)
 
+		this.entries.set(key, buf)
+
 		return new WritableStream({
 			write: async chunk => {
 				buf = concatArrayBuffers(buf, chunk)

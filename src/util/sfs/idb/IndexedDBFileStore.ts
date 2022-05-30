@@ -1,9 +1,22 @@
-import FileStore, { ReadOptions, WriteOptions } from "@app/util/sfs/FileStore"
+import { concatArrayBuffers } from "@app/util/lang/arrayBuffer"
+import FileStore, {
+	DEFAULT_WRITE_MODE,
+	ReadOptions,
+	WriteMode,
+	WriteOptions,
+} from "@app/util/sfs/FileStore"
+import FileStoreError, {
+	FileStoreErrorCode,
+} from "@app/util/sfs/FileStoreError"
 import FilesDB from "@app/util/sfs/idb/FilesDB"
 import { assemblePath, Path } from "@app/util/sfs/Path"
 
 export default class IndexedDBFileStore implements FileStore {
 	constructor(private readonly filesDb: FilesDB) {}
+
+	disownFilesDB = (): FilesDB => {
+		return this.filesDb
+	}
 
 	stat = async (key: Path) => {
 		const path = assemblePath(key)
@@ -21,21 +34,144 @@ export default class IndexedDBFileStore implements FileStore {
 		key: Path,
 		options: ReadOptions,
 	): Promise<ReadableStream<ArrayBuffer>> => {
-		throw new Error("NIY")
+		const path = assemblePath(key)
+
+		const { limit, offset } = options ?? {}
+
+		const partial = await this.filesDb.getFilePartialChunk(path)
+		if (!partial)
+			throw new FileStoreError(
+				`File with path ${path} was not found`,
+				FileStoreErrorCode.NOT_FOUND,
+			)
+
+		const chunkCount = await this.filesDb.getFileChunkCount(path)
+		let chunkOffset = 0
+
+		const getNextChunk = async () => {
+			try {
+				if (chunkOffset === chunkCount) {
+					const partial = await this.filesDb.getFilePartialChunk(path)
+					return partial
+				} else if (chunkOffset > chunkCount) {
+					// noop, return null
+				} else {
+					const chunk = await this.filesDb.getFileChunk(
+						path,
+						chunkOffset,
+					)
+					if (chunk) return chunk
+				}
+				return null
+			} finally {
+				chunkOffset++
+			}
+		}
+
+		let bytesRead = 0
+		let bytesEmitted = 0
+
+		return new ReadableStream({
+			pull: async controller => {
+				for (;;) {
+					const chunk = await getNextChunk()
+					if (!chunk) {
+						controller.close()
+						break
+					}
+					bytesRead += chunk.byteLength
+
+					let chunkToEnqueue: ArrayBuffer | null = null
+
+					if (typeof offset === "number") {
+						if (offset > bytesRead) {
+							// noop
+						} else if (offset > bytesRead - chunk.byteLength) {
+							const part = chunk.slice(offset - bytesRead)
+							chunkToEnqueue = part
+						} else {
+							chunkToEnqueue = chunk
+						}
+					}
+
+					if (!chunkToEnqueue) {
+						continue
+					}
+
+					if (typeof limit === "number") {
+						if (bytesEmitted + chunkToEnqueue.byteLength > limit) {
+							const partOfPart = chunkToEnqueue.slice(
+								0,
+								limit - bytesEmitted,
+							)
+
+							controller.enqueue(partOfPart)
+							bytesEmitted += partOfPart.byteLength
+							controller.close()
+							break
+						} else {
+							controller.enqueue(chunkToEnqueue)
+							bytesEmitted += chunkToEnqueue.byteLength
+						}
+					} else {
+						controller.enqueue(chunkToEnqueue)
+						bytesEmitted += chunkToEnqueue.byteLength
+					}
+				}
+			},
+		})
 	}
 
 	write = async (
 		key: Path,
 		options?: WriteOptions,
 	): Promise<WritableStream<ArrayBuffer>> => {
-		throw new Error("NIY")
+		const path = assemblePath(key)
+		const mode = options?.mode ?? DEFAULT_WRITE_MODE
+
+		if (mode === WriteMode.Override) {
+			await this.filesDb.deleteFile(path)
+		}
+
+		let chunkBuffer = new ArrayBuffer(0)
+		let performedAnyWrite = false
+
+		return new WritableStream({
+			write: async data => {
+				chunkBuffer = concatArrayBuffers(chunkBuffer, data)
+				while (chunkBuffer.byteLength >= data.byteLength) {
+					const chunk = chunkBuffer.slice(0, this.filesDb.chunkSize)
+					chunkBuffer = chunkBuffer.slice(this.filesDb.chunkSize)
+
+					performedAnyWrite = true
+					await this.filesDb.writeFileChunk(path, chunk)
+				}
+			},
+			close: async () => {
+				if (chunkBuffer.byteLength > 0 || !performedAnyWrite) {
+					performedAnyWrite = true
+					await this.filesDb.writeFileChunk(path, chunkBuffer)
+				}
+			},
+		})
 	}
 
 	delete = async (prefix: Path): Promise<void> => {
-		// this.filesDb.delete()
+		const path = assemblePath(prefix)
+		await this.filesDb.deleteFile(path)
 	}
 
 	list = (prefix: Path): AsyncIterable<string> => {
-		throw new Error("NIY")
+		const pref = assemblePath(prefix)
+
+		async function* gen() {
+			for await (const e of this.filesDb.iterateOverPaths()) {
+				if (e.startsWith(pref)) {
+					yield e
+				}
+			}
+		}
+
+		return gen()
 	}
 }

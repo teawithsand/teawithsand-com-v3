@@ -5,13 +5,17 @@ import {
 	openDB,
 } from "idb/with-async-ittr"
 
+import {
+	useIDBPTransaction,
+	useIDBPTransactionAbortOnly,
+} from "@app/util/idb/transaction"
 import { concatArrayBuffers } from "@app/util/lang/arrayBuffer"
 
 const CHUNK_STORE_NAME = "chunks"
 const PARTIAL_CHUNK_STORE_NAME = "partial_chunks"
 
 const PATH_OFFSET_CHUNK_INDEX_NAME = "pathOffsetChunkIndex"
-const PATH_PARTIAL_CHUNK_INDEX_NAME = "pathPartialChunkIndex"
+const PATH_CHUNK_INDEX_NAME = "pathChunkIndex"
 
 const CHUNK_SIZE = 1024 * 128 // these should be quite big, since path is replicated to each chunk
 
@@ -23,7 +27,6 @@ export type DBFileChunk = {
 }
 
 export type DBFilePartialChunk = {
-	id: number
 	path: string
 	data: ArrayBufferLike
 }
@@ -53,15 +56,12 @@ export default class FilesDB {
 							unique: true,
 						},
 					)
+					os.createIndex(PATH_CHUNK_INDEX_NAME, ["path"])
 				}
 
 				if (!db.objectStoreNames.contains(PARTIAL_CHUNK_STORE_NAME)) {
-					const os = db.createObjectStore(PARTIAL_CHUNK_STORE_NAME, {
-						keyPath: "id",
-						autoIncrement: true,
-					})
-					os.createIndex(PATH_PARTIAL_CHUNK_INDEX_NAME, ["path"], {
-						unique: true,
+					db.createObjectStore(PARTIAL_CHUNK_STORE_NAME, {
+						keyPath: "path",
 					})
 				}
 			},
@@ -101,8 +101,7 @@ export default class FilesDB {
 		tx: IDBPTransaction<DBSchema, string[], "readonly" | "readwrite">,
 	) => {
 		const store = tx.objectStore(PARTIAL_CHUNK_STORE_NAME)
-		const index = store.index(PATH_PARTIAL_CHUNK_INDEX_NAME)
-		const res = (await index.get(path)) as
+		const res = (await store.get(path)) as
 			| DBFilePartialChunk
 			| undefined
 			| null
@@ -115,9 +114,8 @@ export default class FilesDB {
 		tx: IDBPTransaction<DBSchema, string[], "readwrite">,
 	) => {
 		const store = tx.objectStore(PARTIAL_CHUNK_STORE_NAME)
-		const index = store.index(PATH_PARTIAL_CHUNK_INDEX_NAME)
-		const v = await index.get(path)
-		if (v) await store.delete(v.id)
+		const v = await store.get(path)
+		if (v) await store.delete(path)
 	}
 
 	private setPartialChunk = async (
@@ -126,15 +124,13 @@ export default class FilesDB {
 		tx: IDBPTransaction<DBSchema, string[], "readwrite">,
 	) => {
 		const store = tx.objectStore(PARTIAL_CHUNK_STORE_NAME)
-
-		const index = store.index(PATH_PARTIAL_CHUNK_INDEX_NAME)
-		const v = await index.get(path)
-		if (v) await store.delete(v.id)
+		const v = await store.get(path)
+		if (v) await store.delete(path)
 
 		await store.put({
 			data,
 			path,
-		} as DBFilePartialChunk)
+		})
 	}
 
 	private getChunkCount = async (
@@ -189,7 +185,7 @@ export default class FilesDB {
 		tx: IDBPTransaction<DBSchema, string[], "readwrite">,
 	) => {
 		const store = tx.objectStore(CHUNK_STORE_NAME)
-		const index = store.index(PATH_PARTIAL_CHUNK_INDEX_NAME)
+		const index = store.index(PATH_CHUNK_INDEX_NAME)
 		for await (const cursor of index.iterate(path)) {
 			await cursor.delete()
 		}
@@ -201,7 +197,7 @@ export default class FilesDB {
 	): Promise<ArrayBuffer | null> => {
 		const tx = this.getReadTx()
 
-		try {
+		return await useIDBPTransactionAbortOnly(tx, async tx => {
 			const store = tx.objectStore(CHUNK_STORE_NAME)
 			const index = store.index(PATH_OFFSET_CHUNK_INDEX_NAME)
 			const cursor = await index.openCursor([path], "next")
@@ -219,27 +215,24 @@ export default class FilesDB {
 			}
 
 			return null
-		} finally {
-			tx.abort()
-		}
+		})
 	}
 
 	getFilePartialChunk = async (path: string) => {
 		const tx = this.getReadTx()
-		try {
-			return this.getPartialChunk(path, tx)
-		} finally {
-			tx.abort()
-		}
+
+		return await useIDBPTransactionAbortOnly(tx, async tx => {
+			const FilePartialChunk = await this.getPartialChunk(path, tx)
+			return FilePartialChunk
+		})
 	}
 
 	getFileChunkCount = async (path: string) => {
 		const tx = this.getReadTx()
-		try {
-			return this.getChunkCount(path, tx)
-		} finally {
-			tx.abort()
-		}
+		return await useIDBPTransactionAbortOnly(
+			tx,
+			async tx => await this.getChunkCount(path, tx),
+		)
 	}
 
 	/**
@@ -247,29 +240,30 @@ export default class FilesDB {
 	 */
 	deleteFile = async (path: string) => {
 		const tx = this.getWriteTx()
-		try {
+		await useIDBPTransaction(tx, async tx => {
 			await this.deletePartialChunk(path, tx)
 			await this.deleteChunks(path, tx)
-		} catch (e) {
-			tx.abort()
-			throw e
-		} finally {
-			tx.commit()
-		}
+		})
 	}
 
 	iterateOverPaths = () => {
-		const tx = this.getReadTx()
 		async function* gen() {
-			try {
+			const tx = this.getReadTx()
+			const res = await useIDBPTransactionAbortOnly(tx, async tx => {
 				const store = tx.objectStore(PARTIAL_CHUNK_STORE_NAME)
-				const index = store.index(PATH_PARTIAL_CHUNK_INDEX_NAME)
 
-				for await (const cursor of index.iterate(null)) {
-					yield cursor.value.path
+				const res: string[] = []
+				for await (const cursor of store.iterate(null)) {
+					// This is bad, it may cause idb transaction to fail.
+					// Sync receiver would be better
+					// for now bypass this via returning array
+					res.push(cursor.value.path as string)
 				}
-			} finally {
-				tx.abort()
+
+				return res
+			})
+			for (const v of res) {
+				yield v
 			}
 		}
 
@@ -280,8 +274,7 @@ export default class FilesDB {
 	 * Writes given chunk at the end of file.
 	 */
 	writeFileChunk = async (path: string, data: ArrayBuffer) => {
-		const tx = this.getWriteTx()
-		try {
+		await useIDBPTransaction(this.getWriteTx(), async tx => {
 			const partial = await this.getPartialChunk(path, tx)
 			let toWriteBuffer = concatArrayBuffers(
 				partial ?? new ArrayBuffer(0),
@@ -297,11 +290,6 @@ export default class FilesDB {
 			}
 
 			await this.setPartialChunk(path, toWriteBuffer, tx)
-		} catch (e) {
-			tx.abort()
-			throw e
-		} finally {
-			tx.commit()
-		}
+		})
 	}
 }
