@@ -1,8 +1,14 @@
 export type Path = string | string[]
 
 export const assemblePath = (path: Path): string => {
-	if (typeof path === "string") return path
-	return path.join("/")
+	let p: string
+	if (typeof path === "string") p = path
+	else p = path.join("/")
+
+	if (!p.startsWith("/")) p = "/" + p
+
+	if (p.endsWith("/")) p = p.slice(0, -1)
+	return p
 }
 
 export const disassemblePath = (path: Path): string[] => {
