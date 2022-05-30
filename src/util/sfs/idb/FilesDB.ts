@@ -1,16 +1,10 @@
-import {
-	deleteDB,
-	IDBPDatabase,
-	IDBPTransaction,
-	openDB,
-} from "idb/with-async-ittr"
+import { deleteDB, IDBPDatabase, IDBPTransaction, openDB } from "idb/with-async-ittr";
 
-import {
-	preventTransactionCloseOnError,
-	useIDBPTransaction,
-	useIDBPTransactionAbortOnly,
-} from "@app/util/idb/transaction"
-import { concatArrayBuffers } from "@app/util/lang/arrayBuffer"
+
+
+import { concatArrayBuffers } from "@app/util/lang/arrayBuffer";
+import { preventTransactionCloseOnError, useIDBPTransaction, useIDBPTransactionAbortOnly } from "@app/util/webapi/idb/transaction";
+
 
 const CHUNK_STORE_NAME = "chunks"
 const PARTIAL_CHUNK_STORE_NAME = "partial_chunks"
@@ -217,8 +211,10 @@ export default class FilesDB {
 	}
 
 	iterateOverPaths = () => {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		const self = this
 		async function* gen() {
-			const tx = this.getReadTx()
+			const tx = self.getReadTx()
 			const res = await useIDBPTransactionAbortOnly(tx, async tx => {
 				const store = tx.objectStore(PARTIAL_CHUNK_STORE_NAME)
 

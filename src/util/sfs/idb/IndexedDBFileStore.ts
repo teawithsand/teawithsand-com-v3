@@ -163,9 +163,10 @@ export default class IndexedDBFileStore implements FileStore {
 
 	list = (prefix: Path): AsyncIterable<string> => {
 		const pref = assemblePath(prefix)
-
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		const self = this
 		async function* gen() {
-			for await (const e of this.filesDb.iterateOverPaths()) {
+			for await (const e of self.filesDb.iterateOverPaths()) {
 				if (e.startsWith(pref)) {
 					yield e
 				}

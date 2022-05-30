@@ -3,6 +3,8 @@ import { collectAsyncIterable } from "@app/util/lang/asyncIterator"
 import { arrayBufferFromBytes, randomBytesSync } from "@app/util/lang/buffer"
 import { iterateOverReader } from "@app/util/lang/readableStream"
 import FileStore from "@app/util/sfs/FileStore"
+import FilesDB from "@app/util/sfs/idb/FilesDB"
+import IndexedDBFileStore from "@app/util/sfs/idb/IndexedDBFileStore"
 import InMemoryFileStore from "@app/util/sfs/InMemoryFileStore"
 
 const testFileStore = <T extends FileStore>(
@@ -23,7 +25,7 @@ const testFileStore = <T extends FileStore>(
 		const writeSampleFile = async (path: string, data?: ArrayBuffer) => {
 			data = data ?? new ArrayBuffer(0)
 			const writer = (await fileStore.write(path)).getWriter()
-			await writer.write(data)
+			if (data.byteLength > 0) await writer.write(data)
 			await writer.close()
 		}
 
@@ -109,8 +111,8 @@ const testFileStore = <T extends FileStore>(
 			expected.sort()
 			expect(results).toEqual(expected)
 		})
-	})
-}
+	}) 
+} 
 
 testFileStore(
 	"InMemoryFileStore",
@@ -120,7 +122,6 @@ testFileStore(
 	},
 )
 
-/*
 testFileStore(
 	"IndexedDBFileStore",
 	async () => {
@@ -133,4 +134,3 @@ testFileStore(
 		await res.disownFilesDB().close()
 	},
 )
-*/
