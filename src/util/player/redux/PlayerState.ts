@@ -1,5 +1,5 @@
-import PlayerSource from "@app/components/player/source/PlayerSource"
-import PlayerSourceProvider from "@app/components/player/source/PlayerSourceProvider"
+import PlayerSource from "@app/util/player/source/PlayerSource"
+import PlayerSourceProvider from "@app/util/player/source/PlayerSourceProvider"
 
 export enum PlayerDriverNetworkState {
 	IDLE,

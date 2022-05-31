@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
 
-import { ArrayPlayerSourceProvider } from "@app/components/player/source/PlayerSourceProvider"
-import PlayerState from "@app/components/player/redux/PlayerState"
+import PlayerState from "@app/util/player/redux/PlayerState"
+import { ArrayPlayerSourceProvider } from "@app/util/player/source/PlayerSourceProvider"
 
 const actionPrefix = "twsblog/player"
 
@@ -16,4 +16,6 @@ const initialPlayerState: Readonly<PlayerState> = {
 }
 
 export const createPlayerReducer = () =>
-	createReducer(initialPlayerState, builder => {})
+	createReducer(initialPlayerState, builder => {
+		// for now niy, since no actions
+	})
