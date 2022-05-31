@@ -1,5 +1,5 @@
-import SimplePlayerNetworkState from "@app/components/player/simple/SimplePlayerNetworkState";
-import SimplePlayerReadyState from "@app/components/player/simple/SimplePlayerReadyState";
+import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState";
+import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState";
 
 
 type SimplePlayerState =

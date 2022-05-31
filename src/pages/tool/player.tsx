@@ -1,7 +1,7 @@
 import React from "react"
 
 import Layout from "@app/components/layout/Layout"
-import HTMLSimplePlayer from "@app/components/player/simple/HTMLSimplePlayer"
+import HTMLSimplePlayer from "@app/util/player/simple/HTMLSimplePlayer"
 
 // const Gallery = loadable(() => import("@app/components/gallery/Gallery"))
 

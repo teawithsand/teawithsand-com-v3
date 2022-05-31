@@ -1,13 +1,13 @@
-import SimplePlayer from "@app/components/player/simple/SimplePlayer"
-import SimplePlayerNetworkState from "@app/components/player/simple/SimplePlayerNetworkState"
-import SimplePlayerReadyState from "@app/components/player/simple/SimplePlayerReadyState"
-import SimplePlayerState from "@app/components/player/simple/SimplePlayerState"
 import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 import { DefaultStickyEventBus } from "@app/util/lang/bus/StickyEventBus"
+import SimplePlayer from "@app/util/player/simple/SimplePlayer"
+import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState"
+import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState"
+import SimplePlayerState from "@app/util/player/simple/SimplePlayerState"
 import {
 	HTMLPlayerState,
 	readHTMLPlayerState,
-} from "@app/util/player/readState"
+} from "@app/util/player/tool/readState"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
@@ -163,6 +163,10 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 
 	setRate = (rate: number) => {
 		this.element.playbackRate = rate
+	}
+
+	setVolume = (volume: number) => {
+		this.element.volume = volume
 	}
 
 	setSource = (src: string) => {

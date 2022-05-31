@@ -1,9 +1,9 @@
 import SimplePlayerNetworkState, {
 	simplePlayerNetworkStateFromNative,
-} from "@app/components/player/simple/SimplePlayerNetworkState"
+} from "@app/util/player/simple/SimplePlayerNetworkState"
 import SimplePlayerReadyState, {
 	simplePlayerReadyStateFromNative,
-} from "@app/components/player/simple/SimplePlayerReadyState"
+} from "@app/util/player/simple/SimplePlayerReadyState"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
