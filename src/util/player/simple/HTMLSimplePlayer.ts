@@ -1,16 +1,18 @@
-import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
-import { DefaultStickyEventBus } from "@app/util/lang/bus/StickyEventBus"
-import SimplePlayer from "@app/util/player/simple/SimplePlayer"
-import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState"
-import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState"
-import SimplePlayerState from "@app/util/player/simple/SimplePlayerState"
-import {
-	HTMLPlayerState,
-	readHTMLPlayerState,
-} from "@app/util/player/tool/readState"
+import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe";
+import { DefaultStickyEventBus } from "@app/util/lang/bus/StickyEventBus";
+import SimplePlayer from "@app/util/player/simple/SimplePlayer";
+import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState";
+import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState";
+import SimplePlayerState from "@app/util/player/simple/SimplePlayerState";
+import { HTMLPlayerState, readHTMLPlayerState } from "@app/util/player/tool/readState";
+
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
+/**
+ * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
+ * in order to provide controls.
+ */
 export default class HTMLSimplePlayer implements SimplePlayer {
 	private innerEventBus = new DefaultStickyEventBus<SimplePlayerState>({
 		type: "no-source",
