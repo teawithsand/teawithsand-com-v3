@@ -52,6 +52,10 @@ export default class MetadataBag {
 		}
 	}
 
+	get length() {
+		return this.results.length
+	}
+
 	/**
 	 * Returns sum duration of all elements to given index.
 	 * Returns null if it's not possible.
@@ -75,5 +79,20 @@ export default class MetadataBag {
 		}
 
 		return duration
+	}
+
+	/**
+	 * Returns index of entry, which contains specified absolute position.
+	 * Returns `this.length` if position is after the end
+	 */
+	getIndexFromPosition = (position: number): number | null => {
+		for (let i = 0; i < this.results.length; i++) {
+			const res = this.getDurationToIndex(i, true)
+			if (res === null) return null
+
+			if (position <= res) return i
+		}
+
+		return this.length
 	}
 }
