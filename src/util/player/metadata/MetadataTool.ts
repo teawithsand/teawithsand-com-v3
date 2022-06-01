@@ -1,8 +1,6 @@
-export type Metadata = {
-	duration: number | null
-}
+import Metadata from "@app/util/player/metadata/Metadata"
 
-export default class MetadataLoader {
+export default class MetadataTool {
 	loadMetadata = async (
 		src:
 			| string
@@ -10,7 +8,7 @@ export default class MetadataLoader {
 					url: string
 					release: () => void
 			  },
-	) => {
+	): Promise<Metadata> => {
 		let url
 		if (typeof src === "string") {
 			url = src
@@ -26,7 +24,7 @@ export default class MetadataLoader {
 
 			let errorListener: () => void
 			let metadataListener: () => void
-			const p = new Promise((resolve, reject) => {
+			const p = new Promise<Metadata>((resolve, reject) => {
 				errorListener = () => {
 					reject(audio.error)
 				}
@@ -46,7 +44,7 @@ export default class MetadataLoader {
 			audio.load()
 
 			try {
-				await p
+				return await p
 			} finally {
 				audio.src = ""
 				audio.load()
