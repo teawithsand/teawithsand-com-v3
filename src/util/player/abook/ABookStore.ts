@@ -1,4 +1,4 @@
-import localforage, { INDEXEDDB } from "localforage"
+import localforage, { INDEXEDDB, WEBSQL } from "localforage"
 
 import KeyValueStore from "@app/util/keyvalue/KeyValueStore"
 import LocalForageKeyValueStore from "@app/util/keyvalue/LocalForageKeyValueStore"
@@ -20,7 +20,7 @@ export default class ABookStore implements KeyValueStore<ABook> {
 		return new ABookStore(
 			new LocalForageKeyValueStore(
 				localforage.createInstance({
-					driver: INDEXEDDB,
+					driver: [INDEXEDDB, WEBSQL],
 					name: "abook-metadata",
 					storeName: "abook-metadata",
 					description: "ABook information store",
