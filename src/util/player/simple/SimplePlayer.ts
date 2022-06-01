@@ -5,7 +5,7 @@ import SimplePlayerState from "@app/util/player/simple/SimplePlayerState"
  * An abstraction over something, which is able to play single file, either audio or video.
  */
 export default interface SimplePlayer {
-	eventBus: StickySubscribable<SimplePlayerState>
+	readonly eventBus: StickySubscribable<SimplePlayerState>
 
 	setIsPlayingWhenReady(isPlayingWhenReady: boolean): void
 	/**
