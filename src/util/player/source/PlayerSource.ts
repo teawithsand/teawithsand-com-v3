@@ -6,6 +6,7 @@
  * Source can be closed, which releases any resources associated with it.
  */
 abstract class PlayerSource {
+	abstract equals(b: any): boolean
 }
 
 /**
@@ -13,6 +14,9 @@ abstract class PlayerSource {
  * It has noop closer.
  */
 export class URLPlayerSource extends PlayerSource {
+	equals = (b: any): boolean => {
+		return b instanceof URLPlayerSource && b.url === this.url
+	}
 	constructor(public readonly url: string) {
 		super()
 	}
