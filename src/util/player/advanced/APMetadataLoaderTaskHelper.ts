@@ -1,11 +1,14 @@
-import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe";
-import { DefaultStickyEventBus } from "@app/util/lang/bus/StickyEventBus";
-import SingularTaskManager from "@app/util/lang/task/SingularTaskManager";
-import { Playlist } from "@app/util/player/advanced/AdvancedPlayer";
-import { MetadataLoadingResult, MetadataLoadingResultType } from "@app/util/player/metadata/Metadata";
-import MetadataBag from "@app/util/player/metadata/MetadataBag";
-import MetadataTool from "@app/util/player/metadata/MetadataTool";
-import { URLPlayerSource } from "@app/util/player/source/PlayerSource";
+import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
+import { DefaultStickyEventBus } from "@app/util/lang/bus/StickyEventBus"
+import SingularTaskManager from "@app/util/lang/task/SingularTaskManager"
+import { Playlist } from "@app/util/player/advanced/AdvancedPlayer"
+import {
+	MetadataLoadingResult,
+	MetadataLoadingResultType,
+} from "@app/util/player/metadata/Metadata"
+import MetadataBag from "@app/util/player/metadata/MetadataBag"
+import MetadataTool from "@app/util/player/metadata/MetadataTool"
+import { URLPlayerSource } from "@app/util/player/source/PlayerSource"
 
 // TODO(teawithsand): add caching, so metadata is not loaded each time we use it
 // We can do something simple like serializing whole LRU into single JS object and then store it in IDB or localstorage
@@ -36,7 +39,7 @@ export default class APMetadataLoaderTaskHelper {
 		}
 		this.taskManager.cancel()
 
-        this.computeAndSendBag()
+		this.computeAndSendBag()
 
 		this.taskManager.submitTask(async ctx => {
 			let i = 0
@@ -61,7 +64,7 @@ export default class APMetadataLoaderTaskHelper {
 							type: MetadataLoadingResultType.OK,
 							metadata,
 						}
-                        this.computeAndSendBag()
+						this.computeAndSendBag()
 					} catch (e) {
 						if (ctx.isCanceled) {
 							return
@@ -70,7 +73,7 @@ export default class APMetadataLoaderTaskHelper {
 							type: MetadataLoadingResultType.ERROR,
 							error: e,
 						}
-                        this.computeAndSendBag()
+						this.computeAndSendBag()
 					}
 				} finally {
 					i++

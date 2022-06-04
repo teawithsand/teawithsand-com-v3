@@ -19,18 +19,19 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 	private isClosed = false
 	private metadataHelper = new APMetadataLoaderTaskHelper()
 
-	private rate = 1
+	private rate = 4
 	private volume = 1
 	private isPlayingWhenReady = false
 
 	private ended = false
 
 	constructor(private readonly innerPlayer: SimplePlayer) {
-		innerPlayer.eventBus.addSubscriber(state => this.onStateChange(state))
-
 		this.setIsPlayingWhenReady(this.isPlayingWhenReady)
 		this.setRate(this.rate)
 		this.setVolume(this.volume)
+
+		innerPlayer.eventBus.addSubscriber(state => this.onStateChange(state))
+
 		this.syncSimplePlayerState()
 
 		this.metadataHelper.metadataBagBus.addSubscriber(() => {
@@ -76,6 +77,8 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 	}
 
 	setPlaylist = (playlist: Playlist): void => {
+		playlist = [...playlist]
+		console.log("We got playlist", playlist)
 		try {
 			this.metadataHelper.setPlaylist(playlist)
 			if (playlist.length === 0) {
@@ -89,11 +92,11 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 				this.goToEndedState()
 				return
 			}
-
-			this.syncSimplePlayerState()
 		} finally {
 			this.innerPlaylist = playlist
 		}
+
+		this.syncSimplePlayerState()
 	}
 
 	localSeek = (to: number): void => {
@@ -139,33 +142,33 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 		} else if (state.type === "error") {
 			// it's noop, it will be read by emitState
 		} else if (state.type === "running") {
-			const { ended } = state
+			const { ended, isPlayingWhenReady } = state
 
-			if (!state.isPlayingWhenReady) {
-				// inverse shouldn't be possible
-				// this may be
-				this.isPlayingWhenReady = false
-			}
+			this.isPlayingWhenReady = isPlayingWhenReady
 
+			console.log("got inner player state", state)
 			if (ended) {
-				this.onInnerPlaybackEnded()
+				this.onInnerPlaybackEndedNoEmit()
 			}
 		}
 
 		this.emitState()
 	}
 
-	private onInnerPlaybackEnded = () => {
-		if (this.currentSourceIndex < this.playlist.length - 1) {
+	private onInnerPlaybackEndedNoEmit = () => {
+		if (this.currentSourceIndex < this.playlist.length) {
+			console.log({ currentSourceIndex: this.currentSourceIndex })
 			this.currentSourceIndex += 1
-			this.syncSimplePlayerState()
+			this.syncSimplePlayerState(true)
 		} else {
 			this.ended = true
 		}
 	}
 
 	private goToEndedState = () => {
-		// niy
+		this.ended = true
+
+		this.emitState()
 	}
 
 	/**
@@ -235,6 +238,12 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 					this.currentSourceIndex,
 				)
 			const currentTime = innerPlayerState.currentTime
+
+			// console.log({
+			// 	durationToIndex,
+			// 	currentTime,
+			// 	bag: this.metadataHelper.metadataBagBus.lastEvent,
+			// })
 
 			const globalCurrentPosition =
 				durationToIndex !== null && currentTime !== null
