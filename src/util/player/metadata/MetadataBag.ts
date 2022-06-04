@@ -26,15 +26,15 @@ export default class MetadataBag {
 			results = arr
 		}
 
-		this.results = results
+		this.results = [...results]
 
 		this.sumDurationToIndex = []
 		let sum: number | null = 0
 		for (const entry of results) {
+			this.sumDurationToIndex.push(sum ?? -1)
+			
 			if (entry && entry.type === MetadataLoadingResultType.OK) {
 				const { metadata } = entry
-
-				this.sumDurationToIndex.push(sum ?? -1)
 
 				if (typeof sum === "number") {
 					if (
@@ -48,6 +48,8 @@ export default class MetadataBag {
 						sum = null
 					}
 				}
+			} else {
+				sum = null
 			}
 		}
 	}
