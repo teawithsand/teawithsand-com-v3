@@ -1,9 +1,7 @@
-import { Subscriber } from "final-form"
-
 import EventBus, { SimpleEventBus } from "./EventBus"
 import {
 	StickySubscribable,
-	Subscribable,
+	Subscriber,
 	SubscriptionCanceler,
 } from "./stateSubscribe"
 
@@ -29,6 +27,8 @@ export class DefaultStickyEventBus<T>
 	}
 
 	emitEvent = (event: T) => {
+		// Note: this behavior must be as-is
+		// before invocation of handler, last event must be updated
 		this.innerLastEvent = event
 		this.innerBus.emitEvent(event)
 	}
