@@ -38,7 +38,6 @@ export const useIDBPTransaction = async <T extends Base, E>(
 		res = await cb(tx)
 	} catch (e) {
 		try {
-			console.log("maybe abort", isDone)
 			if (!isDone) tx.abort()
 		} catch (e) {
 			// ignore it
