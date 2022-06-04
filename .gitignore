@@ -75,3 +75,6 @@ yarn-error.log
 /deploy
 !/deploy/.gitkeep
 !/posts/.gitkeep
+
+# Custom
+/static/*.mp3
