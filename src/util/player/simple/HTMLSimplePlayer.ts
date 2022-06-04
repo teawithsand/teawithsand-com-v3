@@ -112,12 +112,6 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	private hookToElement = (element: Element) => {
 		const regListener = (event: string, listener: (e: Event) => void) => {
 			const actualListener = (e: Event) => {
-				// const data = readHTMLPlayerState(element)
-				// console.log("Got event", {
-				// 	name: event,
-				// 	data: e,
-				// 	...data,
-				// })
 				listener(e)
 			}
 
@@ -174,7 +168,6 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	}
 
 	setIsPlayingWhenReady = (isPlayingWhenReady: boolean) => {
-		console.log("Setting IPWR", isPlayingWhenReady)
 		this.isPlayingWhenReady = isPlayingWhenReady
 
 		if (this.source) {
@@ -193,7 +186,6 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	}
 
 	setSource = (src: string) => {
-		console.log("Setting source", src)
 		if (this.isClosed) throw new Error("is closed")
 
 		this.source = src
