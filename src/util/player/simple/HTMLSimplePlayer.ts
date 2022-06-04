@@ -1,11 +1,13 @@
-import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe";
-import { DefaultStickyEventBus } from "@app/util/lang/bus/StickyEventBus";
-import SimplePlayer from "@app/util/player/simple/SimplePlayer";
-import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState";
-import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState";
-import SimplePlayerState from "@app/util/player/simple/SimplePlayerState";
-import { HTMLPlayerState, readHTMLPlayerState } from "@app/util/player/tool/readState";
-
+import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
+import { DefaultStickyEventBus } from "@app/util/lang/bus/StickyEventBus"
+import SimplePlayer from "@app/util/player/simple/SimplePlayer"
+import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState"
+import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState"
+import SimplePlayerState from "@app/util/player/simple/SimplePlayerState"
+import {
+	HTMLPlayerState,
+	readHTMLPlayerState,
+} from "@app/util/player/tool/readState"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
@@ -33,6 +35,9 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	private source = ""
 
 	private isClosed = false
+
+	private rate = 1
+	private volume = 1
 
 	constructor(private readonly element: Element) {
 		this.hookToElement(element)
@@ -121,7 +126,12 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 			this.emitState()
 		}
 
-		regListener("error", () => handleStateChange())
+		regListener("error", e => {
+			e.stopPropagation()
+			e.preventDefault()
+
+			handleStateChange()
+		})
 		regListener("timeupdate", () => handleStateChange())
 		regListener("durationchange", () => handleStateChange())
 		regListener("ended", () => handleStateChange())
@@ -137,7 +147,9 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 
 	private syncIsPlayingWhenReady = () => {
 		if (this.isPlayingWhenReady) {
-			this.element.play()
+			this.element.play().catch(e => {
+				// noop here
+			})
 		} else {
 			this.element.pause()
 		}
@@ -156,6 +168,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	}
 
 	setIsPlayingWhenReady = (isPlayingWhenReady: boolean) => {
+		console.log("Setting IPWR", isPlayingWhenReady)
 		this.isPlayingWhenReady = isPlayingWhenReady
 
 		if (this.source) {
@@ -164,19 +177,26 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	}
 
 	setRate = (rate: number) => {
+		this.rate = rate
 		this.element.playbackRate = rate
 	}
 
 	setVolume = (volume: number) => {
+		this.volume = volume
 		this.element.volume = volume
 	}
 
 	setSource = (src: string) => {
+		console.log("Setting source", src)
 		if (this.isClosed) throw new Error("is closed")
 
 		this.source = src
 		this.element.src = src
+
+		// load resets playback rate and volume(?)
 		this.element.load()
+		this.element.playbackRate = this.rate
+		this.element.volume = this.volume
 
 		this.syncIsPlayingWhenReady()
 
