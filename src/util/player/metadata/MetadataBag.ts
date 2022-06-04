@@ -10,6 +10,7 @@ import {
 export default class MetadataBag {
 	private sumDurationToIndex: number[] = []
 	private readonly results: (MetadataLoadingResult | null)[] = []
+	private readonly innerIsDone: boolean
 
 	constructor(
 		results:
@@ -28,11 +29,13 @@ export default class MetadataBag {
 
 		this.results = [...results]
 
+		this.innerIsDone = this.results.every(r => r !== null)
+
 		this.sumDurationToIndex = []
 		let sum: number | null = 0
 		for (const entry of results) {
 			this.sumDurationToIndex.push(sum ?? -1)
-			
+
 			if (entry && entry.type === MetadataLoadingResultType.OK) {
 				const { metadata } = entry
 
@@ -96,5 +99,12 @@ export default class MetadataBag {
 		}
 
 		return this.length
+	}
+
+	/**
+	 * Returns true if metadata has been loaded for all entries contained in this bag.
+	 */
+	get isDone() {
+		return this.innerIsDone
 	}
 }
