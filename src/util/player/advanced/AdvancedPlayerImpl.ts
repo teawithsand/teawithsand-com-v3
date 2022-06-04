@@ -9,7 +9,6 @@ import SimplePlayer from "@app/util/player/simple/SimplePlayer"
 import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState"
 import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState"
 import SimplePlayerState from "@app/util/player/simple/SimplePlayerState"
-import { URLPlayerSource } from "@app/util/player/source/PlayerSource"
 
 // TODO(teawithsand): detect inconsistency between metadata duration and player duration
 //  since for now it's assumed to be exact same value
@@ -32,7 +31,7 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 
 		innerPlayer.eventBus.addSubscriber(state => this.onStateChange(state))
 
-		this.syncSimplePlayerState()
+		this.setInnerPlayerSource()
 
 		this.metadataHelper.metadataBagBus.addSubscriber(() => {
 			this.emitState()
@@ -71,18 +70,15 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 	}
 
 	reload = (): void => {
-		if (this.currentSourceIndex < this.innerPlaylist.length) {
-			this.syncSimplePlayerState()
-		}
+		this.setInnerPlayerSource()
 	}
 
 	setPlaylist = (playlist: Playlist): void => {
 		playlist = [...playlist]
-		console.log("We got playlist", playlist)
 		try {
 			this.metadataHelper.setPlaylist(playlist)
 			if (playlist.length === 0) {
-				this.syncSimplePlayerState()
+				this.setInnerPlayerSource()
 				this.goToEndedState()
 				return
 			}
@@ -96,7 +92,7 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 			this.innerPlaylist = playlist
 		}
 
-		this.syncSimplePlayerState()
+		this.setInnerPlayerSource()
 	}
 
 	localSeek = (to: number): void => {
@@ -110,8 +106,10 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 			this.goToEndedState()
 			return
 		}
-		this.currentSourceIndex = index
-		this.syncSimplePlayerState()
+		if (this.currentSourceIndex !== index) {
+			this.currentSourceIndex = index
+			this.setInnerPlayerSource()
+		}
 
 		// done by localSeek
 		// this.ended = false
@@ -146,7 +144,6 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 
 			this.isPlayingWhenReady = isPlayingWhenReady
 
-			console.log("got inner player state", state)
 			if (ended) {
 				this.onInnerPlaybackEndedNoEmit()
 			}
@@ -157,9 +154,8 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 
 	private onInnerPlaybackEndedNoEmit = () => {
 		if (this.currentSourceIndex < this.playlist.length) {
-			console.log({ currentSourceIndex: this.currentSourceIndex })
 			this.currentSourceIndex += 1
-			this.syncSimplePlayerState(true)
+			this.setInnerPlayerSource()
 		} else {
 			this.ended = true
 		}
@@ -178,20 +174,11 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 	 *
 	 * To underlying instance of simple player.
 	 */
-	private syncSimplePlayerState = (forceReload = false) => {
+	private setInnerPlayerSource = () => {
 		if (this.currentSourceIndex < this.playlist.length) {
-			const state = this.innerPlayer.eventBus.lastEvent
-			const url = (
-				this.playlist[this.currentSourceIndex] as URLPlayerSource
-			).url
-			if (state.type === "running") {
-				if (state.source === url && !forceReload) {
-					return
-				}
-			}
-			this.innerPlayer.setSource(url)
+			this.innerPlayer.setSource(this.playlist[this.currentSourceIndex])
 		} else {
-			this.innerPlayer.setSource("")
+			this.innerPlayer.setSource(null)
 		}
 	}
 
@@ -235,12 +222,6 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 					this.currentSourceIndex,
 				)
 			const currentTime = innerPlayerState.currentTime
-
-			// console.log({
-			// 	durationToIndex,
-			// 	currentTime,
-			// 	bag: this.metadataHelper.metadataBagBus.lastEvent,
-			// })
 
 			const globalCurrentPosition =
 				durationToIndex !== null && currentTime !== null

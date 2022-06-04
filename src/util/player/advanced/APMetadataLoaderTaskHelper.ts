@@ -8,7 +8,7 @@ import {
 } from "@app/util/player/metadata/Metadata"
 import MetadataBag from "@app/util/player/metadata/MetadataBag"
 import MetadataTool from "@app/util/player/metadata/MetadataTool"
-import { URLPlayerSource } from "@app/util/player/source/PlayerSource"
+import { obtainPlayerSourceURL } from "@app/util/player/source/PlayerSource"
 
 // TODO(teawithsand): add caching, so metadata is not loaded each time we use it
 // We can do something simple like serializing whole LRU into single JS object and then store it in IDB or localstorage
@@ -43,17 +43,12 @@ export default class APMetadataLoaderTaskHelper {
 
 		this.taskManager.submitTask(async ctx => {
 			let i = 0
-			for (const v of playlist) {
+			for (const source of playlist) {
 				if (ctx.isCanceled) {
 					return
 				}
 				try {
-					if (!(v instanceof URLPlayerSource)) {
-						// for now not supported; ignore it
-						continue
-					}
-
-					const { url } = v
+					const [url, close] = obtainPlayerSourceURL(source)
 
 					try {
 						const metadata = await this.loader.loadMetadata(url)
@@ -74,6 +69,8 @@ export default class APMetadataLoaderTaskHelper {
 							error: e,
 						}
 						this.computeAndSendBag()
+					} finally {
+						close()
 					}
 				} finally {
 					i++

@@ -4,6 +4,9 @@ import SimplePlayer from "@app/util/player/simple/SimplePlayer"
 import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState"
 import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState"
 import SimplePlayerState from "@app/util/player/simple/SimplePlayerState"
+import PlayerSource, {
+	obtainPlayerSourceURL,
+} from "@app/util/player/source/PlayerSource"
 import {
 	HTMLPlayerState,
 	readHTMLPlayerState,
@@ -32,7 +35,8 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	private isPlayingWhenReady = false
 	protected error: MediaError | null = null
 	// private rate = 1
-	private source = ""
+	private source: PlayerSource | null = null
+	private sourceCleanup: (() => void) | null = null
 
 	private isClosed = false
 
@@ -160,6 +164,11 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 			this.element.pause()
 			this.element.src = ""
 
+			if (this.sourceCleanup) {
+				this.sourceCleanup()
+				this.sourceCleanup = null
+			}
+
 			this.eventListeners.forEach(e => {
 				this.element.removeEventListener(e.event, e.listener)
 			})
@@ -185,18 +194,31 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 		this.element.volume = volume
 	}
 
-	setSource = (src: string) => {
+	setSource = (src: PlayerSource | null) => {
 		if (this.isClosed) throw new Error("is closed")
 
-		this.source = src
-		this.element.src = src
+		const oldCleanup = this.sourceCleanup
+		try {
+			this.sourceCleanup = null
 
-		// load resets playback rate and volume(?)
-		this.element.load()
-		this.element.playbackRate = this.rate
-		this.element.volume = this.volume
+			this.source = src
+			if (src !== null) {
+				const [url, close] = obtainPlayerSourceURL(src)
+				this.element.src = url
+				this.sourceCleanup = close
 
-		this.syncIsPlayingWhenReady()
+				// load resets playback rate and volume(?)
+				this.element.load()
+				this.element.playbackRate = this.rate
+				this.element.volume = this.volume
+
+				this.syncIsPlayingWhenReady()
+			} else {
+				this.element.src = ""
+			}
+		} finally {
+			if (oldCleanup) oldCleanup()
+		}
 
 		this.readAndEmitHTMLElementState(this.element)
 	}

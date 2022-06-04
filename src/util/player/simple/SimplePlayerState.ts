@@ -1,5 +1,6 @@
 import SimplePlayerNetworkState from "@app/util/player/simple/SimplePlayerNetworkState";
 import SimplePlayerReadyState from "@app/util/player/simple/SimplePlayerReadyState";
+import PlayerSource from "@app/util/player/source/PlayerSource";
 
 
 type SimplePlayerState =
@@ -8,7 +9,7 @@ type SimplePlayerState =
 	  }
 	| {
 			type: "running"
-            source: string
+            source: PlayerSource
 			ended: boolean
 			seeking: boolean
 			readyState: SimplePlayerReadyState

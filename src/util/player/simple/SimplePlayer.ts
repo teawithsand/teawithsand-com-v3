@@ -1,5 +1,6 @@
 import { StickySubscribable } from "@app/util/lang/bus/stateSubscribe"
 import SimplePlayerState from "@app/util/player/simple/SimplePlayerState"
+import PlayerSource from "@app/util/player/source/PlayerSource"
 
 /**
  * An abstraction over something, which is able to play single file, either audio or video.
@@ -27,7 +28,7 @@ export default interface SimplePlayer {
 	 * Resets any state, which may have been set(like errors) and sets specified source.
 	 * Works also if source is equal to one currently set.
 	 */
-	setSource(src: string): void
+	setSource(src: PlayerSource | null): void
 
 	/**
 	 * Seeks player to specified position in seconds.
