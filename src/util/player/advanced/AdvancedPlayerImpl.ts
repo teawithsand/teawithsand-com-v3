@@ -14,6 +14,9 @@ import SimplePlayerState from "@app/util/player/simple/SimplePlayerState"
 //  since for now it's assumed to be exact same value
 //  which may cause bugs
 
+// TODO(teawithsand): integrate media session event handling into this player
+//  even though in modern browsers play/pause is handled already
+
 export default class AdvancedPlayerImpl implements AdvancedPlayer {
 	private isClosed = false
 	private metadataHelper = new APMetadataLoaderTaskHelper()
