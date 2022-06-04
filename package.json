@@ -54,6 +54,7 @@
     "redux-state-sync": "^3.1.2",
     "redux-toolkit-persist": "^1.1.0",
     "sass": "^1.51.0",
+    "service-worker-loader": "^4.0.2",
     "styled-components": "^5.3.5",
     "typeface-merriweather": "0.0.72",
     "typeface-montserrat": "0.0.75"
