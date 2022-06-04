@@ -218,10 +218,7 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 				volume: this.volume,
 				isPlayingWhenReady: this.isPlayingWhenReady,
 				ended: this.ended,
-				error:
-					innerPlayerState.type === "error"
-						? innerPlayerState.error
-						: null,
+				error: innerPlayerState.error,
 
 				globalCurrentPosition: null,
 				isPlaying: false,
