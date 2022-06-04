@@ -86,6 +86,29 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 		this.innerEventBus.emitEvent(this.makeState())
 	}
 
+	private readAndEmitHTMLElementState = (element?: Element) => {
+		element = element ?? this.element
+
+		if (this.isClosed) return // although it shouldn't, it may happen; exit then
+		const data = readHTMLPlayerState(element)
+
+		if (data.error) {
+			this.error = data.error
+			this.element.pause() // make sure we won't play after error. It may happen if data was buffered already.
+		} else {
+			// Allows remote controls to control audio element
+			// we from code here may not be the only, who change pause
+			if (!data.ended && data.paused) {
+				this.isPlayingWhenReady = false
+			} else if (!data.paused) {
+				this.isPlayingWhenReady = true
+			}
+		}
+
+		this.lastState = data
+		this.emitState()
+	}
+
 	private hookToElement = (element: Element) => {
 		const regListener = (event: string, listener: (e: Event) => void) => {
 			const actualListener = (e: Event) => {
@@ -105,26 +128,8 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 			})
 		}
 
-		const handleStateChange = () => {
-			if (this.isClosed) return // although it shouldn't, it may happen; exit then
-			const data = readHTMLPlayerState(element)
-
-			if (data.error) {
-				this.error = data.error
-				this.element.pause() // make sure we won't play after error. It may happen if data was buffered already.
-			} else {
-				// Allows remote controls to control audio element
-				// we from code here may not be the only, who change pause
-				if (!data.ended && data.paused) {
-					this.isPlayingWhenReady = false
-				} else if (!data.paused) {
-					this.isPlayingWhenReady = true
-				}
-			}
-
-			this.lastState = data
-			this.emitState()
-		}
+		const handleStateChange = () =>
+			this.readAndEmitHTMLElementState(element)
 
 		regListener("error", e => {
 			e.stopPropagation()
@@ -132,6 +137,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 
 			handleStateChange()
 		})
+
 		regListener("timeupdate", () => handleStateChange())
 		regListener("durationchange", () => handleStateChange())
 		regListener("ended", () => handleStateChange())
@@ -200,7 +206,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 
 		this.syncIsPlayingWhenReady()
 
-		this.emitState()
+		this.readAndEmitHTMLElementState(this.element)
 	}
 
 	seek = (to: number) => {
