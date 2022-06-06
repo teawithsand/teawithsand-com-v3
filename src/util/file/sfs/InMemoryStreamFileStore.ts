@@ -1,6 +1,6 @@
 import { concatArrayBuffers } from "@app/util/lang/arrayBuffer"
 import { makeAsyncIterable } from "@app/util/lang/asyncIterable"
-import FileStore, {
+import StreamFileStore, {
 	DEFAULT_WRITE_MODE,
 	FileInfo,
 	ReadOptions,
@@ -12,7 +12,7 @@ import FileStoreError, {
 } from "@app/util/file/sfs/FileStoreError"
 import { assemblePath, Path } from "@app/util/file/sfs/Path"
 
-export default class InMemoryFileStore implements FileStore {
+export default class InMemoryStreamFileStore implements StreamFileStore {
 	private entries: Map<string, ArrayBuffer> = new Map()
 
 	stat = async (path: Path): Promise<FileInfo | null> => {

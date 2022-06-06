@@ -19,7 +19,7 @@ export type WriteOptions = {
 	mode?: WriteMode
 }
 
-export default interface FileStore {
+export default interface StreamFileStore {
 	stat(key: Path): Promise<FileInfo | null>
 	read(key: Path, options?: ReadOptions): Promise<ReadableStream<ArrayBuffer>>
 	write(

@@ -1,5 +1,5 @@
 import { concatArrayBuffers } from "@app/util/lang/arrayBuffer"
-import FileStore, {
+import StreamFileStore, {
 	DEFAULT_WRITE_MODE,
 	ReadOptions,
 	WriteMode,
@@ -11,7 +11,7 @@ import FileStoreError, {
 import FilesDB from "@app/util/file/sfs/idb/FilesDB"
 import { assemblePath, Path } from "@app/util/file/sfs/Path"
 
-export default class IndexedDBFileStore implements FileStore {
+export default class IndexedDBStreamFileStore implements StreamFileStore {
 	constructor(private readonly filesDb: FilesDB) {}
 
 	disownFilesDB = (): FilesDB => {
