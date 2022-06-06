@@ -1,11 +1,11 @@
+import FilesDB from "@app/util/file/sfs/idb/FilesDB"
+import IndexedDBStreamFileStore from "@app/util/file/sfs/idb/IndexedDBStreamFileStore"
+import InMemoryStreamFileStore from "@app/util/file/sfs/InMemoryStreamFileStore"
+import StreamFileStore from "@app/util/file/sfs/StreamFileStore"
 import { concatArrayBuffers } from "@app/util/lang/arrayBuffer"
 import { collectAsyncIterable } from "@app/util/lang/asyncIterator"
 import { arrayBufferFromBytes, randomBytesSync } from "@app/util/lang/buffer"
 import { iterateOverReader } from "@app/util/lang/readableStream"
-import StreamFileStore from "@app/util/file/sfs/FileStore"
-import FilesDB from "@app/util/file/sfs/idb/FilesDB"
-import IndexedDBFileStore from "@app/util/file/sfs/idb/IndexedDBFileStore"
-import InMemoryFileStore from "@app/util/file/sfs/InMemoryFileStore"
 
 const testFileStore = <T extends StreamFileStore>(
 	name: string,
@@ -116,7 +116,7 @@ const testFileStore = <T extends StreamFileStore>(
 
 testFileStore(
 	"InMemoryFileStore",
-	async () => new InMemoryFileStore(),
+	async () => new InMemoryStreamFileStore(),
 	async () => {
 		//noop
 	},
@@ -128,7 +128,7 @@ testFileStore(
 		const db = await FilesDB.open("db1")
 		await db.delete()
 
-		return new IndexedDBFileStore(await FilesDB.open("db1"))
+		return new IndexedDBStreamFileStore(await FilesDB.open("db1"))
 	},
 	async res => {
 		await res.disownFilesDB().close()

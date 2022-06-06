@@ -4,7 +4,7 @@ import StreamFileStore, {
 	ReadOptions,
 	WriteMode,
 	WriteOptions,
-} from "@app/util/file/sfs/FileStore"
+} from "@app/util/file/sfs/StreamFileStore"
 import FileStoreError, {
 	FileStoreErrorCode,
 } from "@app/util/file/sfs/FileStoreError"
