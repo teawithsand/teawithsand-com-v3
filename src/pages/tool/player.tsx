@@ -1,9 +1,12 @@
-import React from "react"
+import React from "react";
 
-import Layout from "@app/components/layout/Layout"
-import AdvancedPlayerImpl from "@app/util/player/advanced/AdvancedPlayerImpl"
-import HTMLSimplePlayer from "@app/util/player/simple/HTMLSimplePlayer"
-import { URLPlayerSource } from "@app/util/player/source/PlayerSource"
+
+
+import Layout from "@app/components/layout/Layout";
+import AdvancedPlayerImpl from "@app/util/player/advanced/AdvancedPlayerImpl";
+import HTMLSimplePlayer from "@app/util/player/simple/HTMLSimplePlayer";
+import { URLPlayerSource } from "@app/util/player/source/PlayerSource";
+
 
 // const Gallery = loadable(() => import("@app/components/gallery/Gallery"))
 
@@ -11,7 +14,6 @@ const PlayerPage = () => {
 	const element = new Audio()
 	const simplePlayer = new HTMLSimplePlayer(element)
 	const player = new AdvancedPlayerImpl(simplePlayer)
-	// player.eventBus.addSubscriber(state => console.log("player state", state))
 	/*
 	simplePlayer.eventBus.addSubscriber(s => console.log(s))
 	simplePlayer.setIsPlayingWhenReady(false)
@@ -19,9 +21,11 @@ const PlayerPage = () => {
 	*/
 
 	player.setPlaylist(
-		["/file.mp3?q=1", "/file.mp3?q=2", "/file.mp3?q=3"].map(
-			v => new URLPlayerSource(v),
-		),
+		[
+			"/file.mp3?q=1",
+			"/file.mp3?q=2",
+			"/file.mp3?q=3",
+		].map(v => new URLPlayerSource(v)),
 	)
 
 	return (
