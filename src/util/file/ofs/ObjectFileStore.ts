@@ -4,8 +4,9 @@ export enum StoredFileObjectKind {
 	FILE_REF = 3,
 }
 
-export interface StoredFileObject {
+export interface StoredFileObject<V =  Blob | File> {
 	readonly kind: StoredFileObjectKind
+	readonly innerObject: V
 
 	// These two are used if we store reference to file
 	requestPermission(): Promise<void>

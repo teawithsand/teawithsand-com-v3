@@ -1,6 +1,8 @@
-import ObjectFileStore, { StoredFileObject, StoredFileObjectKind } from "@app/util/file/ofs/ObjectFileStore";
-import KeyValueStore from "@app/util/keyvalue/KeyValueStore";
-
+import ObjectFileStore, {
+	StoredFileObject,
+	StoredFileObjectKind,
+} from "@app/util/file/ofs/ObjectFileStore"
+import KeyValueStore from "@app/util/keyvalue/KeyValueStore"
 
 type Value = Blob | File
 /**
@@ -32,6 +34,7 @@ export default class KeyValueObjectFileStore implements ObjectFileStore {
 				: StoredFileObjectKind.BLOB
 
 		return {
+			innerObject: value,
 			checkPermission: async () => true,
 			requestPermission: async () => {
 				// noop
