@@ -1,5 +1,5 @@
-import File from "@app/util/fs/File"
-import { FileInfo } from "@app/util/sfs/FileStore"
+import File from "@app/util/file/fs/File"
+import { FileInfo } from "@app/util/file/sfs/FileStore"
 
 export interface FileSystemOps {
 	/**
@@ -30,6 +30,9 @@ export type OpenFileOptions = {
 	mode: OpenFileMode
 }
 
+/**
+ * @deprecated In favour of simple file store
+ */
 export default interface FS {
 	open(path: string, options: OpenFileOptions): Promise<File>
 }

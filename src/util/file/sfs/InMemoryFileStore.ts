@@ -6,11 +6,11 @@ import FileStore, {
 	ReadOptions,
 	WriteMode,
 	WriteOptions,
-} from "@app/util/sfs/FileStore"
+} from "@app/util/file/sfs/FileStore"
 import FileStoreError, {
 	FileStoreErrorCode,
-} from "@app/util/sfs/FileStoreError"
-import { assemblePath, Path } from "@app/util/sfs/Path"
+} from "@app/util/file/sfs/FileStoreError"
+import { assemblePath, Path } from "@app/util/file/sfs/Path"
 
 export default class InMemoryFileStore implements FileStore {
 	private entries: Map<string, ArrayBuffer> = new Map()

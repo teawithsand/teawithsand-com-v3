@@ -4,12 +4,12 @@ import FileStore, {
 	ReadOptions,
 	WriteMode,
 	WriteOptions,
-} from "@app/util/sfs/FileStore"
+} from "@app/util/file/sfs/FileStore"
 import FileStoreError, {
 	FileStoreErrorCode,
-} from "@app/util/sfs/FileStoreError"
-import FilesDB from "@app/util/sfs/idb/FilesDB"
-import { assemblePath, Path } from "@app/util/sfs/Path"
+} from "@app/util/file/sfs/FileStoreError"
+import FilesDB from "@app/util/file/sfs/idb/FilesDB"
+import { assemblePath, Path } from "@app/util/file/sfs/Path"
 
 export default class IndexedDBFileStore implements FileStore {
 	constructor(private readonly filesDb: FilesDB) {}

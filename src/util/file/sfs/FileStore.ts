@@ -1,4 +1,4 @@
-import { Path } from "@app/util/sfs/Path"
+import { Path } from "@app/util/file/sfs/Path"
 
 export enum WriteMode {
 	Override,
