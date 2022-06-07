@@ -8,19 +8,19 @@
         margin-bottom: map-get(def.$spacers, 3);
         margin-top: map-get(def.$spacers, 3);
 
-        > input {
+        & > input {
             @extend .form-control;
         }    
 
-        > textarea {
+        & > textarea {
             @extend .form-control; 
         }
 
-        > select {
+        & > select {
             @extend .form-control; 
         }
 
-        > label {
+        & > label {
             @extend .form-label;
         }
     }
