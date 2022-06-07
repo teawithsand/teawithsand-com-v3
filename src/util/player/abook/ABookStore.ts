@@ -20,7 +20,7 @@ export default class ABookStore implements KeyValueStore<ABook> {
 		return new ABookStore(
 			new LocalForageKeyValueStore(
 				localforage.createInstance({
-					driver: [INDEXEDDB, WEBSQL],
+					driver: INDEXEDDB,
 					name: "abook-metadata",
 					storeName: "abook-metadata",
 					description: "ABook information store",

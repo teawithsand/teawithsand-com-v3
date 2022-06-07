@@ -1,9 +1,23 @@
+import localforage, { INDEXEDDB } from "localforage"
+
 import KeyValueStore from "@app/util/keyvalue/KeyValueStore"
 
 export default class LocalForageKeyValueStore<V, K extends string = string>
 	implements KeyValueStore<V, K>
 {
 	constructor(private readonly forage: LocalForage) {}
+
+	static readonly simple = <V>(name: string) => {
+		return new LocalForageKeyValueStore<V>(
+			localforage.createInstance({
+				driver: [INDEXEDDB],
+				name,
+				storeName: name,
+				description: `Store ${name} - simple one`,
+				version: 1,
+			}),
+		)
+	}
 
 	delete = async (id: K): Promise<void> => {
 		await this.forage.removeItem(id)
@@ -13,7 +27,7 @@ export default class LocalForageKeyValueStore<V, K extends string = string>
 		const res = await this.forage.getItem(id)
 		return res as V | null
 	}
-	
+
 	set = async (id: K, value: V) => {
 		await this.forage.setItem(id, value)
 	}
