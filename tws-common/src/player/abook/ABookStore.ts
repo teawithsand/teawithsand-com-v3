@@ -21,3 +21,4 @@ class ABookStore implements KeyValueStore<ABook> {
 }
 
 export const ABOOK_STORE = ABookStore.createGlobalInstance()
+export const useAbookStore = () => ABOOK_STORE

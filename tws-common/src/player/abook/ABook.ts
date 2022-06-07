@@ -11,11 +11,15 @@ export default interface ABook {
 	 * Title AKA display name of this ABook.
 	 */
 	title: string
+
 	/**
 	 * A short description about ABook.
 	 */
 	description: string
 
+	/**
+	 * ABookImage if any, or null if not set.
+	 */
 	image: ABookImage | null
 
 	/**
