@@ -219,5 +219,6 @@ module.exports = {
 		},
 		// TODO(teawithsand): configure this plugin to prevent page switching
 		// { resolve: "gatsby-plugin-layout" },
+		{ resolve: "gatsby-plugin-styled-components" },
 	],
 }

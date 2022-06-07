@@ -4428,7 +4428,7 @@ babel-plugin-remove-graphql-queries@^4.15.0:
     "@babel/runtime" "^7.15.4"
     gatsby-core-utils "^3.15.0"
 
-"babel-plugin-styled-components@>= 1.12.0":
+"babel-plugin-styled-components@>= 1.12.0", babel-plugin-styled-components@^2.0.7:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/babel-plugin-styled-components/-/babel-plugin-styled-components-2.0.7.tgz#c81ef34b713f9da2b7d3f5550df0d1e19e798086"
   integrity sha512-i7YhvPgVqRKfoQ66toiZ06jPNA3p6ierpfUuEWxNF+fV27Uv5gxBkf8KZLHUCc1nFA9j6+80pYoIpqCeyW3/bA==
@@ -7713,6 +7713,13 @@ gatsby-plugin-sitemap@^5.13.0:
     common-tags "^1.8.2"
     minimatch "^3.1.2"
     sitemap "^7.0.0"
+
+gatsby-plugin-styled-components@^5.16.0:
+  version "5.16.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-styled-components/-/gatsby-plugin-styled-components-5.16.0.tgz#4a70d1f9e862b0a37e8edafe6b1bc219ed476c9f"
+  integrity sha512-V0gfYGtygO5BUFCbLALrvwlYEUnut9C8Eh+ePT8pI2FcefMnuT35qLQssGmsAMrDs0j5FmqOxQBnp9Zf7RMTMQ==
+  dependencies:
+    "@babel/runtime" "^7.15.4"
 
 gatsby-plugin-typescript@^4.13.0, gatsby-plugin-typescript@^4.15.0:
   version "4.15.0"
