@@ -1,3 +1,5 @@
+const path = require("path")
+
 module.exports = {
 	siteMetadata: {
 		title: `PalmABooks PWA`,
@@ -35,8 +37,11 @@ module.exports = {
 		"gatsby-plugin-react-helmet",
 		"gatsby-plugin-sitemap",
 		"gatsby-plugin-styled-components",
-		// TODO(teawithsand): configure this plugin to prevent page switching
-		// { resolve: "gatsby-plugin-layout" },
-		// { resolve:  },
+		{
+			resolve: "gatsby-plugin-layout",
+			options: {
+				component: path.resolve(`./src/Layout.jsx`),
+			},
+		},
 	],
 }

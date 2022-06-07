@@ -6282,6 +6282,13 @@ gatsby-parcel-config@^0.7.0:
     "@parcel/transformer-raw" "2.6.0"
     "@parcel/transformer-react-refresh-wrap" "2.6.0"
 
+gatsby-plugin-layout@^3.16.0:
+  version "3.16.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-layout/-/gatsby-plugin-layout-3.16.0.tgz#8ced398a94e648f79982ccea486333cefd13d6ee"
+  integrity sha512-3jo/73fTklX1VL6ts8z9carybQjjd+XnoyBgD8DgV37E8lKATFTSSkoNWAki2BZiG/f2evUMOaEML29U+FA7VQ==
+  dependencies:
+    "@babel/runtime" "^7.15.4"
+
 gatsby-plugin-manifest@^4.16.0:
   version "4.16.0"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-manifest/-/gatsby-plugin-manifest-4.16.0.tgz#84549aa6e11f85351ccb274aaa9f692b7a8dc286"
