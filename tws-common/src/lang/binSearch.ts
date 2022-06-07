@@ -23,8 +23,8 @@ export const binarySearchSync = ({
 		}
 	}
 
-    // not found
-    return null
+	// not found
+	return null
 }
 
 export const binarySearch = async ({
@@ -52,6 +52,6 @@ export const binarySearch = async ({
 		}
 	}
 
-    // not found
-    return null
+	// not found
+	return null
 }

@@ -1,6 +1,8 @@
-import { MetadataLoadingResult, MetadataLoadingResultType } from "tws-common/player/metadata/Metadata";
-import MetadataBag from "tws-common/player/metadata/MetadataBag";
-
+import {
+	MetadataLoadingResult,
+	MetadataLoadingResultType,
+} from "tws-common/player/metadata/Metadata"
+import MetadataBag from "tws-common/player/metadata/MetadataBag"
 
 describe("MetadataBag", () => {
 	it.each([

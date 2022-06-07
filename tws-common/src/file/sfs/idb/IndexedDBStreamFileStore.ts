@@ -1,7 +1,14 @@
-import FileStoreError, { FileStoreErrorCode } from "tws-common/file/sfs/FileStoreError"
+import FileStoreError, {
+	FileStoreErrorCode,
+} from "tws-common/file/sfs/FileStoreError"
 import FilesDB from "tws-common/file/sfs/idb/FilesDB"
 import { assemblePath, Path } from "tws-common/file/sfs/Path"
-import StreamFileStore, { DEFAULT_WRITE_MODE, ReadOptions, WriteMode, WriteOptions } from "tws-common/file/sfs/StreamFileStore"
+import StreamFileStore, {
+	DEFAULT_WRITE_MODE,
+	ReadOptions,
+	WriteMode,
+	WriteOptions,
+} from "tws-common/file/sfs/StreamFileStore"
 import { concatArrayBuffers } from "tws-common/lang/arrayBuffer"
 
 export default class IndexedDBStreamFileStore implements StreamFileStore {

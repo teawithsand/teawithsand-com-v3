@@ -1,5 +1,4 @@
 import React from "react"
-
 import useUniqueId from "tws-common/react/hook/useUniqueId"
 
 const WithUniqueId = (props: {

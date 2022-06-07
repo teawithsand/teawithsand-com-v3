@@ -1,5 +1,7 @@
-import { concatArrayBuffers } from "tws-common/lang/arrayBuffer"
-import { makeAsyncIterable } from "tws-common/lang/asyncIterable"
+import FileStoreError, {
+	FileStoreErrorCode,
+} from "tws-common/file/sfs/FileStoreError"
+import { assemblePath, Path } from "tws-common/file/sfs/Path"
 import StreamFileStore, {
 	DEFAULT_WRITE_MODE,
 	FileInfo,
@@ -7,10 +9,8 @@ import StreamFileStore, {
 	WriteMode,
 	WriteOptions,
 } from "tws-common/file/sfs/StreamFileStore"
-import FileStoreError, {
-	FileStoreErrorCode,
-} from "tws-common/file/sfs/FileStoreError"
-import { assemblePath, Path } from "tws-common/file/sfs/Path"
+import { concatArrayBuffers } from "tws-common/lang/arrayBuffer"
+import { makeAsyncIterable } from "tws-common/lang/asyncIterable"
 
 export default class InMemoryStreamFileStore implements StreamFileStore {
 	private entries: Map<string, ArrayBuffer> = new Map()

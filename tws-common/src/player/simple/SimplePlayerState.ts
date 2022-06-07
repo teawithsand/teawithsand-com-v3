@@ -1,7 +1,6 @@
-import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState";
-import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState";
-import PlayerSource from "tws-common/player/source/PlayerSource";
-
+import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
+import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
+import PlayerSource from "tws-common/player/source/PlayerSource"
 
 type SimplePlayerState =
 	| {
@@ -9,7 +8,7 @@ type SimplePlayerState =
 	  }
 	| {
 			type: "running"
-            source: PlayerSource
+			source: PlayerSource
 			ended: boolean
 			seeking: boolean
 			readyState: SimplePlayerReadyState
@@ -17,7 +16,7 @@ type SimplePlayerState =
 			isPlaying: boolean
 			currentTime: number | null
 			duration: number | null
-            isPlayingWhenReady: boolean
+			isPlayingWhenReady: boolean
 	  }
 	| {
 			type: "error"

@@ -1,5 +1,4 @@
 import * as React from "react"
-
 import classnames from "tws-common/lang/classnames"
 
 import { ResponsiveImage } from "./responsive"

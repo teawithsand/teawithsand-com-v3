@@ -16,7 +16,7 @@ export default interface ABook {
 	 */
 	description: string
 
-	image: ABookImage | null,
+	image: ABookImage | null
 
 	/**
 	 * Files of this ABook.
@@ -26,7 +26,7 @@ export default interface ABook {
 	/**
 	 * Last position, when ABook was played.
 	 */
-	lastPosition: ABookPosition | null,
+	lastPosition: ABookPosition | null
 }
 
 export type ABookPosition = {
@@ -39,13 +39,15 @@ export type ABookFileSource = {
 	entries: ABookFile[]
 }
 
-export type ABookImage = {
-	type: "url",
-	url: string
-} | {
-	type: "file-ref",
-	path: string,
-}
+export type ABookImage =
+	| {
+			type: "url"
+			url: string
+	  }
+	| {
+			type: "file-ref"
+			path: string
+	  }
 
 export type ABookFile =
 	| {

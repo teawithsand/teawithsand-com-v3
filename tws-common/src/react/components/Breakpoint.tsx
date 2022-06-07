@@ -1,5 +1,4 @@
 import React, { ReactFragment, useMemo } from "react"
-
 import {
 	Breakpoint,
 	breakpointIndex,

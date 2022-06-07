@@ -4,7 +4,7 @@ export enum StoredFileObjectKind {
 	FILE_REF = 3,
 }
 
-export interface StoredFileObject<V =  Blob | File> {
+export interface StoredFileObject<V = Blob | File> {
 	readonly kind: StoredFileObjectKind
 	readonly innerObject: V
 

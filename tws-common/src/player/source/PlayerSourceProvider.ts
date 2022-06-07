@@ -2,7 +2,7 @@ import PlayerSource from "tws-common/player/source/PlayerSource"
 
 /**
  * Note: providers must be "pure" and immutable, once they were created.
- * 
+ *
  * They may perform some logic in order to initialize source though.
  */
 export default interface PlayerSourceProvider {

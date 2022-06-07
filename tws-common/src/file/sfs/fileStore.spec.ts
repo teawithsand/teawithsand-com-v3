@@ -111,8 +111,8 @@ const testFileStore = <T extends StreamFileStore>(
 			expected.sort()
 			expect(results).toEqual(expected)
 		})
-	}) 
-} 
+	})
+}
 
 testFileStore(
 	"InMemoryFileStore",
