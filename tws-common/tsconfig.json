@@ -1,0 +1,33 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"module": "commonjs",
+		"jsx": "react",
+
+		"rootDir": "./src",
+		"baseUrl": "./",
+
+		"paths": {
+			"tws-common": ["*"]
+		},
+
+		"allowJs": true,
+		"checkJs": true,
+		"sourceMap": true,
+		"outDir": "./dist",
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"preserveSymlinks": true,
+		"forceConsistentCasingInFileNames": true,
+
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"alwaysStrict": true,
+		"skipLibCheck": true
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "**/*.spec.ts"]
+}
