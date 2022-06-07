@@ -5,11 +5,14 @@ import ObjectFileStore, {
 import KeyValueStore from "@app/util/keyvalue/KeyValueStore"
 
 type Value = Blob | File
+
 /**
  * Note: this store uses:
  * File API https://developer.mozilla.org/en-US/docs/Web/API/File_API
  * File and Directory Entries API https://developer.mozilla.org/en-US/docs/Web/API/File_and_Directory_Entries_API
  * But not File System Access API https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API
+ * 
+ * Main reason being, is that it only works on desktop chrome, which is not main target of app, which this component was designed for.
  */
 export default class KeyValueObjectFileStore implements ObjectFileStore {
 	constructor(private readonly innerStore: KeyValueStore<Value>) {}
