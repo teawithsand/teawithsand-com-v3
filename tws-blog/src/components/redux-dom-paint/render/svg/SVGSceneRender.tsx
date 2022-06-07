@@ -3,6 +3,7 @@ import React, { MutableRefObject } from "react"
 import { PrimPaintElement } from "@app/components/redux-dom-paint/defines/PrimPaintElement"
 import { SceneRenderProps } from "@app/components/redux-dom-paint/render/SceneRender"
 import SVGLayerRender from "@app/components/redux-dom-paint/render/svg/SVGLayerRender"
+
 import {
 	NORM_RECT_MIN,
 	rectDimensions,

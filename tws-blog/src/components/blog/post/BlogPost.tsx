@@ -3,6 +3,7 @@ import React from "react"
 
 import Bio from "@app/components/blog/bio/Bio"
 import PostTags from "@app/components/blog/util/PostTags"
+
 import classnames from "tws-common/lang/classnames"
 
 import * as styles from "./blogPost.module.scss"

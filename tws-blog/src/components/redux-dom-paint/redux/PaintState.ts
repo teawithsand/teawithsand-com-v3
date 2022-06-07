@@ -1,6 +1,7 @@
 import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
 import { PathPaintToolOptions } from "@app/components/redux-dom-paint/ui/tool/path"
+
 import { Color } from "tws-common/color"
 
 /**

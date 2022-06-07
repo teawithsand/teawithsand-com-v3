@@ -1,6 +1,7 @@
 import React, { useMemo } from "react"
 
 import { SVGElementRenderProps } from "@app/components/redux-dom-paint/render/svg/SVGSceneRender"
+
 import { encodeColor } from "tws-common/color"
 
 /**

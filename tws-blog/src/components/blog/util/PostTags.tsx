@@ -2,6 +2,7 @@ import { Link } from "gatsby"
 import React from "react"
 
 import { blogTagPath } from "@app/components/paths"
+
 import classnames from "tws-common/lang/classnames"
 
 import * as styles from "./postTags.module.scss"

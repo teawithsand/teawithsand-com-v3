@@ -12,6 +12,7 @@ import {
 	usePathStrokeData,
 } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import DrawEvent from "@app/components/redux-dom-paint/ui/tool/DrawEvent"
+
 import { Point } from "tws-common/geometry"
 import { euclideanDistance } from "tws-common/geometry/distance"
 import { generateUUID } from "tws-common/lang/uuid"

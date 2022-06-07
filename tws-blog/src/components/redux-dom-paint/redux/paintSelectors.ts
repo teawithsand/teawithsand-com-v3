@@ -12,6 +12,7 @@ import {
 } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
 import { applyMutationOnDraft } from "@app/components/redux-dom-paint/defines/PrimPaintSceneMutation"
 import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
+
 import {
 	Point,
 	Rect,

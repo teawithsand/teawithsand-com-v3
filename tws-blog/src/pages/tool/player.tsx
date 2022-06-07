@@ -1,12 +1,10 @@
-import React from "react";
+import React from "react"
 
+import Layout from "@app/components/layout/Layout"
 
-
-import Layout from "@app/components/layout/Layout";
-import AdvancedPlayerImpl from "tws-common/player/advanced/AdvancedPlayerImpl";
-import HTMLSimplePlayer from "tws-common/player/simple/HTMLSimplePlayer";
-import { URLPlayerSource } from "tws-common/player/source/PlayerSource";
-
+import AdvancedPlayerImpl from "tws-common/player/advanced/AdvancedPlayerImpl"
+import HTMLSimplePlayer from "tws-common/player/simple/HTMLSimplePlayer"
+import { URLPlayerSource } from "tws-common/player/source/PlayerSource"
 
 // const Gallery = loadable(() => import("@app/components/gallery/Gallery"))
 
@@ -21,11 +19,9 @@ const PlayerPage = () => {
 	*/
 
 	player.setPlaylist(
-		[
-			"/file.mp3?q=1",
-			"/file.mp3?q=2",
-			"/file.mp3?q=3",
-		].map(v => new URLPlayerSource(v)),
+		["/file.mp3?q=1", "/file.mp3?q=2", "/file.mp3?q=3"].map(
+			v => new URLPlayerSource(v),
+		),
 	)
 
 	return (

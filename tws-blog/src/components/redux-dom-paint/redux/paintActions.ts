@@ -4,6 +4,7 @@ import PrimPaintSceneMutation from "@app/components/redux-dom-paint/defines/Prim
 import PaintState from "@app/components/redux-dom-paint/redux/PaintState"
 import { PaintToolName } from "@app/components/redux-dom-paint/ui/tool/PaintTool"
 import { PathPaintToolOptions } from "@app/components/redux-dom-paint/ui/tool/path"
+
 import { Color } from "tws-common/color"
 
 const actionPrefix = "twsblog/dompaint"

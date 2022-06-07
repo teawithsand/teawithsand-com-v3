@@ -144,7 +144,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 	}
 }
 
-exports.createResolvers = ({ createResolvers }) => { }
+exports.createResolvers = ({ createResolvers }) => {}
 
 exports.createSchemaCustomization = ({ actions, schema }) => {
 	// TODO(teawithsand): add types here, so no error happens when there is no posts

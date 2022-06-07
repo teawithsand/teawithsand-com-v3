@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 
 import ButtonDropdown from "@app/components/util/collapse/ButtonCollapse"
+
 import WithUniqueId from "tws-common/react/components/WithUniqueId"
 
 import * as styles from "./paintDrawPanel.module.scss"
