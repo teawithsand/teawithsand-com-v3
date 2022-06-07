@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 
 import Layout from "@app/components/layout/Layout"
-import KeyValueObjectFileStore from "@app/util/file/ofs/KeyValueObjectFileStore"
-import LocalForageKeyValueStore from "@app/util/keyvalue/LocalForageKeyValueStore"
-import { collectAsyncIterable } from "@app/util/lang/asyncIterator"
+import KeyValueObjectFileStore from "tws-common/file/ofs/KeyValueObjectFileStore"
+import LocalForageKeyValueStore from "tws-common/keyvalue/LocalForageKeyValueStore"
+import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 
 const testFileStore = new KeyValueObjectFileStore(
 	LocalForageKeyValueStore.simple("testFileStore"),

@@ -7,7 +7,7 @@ import {
 	NORM_RECT_MIN,
 	rectDimensions,
 	rectNormalize,
-} from "@app/util/geometry"
+} from "tws-common/geometry"
 
 export type SVGElementRenderProps<T extends string> = {
 	element: PrimPaintElement & { type: T }

@@ -7,7 +7,7 @@ import {
 } from "@app/components/redux-dom-paint/redux/paintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import DrawEvent from "@app/components/redux-dom-paint/ui/tool/DrawEvent"
-import { Point } from "@app/util/geometry"
+import { Point } from "tws-common/geometry"
 
 const useScrollPaintTool = () => {
 	const dispatch = useDispatch()

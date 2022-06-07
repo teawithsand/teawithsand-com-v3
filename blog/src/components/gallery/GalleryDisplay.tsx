@@ -3,8 +3,8 @@ import { CSSTransition, TransitionGroup } from "react-transition-group"
 
 import { GalleryItem } from "@app/components/gallery/GalleryItem"
 import GalleryItemDisplay from "@app/components/gallery/GalleryItemDisplay"
-import classnames from "@app/util/lang/classnames"
-import { findTransitionClasses } from "@app/util/react/transitionGroupClass"
+import classnames from "tws-common/lang/classnames"
+import { findTransitionClasses } from "tws-common/react/transitionGroupClass"
 
 import * as styles from "./galleryDisplay.module.scss"
 

@@ -1,4 +1,4 @@
-import { Point } from "@app/util/geometry"
+import { Point } from "tws-common/geometry"
 
 export type DrawEvent =
 	| {

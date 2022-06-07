@@ -19,7 +19,7 @@ import {
 	rectIntersection,
 	rectNormalize,
 	rectTransformDistances,
-} from "@app/util/geometry"
+} from "tws-common/geometry"
 
 const posOrZero = (n: number) => (n > 0 ? n : 0)
 

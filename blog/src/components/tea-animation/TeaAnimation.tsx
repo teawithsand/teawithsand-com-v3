@@ -1,8 +1,8 @@
 import React, { useMemo } from "react"
 
-import classnames from "@app/util/lang/classnames"
-import { useBreakpointIndex } from "@app/util/react/hook/dimensions/useBreakpoint"
-import useCssVar from "@app/util/react/hook/useCssVar"
+import classnames from "tws-common/lang/classnames"
+import { useBreakpointIndex } from "tws-common/react/hook/dimensions/useBreakpoint"
+import useCssVar from "tws-common/react/hook/useCssVar"
 
 import "./tea-animation.global.scss"
 

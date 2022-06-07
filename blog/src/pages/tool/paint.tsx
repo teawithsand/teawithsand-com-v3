@@ -1,7 +1,7 @@
 import loadable from "@loadable/component"
 import React from "react"
 
-import { generateUUID } from "@app/util/lang/uuid"
+import { generateUUID } from "tws-common/lang/uuid"
 
 const PaintDraw = loadable(
 	() => import("@app/components/redux-dom-paint/ui/draw/PaintDraw"),

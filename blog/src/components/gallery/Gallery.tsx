@@ -4,8 +4,8 @@ import React, { useMemo, useState } from "react"
 import { DissolveGalleryDisplay } from "@app/components/gallery/GalleryDisplay"
 import GalleryItemDisplay from "@app/components/gallery/GalleryItemDisplay"
 import GalleryItemProvider from "@app/components/gallery/ItemProvider"
-import classnames from "@app/util/lang/classnames"
-import { useFullscreen } from "@app/util/react/hook/useFullscreen"
+import classnames from "tws-common/lang/classnames"
+import { useFullscreen } from "tws-common/react/hook/useFullscreen"
 
 import * as styles from "./gallery.module.scss"
 

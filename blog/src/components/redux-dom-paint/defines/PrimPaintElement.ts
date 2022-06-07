@@ -1,5 +1,5 @@
-import { Color } from "@app/util/color"
-import { Point, Rect } from "@app/util/geometry"
+import { Color } from "tws-common/color"
+import { Point, Rect } from "tws-common/geometry"
 
 export type PaintElementData = {
 	filters: Array<string>

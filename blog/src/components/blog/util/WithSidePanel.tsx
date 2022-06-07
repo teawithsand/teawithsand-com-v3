@@ -1,6 +1,6 @@
 import React from "react"
 
-import { useBreakpoint } from "@app/util/react/hook/dimensions/useBreakpoint"
+import { useBreakpoint } from "tws-common/react/hook/dimensions/useBreakpoint"
 
 import * as styles from "./withSidePanel.module.scss"
 

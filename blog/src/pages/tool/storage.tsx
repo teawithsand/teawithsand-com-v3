@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react"
 
 import Layout from "@app/components/layout/Layout"
-import { formatFileSize } from "@app/util/lang/fileSize"
+import { formatFileSize } from "tws-common/lang/fileSize"
 import {
 	estimateStorage,
 	isStorageSupported,
 	requestPersistentStorage,
-} from "@app/util/webapi/storagemanager"
+} from "tws-common/webapi/storagemanager"
 
 // const Gallery = loadable(() => import("@app/components/gallery/Gallery"))
 

@@ -7,7 +7,7 @@ import {
 } from "@app/components/redux-dom-paint/redux/paintActions"
 import { usePaintStateSelector } from "@app/components/redux-dom-paint/redux/paintSelectors"
 import ButtonDropdown from "@app/components/util/collapse/ButtonCollapse"
-import { encodeColor, encodeColorForInput, parseColor } from "@app/util/color"
+import { encodeColor, encodeColorForInput, parseColor } from "tws-common/color"
 
 import * as styles from "./paintDrawPanel.module.scss"
 

@@ -1,4 +1,4 @@
-import PlayerSource from "@app/components/player/source/PlayerSource"
+import PlayerSource from "tws-common/player/source/PlayerSource"
 
 /**
  * Note: providers must be "pure" and immutable, once they were created.

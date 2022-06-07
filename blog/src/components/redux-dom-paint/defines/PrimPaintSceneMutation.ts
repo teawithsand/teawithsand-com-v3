@@ -8,7 +8,7 @@ import {
 	PrimPaintLayerMetadata,
 	PrimPaintScene,
 } from "@app/components/redux-dom-paint/defines/PrimPaintScene"
-import { generateUUID } from "@app/util/lang/uuid"
+import { generateUUID } from "tws-common/lang/uuid"
 
 type PrimLayerMutation =
 	| {
