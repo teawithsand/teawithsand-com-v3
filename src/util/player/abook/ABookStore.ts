@@ -1,4 +1,4 @@
-import localforage, { INDEXEDDB, WEBSQL } from "localforage"
+import localforage, { INDEXEDDB } from "localforage"
 
 import KeyValueStore from "@app/util/keyvalue/KeyValueStore"
 import LocalForageKeyValueStore from "@app/util/keyvalue/LocalForageKeyValueStore"
@@ -10,6 +10,7 @@ export default class ABookStore implements KeyValueStore<ABook> {
 	set = this.inner.set
 	clear = this.inner.clear
 	iterateKeys = this.inner.iterateKeys
+	delete = this.inner.delete
 
 	// In future more functions may be included here
 	// like lookup book by name
