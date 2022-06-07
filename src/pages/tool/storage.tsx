@@ -5,6 +5,7 @@ import { formatFileSize } from "@app/util/lang/fileSize"
 import {
 	estimateStorage,
 	isStorageSupported,
+	requestPersistentStorage,
 } from "@app/util/webapi/storagemanager"
 
 // const Gallery = loadable(() => import("@app/components/gallery/Gallery"))
@@ -13,6 +14,12 @@ const PlayerPage = () => {
 	const supported = useMemo(() => isStorageSupported(), [])
 
 	const [data, setData] = useState<StorageEstimate | null>(null)
+
+	useEffect(() => {
+		;(async () => {
+			console.log("res", await requestPersistentStorage())
+		})()
+	}, [])
 
 	useEffect(() => {
 		estimateStorage().then(res => setData(res))
