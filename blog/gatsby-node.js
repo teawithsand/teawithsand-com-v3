@@ -144,7 +144,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 	}
 }
 
-exports.createResolvers = ({ createResolvers }) => {}
+exports.createResolvers = ({ createResolvers }) => { }
 
 exports.createSchemaCustomization = ({ actions, schema }) => {
 	// TODO(teawithsand): add types here, so no error happens when there is no posts
@@ -218,6 +218,10 @@ exports.onCreateWebpackConfig = ({
 		...(config.resolve.plugins ?? []),
 		new TSConfigPathsPlugin(),
 	]
+
+	// Required to make yarn link work
+	// Also required for yarn's link:... dependencies
+	config.resolve.symlinks = false
 
 	if (config.mode === "production") {
 		config.devtool = false
