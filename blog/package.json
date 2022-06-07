@@ -58,6 +58,7 @@
     "sass": "^1.51.0",
     "service-worker-loader": "^4.0.2",
     "styled-components": "^5.3.5",
+    "tws-common": "link:tws-common",
     "typeface-merriweather": "0.0.72",
     "typeface-montserrat": "0.0.75"
   },

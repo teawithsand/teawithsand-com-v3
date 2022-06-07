@@ -1,0 +1,66 @@
+{
+	"cSpell.words": [
+		"AABB",
+		"abook",
+		"Avif",
+		"disqus",
+		"dompaint",
+		"downcasting",
+		"downscaled",
+		"downscaling",
+		"frontmatter",
+		"Głowacki",
+		"Grunwald",
+		"Hashable",
+		"IDBP",
+		"immer",
+		"impls",
+		"ittr",
+		"keyvalue",
+		"localforage",
+		"monospace",
+		"palmabooks",
+		"postcss",
+		"precache",
+		"precaching",
+		"prismjs",
+		"Przemysław",
+		"reduxjs",
+		"scrollbars",
+		"stackoverflow",
+		"storagemanager",
+		"stylesheet",
+		"svgimpls",
+		"svgrepo",
+		"teawithsand",
+		"tldr",
+		"twsblog",
+		"typecheck",
+		"unoptimized",
+		"viewbox",
+		"webapi",
+		"weeb",
+		"zopfli"
+	],
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnPaste": true,
+	"scss.format.enable": false,
+	"less.format.enable": false,
+	"css.format.enable": false,
+	"typescript.format.enable": false,
+	"javascript.format.enable": false,
+	"json.format.enable": false,
+	"html.format.enable": false,
+	"[scss]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[xml]": {
+		"editor.defaultFormatter": "redhat.vscode-xml"
+	}
+}
