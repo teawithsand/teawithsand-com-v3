@@ -6,7 +6,7 @@ type Data = Blob | BufferSource | string
 /**
  * Name of any entry in file system.
  */
-export type FileSystemEntryName = string & { readonly ty: unique symbol }
+export type FileSystemEntryName = string // & { readonly ty: unique symbol } // It's nice on the one hand, but quite annoying to use
 
 export type FileSystemPermissionRequest = {
 	mode: "read" | "readwrite"
