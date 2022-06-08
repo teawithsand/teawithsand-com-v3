@@ -19,3 +19,8 @@ export class PermissionNativeFileSystemError extends NativeFileSystemError {}
  * Thrown when some operation is not possible. Most likely, due to some feature being polyfilled rather than natively implemented.
  */
 export class OperationUnsupportedNativeFileSystemError extends NativeFileSystemError {}
+
+/**
+ * Thrown when some argument provided contains invalid value.
+ */
+export class InvalidArgumentNativeFileSystemError extends NativeFileSystemError {}

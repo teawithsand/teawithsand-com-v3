@@ -12,8 +12,10 @@ import {
 } from "tws-common/file/nfs"
 import {
 	EntryNotFoundNativeFileSystemError,
+	InvalidArgumentNativeFileSystemError,
 	InvalidEntryTypeNativeFileSystemError,
 } from "tws-common/file/nfs/error"
+import { isEntryNameValid } from "tws-common/file/nfs/path"
 import { makeAsyncIterable } from "tws-common/lang/asyncIterable"
 
 // TODO(teawithsand): unify this among all implementations of streams
@@ -239,6 +241,11 @@ export class InMemoryDirectoryHandle implements FileSystemDirectoryHandle {
 
 		if (!childEntry) {
 			if (options?.create) {
+				if (!isEntryNameValid(name))
+					throw new InvalidArgumentNativeFileSystemError(
+						`Name ${name} is not valid file name`,
+					)
+
 				childEntry = new InMemoryDirectoryHandle(name)
 				this.dataEntries.set(name, childEntry)
 			} else {
@@ -290,6 +297,10 @@ export class InMemoryDirectoryHandle implements FileSystemDirectoryHandle {
 
 		if (!childEntry) {
 			if (options?.create) {
+				if (!isEntryNameValid(name))
+					throw new InvalidArgumentNativeFileSystemError(
+						`Name ${name} is not valid file name`,
+					)
 				childEntry = new InMemoryFileHandle(new File([], name), name)
 				this.dataEntries.set(name, childEntry)
 			} else {
