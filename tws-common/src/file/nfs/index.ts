@@ -1,3 +1,6 @@
+// Wrapper types for NativeFileSystem API are stored here
+// For now for sake of simplicity, not all are defined
+
 type Data = Blob | BufferSource | string
 
 export type FileSystemWritableFileStreamCommand =
