@@ -187,13 +187,15 @@ export class InMemoryFileHandle implements FileSystemFileHandle {
 export class InMemoryDirectoryHandle implements FileSystemDirectoryHandle {
 	public readonly kind = "directory"
 
-	private constructor(
+	constructor(
 		public readonly name: string,
 		private dataEntries: Map<
 			FileSystemEntryName,
 			InMemoryFileHandle | InMemoryDirectoryHandle
 		> | null = new Map(),
 	) {}
+
+	getMutableRawEntries = () => this.dataEntries
 
 	queryPermission = async (
 		opts: FileSystemPermissionRequest,
