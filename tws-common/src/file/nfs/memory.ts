@@ -286,16 +286,15 @@ export class InMemoryDirectoryHandle implements FileSystemDirectoryHandle {
 	): Promise<FileSystemFileHandle> => {
 		if (!this.dataEntries) throw new EntryNotFoundNativeFileSystemError()
 
-		const childEntry = this.dataEntries.get(name)
+		let childEntry = this.dataEntries.get(name)
 
 		if (!childEntry) {
 			if (options?.create) {
-				this.dataEntries.set(
-					name,
-					new InMemoryFileHandle(new File([], name), name),
-				)
+				childEntry = new InMemoryFileHandle(new File([], name), name)
+				this.dataEntries.set(name, childEntry)
+			} else {
+				throw new EntryNotFoundNativeFileSystemError()
 			}
-			throw new EntryNotFoundNativeFileSystemError()
 		}
 
 		if (childEntry?.kind !== "file")

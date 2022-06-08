@@ -31,6 +31,7 @@ const doTest = <T extends FileSystemDirectoryHandle>(
 					),
 				).toStrictEqual(true)
 			})
+
 			it("creates when not found and flag set", async () => {
 				const dir = await store.getDirectoryHandle(
 					"not-exist" as FileSystemEntryName,
@@ -39,7 +40,19 @@ const doTest = <T extends FileSystemDirectoryHandle>(
 					},
 				)
 
-                expect(await collectAsyncIterable(dir.entries())).toEqual([])
+				expect(await collectAsyncIterable(dir.entries())).toEqual([])
+			})
+
+			it("does not recreate when found and flag set", async () => {
+				const existing_handle = await store.getDirectoryHandle("dir", {
+					create: true,
+				})
+				await existing_handle.getFileHandle("file", { create: true })
+				const dir = await store.getDirectoryHandle("dir", {
+					create: true,
+				})
+
+				expect(await collectAsyncIterable(dir.keys())).toEqual(["file"])
 			})
 		})
 	})
