@@ -1,6 +1,19 @@
-export const captureError = <T, E = void>(
+export const captureError = async <T, E = void>(
 	promise: Promise<T>,
 	fallback: E,
 ): Promise<T | E> => {
-	return promise.catch(() => fallback)
+	try {
+		return await promise
+	} catch {
+		return fallback
+	}
+}
+
+export const promiseHasThrown = async <T>(promise: Promise<T>) => {
+	try {
+		await promise
+		return false
+	} catch (e) {
+		return true
+	}
 }

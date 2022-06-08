@@ -211,15 +211,21 @@ export class InMemoryDirectoryHandle implements FileSystemDirectoryHandle {
 
 	entries = () => {
 		if (!this.dataEntries) throw new EntryNotFoundNativeFileSystemError()
-		makeAsyncIterable(this.dataEntries.entries())
+		return makeAsyncIterable(
+			this.dataEntries.entries() as Iterable<
+				[FileSystemEntryName, FileSystemEntry]
+			>,
+		)
 	}
 	keys = () => {
 		if (!this.dataEntries) throw new EntryNotFoundNativeFileSystemError()
-		makeAsyncIterable(this.dataEntries.keys())
+		return makeAsyncIterable(this.dataEntries.keys())
 	}
 	values = () => {
 		if (!this.dataEntries) throw new EntryNotFoundNativeFileSystemError()
-		makeAsyncIterable(this.dataEntries.values())
+		return makeAsyncIterable(
+			this.dataEntries.values() as Iterable<FileSystemEntry>,
+		)
 	};
 	[Symbol.asyncIterator] = this.entries
 
@@ -229,13 +235,15 @@ export class InMemoryDirectoryHandle implements FileSystemDirectoryHandle {
 	): Promise<FileSystemDirectoryHandle> => {
 		if (!this.dataEntries) throw new EntryNotFoundNativeFileSystemError()
 
-		const childEntry = this.dataEntries.get(name)
+		let childEntry = this.dataEntries.get(name)
 
 		if (!childEntry) {
 			if (options?.create) {
-				this.dataEntries.set(name, new InMemoryDirectoryHandle(name))
+				childEntry = new InMemoryDirectoryHandle(name)
+				this.dataEntries.set(name, childEntry)
+			} else {
+				throw new EntryNotFoundNativeFileSystemError()
 			}
-			throw new EntryNotFoundNativeFileSystemError()
 		}
 
 		if (childEntry?.kind !== "directory")
