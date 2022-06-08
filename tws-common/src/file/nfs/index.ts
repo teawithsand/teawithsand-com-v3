@@ -36,6 +36,7 @@ export interface FileSystemWritableFileStream {
 	write(command: FileSystemWritableFileStreamCommand): Promise<void>
 	seek(position: number): Promise<void>
 	truncate(size: number): Promise<void>
+	close(): Promise<void>
 }
 
 export interface FileSystemHandle {
