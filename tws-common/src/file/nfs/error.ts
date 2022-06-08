@@ -5,8 +5,17 @@ export default class NativeFileSystemError extends DOMException {}
  */
 export class EntryNotFoundNativeFileSystemError extends NativeFileSystemError {}
 
-
 /**
  * Thrown when expected file but got dir or vice versa.
  */
 export class InvalidEntryTypeNativeFileSystemError extends NativeFileSystemError {}
+
+/**
+ * Thrown when permission error occurs. For instance,
+ */
+export class PermissionNativeFileSystemError extends NativeFileSystemError {}
+
+/**
+ * Thrown when some operation is not possible. Most likely, due to some feature being polyfilled rather than natively implemented.
+ */
+export class OperationUnsupportedNativeFileSystemError extends NativeFileSystemError {}

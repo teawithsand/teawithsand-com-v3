@@ -7,3 +7,9 @@ export const collectAsyncIterable = async <T>(
 	}
 	return arr
 }
+
+export async function* makeAsyncIterable<T>(iterable: Iterable<T>) {
+	for (const e of iterable) {
+		yield e
+	}
+}

@@ -3,6 +3,11 @@
 
 type Data = Blob | BufferSource | string
 
+/**
+ * Name of any entry in file system.
+ */
+export type FileSystemEntryName = string & { readonly ty: unique symbol }
+
 export type FileSystemPermissionRequest = {
 	mode: "read" | "readwrite"
 }
@@ -58,11 +63,11 @@ export interface FileSystemDirectoryHandle extends FileSystemHandle {
 	readonly kind: "directory"
 
 	getDirectoryHandle(
-		name: string,
+		name: FileSystemEntryName,
 		options?: FileSystemGetDirectoryOptions,
 	): Promise<FileSystemDirectoryHandle>
 	getFileHandle(
-		name: string,
+		name: FileSystemEntryName,
 		options?: FileSystemGetFileOptions,
 	): Promise<FileSystemFileHandle>
 	removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void>

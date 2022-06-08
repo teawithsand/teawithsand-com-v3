@@ -1,10 +1,12 @@
 // Side note(teawithsand): Yes, it was easier to implement Write-Ahead logging than use IDB transactions
-import { FileSystemDirectoryHandle, FileSystemFileHandle, FileSystemPermissionRequest, FileSystemPermissionResult, FileSystemWritableFileStream, FileSystemWritableFileStreamCommand, FileSystemWritableOptions } from "tws-common/file/nfs";
+import { FileSystemDirectoryHandle, FileSystemFileHandle, FileSystemPermissionRequest, FileSystemPermissionResult, FileSystemWritableFileStream, FileSystemWritableFileStreamCommand, FileSystemWritableOptions, FileSystemEntryName as FileSystemName } from "tws-common/file/nfs";
 import { EntryNotFoundNativeFileSystemError, InvalidEntryTypeNativeFileSystemError } from "tws-common/file/nfs/error";
 import KeyValueStore from "tws-common/keyvalue/KeyValueStore";
 import { collectAsyncIterable } from "tws-common/lang/asyncIterator";
 import { generateUUID } from "tws-common/lang/uuid";
 
+
+type Key = string & { readonly ty: unique symbol }
 
 const ROOT_ENTRY_ID = "00000000-0000-0000-0000-000000000000" as Key
 
@@ -21,7 +23,7 @@ type Value =
 	| {
 			type: EntryType.DIR
 			children: {
-				[name: Name]: Key // map of filename to it's id. Useful when looking up children
+				[name: FileSystemName]: Key // map of filename to it's id. Useful when looking up children
 			}
 	  }
 
@@ -38,9 +40,6 @@ type Store = {
 	entries: KeyValueStore<Value, Key>
 	wal: KeyValueStore<WriteAheadOP, string>
 }
-
-type Name = string & { readonly ty: unique symbol }
-type Key = string & { readonly ty: unique symbol }
 
 const executeWalOp = async (store: Store, op: WriteAheadOP) => {
 	if (op.type === WriteAheadOPType.REMOVE) {
@@ -179,7 +178,7 @@ export class KeyValueFileHandle implements FileSystemFileHandle {
 	constructor(
 		private readonly store: Store,
 		private readonly id: Key,
-		public readonly name: Name,
+		public readonly name: FileSystemName,
 	) {}
 	queryPermission = async (
 		opts: FileSystemPermissionRequest,
@@ -279,7 +278,7 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 	[Symbol.asyncIterator] = this.entries
 
 	getDirectoryHandle = async (
-		name: Name,
+		name: FileSystemName,
 		options?: FileSystemGetDirectoryOptions | undefined,
 	): Promise<FileSystemDirectoryHandle> => {
 		const file = await this.store.entries.get(this.id)
@@ -313,7 +312,7 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 	}
 
 	removeEntry = async (
-		name: Name,
+		name: FileSystemName,
 		options?: FileSystemRemoveOptions | undefined,
 	): Promise<void> => {
 		// Since we have no transactions
@@ -366,7 +365,7 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 	}
 
 	getFileHandle = async (
-		name: Name,
+		name: FileSystemName,
 		options?: FileSystemGetFileOptions,
 	): Promise<FileSystemFileHandle> => {
 		const file = await this.store.entries.get(this.id)
@@ -411,6 +410,10 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 export const getKeyValueNativeFileSystem = async (
 	store: Store,
 ): Promise<FileSystemDirectoryHandle> => {
+	// Root entry must exist.
+	// It can't be deleted, and if it was
+	// it means that whole FS was deleted, so
+	// performing clearing here is ok
 	const root = await store.entries.get(ROOT_ENTRY_ID)
 	if (!root || root.type !== EntryType.DIR) {
 		await store.entries.clear()
