@@ -3,6 +3,11 @@
 
 type Data = Blob | BufferSource | string
 
+export type FileSystemPermissionRequest = {
+	mode: "read" | "readwrite"
+}
+export type FileSystemPermissionResult = "granted" | "denied" | "prompt"
+
 export type FileSystemWritableFileStreamCommand =
 	| {
 			type: "write"
@@ -28,13 +33,11 @@ export interface FileSystemWritableFileStream {
 	truncate(size: number): Promise<void>
 }
 
-// Only not-predefined by ts environment types are defined here
-/*
 export interface FileSystemHandle {
 	readonly kind: "file" | "directory"
 	readonly name: string
 
-	isSameEntry(other: FileSystemHandle): boolean
+	isSameEntry(other: FileSystemHandle): Promise<boolean>
 	queryPermission(
 		opts: FileSystemPermissionRequest,
 	): Promise<FileSystemPermissionResult>
@@ -54,9 +57,14 @@ export interface FileSystemFileHandle extends FileSystemHandle {
 export interface FileSystemDirectoryHandle extends FileSystemHandle {
 	readonly kind: "directory"
 
-    getDirectoryHandle(name: string, options?: FileSystemGetDirectoryOptions): Promise<FileSystemDirectoryHandle>;
-    getFileHandle(name: string, options?: FileSystemGetFileOptions): Promise<FileSystemFileHandle>;
-    removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void>;
-    resolve(possibleDescendant: FileSystemHandle): Promise<string[] | null>;
+	getDirectoryHandle(
+		name: string,
+		options?: FileSystemGetDirectoryOptions,
+	): Promise<FileSystemDirectoryHandle>
+	getFileHandle(
+		name: string,
+		options?: FileSystemGetFileOptions,
+	): Promise<FileSystemFileHandle>
+	removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void>
+	resolve(possibleDescendant: FileSystemHandle): Promise<string[] | null>
 }
-*/

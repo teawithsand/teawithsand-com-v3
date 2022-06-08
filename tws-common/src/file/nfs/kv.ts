@@ -1,12 +1,10 @@
 // Side note(teawithsand): Yes, it was easier to implement Write-Ahead logging than use IDB transactions
-import { FileSystemWritableFileStream, FileSystemWritableFileStreamCommand, FileSystemWritableOptions } from "tws-common/file/nfs"
-import {
-	EntryNotFoundNativeFileSystemError,
-	InvalidEntryTypeNativeFileSystemError,
-} from "tws-common/file/nfs/error"
-import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
-import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
-import { generateUUID } from "tws-common/lang/uuid"
+import { FileSystemDirectoryHandle, FileSystemFileHandle, FileSystemPermissionRequest, FileSystemPermissionResult, FileSystemWritableFileStream, FileSystemWritableFileStreamCommand, FileSystemWritableOptions } from "tws-common/file/nfs";
+import { EntryNotFoundNativeFileSystemError, InvalidEntryTypeNativeFileSystemError } from "tws-common/file/nfs/error";
+import KeyValueStore from "tws-common/keyvalue/KeyValueStore";
+import { collectAsyncIterable } from "tws-common/lang/asyncIterator";
+import { generateUUID } from "tws-common/lang/uuid";
+
 
 const ROOT_ENTRY_ID = "00000000-0000-0000-0000-000000000000" as Key
 
@@ -183,6 +181,16 @@ export class KeyValueFileHandle implements FileSystemFileHandle {
 		private readonly id: Key,
 		public readonly name: Name,
 	) {}
+	queryPermission = async (
+		opts: FileSystemPermissionRequest,
+	): Promise<FileSystemPermissionResult> => {
+		return "granted"
+	}
+	requestPermission = async (
+		opts: FileSystemPermissionRequest,
+	): Promise<FileSystemPermissionResult> => {
+		return "granted"
+	}
 	public readonly kind = "file"
 
 	isSameEntry = async (other: FileSystemHandle): Promise<boolean> => {
@@ -221,6 +229,18 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 		private readonly id: Key,
 		public readonly name: string,
 	) {}
+
+	queryPermission = async (
+		opts: FileSystemPermissionRequest,
+	): Promise<FileSystemPermissionResult> => {
+		return "granted"
+	}
+	
+	requestPermission = async (
+		opts: FileSystemPermissionRequest,
+	): Promise<FileSystemPermissionResult> => {
+		return "granted"
+	}
 
 	async *entries() {
 		const file = await this.store.entries.get(this.id)
