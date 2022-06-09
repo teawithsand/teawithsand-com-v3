@@ -74,10 +74,10 @@ export interface FileSystemDirectoryHandle extends FileSystemHandle {
 	removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void>
 	resolve(possibleDescendant: FileSystemHandle): Promise<string[] | null>
 
-	entries: () => AsyncIterable<[FileSystemEntryName, FileSystemEntry]>
+	entries: () => AsyncIterable<[FileSystemEntryName, FileSystemHandle]>
 	keys: () => AsyncIterable<FileSystemEntryName>
-	values: () => AsyncIterable<FileSystemEntry>
+	values: () => AsyncIterable<FileSystemHandle>
 	[Symbol.asyncIterator]: () => AsyncIterable<
-		[FileSystemEntryName, FileSystemEntry]
+		[FileSystemEntryName, FileSystemHandle]
 	>
 }
