@@ -1,5 +1,7 @@
 import useWindowDimensions from "./useWindowDimensions"
 
+// TODO(teawithsand): move breakpoint definitions and boundaries to
+
 export type Breakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "xxl"
 
 export const BREAKPOINT_XS: Breakpoint = "xs"
@@ -8,6 +10,15 @@ export const BREAKPOINT_MD: Breakpoint = "md"
 export const BREAKPOINT_LG: Breakpoint = "lg"
 export const BREAKPOINT_XL: Breakpoint = "xl"
 export const BREAKPOINT_XXL: Breakpoint = "xxl"
+
+export const BREAKPOINT_BOUNDARIES = {
+	[BREAKPOINT_XS]: 576,
+	[BREAKPOINT_SM]: 768,
+	[BREAKPOINT_MD]: 992,
+	[BREAKPOINT_LG]: 1200,
+	[BREAKPOINT_XL]: 1440,
+	// above is breakpoint_XXL
+}
 
 export const BREAKPOINTS = [
 	BREAKPOINT_XS,
