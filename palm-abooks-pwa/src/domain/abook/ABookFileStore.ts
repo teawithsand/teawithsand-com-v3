@@ -4,3 +4,5 @@ import LocalForageKeyValueStore from "tws-common/keyvalue/LocalForageKeyValueSto
 export const ABOOK_FILE_STORE = new KeyValueObjectFileStore(
 	LocalForageKeyValueStore.simple("abookFiles"),
 )
+
+export const useAbookFileStore = () => ABOOK_FILE_STORE
