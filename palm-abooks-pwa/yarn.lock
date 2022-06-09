@@ -11687,9 +11687,14 @@ tunnel-agent@^0.6.0:
   dependencies:
     safe-buffer "^5.0.1"
 
-"tws-common@link:../tws-common/dist":
-  version "0.0.0"
-  uid ""
+"tws-common@file:.yalc/tws-common":
+  version "0.0.1"
+  dependencies:
+    idb "^7.0.1"
+    immer "^9.0.14"
+    localforage "^1.10.0"
+    native-file-system-adapter "^2.0.4"
+    styled-components "^5.3.5"
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"

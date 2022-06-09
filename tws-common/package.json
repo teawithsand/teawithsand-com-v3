@@ -35,7 +35,9 @@
 		"build": "tsc",
 		"watch": "tsc --watch",
 		"test": "jest",
-		"format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+		"format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+		"prepare": "tsc",
+		"pub": "yalc publish --private"
 	},
 	"dependencies": {
 		"idb": "^7.0.1",
@@ -43,5 +45,8 @@
 		"localforage": "^1.10.0",
 		"native-file-system-adapter": "^2.0.4",
 		"styled-components": "^5.3.5"
+	},
+	"resolutions": {
+		"styled-components": "^5"
 	}
 }
