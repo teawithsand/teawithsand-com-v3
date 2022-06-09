@@ -9,7 +9,7 @@ export const captureError = async <T, E = void>(
 	}
 }
 
-export const promiseHasThrown = async <T>(promise: Promise<T>) => {
+export const isPromiseHasThrown = async <T>(promise: Promise<T>) => {
 	try {
 		await promise
 		return false
