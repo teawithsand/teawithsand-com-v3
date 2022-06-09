@@ -2,7 +2,9 @@ import {
 	FileSystemDirectoryHandle,
 	FileSystemEntryName,
 } from "tws-common/file/nfs"
+import { createKeyValueNativeFileSystem } from "tws-common/file/nfs/kv"
 import { createInMemoryFileSystem } from "tws-common/file/nfs/memory"
+import InMemoryKeyValueStore from "tws-common/keyvalue/InMemoryKeyValueStore"
 import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 import { isPromiseHasThrown } from "tws-common/lang/promise"
 
@@ -18,7 +20,7 @@ const doTest = <T extends FileSystemDirectoryHandle>(
 			entry: FileSystemDirectoryHandle,
 			name: string,
 			data: string,
-			create = true
+			create = true,
 		) => {
 			const handle = await entry.getFileHandle(name, { create })
 			const wr = await handle.createWritable()
@@ -107,7 +109,9 @@ const doTest = <T extends FileSystemDirectoryHandle>(
 				"throws when using invalid name",
 				async name => {
 					expect(
-						await isPromiseHasThrown(store.getDirectoryHandle(name)),
+						await isPromiseHasThrown(
+							store.getDirectoryHandle(name),
+						),
 					).toBe(true)
 					expect(
 						await isPromiseHasThrown(
@@ -137,7 +141,9 @@ const doTest = <T extends FileSystemDirectoryHandle>(
 			})
 
 			it("getFileHandle with create false does not create file and throws", async () => {
-				expect(await isPromiseHasThrown(store.getFileHandle("file"))).toBe(true)
+				expect(
+					await isPromiseHasThrown(store.getFileHandle("file")),
+				).toBe(true)
 			})
 		})
 	})
@@ -146,6 +152,18 @@ const doTest = <T extends FileSystemDirectoryHandle>(
 doTest(
 	"InMemory",
 	async () => createInMemoryFileSystem(),
+	async () => {
+		// noop; it's in memory
+	},
+)
+
+doTest(
+	"keyValue",
+	async () =>
+		createKeyValueNativeFileSystem({
+			entries: new InMemoryKeyValueStore(),
+			wal: new InMemoryKeyValueStore(),
+		}),
 	async () => {
 		// noop; it's in memory
 	},

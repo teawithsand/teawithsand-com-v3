@@ -1,10 +1,24 @@
 // Side note(teawithsand): Yes, it was easier to implement Write-Ahead logging than use IDB transactions
-import { FileSystemDirectoryHandle, FileSystemFileHandle, FileSystemPermissionRequest, FileSystemPermissionResult, FileSystemWritableFileStream, FileSystemWritableFileStreamCommand, FileSystemWritableOptions, FileSystemEntryName as FileSystemName } from "tws-common/file/nfs";
-import { EntryNotFoundNativeFileSystemError, InvalidEntryTypeNativeFileSystemError } from "tws-common/file/nfs/error";
-import KeyValueStore from "tws-common/keyvalue/KeyValueStore";
-import { collectAsyncIterable } from "tws-common/lang/asyncIterator";
-import { generateUUID } from "tws-common/lang/uuid";
-
+import {
+	FileSystemDirectoryHandle,
+	FileSystemEntryName,
+	FileSystemFileHandle,
+	FileSystemHandle,
+	FileSystemPermissionRequest,
+	FileSystemPermissionResult,
+	FileSystemWritableFileStream,
+	FileSystemWritableFileStreamCommand,
+	FileSystemWritableOptions,
+} from "tws-common/file/nfs"
+import {
+	EntryNotFoundNativeFileSystemError,
+	InvalidArgumentNativeFileSystemError,
+	InvalidEntryTypeNativeFileSystemError,
+} from "tws-common/file/nfs/error"
+import { isEntryNameValid } from "tws-common/file/nfs/path"
+import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
+import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
+import { generateUUID } from "tws-common/lang/uuid"
 
 type Key = string & { readonly ty: unique symbol }
 
@@ -23,18 +37,34 @@ type Value =
 	| {
 			type: EntryType.DIR
 			children: {
-				[name: FileSystemName]: Key // map of filename to it's id. Useful when looking up children
+				[name: FileSystemEntryName]: {
+					id: Key
+					isFile: boolean
+				} // map of filename to it's id. Useful when looking up children
 			}
 	  }
 
 enum WriteAheadOPType {
 	REMOVE = 1,
+	CREATE_FILE = 2,
+	CREATE_DIR = 3,
 }
 
-type WriteAheadOP = {
-	type: WriteAheadOPType.REMOVE
-	root: Key
-}
+type WriteAheadOP =
+	| {
+			type: WriteAheadOPType.REMOVE
+			sourceId: Key
+	  }
+	| {
+			type: WriteAheadOPType.CREATE_FILE
+			sourceId: Key
+			destinationName: FileSystemEntryName
+	  }
+	| {
+			type: WriteAheadOPType.CREATE_DIR
+			sourceId: Key
+			destinationName: FileSystemEntryName
+	  }
 
 type Store = {
 	entries: KeyValueStore<Value, Key>
@@ -43,24 +73,95 @@ type Store = {
 
 const executeWalOp = async (store: Store, op: WriteAheadOP) => {
 	if (op.type === WriteAheadOPType.REMOVE) {
-		const entry = await store.entries.get(op.root)
+		const entry = await store.entries.get(op.sourceId)
 		if (!entry) return // already removed, we are done
 		if (entry.type === EntryType.FILE) {
-			await store.entries.delete(op.root)
+			await store.entries.delete(op.sourceId)
 		} else if (entry.type === EntryType.DIR) {
 			for (const child of Object.values(entry.children)) {
 				// This is hack
 				// but it works
 				// so just use it.
 				await executeWalOp(store, {
-					root: child,
+					sourceId: child.id,
 					type: WriteAheadOPType.REMOVE,
 				})
-				await store.entries.delete(op.root)
+				await store.entries.delete(op.sourceId)
 			}
+		}
+	} else if (op.type === WriteAheadOPType.CREATE_DIR) {
+		const { sourceId, destinationName: name } = op
+		const file = await store.entries.get(sourceId)
+
+		if (!file) {
+			throw new EntryNotFoundNativeFileSystemError(
+				`Parent dir was removed when tried to get ${name} directory handle`,
+			)
+		}
+		if (file.type !== EntryType.DIR) {
+			throw new InvalidEntryTypeNativeFileSystemError(
+				"Expected dir, got file",
+			)
+		}
+		let childId = file.children[name]?.id ?? null
+
+		if (!childId) {
+			childId = generateUUID() as Key
+			file.children[name] = {
+				id: childId,
+				isFile: false,
+			}
+			await store.entries.set(sourceId, file)
+		}
+
+		const targetFile = await store.entries.get(childId)
+		// Creation may not have been finished, so in that case
+		// it gets finished now
+		if (!targetFile) {
+			await store.entries.set(childId, {
+				type: EntryType.DIR,
+				children: {},
+			})
+		}
+	} else if (op.type === WriteAheadOPType.CREATE_FILE) {
+		const { sourceId, destinationName: name } = op
+		const file = await store.entries.get(sourceId)
+
+		if (!file) {
+			throw new EntryNotFoundNativeFileSystemError(
+				`Parent dir was removed when tried to get ${name} directory handle`,
+			)
+		}
+		if (file.type !== EntryType.DIR) {
+			throw new InvalidEntryTypeNativeFileSystemError(
+				"Expected dir, got file",
+			)
+		}
+		let childId = file.children[name]?.id ?? null
+
+		if (!childId) {
+			childId = generateUUID() as Key
+			file.children[name] = {
+				id: childId,
+				isFile: true,
+			}
+			await store.entries.set(sourceId, file)
+		}
+
+		const targetFile = await store.entries.get(childId)
+		// Creation may not have been finished, so in that case
+		// it gets finished now
+		if (!targetFile) {
+			await store.entries.set(childId, {
+				type: EntryType.FILE,
+				file: new File([], name),
+			})
 		}
 	}
 }
+
+// TODO(teawithsand): fix a bug where interrupting creation of file or directory may result in partial creation of these only
+//  these actions should be wal-logged
 
 class Writer implements FileSystemWritableFileStream {
 	private position = 0
@@ -178,7 +279,7 @@ export class KeyValueFileHandle implements FileSystemFileHandle {
 	constructor(
 		private readonly store: Store,
 		private readonly id: Key,
-		public readonly name: FileSystemName,
+		public readonly name: FileSystemEntryName,
 	) {}
 	queryPermission = async (
 		opts: FileSystemPermissionRequest,
@@ -234,51 +335,75 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 	): Promise<FileSystemPermissionResult> => {
 		return "granted"
 	}
-	
+
 	requestPermission = async (
 		opts: FileSystemPermissionRequest,
 	): Promise<FileSystemPermissionResult> => {
 		return "granted"
 	}
 
-	async *entries() {
-		const file = await this.store.entries.get(this.id)
+	entries = (): AsyncIterable<[FileSystemEntryName, FileSystemHandle]> => {
+		const { id, store } = this
+		async function* gen() {
+			const file = await store.entries.get(id)
 
-		if (!file) throw new EntryNotFoundNativeFileSystemError()
-		for (const [name, [id, isFile]] of Object.entries(file) as any) {
-			yield [
-				name,
-				isFile
-					? new KeyValueFileHandle(this.store, id, name)
-					: new KeyValueDirectoryHandle(this.store, id, name),
-			]
+			if (!file || file.type !== EntryType.DIR)
+				throw new EntryNotFoundNativeFileSystemError()
+			for (const [name, { id, isFile }] of Object.entries(
+				file.children,
+			)) {
+				yield [
+					name,
+					isFile
+						? new KeyValueFileHandle(store, id, name)
+						: new KeyValueDirectoryHandle(store, id, name),
+				] as [FileSystemEntryName, FileSystemHandle]
+			}
 		}
+
+		return gen()
 	}
 
-	async *keys() {
-		const file = await this.store.entries.get(this.id)
+	keys = (): AsyncIterable<FileSystemEntryName> => {
+		const { id, store } = this
+		async function* gen() {
+			const file = await store.entries.get(id)
 
-		if (!file) throw new EntryNotFoundNativeFileSystemError()
-		for (const [name, [id, isFile]] of Object.entries(file) as any) {
-			yield name
+			if (!file || file.type !== EntryType.DIR)
+				throw new EntryNotFoundNativeFileSystemError()
+			for (const [name, id] of Object.entries(file.children)) {
+				yield name
+			}
 		}
+
+		return gen()
 	}
 
-	async *values() {
-		const file = await this.store.entries.get(this.id)
+	values = (): AsyncIterable<FileSystemHandle> => {
+		const { id, store } = this
+		async function* gen() {
+			const file = await store.entries.get(id)
 
-		if (!file) throw new EntryNotFoundNativeFileSystemError()
-		for (const [name, [id, isFile]] of Object.entries(file) as any) {
-			yield isFile
-				? new KeyValueFileHandle(this.store, id, name)
-				: new KeyValueDirectoryHandle(this.store, id, name)
+			if (!file || file.type !== EntryType.DIR)
+				throw new EntryNotFoundNativeFileSystemError()
+			for (const [name, { id }] of Object.entries(file.children)) {
+				const file = await store.entries.get(id)
+				if (!file) continue
+				const isFile = file.type === EntryType.FILE
+
+				yield isFile
+					? new KeyValueFileHandle(store, id, name)
+					: new KeyValueDirectoryHandle(store, id, name)
+			}
 		}
-	}
+
+		return gen()
+	};
 
 	[Symbol.asyncIterator] = this.entries
 
 	getDirectoryHandle = async (
-		name: FileSystemName,
+		name: FileSystemEntryName,
 		options?: FileSystemGetDirectoryOptions | undefined,
 	): Promise<FileSystemDirectoryHandle> => {
 		const file = await this.store.entries.get(this.id)
@@ -293,26 +418,45 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 				"Expected dir, got file",
 			)
 		}
-		const entryId = file.children[name] ?? null
 
-		if (!entryId) {
+		const childData = file.children[name] ?? null
+		if (childData === null) {
 			if (options?.create) {
-				const id = generateUUID() as Key
-				await this.store.entries.set(id, {
-					type: EntryType.DIR,
-					children: {},
-				})
+				if (!isEntryNameValid(name))
+					throw new InvalidArgumentNativeFileSystemError(
+						`Name ${name} is not valid file/dir name`,
+					)
 
-				return new KeyValueDirectoryHandle(this.store, id, name)
+				const walOpId = generateUUID()
+
+				const op: WriteAheadOP = {
+					type: WriteAheadOPType.CREATE_DIR,
+					sourceId: this.id,
+					destinationName: name,
+				}
+
+				await this.store.wal.set(walOpId, op)
+				await executeWalOp(this.store, op)
+				await this.store.wal.delete(walOpId)
+
+				return await this.getDirectoryHandle(name, options)
+			} else {
+				throw new EntryNotFoundNativeFileSystemError(
+					`Directory entry with name ${name} was not found in given dir`,
+				)
 			}
-			throw new EntryNotFoundNativeFileSystemError()
 		}
 
-		return new KeyValueDirectoryHandle(this.store, entryId, name)
+		if (childData.isFile)
+			throw new InvalidEntryTypeNativeFileSystemError(
+				"Expected dir, got file",
+			)
+
+		return new KeyValueDirectoryHandle(this.store, childData.id, name)
 	}
 
 	removeEntry = async (
-		name: FileSystemName,
+		name: FileSystemEntryName,
 		options?: FileSystemRemoveOptions | undefined,
 	): Promise<void> => {
 		// Since we have no transactions
@@ -341,7 +485,7 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 
 		const op: WriteAheadOP = {
 			type: WriteAheadOPType.REMOVE,
-			root: childId,
+			sourceId: childId.id,
 		}
 
 		// Note: wall op is not required, if entry is file, but we can't know that just yet, we have to query file
@@ -365,49 +509,62 @@ export class KeyValueDirectoryHandle implements FileSystemDirectoryHandle {
 	}
 
 	getFileHandle = async (
-		name: FileSystemName,
+		name: FileSystemEntryName,
 		options?: FileSystemGetFileOptions,
 	): Promise<FileSystemFileHandle> => {
 		const file = await this.store.entries.get(this.id)
+
 		if (!file) {
 			throw new EntryNotFoundNativeFileSystemError(
-				`Parent dir was already removed when tried to remove ${name} child`,
+				`Parent dir was removed when tried to get ${name} file handle`,
 			)
 		}
 		if (file.type !== EntryType.DIR) {
 			throw new InvalidEntryTypeNativeFileSystemError(
-				"Expected dir, got file",
+				"Expected dir as parent, got file",
 			)
 		}
 
-		let childId = file.children[name] ?? null
-		if (!childId) {
+		const childData = file.children[name] ?? null
+		if (childData === null) {
 			if (options?.create) {
-				childId = generateUUID() as Key
-				file.children[name] = childId
-				await this.store.entries.set(this.id, file)
+				if (!isEntryNameValid(name))
+					throw new InvalidArgumentNativeFileSystemError(
+						`Name ${name} is not valid file/dir name`,
+					)
+
+				const walOpId = generateUUID()
+
+				const op: WriteAheadOP = {
+					type: WriteAheadOPType.CREATE_FILE,
+					sourceId: this.id,
+					destinationName: name,
+				}
+
+				await this.store.wal.set(walOpId, op)
+				await executeWalOp(this.store, op)
+				await this.store.wal.delete(walOpId)
+
+				return await this.getFileHandle(name, options)
 			} else {
 				throw new EntryNotFoundNativeFileSystemError(
-					"File to open was not found",
+					`File entry with name ${name} was not found in given dir`,
 				)
 			}
 		}
 
-		// File creation may have been done only partially, so finish it
-		if (!(await this.store.entries.get(childId))) {
-			await this.store.entries.set(childId, {
-				type: EntryType.FILE,
-				file: new File([], name),
-			})
-		}
+		if (!childData.isFile)
+			throw new InvalidEntryTypeNativeFileSystemError(
+				"Expected file, got dir",
+			)
 
-		return new KeyValueFileHandle(this.store, childId, name)
+		return new KeyValueFileHandle(this.store, childData.id, name)
 	}
 }
 
 // Note: there should be no more than one FS with same name
 // TODO(teawithsand): use web locks to provide inter-tab locking for file ops
-export const getKeyValueNativeFileSystem = async (
+export const createKeyValueNativeFileSystem = async (
 	store: Store,
 ): Promise<FileSystemDirectoryHandle> => {
 	// Root entry must exist.

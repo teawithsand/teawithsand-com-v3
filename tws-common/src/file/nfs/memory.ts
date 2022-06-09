@@ -4,6 +4,7 @@ import {
 	FileSystemDirectoryHandle,
 	FileSystemEntryName,
 	FileSystemFileHandle,
+	FileSystemHandle,
 	FileSystemPermissionRequest,
 	FileSystemPermissionResult,
 	FileSystemWritableFileStream,
@@ -215,7 +216,7 @@ export class InMemoryDirectoryHandle implements FileSystemDirectoryHandle {
 		if (!this.dataEntries) throw new EntryNotFoundNativeFileSystemError()
 		return makeAsyncIterable(
 			this.dataEntries.entries() as Iterable<
-				[FileSystemEntryName, FileSystemEntry]
+				[FileSystemEntryName, FileSystemHandle]
 			>,
 		)
 	}
@@ -226,7 +227,7 @@ export class InMemoryDirectoryHandle implements FileSystemDirectoryHandle {
 	values = () => {
 		if (!this.dataEntries) throw new EntryNotFoundNativeFileSystemError()
 		return makeAsyncIterable(
-			this.dataEntries.values() as Iterable<FileSystemEntry>,
+			this.dataEntries.values() as Iterable<FileSystemHandle>,
 		)
 	};
 	[Symbol.asyncIterator] = this.entries
