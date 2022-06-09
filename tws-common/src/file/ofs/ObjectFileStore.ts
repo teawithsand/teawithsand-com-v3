@@ -1,12 +1,14 @@
+export type FileObject = File | Blob
+
 export enum StoredFileObjectKind {
 	BLOB = 1,
 	FILE = 2,
 	FILE_REF = 3,
 }
 
-export interface StoredFileObject<V = Blob | File> {
+export interface StoredFileObject {
 	readonly kind: StoredFileObjectKind
-	readonly innerObject: V
+	readonly innerObject: FileObject
 
 	// These two are used if we store reference to file
 	requestPermission(): Promise<void>
@@ -29,9 +31,9 @@ export interface StoredFileObject<V = Blob | File> {
  *
  * Note: for now this store is not capable of storing directory references. Each directory has to be flattened to set of files.
  */
-export default interface ObjectFileStore<V = Blob | File, K = string> {
-	delete(key: K): Promise<void>
-	store(key: K, data: V): Promise<void>
-	get(key: K): Promise<StoredFileObject | null>
-	iterateKeys(): AsyncIterable<K>
+export default interface ObjectFileStore {
+	delete(key: string): Promise<void>
+	store(key: string, data: FileObject): Promise<void>
+	get(key: string): Promise<StoredFileObject | null>
+	iterateKeys(): AsyncIterable<string>
 }

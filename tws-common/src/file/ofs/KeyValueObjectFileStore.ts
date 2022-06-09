@@ -1,10 +1,9 @@
 import ObjectFileStore, {
+	FileObject,
 	StoredFileObject,
 	StoredFileObjectKind,
 } from "tws-common/file/ofs/ObjectFileStore"
 import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
-
-type Value = Blob | File
 
 /**
  * Note: this store uses:
@@ -15,13 +14,13 @@ type Value = Blob | File
  * Main reason being, is that it only works on desktop chrome, which is not main target of app, which this component was designed for.
  */
 export default class KeyValueObjectFileStore implements ObjectFileStore {
-	constructor(private readonly innerStore: KeyValueStore<Value>) {}
+	constructor(private readonly innerStore: KeyValueStore<FileObject>) {}
 
 	delete = async (key: string): Promise<void> => {
 		await this.innerStore.delete(key)
 	}
 
-	store = async (key: string, data: Value): Promise<void> => {
+	store = async (key: string, data: FileObject): Promise<void> => {
 		await this.innerStore.set(key, data)
 	}
 
