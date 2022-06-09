@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "tws-common": {
+      "signature": "ff954210afeca9fa0352acfb96b2c56e",
+      "file": true
+    }
+  }
+}

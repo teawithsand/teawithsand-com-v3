@@ -78,3 +78,5 @@ yarn-error.log
 
 # Custom
 /static/*.mp3
+
+.yalc/
