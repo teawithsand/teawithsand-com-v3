@@ -1,19 +1,20 @@
 import Metadata from "tws-common/player/metadata/Metadata"
+import MetadataLoader from "tws-common/player/metadata/MetadataLoader"
+import PlayerSource, {
+	obtainPlayerSourceURL,
+} from "tws-common/player/source/PlayerSource"
 
-export default class MetadataTool {
-	loadMetadata = async (
-		src:
-			| string
-			| {
-					url: string
-					release: () => void
-			  },
-	): Promise<Metadata> => {
+export default class DefaultMetadataLoader implements MetadataLoader {
+	loadMetadata = async (src: string | PlayerSource): Promise<Metadata> => {
 		let url: string
+		let closer = () => {
+			// noop
+		}
+
 		if (typeof src === "string") {
 			url = src
 		} else {
-			url = src.url
+			[url, closer] = obtainPlayerSourceURL(src)
 		}
 
 		try {
@@ -73,7 +74,7 @@ export default class MetadataTool {
 				audio.pause()
 			}
 		} finally {
-			if (typeof src === "object") src.release()
+			closer()
 		}
 	}
 }

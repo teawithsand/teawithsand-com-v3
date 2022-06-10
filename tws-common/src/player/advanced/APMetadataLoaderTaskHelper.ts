@@ -7,7 +7,7 @@ import {
 	MetadataLoadingResultType,
 } from "tws-common/player/metadata/Metadata"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import MetadataTool from "tws-common/player/metadata/MetadataTool"
+import DefaultMetadataLoader from "tws-common/player/metadata/MetadataTool"
 import { obtainPlayerSourceURL } from "tws-common/player/source/PlayerSource"
 
 // TODO(teawithsand): add caching, so metadata is not loaded each time we use it
@@ -15,7 +15,7 @@ import { obtainPlayerSourceURL } from "tws-common/player/source/PlayerSource"
 //  it should do ok
 export default class APMetadataLoaderTaskHelper {
 	private readonly taskManager = new SingularTaskManager()
-	private readonly loader = new MetadataTool()
+	private readonly loader = new DefaultMetadataLoader()
 	private readonly innerEventBus = new DefaultStickyEventBus<MetadataBag>(
 		new MetadataBag([]),
 	)
