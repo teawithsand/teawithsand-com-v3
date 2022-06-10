@@ -7,7 +7,7 @@ import {
 	MetadataLoadingResultType,
 } from "tws-common/player/metadata/Metadata"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import DefaultMetadataLoader from "tws-common/player/metadata/MetadataTool"
+import DefaultMetadataLoader from "tws-common/player/metadata/DefaultMetadataLoader"
 import { obtainPlayerSourceURL } from "tws-common/player/source/PlayerSource"
 
 // TODO(teawithsand): add caching, so metadata is not loaded each time we use it
