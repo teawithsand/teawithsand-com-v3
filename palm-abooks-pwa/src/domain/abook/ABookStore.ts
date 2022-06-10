@@ -1,6 +1,6 @@
+import ABook from "@app/domain/abook/ABook"
 import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
 import LocalForageKeyValueStore from "tws-common/keyvalue/LocalForageKeyValueStore"
-import ABook from "tws-common/player/abook/ABook"
 
 class ABookStore implements KeyValueStore<ABook> {
 	private constructor(private readonly inner: KeyValueStore<ABook, string>) {}
