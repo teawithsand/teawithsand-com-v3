@@ -1,16 +1,12 @@
-import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
-import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
-import SimplePlayer from "tws-common/player/simple/SimplePlayer"
-import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
-import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
-import SimplePlayerState from "tws-common/player/simple/SimplePlayerState"
-import PlayerSource, {
-	obtainPlayerSourceURL,
-} from "tws-common/player/source/PlayerSource"
-import {
-	HTMLPlayerState,
-	readHTMLPlayerState,
-} from "tws-common/player/tool/readState"
+import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe";
+import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus";
+import SimplePlayer from "tws-common/player/simple/SimplePlayer";
+import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState";
+import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState";
+import SimplePlayerState from "tws-common/player/simple/SimplePlayerState";
+import PlayerSource, { obtainPlayerSourceURL } from "tws-common/player/source/PlayerSource";
+import { HTMLPlayerState, readHTMLPlayerState } from "tws-common/player/tool/readState";
+
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
@@ -203,16 +199,20 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 
 			this.source = src
 			if (src !== null) {
-				const [url, close] = obtainPlayerSourceURL(src)
-				this.element.src = url
-				this.sourceCleanup = close
+				// TODO(teawithsand): FIXME: this should be synchronized/locked, so only latest one gets executed
+				// It's temporary quick'n'dirty fix
+				(async () => {
+					const [url, close] = await obtainPlayerSourceURL(src)
+					this.element.src = url
+					this.sourceCleanup = close
 
-				// load resets playback rate and volume(?)
-				this.element.load()
-				this.element.playbackRate = this.rate
-				this.element.volume = this.volume
+					// load resets playback rate and volume(?)
+					this.element.load()
+					this.element.playbackRate = this.rate
+					this.element.volume = this.volume
 
-				this.syncIsPlayingWhenReady()
+					this.syncIsPlayingWhenReady()
+				})()
 			} else {
 				this.element.src = ""
 			}

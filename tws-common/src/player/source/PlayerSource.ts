@@ -23,7 +23,7 @@ export class URLPlayerSource extends PlayerSource {
 		return this.url
 	}
 
-	equals = (b: any): boolean => {
+	equals = (b: PlayerSource): boolean => {
 		return b instanceof URLPlayerSource && b.url === this.url
 	}
 }
@@ -36,8 +36,25 @@ export class BlobPlayerSource extends PlayerSource {
 		super()
 	}
 
-	equals = (b: any): boolean => {
+	equals = (b: PlayerSource): boolean => {
 		return b instanceof BlobPlayerSource && b.innerId === this.innerId
+	}
+
+	get id(): string {
+		return this.id
+	}
+}
+
+export class FunctionPlayerSource extends PlayerSource {
+	constructor(
+		public readonly blobGetter: () => Promise<Blob | File>,
+		public readonly innerId: string,
+	) {
+		super()
+	}
+
+	equals = (b: PlayerSource): boolean => {
+		return b instanceof FunctionPlayerSource && b.innerId === this.innerId
 	}
 
 	get id(): string {
@@ -47,9 +64,9 @@ export class BlobPlayerSource extends PlayerSource {
 
 export default PlayerSource
 
-export const obtainPlayerSourceURL = (
+export const obtainPlayerSourceURL = async (
 	src: PlayerSource,
-): [string, () => void] => {
+): Promise<[string, () => void]> => {
 	if (src instanceof URLPlayerSource) {
 		return [
 			src.url,
@@ -59,6 +76,20 @@ export const obtainPlayerSourceURL = (
 		]
 	} else if (src instanceof BlobPlayerSource) {
 		const url = URL.createObjectURL(src.blob)
+		let isClosed = false
+		return [
+			url,
+			() => {
+				if (!isClosed) {
+					URL.revokeObjectURL(url)
+					isClosed = true
+				}
+			},
+		]
+	} else if (src instanceof FunctionPlayerSource) {
+		const blob = await src.blobGetter()
+
+		const url = URL.createObjectURL(blob)
 		let isClosed = false
 		return [
 			url,

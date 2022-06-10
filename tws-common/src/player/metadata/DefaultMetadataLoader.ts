@@ -15,7 +15,7 @@ export default class DefaultMetadataLoader implements MetadataLoader {
 
 		let url: string
 		if (!maybeUrl) {
-			;[url, closer] = obtainPlayerSourceURL(src)
+			;[url, closer] = await obtainPlayerSourceURL(src)
 		} else {
 			url = maybeUrl
 		}
