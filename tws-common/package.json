@@ -17,6 +17,7 @@
 		"fake-indexeddb": "^3.1.7",
 		"jest": "^28.1.1",
 		"jest-environment-jsdom": "^28.1.1",
+		"nodemon": "^2.0.16",
 		"prettier": "^2.6.2",
 		"react": "^18.1.0",
 		"ts-jest": "^28.0.4",
@@ -29,21 +30,22 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"files": [
-		"/dist"
+		"dist",
+		"scss"
 	],
 	"scripts": {
-		"build": "tsc",
-		"watch": "tsc --watch",
 		"test": "jest",
 		"format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-		"prepare": "tsc",
-		"pub": "yalc publish --private --push"
+		"pub": "yalc publish --private --push",
+		"watch": "nodemon -e js,ts,tsx,jsx --ignore dist --exec \"tsc && yalc publish --private --push\""
 	},
 	"dependencies": {
+		"bootstrap": "^5.1.3",
 		"idb": "^7.0.1",
 		"immer": "^9.0.14",
 		"localforage": "^1.10.0",
 		"native-file-system-adapter": "^2.0.4",
+		"react-bootstrap": "^2.4.0",
 		"styled-components": "^5.3.5"
 	},
 	"resolutions": {
