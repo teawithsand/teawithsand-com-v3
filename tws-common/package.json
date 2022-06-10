@@ -49,6 +49,7 @@
 		"localforage": "^1.10.0",
 		"native-file-system-adapter": "^2.0.4",
 		"react-bootstrap": "^2.4.0",
+		"react-query": "^3.39.1",
 		"styled-components": "^5.3.5"
 	},
 	"resolutions": {
