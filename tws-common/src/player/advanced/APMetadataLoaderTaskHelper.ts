@@ -63,7 +63,7 @@ export default class APMetadataLoaderTaskHelper {
 						}
 						this.metadataLoadingResults[i] = {
 							type: MetadataLoadingResultType.ERROR,
-							error: e,
+							error: "An error occurred when loading metadata", // TODO(teawithsand): extract actual message
 						}
 						this.computeAndSendBag()
 					}
