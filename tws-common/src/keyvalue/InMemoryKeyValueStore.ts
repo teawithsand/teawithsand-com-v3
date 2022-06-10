@@ -11,7 +11,8 @@ export default class InMemoryKeyValueStore<V, K extends string = string>
 		this.map.set(id, value)
 		return Promise.resolve()
 	}
-	delete(id: K): Promise<void> {
+
+	delete = (id: K): Promise<void> => {
 		this.map.delete(id)
 		return Promise.resolve()
 	}
