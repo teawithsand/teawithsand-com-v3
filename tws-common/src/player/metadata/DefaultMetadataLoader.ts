@@ -7,14 +7,17 @@ import PlayerSource, {
 export default class DefaultMetadataLoader implements MetadataLoader {
 	loadMetadata = async (
 		src: PlayerSource,
-		url?: string,
+		maybeUrl?: string,
 	): Promise<Metadata> => {
 		let closer = () => {
 			// noop
 		}
 
-		if (!url) {
-			[url, closer] = obtainPlayerSourceURL(src)
+		let url: string
+		if (!maybeUrl) {
+			;[url, closer] = obtainPlayerSourceURL(src)
+		} else {
+			url = maybeUrl
 		}
 
 		try {
@@ -27,7 +30,7 @@ export default class DefaultMetadataLoader implements MetadataLoader {
 					reject(
 						audio.error ??
 							new Error(
-								`Unknown error when loading metadata for ${url}`,
+								`Unknown error when loading metadata for ${maybeUrl}`,
 							),
 					)
 				}
@@ -46,7 +49,9 @@ export default class DefaultMetadataLoader implements MetadataLoader {
 
 				const timeout = setTimeout(() => {
 					reject(
-						new Error(`Timeout when loading metadata for ${url}`),
+						new Error(
+							`Timeout when loading metadata for ${maybeUrl}`,
+						),
 					)
 				}, 30 * 1000) // 30s is a lot of timeout btw
 
