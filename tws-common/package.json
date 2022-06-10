@@ -30,14 +30,15 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"files": [
-		"dist",
+		"*.js",
+		"**/*.js",
+		"**/*.d.ts",
 		"scss"
 	],
 	"scripts": {
 		"test": "jest",
 		"format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-		"pub": "yalc publish --private --push",
-		"watch": "nodemon -e js,ts,tsx,jsx --ignore dist --exec \"tsc && yalc publish --private --push\""
+		"watch": "nodemon -e js,ts,tsx,jsx --ignore dist --exec \"tsc && cp -r scss dist && cp package.json dist && cd dist && yalc publish --private --push\""
 	},
 	"dependencies": {
 		"bootstrap": "^5.1.3",
