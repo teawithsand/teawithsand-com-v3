@@ -21,6 +21,7 @@ module.exports = {
 	rules: {
 		"no-mixed-spaces-and-tabs": "off",
 		"@typescript-eslint/no-explicit-any": "off",
+		"@typescript-eslint/ban-types": "off",
 		"react/display-name": "warn",
 		"react/prop-types": "off",
 	},
