@@ -1,8 +1,18 @@
 import KeyValueObjectFileStore from "tws-common/file/ofs/KeyValueObjectFileStore"
 import LocalForageKeyValueStore from "tws-common/keyvalue/LocalForageKeyValueStore"
 
-export const ABOOK_FILE_STORE = new KeyValueObjectFileStore(
+import KeyValueWALStore from "tws-common/lang/wal/KeyValueWALStore"
+import Metadata from "tws-common/player/metadata/Metadata"
+
+export type ABookFileMetadata = {
+	disposition: "playable"
+	metadata: Metadata | null
+}
+
+export const ABOOK_FILE_STORE = new KeyValueObjectFileStore<ABookFileMetadata>(
 	LocalForageKeyValueStore.simple("abookFiles"),
+	LocalForageKeyValueStore.simple("abookFilesMetadata"),
+	new KeyValueWALStore(LocalForageKeyValueStore.simple("abookFilesWAL")),
 )
 
 export const useAbookFileStore = () => ABOOK_FILE_STORE

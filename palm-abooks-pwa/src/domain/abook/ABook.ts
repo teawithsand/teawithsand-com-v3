@@ -16,6 +16,12 @@ export default interface ABook {
 	 * A short description about ABook.
 	 */
 	description: string
+
+	/**
+	 * List of files, which this ABook owns.
+	 * Not only music files are there, but also other ones.
+	 */
+	files: ABookFileSource
 }
 
 export type ABookPosition = {
