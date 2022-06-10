@@ -80,3 +80,4 @@ yarn-error.log
 /static/*.mp3
 
 .yalc/
+yalc.lock
