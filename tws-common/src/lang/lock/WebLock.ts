@@ -1,7 +1,7 @@
 /**
  * Better api for WebLocks, with potential of polyfill implementation.
  */
-export class WebLock {
+export default class WebLock {
 	constructor(private readonly key: string) {}
 
 	claim = async (
@@ -28,15 +28,11 @@ export class WebLock {
 				ifAvailable: ifAvailable ?? false,
 			},
 			async lock => {
-				try {
-					if (lock === null && ifAvailable) {
-						await opWhenNotAcquired()
-					} else {
-						await opWhenAcquired()
-					}
-				} catch (e) {
-					console.error("An error occurred while we were in lock", e)
-				}
+                if (lock === null && ifAvailable) {
+                    await opWhenNotAcquired()
+                } else {
+                    await opWhenAcquired()
+                }
 			},
 		)
 	}
