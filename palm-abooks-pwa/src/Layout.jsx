@@ -1,6 +1,9 @@
+import React from "react"
+import ActualLayout from "./components/layout/Layout"
+
 const Layout = props => {
 	const { children } = props
-	return children
+	return <ActualLayout>{children}</ActualLayout>
 }
 
-module.exports = Layout
+export default Layout
