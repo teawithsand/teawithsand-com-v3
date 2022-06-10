@@ -6,7 +6,8 @@
  * Source can be closed, which releases any resources associated with it.
  */
 abstract class PlayerSource {
-	abstract equals(b: any): boolean
+	abstract equals(b: PlayerSource): boolean
+	abstract id: string
 }
 
 /**
@@ -14,25 +15,33 @@ abstract class PlayerSource {
  * It has noop closer.
  */
 export class URLPlayerSource extends PlayerSource {
-	equals = (b: any): boolean => {
-		return b instanceof URLPlayerSource && b.url === this.url
-	}
-
 	constructor(public readonly url: string) {
 		super()
+	}
+
+	get id() {
+		return this.url
+	}
+
+	equals = (b: any): boolean => {
+		return b instanceof URLPlayerSource && b.url === this.url
 	}
 }
 
 export class BlobPlayerSource extends PlayerSource {
-	equals = (b: any): boolean => {
-		return b instanceof BlobPlayerSource && b.id === this.id
-	}
-
 	constructor(
 		public readonly blob: Blob | MediaSource | File,
-		public readonly id: string,
+		public readonly innerId: string,
 	) {
 		super()
+	}
+
+	equals = (b: any): boolean => {
+		return b instanceof BlobPlayerSource && b.innerId === this.innerId
+	}
+
+	get id(): string {
+		return this.id
 	}
 }
 
