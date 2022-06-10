@@ -27,7 +27,7 @@ export default class LocalForageKeyValueStore<V, K extends string = string>
 		return res as V | null
 	}
 
-	set = async (id: K, value: V) => {
+	set = async (id: K, value: V): Promise<void> => {
 		await this.forage.setItem(id, value)
 	}
 
