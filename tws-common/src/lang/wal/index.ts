@@ -13,7 +13,7 @@ export interface WALStore<T> {
 export class SimpleWALHelper<T, C = void> {
 	constructor(
 		private readonly store: WALStore<T>,
-		private readonly handler: (ctx: C, data: T) => Promise<void>,
+		private readonly handler: ( data: T, ctx: C) => Promise<void>,
 	) {}
 
 	/**
@@ -24,7 +24,7 @@ export class SimpleWALHelper<T, C = void> {
 			const op = await this.store.getUndoneOperation()
 			if (op === null) return
 
-			await this.handler(ctx, op.data)
+			await this.handler(op.data, ctx)
 			await this.store.dropOperationData(op.id)
 		}
 	}
@@ -34,7 +34,7 @@ export class SimpleWALHelper<T, C = void> {
 
 		await this.store.setOperationData(id, data)
 		try {
-			await this.handler(ctx, data)
+			await this.handler(data, ctx)
 		} finally {
             // operation has to be considered done always
 			await this.store.dropOperationData(id)
