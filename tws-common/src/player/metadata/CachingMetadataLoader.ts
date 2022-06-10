@@ -24,21 +24,15 @@ export class CachingMetadataLoader implements MetadataLoader {
 		private readonly cacheErrors = false,
 	) {}
 
-	private getId = (src: string | PlayerSource) => {
-		if (typeof src === "string") {
-			return src
-		} else {
-			return src.id
-		}
-	}
+	private getId = (src: PlayerSource) => src.id
 
-	dropCachedEntry = async (src: string | PlayerSource): Promise<void> => {
+	dropCachedEntry = async (src: PlayerSource): Promise<void> => {
 		const id = this.getId(src)
 		await this.store.delete(id)
 	}
 
 	storeEntryToCache = async (
-		src: string | PlayerSource,
+		src: PlayerSource,
 		metadata: Metadata,
 	): Promise<void> => {
 		const id = this.getId(src)
@@ -48,13 +42,16 @@ export class CachingMetadataLoader implements MetadataLoader {
 		})
 	}
 
-	loadMetadata = async (src: string | PlayerSource): Promise<Metadata> => {
+	loadMetadata = async (
+		src: PlayerSource,
+		url?: string,
+	): Promise<Metadata> => {
 		const id = this.getId(src)
 
 		const cached = await this.store.get(id)
 		if (!cached) {
 			try {
-				const metadata = await this.innerLoader.loadMetadata(src)
+				const metadata = await this.innerLoader.loadMetadata(src, url)
 				await this.store.set(id, {
 					type: 1,
 					metadata,

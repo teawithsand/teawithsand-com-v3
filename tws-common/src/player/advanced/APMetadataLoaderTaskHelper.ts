@@ -2,16 +2,15 @@ import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
 import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
 import SingularTaskManager from "tws-common/lang/task/SingularTaskManager"
 import { Playlist } from "tws-common/player/advanced/AdvancedPlayer"
+import DefaultMetadataLoader from "tws-common/player/metadata/DefaultMetadataLoader"
 import {
 	MetadataLoadingResult,
 	MetadataLoadingResultType,
 } from "tws-common/player/metadata/Metadata"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import DefaultMetadataLoader from "tws-common/player/metadata/DefaultMetadataLoader"
-import { obtainPlayerSourceURL } from "tws-common/player/source/PlayerSource"
 
 // TODO(teawithsand): add caching, so metadata is not loaded each time we use it
-// We can do something simple like serializing whole LRU into single JS object and then store it in IDB or localstorage
+// We can do something simple like serializing whole LRU into single JS object and then store it in IDB or localStorage
 //  it should do ok
 export default class APMetadataLoaderTaskHelper {
 	private readonly taskManager = new SingularTaskManager()
@@ -48,10 +47,8 @@ export default class APMetadataLoaderTaskHelper {
 					return
 				}
 				try {
-					const [url, close] = obtainPlayerSourceURL(source)
-
 					try {
-						const metadata = await this.loader.loadMetadata(url)
+						const metadata = await this.loader.loadMetadata(source)
 						if (ctx.isCanceled) {
 							return
 						}
@@ -69,8 +66,6 @@ export default class APMetadataLoaderTaskHelper {
 							error: e,
 						}
 						this.computeAndSendBag()
-					} finally {
-						close()
 					}
 				} finally {
 					i++

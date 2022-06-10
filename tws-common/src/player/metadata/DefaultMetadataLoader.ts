@@ -5,15 +5,15 @@ import PlayerSource, {
 } from "tws-common/player/source/PlayerSource"
 
 export default class DefaultMetadataLoader implements MetadataLoader {
-	loadMetadata = async (src: string | PlayerSource): Promise<Metadata> => {
-		let url: string
+	loadMetadata = async (
+		src: PlayerSource,
+		url?: string,
+	): Promise<Metadata> => {
 		let closer = () => {
 			// noop
 		}
 
-		if (typeof src === "string") {
-			url = src
-		} else {
+		if (!url) {
 			[url, closer] = obtainPlayerSourceURL(src)
 		}
 
