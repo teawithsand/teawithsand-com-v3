@@ -2,11 +2,11 @@ import KeyValueObjectFileStore from "tws-common/file/ofs/KeyValueObjectFileStore
 import LocalForageKeyValueStore from "tws-common/keyvalue/LocalForageKeyValueStore"
 
 import KeyValueWALStore from "tws-common/lang/wal/KeyValueWALStore"
-import Metadata from "tws-common/player/metadata/Metadata"
+import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 
 export type ABookFileMetadata = {
 	disposition: "playable"
-	metadata: Metadata | null
+	metadata: MetadataLoadingResult | null
 }
 
 export const ABOOK_FILE_STORE = new KeyValueObjectFileStore<ABookFileMetadata>(

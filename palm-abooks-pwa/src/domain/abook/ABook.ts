@@ -31,15 +31,5 @@ export type ABookPosition = {
 
 export type ABookFileSource = {
 	type: "files"
-	entries: ABookFileRef[]
+	entries: string[] // each string is id of entry in ABookFileStore
 }
-
-export type ABookFileRef =
-	| {
-			type: "local-stored"
-			path: string
-	  }
-	| {
-			type: "url"
-			url: string
-	  }
