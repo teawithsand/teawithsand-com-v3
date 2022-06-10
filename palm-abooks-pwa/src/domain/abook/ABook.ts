@@ -5,7 +5,7 @@ export default interface ABook {
 	/**
 	 * Unique ID of this ABook.
 	 */
-	uuid: string
+	id: string
 
 	/**
 	 * Title AKA display name of this ABook.
@@ -16,21 +16,6 @@ export default interface ABook {
 	 * A short description about ABook.
 	 */
 	description: string
-
-	/**
-	 * ABookImage if any, or null if not set.
-	 */
-	image: ABookImage | null
-
-	/**
-	 * Files of this ABook.
-	 */
-	source: ABookFileSource
-
-	/**
-	 * Last position, when ABook was played.
-	 */
-	lastPosition: ABookPosition | null
 }
 
 export type ABookPosition = {
@@ -40,20 +25,10 @@ export type ABookPosition = {
 
 export type ABookFileSource = {
 	type: "files"
-	entries: ABookFile[]
+	entries: ABookFileRef[]
 }
 
-export type ABookImage =
-	| {
-			type: "url"
-			url: string
-	  }
-	| {
-			type: "file-ref"
-			path: string
-	  }
-
-export type ABookFile =
+export type ABookFileRef =
 	| {
 			type: "local-stored"
 			path: string

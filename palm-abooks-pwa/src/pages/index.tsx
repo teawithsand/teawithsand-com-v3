@@ -1,10 +1,19 @@
-import CreateABookForm from "@app/components/abook/CreateABookForm"
+import ABookList from "@app/components/abook/ABookList"
 import React from "react"
+import { generateUUID } from "tws-common/lang/uuid"
 
 const IndexPage = () => {
 	return (
 		<div>
-			<CreateABookForm />
+			<ABookList
+				abooks={[
+					{
+						id: generateUUID(),
+						title: "Book one",
+						description: "Lorem ipsum dolor sir",
+					},
+				]}
+			/>
 		</div>
 	)
 }

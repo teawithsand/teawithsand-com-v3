@@ -2,26 +2,43 @@ import React from "react"
 import { Form as FinalForm, Field as FinalField } from "react-final-form"
 import { Form, Button } from "tws-common/ui"
 
-const onSubmit = async (data: any) => {
-	console.log("Form data", { data })
+export type CreateABookFormData = {
+	name: string
+	description: string
 }
 
-const CreateABookForm = () => {
+const CreateABookForm = (props: {
+	onSubmit: (data: CreateABookFormData) => Promise<void>
+}) => {
 	return (
-		<FinalForm
-			onSubmit={onSubmit}
-			render={({ handleSubmit, form, submitting, pristine, values }) => (
+		<FinalForm<CreateABookFormData>
+			onSubmit={props.onSubmit}
+			render={({ handleSubmit, submitting, pristine }) => (
 				<Form onSubmit={handleSubmit}>
 					<Form.Group className="mb-3">
-						<Form.Label>Email address</Form.Label>
+						<Form.Label>ABook name</Form.Label>
 
-						<FinalField name="abookName">
+						<FinalField name="name">
 							{({ input }) => (
 								<Form.Control type="text" {...input} />
 							)}
 						</FinalField>
-						<Form.Text className="text-muted">
-							We'll never share your email with anyone else.
+					</Form.Group>
+
+					<Form.Group className="mb-3">
+						<Form.Label>ABook description</Form.Label>
+
+						<FinalField name="description">
+							{({ input }) => (
+								<Form.Control as="textarea" {...input} />
+							)}
+						</FinalField>
+					</Form.Group>
+
+					<Form.Group className="mb-3">
+						<Form.Text>
+							You will be able to add files later, once ABook is
+							created
 						</Form.Text>
 					</Form.Group>
 
