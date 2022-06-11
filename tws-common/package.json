@@ -47,6 +47,7 @@
 		"idb": "^7.0.1",
 		"immer": "^9.0.14",
 		"localforage": "^1.10.0",
+		"localforage-startswith": "^1.4.0",
 		"native-file-system-adapter": "^2.0.4",
 		"react-bootstrap": "^2.4.0",
 		"react-query": "^3.39.1",
