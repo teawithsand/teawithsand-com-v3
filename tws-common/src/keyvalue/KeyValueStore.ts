@@ -4,6 +4,11 @@ export default interface KeyValueStore<V, K = string> {
 	has(id: K): Promise<boolean>
 
 	delete(id: K): Promise<void>
+
+	/**
+	 * Note: unlike other mutating operations, this one is not atomic.
+	 * It may end up clearing only some part of entries.
+	 */
 	clear(): Promise<void>
 
 	keys(): AsyncIterable<K>
