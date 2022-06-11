@@ -136,7 +136,7 @@ export default class KeyValueObjectFileStore<M extends {}>
 		await this.metadataStore.set(key, metadata)
 	}
 
-	iterateKeys = (): AsyncIterable<string> => {
+	keys = (): AsyncIterable<string> => {
 		return this.fileStore.keys()
 	}
 }

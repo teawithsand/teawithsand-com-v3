@@ -41,5 +41,5 @@ export default interface ObjectFileStore<M extends {}> {
 	getMetadata(key: string): Promise<M | null>
 	setMetadata(key: string, metadata: M): Promise<void>
 
-	iterateKeys(): AsyncIterable<string>
+	keys(): AsyncIterable<string>
 }
