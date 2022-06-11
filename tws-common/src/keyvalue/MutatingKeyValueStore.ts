@@ -14,6 +14,7 @@ export default class MutatingKeyValueStore<V extends {}, E extends {}>
 	private constructor(
 		private readonly mutator: {
 			mutateKey: (k: string) => Promise<string>
+			mutateKeyReverse: (k: string) => Promise<string>
 			mutatePrefix: (k: string) => Promise<string>
 			mutateValue: (innerValue: E) => Promise<V>
 			mutateValueReverse: (outerValue: V) => Promise<E>
@@ -21,6 +22,7 @@ export default class MutatingKeyValueStore<V extends {}, E extends {}>
 		private readonly inner: PrefixKeyValueStore<E, string>,
 	) {}
 
+	private readonly mutateKeyReverse = this.mutator.mutateKeyReverse
 	private readonly mutateKey = this.mutator.mutateKey
 	private readonly mutatePrefix = this.mutator.mutatePrefix
 	private readonly mutateValue = this.mutator.mutateValue
@@ -54,12 +56,12 @@ export default class MutatingKeyValueStore<V extends {}, E extends {}>
 
 	keys = (): AsyncIterable<string> => this.keysWithPrefix("")
 	keysWithPrefix = (prefix: string): AsyncIterable<string> => {
-		const { inner, mutatePrefix } = this
+		const { inner, mutatePrefix, mutateKeyReverse } = this
 		async function* gen() {
 			const keys = inner.keysWithPrefix(await mutatePrefix(prefix))
 
 			for await (const k of keys) {
-				yield this.mutateKey(k)
+				yield mutateKeyReverse(k)
 			}
 		}
 		return gen()
