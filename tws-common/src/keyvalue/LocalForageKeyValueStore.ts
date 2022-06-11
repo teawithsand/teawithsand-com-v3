@@ -1,12 +1,15 @@
-import localforage, { INDEXEDDB } from "localforage"
-import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
+import KeyValueStore, {
+	PrefixKeyValueStore,
+} from "tws-common/keyvalue/KeyValueStore"
+import localforage, { INDEXEDDB } from "tws-common/keyvalue/localforage"
+import { makeAsyncIterable } from "tws-common/lang/asyncIterable"
 
 // TODO(teawithsand): in future for better performance port
 // https://github.com/localForage/localForage-startsWith/tree/master/lib/implementations
 // For prefix queries into my codebase, since that project looks unmaintained
 
 export default class LocalForageKeyValueStore<V, K extends string = string>
-	implements KeyValueStore<V, K>
+	implements KeyValueStore<V, K>, PrefixKeyValueStore<V, K>
 {
 	constructor(private readonly forage: LocalForage) {}
 
@@ -51,6 +54,17 @@ export default class LocalForageKeyValueStore<V, K extends string = string>
 			}
 		}
 
+		return gen()
+	}
+
+	keysWithPrefix = (prefix: string): AsyncIterable<K> => {
+		const { forage } = this
+		async function* gen() {
+			const keys = await forage.keysStartingWith(prefix)
+			for (const k of keys) {
+				yield k as K
+			}
+		}
 		return gen()
 	}
 }

@@ -8,3 +8,8 @@ export default interface KeyValueStore<V, K = string> {
 
 	keys(): AsyncIterable<K>
 }
+
+export interface PrefixKeyValueStore<V, K extends string = string>
+	extends KeyValueStore<V, K> {
+	keysWithPrefix(prefix: string): AsyncIterable<K>
+}

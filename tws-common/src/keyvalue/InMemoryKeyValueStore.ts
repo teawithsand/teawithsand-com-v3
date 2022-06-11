@@ -1,10 +1,12 @@
-import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
+import KeyValueStore, {
+	PrefixKeyValueStore,
+} from "tws-common/keyvalue/KeyValueStore"
 
 export default class InMemoryKeyValueStore<V, K extends string = string>
-	implements KeyValueStore<V, K>
+	implements KeyValueStore<V, K>, PrefixKeyValueStore<V, K>
 {
 	constructor(private readonly map: Map<K, V> = new Map()) {}
-	
+
 	has = (id: K): Promise<boolean> => Promise.resolve(this.map.has(id))
 	get = (id: K): Promise<V | null> =>
 		Promise.resolve(this.map.get(id) ?? null)
@@ -32,6 +34,16 @@ export default class InMemoryKeyValueStore<V, K extends string = string>
 			}
 		}
 
+		return gen()
+	}
+
+	keysWithPrefix = (prefix: string): AsyncIterable<K> => {
+		const keys = this.map.keys()
+		async function* gen() {
+			for (const k of keys) {
+				if (k.startsWith(prefix)) yield k
+			}
+		}
 		return gen()
 	}
 }
