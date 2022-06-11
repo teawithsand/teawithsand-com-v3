@@ -35,6 +35,8 @@ export default interface ObjectFileStore<M extends {}> {
 	delete(key: string): Promise<void>
 	has(key: string): Promise<boolean>
 
+	clear(): Promise<void>
+
 	setFile(
 		key: string,
 		data: ObjectFileStoreObject,
@@ -50,7 +52,7 @@ export default interface ObjectFileStore<M extends {}> {
 
 export interface PrefixObjectFileStore<M extends {}>
 	extends ObjectFileStore<M> {
-	keyWithPrefix(prefix: string): AsyncIterable<string>
+	keysWithPrefix(prefix: string): AsyncIterable<string>
 }
 
 // TODO(teawithsand): implement mutating/prefixing OFS, just like key value one

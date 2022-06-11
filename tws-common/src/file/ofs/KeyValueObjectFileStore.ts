@@ -19,6 +19,9 @@ export type KeyValueObjectFileStoreWALOperation<M> =
 			metadata: M
 			key: string
 	  }
+	| {
+			type: "clear"
+	  }
 
 /**
  * Note: this store uses:
@@ -57,8 +60,20 @@ export default class KeyValueObjectFileStore<M extends {}>
 						await this.metadataStore.set(data.key, data.metadata)
 						await this.fileStore.set(data.key, ctx)
 					}
+				} else if (data.type === "clear") {
+					await this.metadataStore.clear()
+					await this.fileStore.clear()
 				}
 			},
+		)
+	}
+
+	clear = async (): Promise<void> => {
+		await this.walHelper.execute(
+			{
+				type: "clear",
+			},
+			null,
 		)
 	}
 
@@ -148,7 +163,7 @@ export default class KeyValueObjectFileStore<M extends {}>
 		return this.metadataStore.keys()
 	}
 
-	keyWithPrefix = (prefix: string): AsyncIterable<string> => {
+	keysWithPrefix = (prefix: string): AsyncIterable<string> => {
 		return this.metadataStore.keysWithPrefix(prefix)
 	}
 }
