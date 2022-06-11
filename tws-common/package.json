@@ -39,6 +39,7 @@
 	"scripts": {
 		"test": "jest",
 		"format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+		"typecheck": "tsc --noEmit",
 		"watch": "nodemon -e js,ts,tsx,jsx --ignore dist --exec \"touch dist && rm -r dist && mkdir dist && tsc && cp -r scss dist && cp package.json dist && cd dist && yalc publish --private --push\""
 	},
 	"dependencies": {
