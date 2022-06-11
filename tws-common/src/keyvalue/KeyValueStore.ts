@@ -1,4 +1,4 @@
-export default interface KeyValueStore<V, K = string> {
+export default interface KeyValueStore<V extends {}, K = string> {
 	get(id: K): Promise<V | null>
 	set(id: K, value: V): Promise<void>
 	has(id: K): Promise<boolean>
@@ -14,7 +14,7 @@ export default interface KeyValueStore<V, K = string> {
 	keys(): AsyncIterable<K>
 }
 
-export interface PrefixKeyValueStore<V, K extends string = string>
+export interface PrefixKeyValueStore<V extends {}, K extends string = string>
 	extends KeyValueStore<V, K> {
 	keysWithPrefix(prefix: string): AsyncIterable<K>
 }

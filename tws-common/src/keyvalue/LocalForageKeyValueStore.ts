@@ -2,18 +2,19 @@ import KeyValueStore, {
 	PrefixKeyValueStore,
 } from "tws-common/keyvalue/KeyValueStore"
 import localforage, { INDEXEDDB } from "tws-common/keyvalue/localforage"
-import { makeAsyncIterable } from "tws-common/lang/asyncIterable"
 
 // TODO(teawithsand): in future for better performance port
 // https://github.com/localForage/localForage-startsWith/tree/master/lib/implementations
 // For prefix queries into my codebase, since that project looks unmaintained
 
-export default class LocalForageKeyValueStore<V, K extends string = string>
-	implements KeyValueStore<V, K>, PrefixKeyValueStore<V, K>
+export default class LocalForageKeyValueStore<
+	V extends {},
+	K extends string = string,
+> implements KeyValueStore<V, K>, PrefixKeyValueStore<V, K>
 {
 	constructor(private readonly forage: LocalForage) {}
 
-	static readonly simple = <V>(name: string) => {
+	static readonly simple = <V extends {}>(name: string) => {
 		return new LocalForageKeyValueStore<V>(
 			localforage.createInstance({
 				driver: [INDEXEDDB],

@@ -8,7 +8,7 @@ import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 /**
  * Store, which mutates each key before passing it down to inner one.
  */
-export default class MutatingKeyValueStore<V, E>
+export default class MutatingKeyValueStore<V extends {}, E extends {}>
 	implements KeyValueStore<V, string>, PrefixKeyValueStore<V, string>
 {
 	private constructor(
