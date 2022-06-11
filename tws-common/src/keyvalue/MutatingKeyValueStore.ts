@@ -3,6 +3,8 @@ import KeyValueStore, {
 } from "tws-common/keyvalue/KeyValueStore"
 import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 
+// TODO(teawithsand): make it support non-string keys and non-prefix stores
+
 /**
  * Store, which mutates each key before passing it down to inner one.
  */

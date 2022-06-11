@@ -52,3 +52,5 @@ export interface PrefixObjectFileStore<M extends {}>
 	extends ObjectFileStore<M> {
 	keyWithPrefix(prefix: string): AsyncIterable<string>
 }
+
+// TODO(teawithsand): implement mutating/prefixing OFS, just like key value one
