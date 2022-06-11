@@ -137,6 +137,6 @@ export default class KeyValueObjectFileStore<M extends {}>
 	}
 
 	iterateKeys = (): AsyncIterable<string> => {
-		return this.fileStore.iterateKeys()
+		return this.fileStore.keys()
 	}
 }

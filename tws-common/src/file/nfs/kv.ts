@@ -584,7 +584,7 @@ export const createKeyValueNativeFileSystem = async (
 	if (!realRoot || realRoot.type !== EntryType.DIR)
 		throw new Error("Unreachable code")
 
-	const walOps = await collectAsyncIterable(store.wal.iterateKeys())
+	const walOps = await collectAsyncIterable(store.wal.keys())
 
 	for (const walOp of walOps) {
 		const op = await store.wal.get(walOp)

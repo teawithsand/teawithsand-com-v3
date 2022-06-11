@@ -13,7 +13,7 @@ export default class KeyValueWALStore<T extends {}> implements WALStore<T> {
 	}
 
 	getUndoneOperation = async (): Promise<{ data: T; id: string } | null> => {
-		for await (const id of this.keyValueStore.iterateKeys()) {
+		for await (const id of this.keyValueStore.keys()) {
 			const data = await this.keyValueStore.get(id)
 			if (!data) continue
 

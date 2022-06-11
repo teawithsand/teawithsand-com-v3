@@ -1,6 +1,10 @@
 import localforage, { INDEXEDDB } from "localforage"
 import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
 
+// TODO(teawithsand): in future for better performance port
+// https://github.com/localForage/localForage-startsWith/tree/master/lib/implementations
+// For prefix queries into my codebase, since that project looks unmaintained
+
 export default class LocalForageKeyValueStore<V, K extends string = string>
 	implements KeyValueStore<V, K>
 {
@@ -22,6 +26,9 @@ export default class LocalForageKeyValueStore<V, K extends string = string>
 		await this.forage.removeItem(id)
 	}
 
+	has = async (id: K): Promise<boolean> =>
+		(await this.forage.getItem(id)) !== null
+
 	get = async (id: K): Promise<V | null> => {
 		const res = await this.forage.getItem(id)
 		return res as V | null
@@ -35,7 +42,7 @@ export default class LocalForageKeyValueStore<V, K extends string = string>
 		await this.forage.clear()
 	}
 
-	iterateKeys = (): AsyncIterable<K> => {
+	keys = (): AsyncIterable<K> => {
 		const { forage } = this
 		async function* gen() {
 			const keys = await forage.keys()
