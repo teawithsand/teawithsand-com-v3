@@ -20,7 +20,7 @@ describe("KeyValueObjectFileStore", () => {
 	it("can store entry", async () => {
 		const blob = new Blob([arrayBufferFromBytes([123])])
 
-		await store.store("/asdf", blob, {
+		await store.setFile("/asdf", blob, {
 			meaning: "of life",
 		})
 		const file = await store.getFile("/asdf")
@@ -32,7 +32,7 @@ describe("KeyValueObjectFileStore", () => {
 	it("can update metadata", async () => {
 		const blob = new Blob([arrayBufferFromBytes([123])])
 
-		await store.store("/asdf", blob, {
+		await store.setFile("/asdf", blob, {
 			meaning: "of life",
 		})
 		

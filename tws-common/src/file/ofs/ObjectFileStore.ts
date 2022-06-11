@@ -33,13 +33,22 @@ export interface StoredFileObject {
  */
 export default interface ObjectFileStore<M extends {}> {
 	delete(key: string): Promise<void>
+	has(key: string): Promise<boolean>
 
-	store(key: string, data: ObjectFileStoreObject, metadata: M): Promise<void>
-
+	setFile(
+		key: string,
+		data: ObjectFileStoreObject,
+		metadata: M,
+	): Promise<void>
 	getFile(key: string): Promise<StoredFileObject | null>
-	
+
 	getMetadata(key: string): Promise<M | null>
 	setMetadata(key: string, metadata: M): Promise<void>
 
 	keys(): AsyncIterable<string>
+}
+
+export interface PrefixObjectFileStore<M extends {}>
+	extends ObjectFileStore<M> {
+	keyWithPrefix(prefix: string): AsyncIterable<string>
 }

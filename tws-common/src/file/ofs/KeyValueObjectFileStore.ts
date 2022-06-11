@@ -1,9 +1,12 @@
 import ObjectFileStore, {
 	ObjectFileStoreObject,
+	PrefixObjectFileStore,
 	StoredFileObject,
 	StoredFileObjectKind,
 } from "tws-common/file/ofs/ObjectFileStore"
-import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
+import KeyValueStore, {
+	PrefixKeyValueStore,
+} from "tws-common/keyvalue/KeyValueStore"
 import { SimpleWALHelper, WALStore } from "tws-common/lang/wal"
 
 export type KeyValueObjectFileStoreWALOperation<M> =
@@ -26,7 +29,7 @@ export type KeyValueObjectFileStoreWALOperation<M> =
  * Main reason being, is that it only works on desktop chrome, which is not main target of app, which this component was designed for.
  */
 export default class KeyValueObjectFileStore<M extends {}>
-	implements ObjectFileStore<M>
+	implements ObjectFileStore<M>, PrefixObjectFileStore<M>
 {
 	private readonly walHelper: SimpleWALHelper<
 		KeyValueObjectFileStoreWALOperation<M>,
@@ -35,7 +38,7 @@ export default class KeyValueObjectFileStore<M extends {}>
 
 	constructor(
 		private readonly fileStore: KeyValueStore<ObjectFileStoreObject>,
-		private readonly metadataStore: KeyValueStore<M>,
+		private readonly metadataStore: PrefixKeyValueStore<M>,
 		private readonly walStore: WALStore<
 			KeyValueObjectFileStoreWALOperation<M>
 		>,
@@ -59,8 +62,13 @@ export default class KeyValueObjectFileStore<M extends {}>
 		)
 	}
 
+	// TODO(teawithsand): add checks to make sure that WAL was initialized properly
 	initializeWAL = async (): Promise<void> => {
 		await this.walHelper.emptyWalStore(null)
+	}
+
+	has = async (key: string): Promise<boolean> => {
+		return await this.metadataStore.has(key)
 	}
 
 	delete = async (key: string): Promise<void> => {
@@ -73,7 +81,7 @@ export default class KeyValueObjectFileStore<M extends {}>
 		)
 	}
 
-	store = async (
+	setFile = async (
 		key: string,
 		file: ObjectFileStoreObject,
 		metadata: M,
@@ -137,6 +145,10 @@ export default class KeyValueObjectFileStore<M extends {}>
 	}
 
 	keys = (): AsyncIterable<string> => {
-		return this.fileStore.keys()
+		return this.metadataStore.keys()
+	}
+
+	keyWithPrefix = (prefix: string): AsyncIterable<string> => {
+		return this.metadataStore.keysWithPrefix(prefix)
 	}
 }
