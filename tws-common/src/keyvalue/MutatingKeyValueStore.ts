@@ -6,26 +6,38 @@ import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 /**
  * Store, which mutates each key before passing it down to inner one.
  */
-export default class MutatingKeyValueStore<V>
+export default class MutatingKeyValueStore<V, E>
 	implements KeyValueStore<V, string>, PrefixKeyValueStore<V, string>
 {
 	private constructor(
 		private readonly mutator: {
-			mutateKey: (k: string) => string
-			mutatePrefix?: (k: string) => string
+			mutateKey: (k: string) => Promise<string>
+			mutatePrefix: (k: string) => Promise<string>
+			mutateValue: (innerValue: E) => Promise<V>
+			mutateValueReverse: (outerValue: V) => Promise<E>
 		},
-		private readonly inner: PrefixKeyValueStore<V, string>,
+		private readonly inner: PrefixKeyValueStore<E, string>,
 	) {}
 
-	private mutateKey = this.mutator.mutateKey
-	private mutatePrefix = this.mutator.mutatePrefix ?? this.mutator.mutateKey
+	private readonly mutateKey = this.mutator.mutateKey
+	private readonly mutatePrefix = this.mutator.mutatePrefix
+	private readonly mutateValue = this.mutator.mutateValue
+	private readonly mutateValueReverse = this.mutator.mutateValueReverse
 
-	get = (id: string): Promise<V | null> => this.inner.get(this.mutateKey(id))
-	set = (id: string, value: V): Promise<void> =>
-		this.inner.set(this.mutateKey(id), value)
-	has = (id: string): Promise<boolean> => this.inner.has(this.mutateKey(id))
-	delete = (id: string): Promise<void> =>
-		this.inner.delete(this.mutateKey(id))
+	get = async (id: string): Promise<V | null> => {
+		const v = await this.inner.get(await this.mutateKey(id))
+		if (v !== null) this.mutateValue(v)
+		return null
+	}
+	set = async (id: string, value: V): Promise<void> =>
+		await this.inner.set(
+			await this.mutateKey(id),
+			await this.mutateValueReverse(value),
+		)
+	has = async (id: string): Promise<boolean> =>
+		await this.inner.has(await this.mutateKey(id))
+	delete = async (id: string): Promise<void> =>
+		await this.inner.delete(await this.mutateKey(id))
 
 	// TODO(teawithsand): make this atomic, which should be doable with
 	// localforage extensions available on it's github
@@ -38,8 +50,16 @@ export default class MutatingKeyValueStore<V>
 		}
 	}
 
-	keys = (): AsyncIterable<string> =>
-		this.inner.keysWithPrefix(this.mutatePrefix(""))
-	keysWithPrefix = (prefix: string): AsyncIterable<string> =>
-		this.inner.keysWithPrefix(this.mutatePrefix(prefix))
+	keys = (): AsyncIterable<string> => this.keysWithPrefix("")
+	keysWithPrefix = (prefix: string): AsyncIterable<string> => {
+		const { inner, mutatePrefix } = this
+		async function* gen() {
+			const keys = inner.keysWithPrefix(await mutatePrefix(prefix))
+
+			for await (const k of keys) {
+				yield this.mutateKey(k)
+			}
+		}
+		return gen()
+	}
 }
