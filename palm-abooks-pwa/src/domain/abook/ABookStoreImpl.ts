@@ -2,15 +2,14 @@ import ABookStore, {
 	ABookEntryAddData,
 	ABookMetadata,
 	ABookReadProjection,
-} from "@app/domain/newabook/ABookStore"
+} from "@app/domain/abook/ABookStore"
 import { StoredFileObject } from "tws-common/file/ofs/ObjectFileStore"
 
-// TODO(teawithsand): implement it
 export default class ABookStoreImpl implements ABookStore {
-	getABook = (id: string): Promise<ABookReadProjection | null> => {
+	getAllABookData = (id: string): Promise<ABookReadProjection | null> => {
 		throw new Error("Method not implemented.")
 	}
-	
+
 	deleteABook = (id: string): Promise<boolean> => {
 		throw new Error("Method not implemented.")
 	}
