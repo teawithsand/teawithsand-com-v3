@@ -40,12 +40,4 @@ export default interface AdvancedPlayer {
 	 * Causes media reload if index is equal to current entry and player is in error state.
 	 */
 	seek(index: number, to: number): void
-
-	/**
-	 * Performs seek to global offset in second as provided.
-	 * Global offset is offset in duration among all files provided treated as one.
-	 *
-	 * This is available only when durations are loaded.
-	 */
-	globalSeek(to: number): boolean
 }

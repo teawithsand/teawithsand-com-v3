@@ -4,7 +4,6 @@ import AdvancedPlayer, {
 	Playlist,
 } from "tws-common/player/advanced/AdvancedPlayer"
 import AdvancedPlayerState from "tws-common/player/advanced/AdvancedPlayerState"
-import APMetadataLoaderTaskHelper from "tws-common/player/advanced/APMetadataLoaderTaskHelper"
 import SimplePlayer from "tws-common/player/simple/SimplePlayer"
 import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
 import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
@@ -19,7 +18,6 @@ import SimplePlayerState from "tws-common/player/simple/SimplePlayerState"
 
 export default class AdvancedPlayerImpl implements AdvancedPlayer {
 	private isClosed = false
-	private metadataHelper = new APMetadataLoaderTaskHelper()
 
 	private rate = 4
 	private volume = 1
@@ -35,10 +33,6 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 		innerPlayer.eventBus.addSubscriber(state => this.onStateChange(state))
 
 		this.setInnerPlayerSource()
-
-		this.metadataHelper.metadataBagBus.addSubscriber(() => {
-			this.emitState()
-		})
 	}
 
 	private readonly innerEventBus =
@@ -79,7 +73,6 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 	setPlaylist = (playlist: Playlist): void => {
 		playlist = [...playlist]
 		try {
-			this.metadataHelper.setPlaylist(playlist)
 			if (playlist.length === 0) {
 				this.setInnerPlayerSource()
 				this.goToEndedState()
@@ -118,21 +111,6 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 		// this.ended = false
 		this.localSeek(to)
 		// this.emitState()
-	}
-
-	globalSeek = (to: number): boolean => {
-		const metadataBag = this.metadataHelper.metadataBagBus.lastEvent
-
-		const index = metadataBag.getIndexFromPosition(to)
-		if (index === null) return false
-		const durationToFile = metadataBag.getDurationToIndex(index)
-		if (durationToFile === null) return false
-
-		// done by seek
-		// this.ended = false
-		this.seek(index, Math.max(to - durationToFile, 0))
-		// this.emitState()
-		return true
 	}
 
 	private onStateChange = (state: SimplePlayerState) => {
@@ -202,7 +180,6 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 			return {
 				type: "running",
 				currentSourceIndex: this.currentSourceIndex,
-				metadata: this.metadataHelper.metadataBagBus.lastEvent,
 
 				rate: this.rate,
 				volume: this.volume,
@@ -210,7 +187,6 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 				ended: this.ended,
 				error: innerPlayerState.error,
 
-				globalCurrentPosition: null,
 				isPlaying: false,
 				localCurrentTime: null,
 				localDuration: null,
@@ -220,27 +196,15 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 				seeking: false,
 			}
 		} else if (innerPlayerState.type === "running") {
-			const durationToIndex =
-				this.metadataHelper.metadataBagBus.lastEvent.getDurationToIndex(
-					this.currentSourceIndex,
-				)
-			const currentTime = innerPlayerState.currentTime
-
-			const globalCurrentPosition =
-				durationToIndex !== null && currentTime !== null
-					? durationToIndex + currentTime
-					: null
 			return {
 				type: "running",
 				currentSourceIndex: this.currentSourceIndex,
-				metadata: this.metadataHelper.metadataBagBus.lastEvent,
 
 				rate: this.rate,
 				volume: this.volume,
 				isPlayingWhenReady: this.isPlayingWhenReady,
 				ended: this.ended,
 				error: null,
-				globalCurrentPosition,
 				isPlaying: innerPlayerState.isPlaying,
 				localCurrentTime: innerPlayerState.currentTime,
 				localDuration: innerPlayerState.duration,
