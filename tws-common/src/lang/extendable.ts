@@ -3,6 +3,7 @@
 export function ExtendableBuiltin<T>(cls: T): T {
 	const innerCls = cls as any
 	function ExtendableBuiltin(this: any) {
+		// eslint-disable-next-line prefer-rest-params
 		innerCls.apply(this as unknown as any, arguments)
 	}
 	ExtendableBuiltin.prototype = Object.create(innerCls.prototype)
