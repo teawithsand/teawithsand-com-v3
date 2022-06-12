@@ -147,13 +147,17 @@ export default class WhatToPlayManager {
 					return blob
 				}, f.key),
 		)
-		const ctx: WhatToPlayManagerState = {
+		const initialState: WhatToPlayManagerState = {
 			type: "running",
 			playable,
 			metadata: new MetadataBag([...metadataResultsArray]),
 			sources,
 		}
-		this.innerEventBus.emitEvent(ctx)
+
+		const publishState = (state: WhatToPlayManagerState) => {
+			if (handle.isValid) this.innerEventBus.emitEvent(state)
+		}
+		publishState(initialState)
 		;(async () => {
 			// launch background task here
 			// load metadata from now on
@@ -178,8 +182,8 @@ export default class WhatToPlayManager {
 
 					if (!handle.isValid) return
 
-					this.innerEventBus.emitEvent({
-						...ctx,
+					publishState({
+						...initialState,
 						metadata: new MetadataBag([...metadataResultsArray]),
 					})
 				}
