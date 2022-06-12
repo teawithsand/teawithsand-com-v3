@@ -20,7 +20,7 @@ type SimplePlayerState =
 	  }
 	| {
 			type: "error"
-			error: MediaError
+			error: any
 	  }
 	| {
 			type: "closed"

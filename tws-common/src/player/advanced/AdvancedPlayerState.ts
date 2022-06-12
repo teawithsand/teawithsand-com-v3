@@ -11,7 +11,7 @@ type AdvancedPlayerState =
 			readyState: SimplePlayerReadyState
 			networkState: SimplePlayerNetworkState
 
-			error: MediaError | null
+			error: any | null
 
 			isPlaying: boolean // is REALLY playing
 			localCurrentTime: number | null

@@ -1,12 +1,16 @@
-import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe";
-import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus";
-import SimplePlayer from "tws-common/player/simple/SimplePlayer";
-import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState";
-import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState";
-import SimplePlayerState from "tws-common/player/simple/SimplePlayerState";
-import PlayerSource, { obtainPlayerSourceURL } from "tws-common/player/source/PlayerSource";
-import { HTMLPlayerState, readHTMLPlayerState } from "tws-common/player/tool/readState";
-
+import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
+import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
+import SimplePlayer from "tws-common/player/simple/SimplePlayer"
+import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
+import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
+import SimplePlayerState from "tws-common/player/simple/SimplePlayerState"
+import PlayerSource, {
+	obtainPlayerSourceURL,
+} from "tws-common/player/source/PlayerSource"
+import {
+	HTMLPlayerState,
+	readHTMLPlayerState,
+} from "tws-common/player/tool/readState"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
@@ -30,6 +34,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 
 	private isPlayingWhenReady = false
 	protected error: MediaError | null = null
+	private sourceError: any | null = null
 	// private rate = 1
 	private source: PlayerSource | null = null
 	private sourceCleanup: (() => void) | null = null
@@ -52,8 +57,8 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 		if (!this.source) {
 			return { type: "no-source" }
 		}
-		if (this.error) {
-			return { type: "error", error: this.error }
+		if (this.error || this.sourceError) {
+			return { type: "error", error: this.sourceError ?? this.error }
 		}
 		if (!this.lastState) {
 			return {
@@ -92,8 +97,9 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 		if (this.isClosed) return // although it shouldn't, it may happen; exit then
 		const data = readHTMLPlayerState(element)
 
+		this.error = data.error
+
 		if (data.error) {
-			this.error = data.error
 			this.element.pause() // make sure we won't play after error. It may happen if data was buffered already.
 		} else {
 			// Allows remote controls to control audio element
@@ -193,6 +199,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 	setSource = (src: PlayerSource | null) => {
 		if (this.isClosed) throw new Error("is closed")
 
+		this.sourceError = null
 		const oldCleanup = this.sourceCleanup
 		try {
 			this.sourceCleanup = null
@@ -201,8 +208,17 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 			if (src !== null) {
 				// TODO(teawithsand): FIXME: this should be synchronized/locked, so only latest one gets executed
 				// It's temporary quick'n'dirty fix
-				(async () => {
-					const [url, close] = await obtainPlayerSourceURL(src)
+				;(async () => {
+					let url: string
+					let close: () => void
+					try {
+						;[url, close] = await obtainPlayerSourceURL(src)
+					} catch (e) {
+						this.element.src = ""
+						this.sourceError = e
+						return
+					}
+
 					this.element.src = url
 					this.sourceCleanup = close
 
