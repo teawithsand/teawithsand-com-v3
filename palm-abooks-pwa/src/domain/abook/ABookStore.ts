@@ -17,12 +17,12 @@ export interface ABookData {
 export type ABookFileMetadata =
 	| {
 			type: "playable"
-			metadata: MetadataLoadingResult | null
+			metadataLoadingResult: MetadataLoadingResult | null
 	  }
 	| {
 			type: "image"
 	  }
-	  
+
 export type ABookID = string
 
 export interface ABookActiveRecord {
@@ -41,7 +41,6 @@ export interface ABookStore {
 	has(id: ABookID): Promise<boolean>
 	keys(): AsyncIterable<ABookID>
 }
-
 
 export const ABOOK_STORE: ABookStore = new ABookStoreImpl(
 	ABOOK_DATA_STORE,
