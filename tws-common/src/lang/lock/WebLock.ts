@@ -1,5 +1,7 @@
 /**
  * Better api for WebLocks, with potential of polyfill implementation.
+ * 
+ * // TODO(teawithsand): make it implement lock interface
  */
 export default class WebLock {
 	constructor(private readonly key: string) {}
