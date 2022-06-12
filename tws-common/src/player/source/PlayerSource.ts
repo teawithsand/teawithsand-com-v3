@@ -45,6 +45,8 @@ export class BlobPlayerSource extends PlayerSource {
 	}
 }
 
+// TODO(teawithsand): optimize this to have only single instance of blob/file available at a time
+//  preferably, using some counter of how many users use it and release when it gets to zero
 export class FunctionPlayerSource extends PlayerSource {
 	constructor(
 		public readonly blobGetter: () => Promise<Blob | File>,
