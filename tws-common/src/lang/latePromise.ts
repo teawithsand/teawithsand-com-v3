@@ -27,11 +27,17 @@ export const latePromise = <T>(): [
 		p,
 		v => {
 			if (resolver != null) resolver(v)
-			else value = v
+			else {
+				isValueSet = true
+				value = v
+			}
 		},
 		err => {
 			if (rejector != null) rejector(err)
-			else value = err
+			else {
+				isErrorSet = true
+				value = err
+			}
 		},
 	]
 }
