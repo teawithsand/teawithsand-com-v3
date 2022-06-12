@@ -1,42 +1,82 @@
-import ABookStore, {
-	ABookEntryAddData,
+import {
+	ABookActiveRecord,
+	ABookData,
+	ABookFileMetadata,
+	ABookID,
 	ABookMetadata,
-	ABookReadProjection,
+	ABookStore,
 } from "@app/domain/abook/ABookStore"
-import { StoredFileObject } from "tws-common/file/ofs/ObjectFileStore"
+import MutatingObjectFileStore from "tws-common/file/ofs/MutatingObjectFileStore"
+import { PrefixObjectFileStore } from "tws-common/file/ofs/ObjectFileStore"
+import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
+import { generateUUID } from "tws-common/lang/uuid"
 
 export default class ABookStoreImpl implements ABookStore {
-	getAllABookData = (id: string): Promise<ABookReadProjection | null> => {
-		throw new Error("Method not implemented.")
+	constructor(
+		private readonly metadataStore: KeyValueStore<ABookData, ABookID>,
+		private readonly fileStore: PrefixObjectFileStore<ABookFileMetadata>,
+	) {}
+
+	private generateFileNamePrefix = (bookId: ABookID): string => {
+		return bookId + "/"
 	}
 
-	deleteABook = (id: string): Promise<boolean> => {
-		throw new Error("Method not implemented.")
+	private getABookFileStore = (
+		bookId: ABookID,
+	): PrefixObjectFileStore<ABookFileMetadata> => {
+		const prefix = this.generateFileNamePrefix(bookId)
+
+		return new MutatingObjectFileStore(
+			{
+				mutateKey: async k => prefix + k,
+				mutateKeyReverse: async k => k.slice(prefix.length),
+
+				mutatePrefix: async p => prefix + p,
+
+				mutateValue: async v => v,
+				mutateValueReverse: async v => v,
+			},
+			this.fileStore,
+		)
 	}
 
-	createABook = (id: string, metadata: ABookMetadata): Promise<void> => {
-		throw new Error("Method not implemented.")
+	create = async (metadata: ABookMetadata): Promise<string> => {
+		const id = generateUUID()
+
+		await this.metadataStore.set(id, {
+			metadata,
+		})
+
+		return id
 	}
 
-	setMetadata = (id: string, metadata: ABookMetadata): Promise<void> => {
-		throw new Error("Method not implemented.")
+	delete = async (id: string): Promise<void> => {
+		await this.fileStore.delete(id)
 	}
 
-	deleteABookEntry = (abookId: string, entryId: string): Promise<boolean> => {
-		throw new Error("Method not implemented.")
+	get = async (id: string): Promise<ABookActiveRecord | null> => {
+		const data = await this.metadataStore.get(id)
+		if (!data) return null
+
+		return {
+			id,
+			metadata: data.metadata,
+
+			files: this.getABookFileStore(id),
+
+			delete: async () => {
+				await this.delete(id)
+			},
+			setMetadata: async metadata => {
+				await this.metadataStore.set(id, {
+					metadata,
+				})
+			},
+		}
 	}
 
-	addABookEntry = (
-		abookId: string,
-		data: ABookEntryAddData,
-	): Promise<string> => {
-		throw new Error("Method not implemented.")
-	}
+	has = async (id: string): Promise<boolean> =>
+		await this.metadataStore.has(id)
 
-	getFile = (
-		abookId: string,
-		entryId: string,
-	): Promise<StoredFileObject | null> => {
-		throw new Error("Method not implemented.")
-	}
+	keys = (): AsyncIterable<string> => this.metadataStore.keys()
 }
