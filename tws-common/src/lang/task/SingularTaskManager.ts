@@ -6,6 +6,9 @@ type TaskData = {
 	readonly isCanceled: boolean
 }
 
+/**
+ * @deprecated Use DefaultTaskManager instead.
+ */
 export default class SingularTaskManager {
 	private currentTaskData: TaskData | null = null
 	private lastTaskData: TaskData | null = null
