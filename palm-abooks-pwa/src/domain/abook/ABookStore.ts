@@ -1,3 +1,6 @@
+import { ABOOK_DATA_STORE } from "@app/domain/abook/ABookDataStore"
+import { ABOOK_FILE_STORE } from "@app/domain/abook/ABookFileStore"
+import ABookStoreImpl from "@app/domain/abook/ABookStoreImpl"
 import ObjectFileStore from "tws-common/file/ofs/ObjectFileStore"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 
@@ -38,3 +41,10 @@ export interface ABookStore {
 	has(id: ABookID): Promise<boolean>
 	keys(): AsyncIterable<ABookID>
 }
+
+
+export const ABOOK_STORE: ABookStore = new ABookStoreImpl(
+	ABOOK_DATA_STORE,
+	ABOOK_FILE_STORE,
+)
+export const useABookStore = () => ABOOK_STORE

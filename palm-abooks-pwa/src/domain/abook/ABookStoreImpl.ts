@@ -13,7 +13,7 @@ import { generateUUID } from "tws-common/lang/uuid"
 
 export default class ABookStoreImpl implements ABookStore {
 	constructor(
-		private readonly metadataStore: KeyValueStore<ABookData, ABookID>,
+		private readonly dataStore: KeyValueStore<ABookData, ABookID>,
 		private readonly fileStore: PrefixObjectFileStore<ABookFileMetadata>,
 	) {}
 
@@ -43,7 +43,7 @@ export default class ABookStoreImpl implements ABookStore {
 	create = async (metadata: ABookMetadata): Promise<string> => {
 		const id = generateUUID()
 
-		await this.metadataStore.set(id, {
+		await this.dataStore.set(id, {
 			metadata,
 		})
 
@@ -55,7 +55,7 @@ export default class ABookStoreImpl implements ABookStore {
 	}
 
 	get = async (id: string): Promise<ABookActiveRecord | null> => {
-		const data = await this.metadataStore.get(id)
+		const data = await this.dataStore.get(id)
 		if (!data) return null
 
 		return {
@@ -68,7 +68,7 @@ export default class ABookStoreImpl implements ABookStore {
 				await this.delete(id)
 			},
 			setMetadata: async metadata => {
-				await this.metadataStore.set(id, {
+				await this.dataStore.set(id, {
 					metadata,
 				})
 			},
@@ -76,7 +76,7 @@ export default class ABookStoreImpl implements ABookStore {
 	}
 
 	has = async (id: string): Promise<boolean> =>
-		await this.metadataStore.has(id)
+		await this.dataStore.has(id)
 
-	keys = (): AsyncIterable<string> => this.metadataStore.keys()
+	keys = (): AsyncIterable<string> => this.dataStore.keys()
 }
