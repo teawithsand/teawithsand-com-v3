@@ -12,7 +12,7 @@ exports.onCreateWebpackConfig = ({
 	const imgsRule = rules.images()
 
 	config.plugins = [...(config.plugins ?? [])]
-	/*
+
 	const newUrlLoaderRule = {
 		...imgsRule,
 		test: new RegExp(
@@ -33,6 +33,8 @@ exports.onCreateWebpackConfig = ({
 		},
 		newUrlLoaderRule,
 	]
+	
+	/*
 	config.module.rules = [
 		...config.module.rules,
 		{
