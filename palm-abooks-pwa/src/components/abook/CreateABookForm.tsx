@@ -1,6 +1,11 @@
 import React from "react"
-import { Form as FinalForm, Field as FinalField } from "react-final-form"
+import {
+	Form as FinalForm,
+	Field as FinalField,
+	FormSpy,
+} from "react-final-form"
 import { Form, Button } from "tws-common/ui"
+import { formatFileSize } from "tws-common/lang/fileSize"
 
 export type CreateABookFormData = {
 	name: string
@@ -8,12 +13,45 @@ export type CreateABookFormData = {
 	files: File[]
 }
 
+const validInputTypes = [
+	"audio/mpeg",
+	".mp3",
+	".ogg",
+	"image/jpeg",
+	".jpg",
+	".jpeg",
+	"image/gif",
+	".gif",
+	"image/png",
+	".png",
+	"image/webp",
+	".webp",
+	"image/avif",
+	".avif",
+	"text/plain",
+	".txt",
+].join(",")
+
+const getFiles = (files: any): File[] => {
+	if (files instanceof File) {
+		return [files]
+	}
+	return [...(files ?? [])]
+}
+
 const CreateABookForm = (props: {
 	onSubmit: (data: CreateABookFormData) => Promise<void>
 }) => {
 	return (
-		<FinalForm<CreateABookFormData>
-			onSubmit={props.onSubmit}
+		<FinalForm<Partial<CreateABookFormData>>
+			onSubmit={values =>
+				props.onSubmit({
+					files: [],
+					name: "",
+					description: "",
+					...values,
+				})
+			}
 			render={({ handleSubmit, submitting, pristine }) => (
 				<Form onSubmit={handleSubmit}>
 					<Form.Group className="mb-3">
@@ -38,12 +76,75 @@ const CreateABookForm = (props: {
 					<Form.Group className="mb-3">
 						<Form.Label>ABook files</Form.Label>
 
-						<FinalField name="files">
-							{({ input }) => (
-								<Form.Control type="file" multiple {...input} />
-							)}
+						{/* TODO(teawithsand): add drag and drop field/area */}
+						<FinalField<File[]> name="files">
+							{({ input }) => {
+								return (
+									<Form.Control
+										accept={validInputTypes}
+										type="file"
+										{...{
+											...input,
+
+											value: undefined,
+
+											// instead of the default target.value
+											onChange: e => {
+												// TODO(teawithsand): check if it works on older browsers, works on state-of-art ff
+												const files = [
+													...(e.target.files || []),
+												]
+												files.sort((a, b) =>
+													a.name.localeCompare(
+														b.name,
+													),
+												)
+												return input.onChange(files)
+											},
+										}}
+										multiple
+									/>
+								)
+							}}
 						</FinalField>
 					</Form.Group>
+
+					<FormSpy
+						subscription={{
+							modified: true,
+							pristine: true,
+							values: true,
+						}}
+					>
+						{props => {
+							const files = getFiles(props?.values?.files)
+							return (
+								<>
+									<h3>Picked files ({files.length})</h3>
+									<ul>
+										{files.map((f, i) => (
+											<li key={i}>
+												<b>{f.name}</b>
+												{" - "}
+												{formatFileSize(f.size)}
+											</li>
+										))}
+									</ul>
+									{files.length > 0 ? (
+										<h3>
+											Total{" "}
+											{formatFileSize(
+												files.reduce(
+													(pv, v) => pv + v.size,
+													0,
+												),
+											)}
+										</h3>
+									) : null}
+								</>
+							)
+						}}
+					</FormSpy>
 
 					<Button disabled={submitting || pristine} type="submit">
 						Submit
