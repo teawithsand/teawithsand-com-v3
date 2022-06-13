@@ -1,3 +1,5 @@
+import { generateUUID } from "tws-common/lang/uuid"
+
 /**
  * A source, which can be played.
  * It's more of an interface, but it's implemented as a class, so downcasting(which is required to support all types of sources)
@@ -31,7 +33,7 @@ export class URLPlayerSource extends PlayerSource {
 export class BlobPlayerSource extends PlayerSource {
 	constructor(
 		public readonly blob: Blob | MediaSource | File,
-		public readonly innerId: string,
+		public readonly innerId: string = generateUUID(),
 	) {
 		super()
 	}
@@ -50,7 +52,7 @@ export class BlobPlayerSource extends PlayerSource {
 export class FunctionPlayerSource extends PlayerSource {
 	constructor(
 		public readonly blobGetter: () => Promise<Blob | File>,
-		public readonly innerId: string,
+		public readonly innerId: string = generateUUID(),
 	) {
 		super()
 	}
