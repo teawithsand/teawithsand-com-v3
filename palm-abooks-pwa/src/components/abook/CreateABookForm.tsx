@@ -5,6 +5,7 @@ import { Form, Button } from "tws-common/ui"
 export type CreateABookFormData = {
 	name: string
 	description: string
+	files: File[]
 }
 
 const CreateABookForm = (props: {
@@ -34,12 +35,14 @@ const CreateABookForm = (props: {
 							)}
 						</FinalField>
 					</Form.Group>
-
 					<Form.Group className="mb-3">
-						<Form.Text>
-							You will be able to add files later, once ABook is
-							created
-						</Form.Text>
+						<Form.Label>ABook files</Form.Label>
+
+						<FinalField name="files">
+							{({ input }) => (
+								<Form.Control type="file" multiple {...input} />
+							)}
+						</FinalField>
 					</Form.Group>
 
 					<Button disabled={submitting || pristine} type="submit">

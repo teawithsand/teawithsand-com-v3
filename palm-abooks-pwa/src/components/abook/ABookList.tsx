@@ -1,35 +1,34 @@
+import PageContainer from "@app/components/layout/PageContainer"
+import { LoadedABookData } from "@app/domain/abook/ABookStore"
 import React from "react"
-import ABook from "@app/domain/abook/ABook"
 import { Card, Col, Row } from "tws-common/ui"
-import { useAbookFileStore } from "@app/domain/abook/ABookFileStore"
 
-const ABookList = (props: { abooks: ABook[] }) => {
+const ABookList = (props: { abooks: LoadedABookData[] }) => {
 	const { abooks } = props
 
-	const abookFileStore = useAbookFileStore()
-
 	return (
-		<div>
-			<Row>
+		<PageContainer>
+			<Row className="mb-3">
 				<Col>
-					<h2>Total {abooks.length} ABooks:</h2>
+					<h1>Total {abooks.length} ABooks:</h1>
 				</Col>
 			</Row>
 			{abooks.map(abook => (
-				<Row key={abook.id}>
+				<Row key={abook.id} className="mt-2">
 					<Col>
 						<Card>
 							<Card.Body>
-								<Card.Title>{abook.title}</Card.Title>
+								<Card.Title>{abook.metadata.title}</Card.Title>
 								<Card.Text>
-									{abook.description || "No description"}
+									{abook.metadata.description ||
+										"No description"}
 								</Card.Text>
 							</Card.Body>
 						</Card>
 					</Col>
 				</Row>
 			))}
-		</div>
+		</PageContainer>
 	)
 }
 
