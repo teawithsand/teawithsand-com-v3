@@ -3,14 +3,16 @@ import { ABOOK_FILE_STORE } from "@app/domain/abook/ABookFileStore"
 import ABookStoreImpl from "@app/domain/abook/ABookStoreImpl"
 import ObjectFileStore from "tws-common/file/ofs/ObjectFileStore"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
+import { Timestamp } from "tws-common/lang/time/Timestamp"
 
 export interface ABookMetadata {
 	title: string
 	description: string
-	addedAt: number
+	addedAt: Timestamp
 }
 
 export interface ABookData {
+	id: string
 	metadata: ABookMetadata
 }
 
@@ -25,7 +27,7 @@ export type ABookFileMetadata =
 
 export type ABookID = string
 
-export interface ABookActiveRecord {
+export interface ABookActiveRecord extends Readonly<ABookData> {
 	readonly id: ABookID
 	readonly metadata: ABookMetadata
 
@@ -46,4 +48,4 @@ export const ABOOK_STORE: ABookStore = new ABookStoreImpl(
 	ABOOK_DATA_STORE,
 	ABOOK_FILE_STORE,
 )
-export const useABookStore = () => ABOOK_STORE
+export const useABookStore = (): ABookStore => ABOOK_STORE
