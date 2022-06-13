@@ -4,9 +4,8 @@ import SimplePlayer from "tws-common/player/simple/SimplePlayer"
 import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
 import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
 import SimplePlayerState from "tws-common/player/simple/SimplePlayerState"
-import PlayerSource, {
-	obtainPlayerSourceURL,
-} from "tws-common/player/source/PlayerSource"
+import PlayerSource from "tws-common/player/source/PlayerSource"
+import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
 import {
 	HTMLPlayerState,
 	readHTMLPlayerState,
@@ -212,7 +211,8 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 					let url: string
 					let close: () => void
 					try {
-						;[url, close] = await obtainPlayerSourceURL(src)
+						;[url, close] =
+							await DEFAULT_PLAYER_SOURCE_RESOLVER.obtainURL(src)
 					} catch (e) {
 						this.element.src = ""
 						this.sourceError = e

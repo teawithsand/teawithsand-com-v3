@@ -42,16 +42,13 @@ export class CachingMetadataLoader implements MetadataLoader {
 		})
 	}
 
-	loadMetadata = async (
-		src: PlayerSource,
-		url?: string,
-	): Promise<Metadata> => {
+	loadMetadata = async (src: PlayerSource): Promise<Metadata> => {
 		const id = this.getId(src)
 
 		const cached = await this.store.get(id)
 		if (!cached) {
 			try {
-				const metadata = await this.innerLoader.loadMetadata(src, url)
+				const metadata = await this.innerLoader.loadMetadata(src)
 				await this.store.set(id, {
 					type: 1,
 					metadata,

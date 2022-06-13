@@ -1,24 +1,11 @@
 import Metadata from "tws-common/player/metadata/Metadata"
 import MetadataLoader from "tws-common/player/metadata/MetadataLoader"
-import PlayerSource, {
-	obtainPlayerSourceURL,
-} from "tws-common/player/source/PlayerSource"
+import PlayerSource from "tws-common/player/source/PlayerSource"
+import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
 
 export default class DefaultMetadataLoader implements MetadataLoader {
-	loadMetadata = async (
-		src: PlayerSource,
-		maybeUrl?: string,
-	): Promise<Metadata> => {
-		let closer = () => {
-			// noop
-		}
-
-		let url: string
-		if (!maybeUrl) {
-			;[url, closer] = await obtainPlayerSourceURL(src)
-		} else {
-			url = maybeUrl
-		}
+	loadMetadata = async (src: PlayerSource): Promise<Metadata> => {
+		const [url, closer] = await DEFAULT_PLAYER_SOURCE_RESOLVER.obtainURL(src)
 
 		try {
 			const audio = new Audio()
@@ -30,7 +17,7 @@ export default class DefaultMetadataLoader implements MetadataLoader {
 					reject(
 						audio.error ??
 							new Error(
-								`Unknown error when loading metadata for ${maybeUrl}`,
+								`Unknown error when loading metadata for ${src}`,
 							),
 					)
 				}
@@ -50,7 +37,7 @@ export default class DefaultMetadataLoader implements MetadataLoader {
 				const timeout = setTimeout(() => {
 					reject(
 						new Error(
-							`Timeout when loading metadata for ${maybeUrl}`,
+							`Timeout when loading metadata for ${src}`,
 						),
 					)
 				}, 30 * 1000) // 30s is a lot of timeout btw
