@@ -62,6 +62,11 @@ export default class ABookStoreImpl implements ABookStore {
 			id,
 			metadata: data.metadata,
 
+			data: {
+				id,
+				metadata: data.metadata,
+			},
+
 			files: this.getABookFileStore(id),
 
 			delete: async () => {
@@ -75,8 +80,7 @@ export default class ABookStoreImpl implements ABookStore {
 		}
 	}
 
-	has = async (id: string): Promise<boolean> =>
-		await this.dataStore.has(id)
+	has = async (id: string): Promise<boolean> => await this.dataStore.has(id)
 
 	keys = (): AsyncIterable<string> => this.dataStore.keys()
 }

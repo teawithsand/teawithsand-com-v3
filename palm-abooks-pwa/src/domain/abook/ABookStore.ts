@@ -11,10 +11,14 @@ export interface ABookMetadata {
 	addedAt: Timestamp
 }
 
-export interface ABookData {
+export interface LoadedABookData extends ABookData {
 	id: string
+}
+
+export interface ABookData {
 	metadata: ABookMetadata
 }
+
 
 export type ABookFileMetadata =
 	| {
@@ -27,9 +31,10 @@ export type ABookFileMetadata =
 
 export type ABookID = string
 
-export interface ABookActiveRecord extends Readonly<ABookData> {
+export interface ABookActiveRecord extends Readonly<LoadedABookData> {
 	readonly id: ABookID
 	readonly metadata: ABookMetadata
+	readonly data: LoadedABookData
 
 	readonly files: ObjectFileStore<ABookFileMetadata>
 	delete: () => Promise<void>
