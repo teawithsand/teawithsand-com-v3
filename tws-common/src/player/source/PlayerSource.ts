@@ -20,7 +20,7 @@ export class URLPlayerSource extends PlayerSource {
 	}
 
 	get id() {
-		return this.url
+		return "url:" + this.url
 	}
 
 	equals = (b: PlayerSource): boolean => {
@@ -41,7 +41,7 @@ export class BlobPlayerSource extends PlayerSource {
 	}
 
 	get id(): string {
-		return this.id
+		return "blb:" + this.id
 	}
 }
 
@@ -60,7 +60,7 @@ export class FunctionPlayerSource extends PlayerSource {
 	}
 
 	get id(): string {
-		return this.id
+		return "fcn:" + this.id
 	}
 }
 
