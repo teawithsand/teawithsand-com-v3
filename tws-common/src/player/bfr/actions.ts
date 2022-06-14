@@ -1,12 +1,12 @@
-import { createAction, createAsyncThunk } from "@reduxjs/toolkit"
+import { createAction } from "@reduxjs/toolkit"
 import { generateUUID } from "tws-common/lang/uuid"
+import { SleepState } from "tws-common/player/bfr/state"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
-import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import SimplePlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
+import SimplePlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { makeActionPrefix } from "tws-common/redux/action"
-import { SleepState } from "tws-common/player/bfr/state"
 
 const prefix = makeActionPrefix("bfr")
 

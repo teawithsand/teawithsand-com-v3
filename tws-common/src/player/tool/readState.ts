@@ -1,9 +1,9 @@
 import SimplePlayerNetworkState, {
 	simplePlayerNetworkStateFromNative,
-} from "tws-common/player/simple/SimplePlayerNetworkState"
+} from "tws-common/player/tool/PlayerNetworkState"
 import SimplePlayerReadyState, {
 	simplePlayerReadyStateFromNative,
-} from "tws-common/player/simple/SimplePlayerReadyState"
+} from "tws-common/player/tool/PlayerReadyState"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 

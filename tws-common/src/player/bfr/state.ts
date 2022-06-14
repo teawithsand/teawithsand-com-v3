@@ -3,8 +3,8 @@ import {
 	PerformanceTimestampMs,
 } from "tws-common/lang/time/Timestamp"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
-import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
+import SimplePlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
+import SimplePlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 
