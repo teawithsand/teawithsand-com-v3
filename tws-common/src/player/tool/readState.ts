@@ -29,7 +29,7 @@ export type HTMLPlayerState = {
 	paused: boolean
 	networkState: number
 	readyState: number
-	seeking: boolean
+	isSeeking: boolean
 	ended: boolean
 
 	simpleNetworkState: SimplePlayerNetworkState
@@ -68,7 +68,7 @@ export const readHTMLPlayerState = (element: Element): HTMLPlayerState => {
 		ended,
 		currentTime: sanitizeTime(currentTime),
 		duration: sanitizeTime(duration),
-		seeking,
+		isSeeking: seeking,
 		networkState, // : simplePlayerNetworkStateFromNative(networkState),
 		readyState, //: simplePlayerReadyStateFromNative(readyState),
 		simpleReadyState,
