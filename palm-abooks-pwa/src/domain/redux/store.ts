@@ -1,5 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit"
+import { configureStore, combineReducers } from "@reduxjs/toolkit"
+
+import { BFRReducer } from "tws-common/player/bfr/reducer"
+
+const reducer = combineReducers({
+	BFRReducer,
+})
+
 export const store = configureStore({
-	reducer: s => s ?? {},
+	reducer,
 	devTools: false,
 })

@@ -3,7 +3,7 @@ import { generateUUID } from "tws-common/lang/uuid"
 import { setPlaylist } from "tws-common/player/bfr/actions"
 import { BFRState } from "tws-common/player/bfr/state"
 
-export const simpleReduxPlayerReducer = createReducer<BFRState>(
+export const BFRReducer = createReducer<BFRState>(
 	{
 		playerConfig: {
 			isPlayingWhenReady: false,
