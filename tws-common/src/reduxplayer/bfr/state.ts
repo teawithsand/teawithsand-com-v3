@@ -1,4 +1,7 @@
-import { Timestamp } from "tws-common/lang/time/Timestamp"
+import {
+	getNowPerformanceTimestamp,
+	PerformanceTimestampMs,
+} from "tws-common/lang/time/Timestamp"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
 import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
 import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
@@ -22,7 +25,11 @@ export type PlaybackState = {
 export type SleepConfig = {
 	resetOnDeviceShake: boolean
 	turnVolumeDownBeforeEnd: boolean
-	duration: number | null // if null, then disabled
+	durationMs: number
+}
+
+export type SleepState = {
+	lastSetAt: PerformanceTimestampMs
 }
 
 export type BFRState = {
@@ -43,10 +50,8 @@ export type BFRState = {
 		loadMetadataPolicy: "never" | "not-loaded" | "not-loaded-or-error"
 		loadedMetadataResultSave: boolean
 	}
-	sleepConfig: SleepConfig
-	sleepState: {
-		lastSetAt: Timestamp
-	} | null
+	sleepConfig: SleepConfig | null // when null, then sleep unset
+	sleepState: SleepState | null // when null, then sleep task unset, for instance because playback is paused
 	backAfterPauseConfig: {
 		// Sorted sequence of pairs
 		// If pause is up to given time, then on before playback starts
@@ -73,5 +78,24 @@ export const BFRPlaylistSelector = (
 	state.playerConfig.playlist,
 	state.playerPlaylistState.playlistId,
 ]
+
+export const BFRSleepStateSelector = (
+	state: BFRState,
+	now?: PerformanceTimestampMs,
+) => {
+	if (state.sleepConfig === null) {
+		return null
+	}
+	now = now ?? getNowPerformanceTimestamp()
+	const lastSetAt = state.sleepState?.lastSetAt ?? null
+	const durationLeft =
+		lastSetAt !== null
+			? Math.max(state.sleepConfig.durationMs - (now - lastSetAt))
+			: state.sleepConfig.durationMs
+	return {
+		totalDuration: state.sleepConfig.durationMs,
+		durationLeft,
+	}
+}
 
 // TODO(teawithsand): write some selectors for BFR

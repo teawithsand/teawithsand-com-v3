@@ -1,7 +1,14 @@
 import { Store } from "redux"
-import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import PlayerSource from "tws-common/player/source/PlayerSource"
-import { onSleepTimedOut } from "tws-common/reduxplayer/________sleep/actions"
+import { objectEquals } from "tws-common/lang/equal"
+import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
+import {
+	getNowPerformanceTimestamp,
+	PerformanceTimestampMs,
+} from "tws-common/lang/time/Timestamp"
+import {
+	onSleepDone,
+	onSleepStateChanged,
+} from "tws-common/reduxplayer/bfr/actions"
 import { BFRState, SleepConfig } from "tws-common/reduxplayer/bfr/state"
 
 /**
@@ -10,55 +17,110 @@ import { BFRState, SleepConfig } from "tws-common/reduxplayer/bfr/state"
  */
 export class BFRSleep<T> {
 	private releaseReduxStore: (() => void) | null = null
-	private currentPlaylistId: string | null = null
-	private timeoutHandle: any | null = null
+	private currentSleepData: {
+		taskHandle: any
+		realDuration: number
+		startedTimestamp: PerformanceTimestampMs
+		config: SleepConfig
+	} | null = null
+
+	private readonly atom = new DefaultTaskAtom()
 
 	constructor(
 		private readonly store: Store<T>,
-		private readonly selector: (storeState: T) => BFRState,
-		// Adapter for external metadata saving mechanism
-		// it has to be
-		private readonly saveMetadata: (
-			source: PlayerSource,
-			result: MetadataLoadingResult,
-		) => Promise<void>,
+		selector: (storeState: T) => BFRState,
 	) {
 		const unsubscribe = store.subscribe(() => {
 			const state = selector(store.getState())
 			const sleepConfig = state.sleepConfig
-			const playerState = state.playerState?.playbackState
+			const playerConfig = state.playerConfig
 
-			if (playerState !== null) {
-				if (sleepConfig.duration === null) {
+			if (playerConfig !== null) {
+				if (
+					!playerConfig.isPlayingWhenReady ||
+					state.playerConfig.playlist.length === 0
+				) {
 					this.releaseSleepTask()
 				} else {
-					
+					this.submitSleepConfig(sleepConfig)
 				}
 			}
 		})
 		this.releaseReduxStore = () => unsubscribe()
 	}
 
-	private submitSleepConfig = (config: SleepConfig, force = false) => {
-		// Reset sleep: 
-		// 1. If config changed
-		// 2. If force set to true, since it's set when things like pause occurs
-	}
+	private submitSleepConfig = (config: SleepConfig | null) => {
+		// Reset sleep:
+		// 1. If config changed/mismatch
+		// 2. When paused(done above)
 
-	private releaseSleepTask = () => {
-		if (this.timeoutHandle !== null) {
-			clearTimeout(this.timeoutHandle)
+		if (this.currentSleepData !== null && config === null) {
+			this.releaseSleepTask()
+		} else if (this.currentSleepData === null && config !== null) {
+			this.setSleepTask(config)
+		} else if (this.currentSleepData !== null && config !== null) {
+			// If config mismatch
+			// Then reset sleep
+			// It's ok
+			// I guess...
+			// We do not really want to continue
+			// especially that some features may want to have different real duration set
+			// depending on config
+			//
+			// In the end this behavior can always be changed
+			if (!objectEquals(this.currentSleepData.config, config)) {
+				this.setSleepTask(config)
+			}
 		}
 	}
 
-	private isSleepTaskSet = () => {
-		return this.timeoutHandle !== null
+	private emitSleepStateChanged = () => {
+		if (this.currentSleepData !== null) {
+			this.store.dispatch(
+				onSleepStateChanged({
+					lastSetAt: this.currentSleepData.startedTimestamp,
+				}),
+			)
+		} else {
+			this.store.dispatch(onSleepStateChanged(null))
+		}
 	}
 
-	private setSleepTask = (timeoutSeconds: number) => {
-		this.timeoutHandle = setTimeout(() => {
-			this.store.dispatch(onSleepTimedOut())
-		}, Math.ceil(timeoutSeconds))
+	private setSleepTask = (config: SleepConfig) => {
+		this.releaseSleepTask(false)
+
+		const now = getNowPerformanceTimestamp()
+		const claim = this.atom.claim()
+
+		let { durationMs: duration } = config
+		duration = Math.ceil(duration)
+
+		const taskHandle = setTimeout(() => {
+			if (!claim.isValid) {
+				return
+			}
+			this.store.dispatch(onSleepDone())
+		}, duration)
+
+		this.currentSleepData = {
+			config,
+			taskHandle,
+			realDuration: duration,
+			startedTimestamp: now,
+		}
+
+		this.emitSleepStateChanged()
+	}
+
+	private releaseSleepTask = (emit = true) => {
+		if (this.currentSleepData !== null) {
+			clearTimeout(this.currentSleepData.taskHandle)
+			this.currentSleepData = null
+
+			if (emit) {
+				this.emitSleepStateChanged()
+			}
+		}
 	}
 
 	release = () => {

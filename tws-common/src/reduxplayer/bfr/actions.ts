@@ -1,11 +1,12 @@
-import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { generateUUID } from "tws-common/lang/uuid";
-import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata";
-import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState";
-import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState";
-import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource";
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
-import { makeActionPrefix } from "tws-common/redux/action";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit"
+import { generateUUID } from "tws-common/lang/uuid"
+import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
+import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
+import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
+import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import { makeActionPrefix } from "tws-common/redux/action"
+import { SleepState } from "tws-common/reduxplayer/bfr/state"
 
 const prefix = makeActionPrefix("bfr")
 
@@ -14,7 +15,7 @@ export const setIsPlayingWhenReady = createAction<boolean>(
 )
 
 export const setPlaylist = createAction<PlayerSourceWithMetadata[]>(
-	`${prefix}/setPlaylist`
+	`${prefix}/setPlaylist`,
 )
 export const setMetadata = createAction<{
 	i: number
@@ -51,3 +52,8 @@ export const onExternalSetIsPlayingWhenReady = createAction<boolean>(
 	`${prefix}/onExternalSetIsPlayingWhenReady`,
 )
 export const onSourcePlaybackEnded = createAction<void>(`${prefix}/onEnded`)
+
+export const onSleepStateChanged = createAction<SleepState | null>(
+	`${prefix}/onSleepStateChanged`,
+)
+export const onSleepDone = createAction<void>(`${prefix}/onSleepDone`)

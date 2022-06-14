@@ -27,11 +27,8 @@ export const simpleReduxPlayerReducer = createReducer<BFRState>(
 			playlistId: "initial-playlist-id-1231332131",
 		},
 		playerState: null,
-		sleepConfig: {
-			duration: null,
-			resetOnDeviceShake: true,
-			turnVolumeDownBeforeEnd: true,
-		},
+		
+		sleepConfig: null,
 		sleepState: null,
 	},
 	builder =>
