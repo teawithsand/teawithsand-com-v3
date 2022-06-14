@@ -23,6 +23,7 @@ module.exports = {
 		"@typescript-eslint/no-explicit-any": "off",
 		"@typescript-eslint/ban-types": "off",
 		"@typescript-eslint/no-extra-semi": "off",
+		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"react/display-name": "warn",
 		"react/prop-types": "off",
 	},
