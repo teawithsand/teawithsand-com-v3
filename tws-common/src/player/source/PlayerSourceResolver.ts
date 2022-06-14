@@ -1,6 +1,10 @@
-import PlayerSource, { BlobPlayerSource, FunctionPlayerSource, URLPlayerSource } from "tws-common/player/source/PlayerSource";
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
-
+import PlayerSource, {
+	BlobPlayerSource,
+	FunctionPlayerSource,
+	LoadingPlayerSource,
+	URLPlayerSource,
+} from "tws-common/player/source/PlayerSource"
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 
 /**
  * Util, which takes source and makes URLs from it.
@@ -19,7 +23,39 @@ export class DefaultPlayerSourceResolver implements PlayerSourceResolver {
 		}
 	> = new Map()
 
-	private getCachedURL = (
+	private getURLCached = (id: string, url: string): [string, () => void] => {
+		if (!this.cachedSourcesIds.has(id)) {
+			this.cachedSourcesIds.set(id, {
+				counter: 1,
+				release: () => {
+					// noop, we do not release URLs
+				},
+				url,
+			})
+		}
+
+		const cached = this.cachedSourcesIds.get(id)
+		if (!cached) throw new Error("unreachable code")
+
+		cached.counter += 1
+		let closed = false
+		return [
+			cached.url,
+			() => {
+				if (!closed) {
+					cached.counter -= 1
+					closed = true
+
+					if (cached.counter === 0) {
+						cached.release()
+						this.cachedSourcesIds.delete(id)
+					}
+				}
+			},
+		]
+	}
+
+	private getCachedBlobURL = (
 		id: string,
 		blob: Blob | File | MediaSource,
 	): [string, () => void] => {
@@ -64,12 +100,26 @@ export class DefaultPlayerSourceResolver implements PlayerSourceResolver {
 				},
 			]
 		} else if (source instanceof BlobPlayerSource) {
-			return this.getCachedURL(source.id, source.blob)
+			return this.getCachedBlobURL(source.id, source.blob)
 		} else if (source instanceof FunctionPlayerSource) {
 			try {
 				const blob = await source.blobGetter()
-				return this.getCachedURL(source.id, blob)
+				return this.getCachedBlobURL(source.id, blob)
 			} catch (e) {
+				throw new PlayerSourceError(
+					`Filed to resolve FunctionPlayerSource: ${e}`,
+				)
+			}
+		} else if (source instanceof LoadingPlayerSource) {
+			try {
+				const result = await source.loadTarget()
+				if (result.type === "urlObject") {
+					return this.getCachedBlobURL(source.id, result.data)
+				} else {
+					return this.getURLCached(source.id, result.url)
+				}
+			} catch (e) {
+				if (e instanceof PlayerSourceError) throw e
 				throw new PlayerSourceError(
 					`Filed to resolve FunctionPlayerSource: ${e}`,
 				)
@@ -79,6 +129,5 @@ export class DefaultPlayerSourceResolver implements PlayerSourceResolver {
 		}
 	}
 }
-
 
 export const DEFAULT_PLAYER_SOURCE_RESOLVER = new DefaultPlayerSourceResolver()
