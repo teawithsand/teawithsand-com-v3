@@ -1,4 +1,4 @@
-enum SimplePlayerNetworkState {
+enum PlayerNetworkState {
 	EMPTY,
 	IDLE,
 	LOADING,
@@ -7,18 +7,18 @@ enum SimplePlayerNetworkState {
 
 export const simplePlayerNetworkStateFromNative = (
 	n: number,
-): SimplePlayerNetworkState => {
+): PlayerNetworkState => {
 	if (n == 0) {
-		return SimplePlayerNetworkState.EMPTY
+		return PlayerNetworkState.EMPTY
 	} else if (n == 1) {
-		return SimplePlayerNetworkState.IDLE
+		return PlayerNetworkState.IDLE
 	} else if (n == 2) {
-		return SimplePlayerNetworkState.LOADING
+		return PlayerNetworkState.LOADING
 	} else if (n == 3) {
-		return SimplePlayerNetworkState.NO_SOURCE
+		return PlayerNetworkState.NO_SOURCE
 	} else {
-		return SimplePlayerNetworkState.EMPTY // actually it should throw imho
+		return PlayerNetworkState.EMPTY // actually it should throw imho
 	}
 }
 
-export default SimplePlayerNetworkState
+export default PlayerNetworkState

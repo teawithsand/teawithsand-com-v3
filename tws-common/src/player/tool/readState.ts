@@ -1,7 +1,7 @@
-import SimplePlayerNetworkState, {
+import PlayerNetworkState, {
 	simplePlayerNetworkStateFromNative,
 } from "tws-common/player/tool/PlayerNetworkState"
-import SimplePlayerReadyState, {
+import PlayerReadyState, {
 	simplePlayerReadyStateFromNative,
 } from "tws-common/player/tool/PlayerReadyState"
 
@@ -32,8 +32,8 @@ export type HTMLPlayerState = {
 	isSeeking: boolean
 	isEnded: boolean
 
-	simpleNetworkState: SimplePlayerNetworkState
-	simpleReadyState: SimplePlayerReadyState
+	simpleNetworkState: PlayerNetworkState
+	simpleReadyState: PlayerReadyState
 
 	isPlaying: boolean
 
@@ -79,6 +79,6 @@ export const readHTMLPlayerState = (element: Element): HTMLPlayerState => {
 			!seeking &&
 			!paused &&
 			!ended &&
-			simpleReadyState === SimplePlayerReadyState.ENOUGH_DATA,
+			simpleReadyState === PlayerReadyState.ENOUGH_DATA,
 	}
 }

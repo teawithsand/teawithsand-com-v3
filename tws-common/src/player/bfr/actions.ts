@@ -4,8 +4,8 @@ import { SleepState } from "tws-common/player/bfr/state"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
-import SimplePlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
-import SimplePlayerReadyState from "tws-common/player/tool/PlayerReadyState"
+import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
+import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { makeActionPrefix } from "tws-common/redux/action"
 
 const prefix = makeActionPrefix("bfr")
@@ -44,8 +44,8 @@ export const onNewPlayerState = createAction<{
 	isInnerEnded: boolean
 	position: number | null
 	duration: number | null
-	networkState: SimplePlayerNetworkState
-	readyState: SimplePlayerReadyState
+	networkState: PlayerNetworkState
+	readyState: PlayerReadyState
 }>(`${prefix}/onNewPlayerState`)
 
 export const onExternalSetIsPlayingWhenReady = createAction<boolean>(

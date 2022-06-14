@@ -1,4 +1,4 @@
-enum SimplePlayerReadyState {
+enum PlayerReadyState {
 	NOTHING,
 	METADATA,
 	CURRENT_DATA,
@@ -8,20 +8,20 @@ enum SimplePlayerReadyState {
 
 export const simplePlayerReadyStateFromNative = (
 	n: number,
-): SimplePlayerReadyState => {
+): PlayerReadyState => {
 	if (n == 0) {
-		return SimplePlayerReadyState.NOTHING
+		return PlayerReadyState.NOTHING
 	} else if (n == 1) {
-		return SimplePlayerReadyState.METADATA
+		return PlayerReadyState.METADATA
 	} else if (n == 2) {
-		return SimplePlayerReadyState.CURRENT_DATA
+		return PlayerReadyState.CURRENT_DATA
 	} else if (n == 3) {
-		return SimplePlayerReadyState.FUTURE_DATA
+		return PlayerReadyState.FUTURE_DATA
 	} else if (n == 4) {
-		return SimplePlayerReadyState.ENOUGH_DATA
+		return PlayerReadyState.ENOUGH_DATA
 	} else {
-		return SimplePlayerReadyState.NOTHING // actually it should throw imho
+		return PlayerReadyState.NOTHING // actually it should throw imho
 	}
 }
 
-export default SimplePlayerReadyState
+export default PlayerReadyState

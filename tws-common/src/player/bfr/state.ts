@@ -1,12 +1,10 @@
-import {
-	getNowPerformanceTimestamp,
-	PerformanceTimestampMs,
-} from "tws-common/lang/time/Timestamp"
-import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import SimplePlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
-import SimplePlayerReadyState from "tws-common/player/tool/PlayerReadyState"
+import { getNowPerformanceTimestamp, PerformanceTimestampMs } from "tws-common/lang/time/Timestamp";
+import MetadataBag from "tws-common/player/metadata/MetadataBag";
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
+import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState";
+import PlayerReadyState from "tws-common/player/tool/PlayerReadyState";
+
 
 export type PlaybackState = {
 	playerError: MediaError | null
@@ -18,8 +16,8 @@ export type PlaybackState = {
 	isPlaying: boolean
 	isSeeking: boolean
 
-	networkState: SimplePlayerNetworkState
-	readyState: SimplePlayerReadyState
+	networkState: PlayerNetworkState
+	readyState: PlayerReadyState
 }
 
 export type SleepConfig = {
