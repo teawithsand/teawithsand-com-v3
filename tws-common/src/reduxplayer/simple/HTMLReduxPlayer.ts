@@ -1,12 +1,18 @@
-import { Store } from "redux";
-import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState";
-import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState";
-import PlayerSource from "tws-common/player/source/PlayerSource";
-import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver";
-import { readHTMLPlayerState } from "tws-common/player/tool/readState";
-import { SimpleReduxPlayerState } from "tws-common/reduxplayer/simple";
-import { onDurationChanged, onExternalSetIsPlayingWhenReady, onNewPlayerState, onPositionChanged } from "tws-common/reduxplayer/simple/actions";
-
+import { Store } from "redux"
+import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
+import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
+import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
+import PlayerSource from "tws-common/player/source/PlayerSource"
+import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
+import { readHTMLPlayerState } from "tws-common/player/tool/readState"
+import { SimpleReduxPlayerState } from "tws-common/reduxplayer/simple"
+import {
+	onDurationChanged,
+	onExternalSetIsPlayingWhenReady,
+	onNewPlayerState,
+	onPositionChanged,
+	onSourcePlaybackEnded,
+} from "tws-common/reduxplayer/simple/actions"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
@@ -23,7 +29,10 @@ export default class HTMLReduxPlayer<T> {
 	private sourceCleanup: (() => void) | null = null
 	private releaseReduxStore: (() => void) | null = null
 
-	private currentSource: PlayerSource | null = null
+	private currentSourceInfo: {
+		playlist: PlayerSource[]
+		currentSourceIndex: number
+	} | null = null
 	private sourceError: any | null = null
 
 	private currentDuration: number | null = null
@@ -32,10 +41,13 @@ export default class HTMLReduxPlayer<T> {
 	private readyState: SimplePlayerReadyState | null = null
 	private isPlaying: boolean | null = null
 	private isSeeking: boolean | null = null
+	private isEnded: boolean | null = null
 
 	private lastSeekId: string | null = null
 
 	private isPlayingWhenReady = false
+
+	private readonly taskAtom = new DefaultTaskAtom()
 
 	constructor(
 		private readonly element: Element,
@@ -46,8 +58,13 @@ export default class HTMLReduxPlayer<T> {
 		const unsubscribe = store.subscribe(() => {
 			const state = selector(store.getState())
 
-			if (this.currentSource?.id !== state.config.source?.id) {
-				this.setSource(state)
+			if (
+				state.playlistConfigState?.currentSourceIndex !==
+					this.currentSourceInfo?.currentSourceIndex ||
+				state.playlistConfigState?.playlist !==
+					this.currentSourceInfo?.playlist
+			) {
+				this.syncSource(state)
 			}
 
 			if (state.config.speed !== element.playbackRate) {
@@ -58,9 +75,10 @@ export default class HTMLReduxPlayer<T> {
 				element.volume = state.config.volume
 			}
 
+			// this should be separate sync method btw
 			this.isPlayingWhenReady = state.config.isPlayingWhenReady
 
-			if (this.currentSource !== null) {
+			if (this.currentSourceInfo !== null) {
 				if (state.config.isPlayingWhenReady !== element.paused) {
 					if (state.config.isPlayingWhenReady) {
 						this.element.play().catch(e => {
@@ -78,7 +96,9 @@ export default class HTMLReduxPlayer<T> {
 				state.config.seekData.id !== this.lastSeekId
 			) {
 				this.lastSeekId = state.config.seekData.id
-				this.seek(state.config.seekData.to)
+				this.seek(
+					state.config.seekData.position,
+				)
 			}
 		})
 		this.releaseReduxStore = () => unsubscribe()
@@ -108,6 +128,10 @@ export default class HTMLReduxPlayer<T> {
 				this.isPlayingWhenReady = true
 				this.store.dispatch(onExternalSetIsPlayingWhenReady(true))
 			}
+		}
+
+		if (playerState.ended) {
+			this.store.dispatch(onSourcePlaybackEnded())
 		}
 
 		if (
@@ -215,7 +239,7 @@ export default class HTMLReduxPlayer<T> {
 		}
 	}
 
-	private setSource = (state: SimpleReduxPlayerState) => {
+	private syncSource = (state: SimpleReduxPlayerState) => {
 		this.sourceError = null
 		this.currentDuration = null
 		this.currentPosition = null
@@ -224,15 +248,35 @@ export default class HTMLReduxPlayer<T> {
 		this.isSeeking = null
 		this.isPlaying = null
 
+		let src: PlayerSource | null = null
+		if (
+			state.playlistConfigState === null ||
+			state.playlistConfigState.currentSourceIndex >=
+				state.playlistConfigState.playlist.length
+		) {
+			this.currentSourceInfo = null
+			src = null
+		} else {
+			src =
+				state.playlistConfigState.playlist[
+					state.playlistConfigState.currentSourceIndex
+				]
+			this.currentSourceInfo = { ...state.playlistConfigState }
+		}
+
 		const prevSourceCleanup = this.sourceCleanup
 		try {
 			this.sourceCleanup = null
 
-			const src = state.config.source
-			this.currentSource = src
 			if (src !== null) {
 				// TODO(teawithsand): FIXME: this should be synchronized/locked, so only latest one gets executed
 				// It's temporary quick'n'dirty fix
+				// In fact, even though this claim is here
+				// this logic here could use cancelation logic
+				// which would stop pending loadings
+				// from finishing
+
+				const claim = this.taskAtom.claim()
 				;(async () => {
 					let url: string
 					let close: () => void
@@ -240,8 +284,13 @@ export default class HTMLReduxPlayer<T> {
 						;[url, close] =
 							await DEFAULT_PLAYER_SOURCE_RESOLVER.obtainURL(src)
 					} catch (e) {
+						if (!claim.isValid) return
 						this.element.src = ""
 						this.sourceError = e
+						return
+					}
+					if (!claim.isValid) {
+						close()
 						return
 					}
 
@@ -266,7 +315,8 @@ export default class HTMLReduxPlayer<T> {
 	}
 
 	private seek = (to: number) => {
-		if (this.currentSource) {
+		// TODO(teawithsand): sync current source index here as well
+		if (this.currentSourceInfo !== null) {
 			this.element.currentTime = to
 			this.syncIsPlayingWhenReady()
 		}

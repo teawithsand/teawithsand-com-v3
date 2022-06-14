@@ -1,10 +1,11 @@
-import { createAction } from "@reduxjs/toolkit"
-import { generateUUID } from "tws-common/lang/uuid"
-import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState"
-import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState"
-import PlayerSource from "tws-common/player/source/PlayerSource"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
-import { makeActionPrefix } from "tws-common/redux/action"
+import { createAction } from "@reduxjs/toolkit";
+import { generateUUID } from "tws-common/lang/uuid";
+import SimplePlayerNetworkState from "tws-common/player/simple/SimplePlayerNetworkState";
+import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadyState";
+import PlayerSource from "tws-common/player/source/PlayerSource";
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
+import { makeActionPrefix } from "tws-common/redux/action";
+
 
 const prefix = makeActionPrefix("player")
 
@@ -12,17 +13,21 @@ export const setIsPlayingWhenReady = createAction<boolean>(
 	`${prefix}/setIsPlayingWhenReady`,
 )
 
-export const setSource = createAction<PlayerSource>(`${prefix}/setSource`)
+export const setPlaylist = createAction<PlayerSource[]>(`${prefix}/setPlaylist`)
 export const setSpeed = createAction<number>(`${prefix}/setSpeed`)
 export const setVolume = createAction<number>(`${prefix}/setVolume`)
 export const setReleased = createAction<void>(`${prefix}/setReleased`)
 
-export const doSeek = createAction(`${prefix}/doSeek`, (target: number) => ({
-	payload: {
-		to: target,
-		id: generateUUID(),
-	},
-}))
+export const doSeek = createAction(
+	`${prefix}/doSeek`,
+	(target: number, sourceIndex: number | null = null) => ({
+		payload: {
+			to: target,
+			sourceIndex: sourceIndex,
+			id: generateUUID(),
+		},
+	}),
+)
 
 // This actions encapsulates change of state
 // which has to be consistent immediately
@@ -52,3 +57,4 @@ export const onDurationChanged = createAction<number | null>(
 export const onExternalSetIsPlayingWhenReady = createAction<boolean>(
 	`${prefix}/onExternalSetIsPlayingWhenReady`,
 )
+export const onSourcePlaybackEnded = createAction<void>(`${prefix}/onEnded`)
