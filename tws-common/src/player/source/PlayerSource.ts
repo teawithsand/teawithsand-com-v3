@@ -1,4 +1,6 @@
-import { generateUUID } from "tws-common/lang/uuid"
+import { generateUUID } from "tws-common/lang/uuid";
+import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata";
+
 
 /**
  * A source, which can be played.
@@ -7,9 +9,19 @@ import { generateUUID } from "tws-common/lang/uuid"
  *
  * Source can be closed, which releases any resources associated with it.
  */
-abstract class PlayerSource {
+export abstract class PlayerSource {
 	abstract equals(b: PlayerSource): boolean
 	abstract id: string
+}
+
+export abstract class LoadingPlayerSource extends PlayerSource {
+	abstract loadTarget(): Promise<{
+		type: "urlObject"
+		data: Blob | File | MediaSource,
+	} | {
+		type: "url",
+		url: string,
+	}>
 }
 
 /**
@@ -67,3 +79,8 @@ export class FunctionPlayerSource extends PlayerSource {
 }
 
 export default PlayerSource
+
+export type PlayerSourceWithMetadata = {
+	playerSource: PlayerSource
+	metadata: MetadataLoadingResult | null
+}

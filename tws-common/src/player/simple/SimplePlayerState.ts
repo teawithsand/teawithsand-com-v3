@@ -9,7 +9,7 @@ type SimplePlayerState =
 	| {
 			type: "running"
 			source: PlayerSource
-			ended: boolean
+			isEnded: boolean
 			isSeeking: boolean
 			readyState: SimplePlayerReadyState
 			networkState: SimplePlayerNetworkState

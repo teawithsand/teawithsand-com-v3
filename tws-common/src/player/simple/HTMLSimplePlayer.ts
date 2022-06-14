@@ -65,7 +65,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 				source: this.source,
 				currentTime: 0,
 				duration: 0,
-				ended: false,
+				isEnded: false,
 				isPlaying: false,
 				networkState: SimplePlayerNetworkState.EMPTY,
 				readyState: SimplePlayerReadyState.NOTHING,
@@ -103,7 +103,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 		} else {
 			// Allows remote controls to control audio element
 			// we from code here may not be the only, who change pause
-			if (!data.ended && data.paused) {
+			if (!data.isEnded && data.paused) {
 				this.isPlayingWhenReady = false
 			} else if (!data.paused) {
 				this.isPlayingWhenReady = true

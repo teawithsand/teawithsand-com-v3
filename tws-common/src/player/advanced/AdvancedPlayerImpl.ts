@@ -121,7 +121,7 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 		} else if (state.type === "error") {
 			// it's noop, it will be read by emitState
 		} else if (state.type === "running") {
-			const { ended, isPlayingWhenReady } = state
+			const { isEnded: ended, isPlayingWhenReady } = state
 
 			this.isPlayingWhenReady = isPlayingWhenReady
 
