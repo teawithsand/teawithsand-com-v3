@@ -43,9 +43,8 @@ export const whatToPlayReducer = createReducer<WhatToPlayState>(
 				// TODO(teawithsand): here start metadata loading + saving
 				//  depending on current policy settings
 				//  + interrupt existing loading
-                // OR: 
-                // Setup external manager, which subscribes to WTP and does exactly that - loads metadata and/or saves it
-                    
+				// OR:
+				// Setup external manager, which subscribes to WTP and does exactly that - loads metadata and/or saves it
 			})
 			.addCase(updateSourceMetadata, (state, action) => {
 				const { index, metadata } = action.payload
@@ -57,27 +56,29 @@ export const whatToPlayReducer = createReducer<WhatToPlayState>(
 /**
  * Makes What-To-Play control player's source list.
  */
-export const wrapPlayerReducer = (
-	state: {
+export const wrapWhatToPlayToPlayerReducer = <
+	T extends {
 		simpleReduxPlayerState: SimpleReduxPlayerState
 		whatToPlayState: WhatToPlayState
 	},
-	action: AnyAction,
+	A extends AnyAction,
+>(
+	reducer: (state: T, action: A) => T,
 ) => {
-	state = {
-		...state,
-		whatToPlayState: whatToPlayReducer(state.whatToPlayState, action),
-	}
+	return (state: T, action: A) => {
+		state = reducer(state, action)
 
-	if (action.type === setSourcesWithMetadata.type) {
-		state = {
-			...state,
-			simpleReduxPlayerState: simpleReduxPlayerReducer(
-				state.simpleReduxPlayerState,
-				setPlaylist(state.whatToPlayState.state.playerSources),
-			),
+		if (action.type === setSourcesWithMetadata.type) {
+			if (!state.whatToPlayState) throw new Error("unreachable code")
+			state = {
+				...state,
+				simpleReduxPlayerState: simpleReduxPlayerReducer(
+					state.simpleReduxPlayerState,
+					setPlaylist(state.whatToPlayState.state.playerSources),
+				),
+			}
 		}
-	}
 
-	return state
+		return state
+	}
 }

@@ -12,10 +12,6 @@ import {
 	setSpeed,
 	setVolume,
 } from "tws-common/reduxplayer/simple/actions"
-import {
-	setLoadedSources,
-	setLoadedSourcesAndLoadMetadataTrunk,
-} from "tws-common/reduxplayer/whattoplay/actions"
 
 export const simpleReduxPlayerReducer = createReducer<SimpleReduxPlayerState>(
 	{
