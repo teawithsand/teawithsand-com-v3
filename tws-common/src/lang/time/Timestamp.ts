@@ -13,3 +13,7 @@ export const timestampToDate = (ts: Timestamp): Date => {
 		throw new Error(`Invalid timestamp to format as date: ${ts}`)
 	return new Date(Math.round(ts))
 }
+
+export type PerformanceTimestamp = number & { readonly s: unique symbol }
+export const getNowPerformanceTimestamp = (): PerformanceTimestamp =>
+	window.performance.now() as PerformanceTimestamp
