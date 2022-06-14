@@ -210,7 +210,7 @@ export default class AdvancedPlayerImpl implements AdvancedPlayer {
 				localDuration: innerPlayerState.duration,
 				networkState: innerPlayerState.networkState,
 				readyState: innerPlayerState.readyState,
-				seeking: innerPlayerState.seeking,
+				seeking: innerPlayerState.isSeeking,
 				playlist: this.playlist,
 			}
 		} else {

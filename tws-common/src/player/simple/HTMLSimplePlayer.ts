@@ -69,7 +69,7 @@ export default class HTMLSimplePlayer implements SimplePlayer {
 				isPlaying: false,
 				networkState: SimplePlayerNetworkState.EMPTY,
 				readyState: SimplePlayerReadyState.NOTHING,
-				seeking: false,
+				isSeeking: false,
 				isPlayingWhenReady: this.isPlayingWhenReady,
 			}
 		}
