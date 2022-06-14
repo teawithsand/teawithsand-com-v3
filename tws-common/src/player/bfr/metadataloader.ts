@@ -4,7 +4,7 @@ import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import PlayerSource, {
 	PlayerSourceWithMetadata,
 } from "tws-common/player/source/PlayerSource"
-import { BFRPlaylistSelector, BFRState } from "tws-common/reduxplayer/bfr/state"
+import { BFRPlaylistSelector, BFRState } from "tws-common/player/bfr/state"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement

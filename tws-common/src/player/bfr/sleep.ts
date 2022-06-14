@@ -8,8 +8,8 @@ import {
 import {
 	onSleepDone,
 	onSleepStateChanged,
-} from "tws-common/reduxplayer/bfr/actions"
-import { BFRState, SleepConfig } from "tws-common/reduxplayer/bfr/state"
+} from "tws-common/player/bfr/actions"
+import { BFRState, SleepConfig } from "tws-common/player/bfr/state"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement

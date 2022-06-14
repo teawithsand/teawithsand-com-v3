@@ -6,7 +6,7 @@ import SimplePlayerReadyState from "tws-common/player/simple/SimplePlayerReadySt
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 import { makeActionPrefix } from "tws-common/redux/action"
-import { SleepState } from "tws-common/reduxplayer/bfr/state"
+import { SleepState } from "tws-common/player/bfr/state"
 
 const prefix = makeActionPrefix("bfr")
 

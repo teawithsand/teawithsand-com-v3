@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
 import { generateUUID } from "tws-common/lang/uuid"
-import { setPlaylist } from "tws-common/reduxplayer/bfr/actions"
-import { BFRState } from "tws-common/reduxplayer/bfr/state"
+import { setPlaylist } from "tws-common/player/bfr/actions"
+import { BFRState } from "tws-common/player/bfr/state"
 
 export const simpleReduxPlayerReducer = createReducer<BFRState>(
 	{

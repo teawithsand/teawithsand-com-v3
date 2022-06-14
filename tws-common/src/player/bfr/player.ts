@@ -7,8 +7,8 @@ import {
 	onExternalSetIsPlayingWhenReady,
 	onNewPlayerState,
 	onSourcePlaybackEnded,
-} from "tws-common/reduxplayer/bfr/actions"
-import { BFRState } from "tws-common/reduxplayer/bfr/state"
+} from "tws-common/player/bfr/actions"
+import { BFRState } from "tws-common/player/bfr/state"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
