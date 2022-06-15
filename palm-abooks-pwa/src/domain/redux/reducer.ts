@@ -12,8 +12,12 @@ export type WhatToPlaySource =
 			abook: ABookActiveRecord
 	  }
 	| {
-			type: "raw"
+			type: "raw-no-meta"
 			sources: PlayerSource[]
+	  }
+	| {
+			type: "raw-with-meta"
+			sources: PlayerSourceWithMetadata[]
 	  }
 
 type WhatToPlayStateState =
@@ -54,5 +58,30 @@ export const whatToPlayReducer = createReducer<WhatToPlayState>(
 		builder.addCase(setWhatToPlaySource, (state, action) => {
 			state.config.source = action.payload
 			state.syncState.currentSourcesId = generateUUID()
+
+			if (state.config.source === null) {
+				state.state = {
+					type: "loaded",
+					sources: [],
+				}
+			} else if (state.config.source.type === "raw-no-meta") {
+				state.state = {
+					type: "loaded",
+					sources: state.config.source.sources.map(v => ({
+						metadata: null,
+						playerSource: v,
+					})),
+				}
+			} else if (state.config.source.type === "raw-with-meta") {
+				state.state = {
+					type: "loaded",
+					sources: state.config.source.sources,
+				}
+			} else {
+				// TODO(teawithsand): trigger any load required here
+				state.state = {
+					type: "loading",
+				}
+			}
 		}),
 )

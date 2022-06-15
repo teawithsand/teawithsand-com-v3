@@ -4,6 +4,7 @@ import { audioMimesAndExtensions } from "@app/util/fileTypes"
 import React from "react"
 import { useDispatch } from "react-redux"
 import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
+import { BlobPlayerSource } from "tws-common/player/source/PlayerSource"
 import { Button, ButtonGroup, Col, Form, Row } from "tws-common/ui"
 
 const Player = () => {
@@ -38,15 +39,19 @@ const Player = () => {
 							multiple
 							onChange={(e: any) => {
 								// TODO(teawithsand): check if it works on older browsers, works on state-of-art ff
-								const files = [...(e.target.files || [])]
+								const files: File[] = [
+									...(e.target.files || []),
+								]
 								files.sort((a, b) =>
 									a.name.localeCompare(b.name),
 								)
 
 								dispatch(
 									setWhatToPlaySource({
-										type: "raw",
-										sources: files,
+										type: "raw-no-meta",
+										sources: files.map(
+											f => new BlobPlayerSource(f),
+										),
 									}),
 								)
 							}}
