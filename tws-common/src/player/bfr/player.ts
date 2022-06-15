@@ -9,7 +9,7 @@ import { BFRState } from "tws-common/player/bfr/state"
 import PlayerSource from "tws-common/player/source/PlayerSource"
 import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
 import { readHTMLPlayerState } from "tws-common/player/tool/readState"
-import { SyncID } from "tws-common/redux/sync/id"
+import { SyncId } from "tws-common/redux/sync/id"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
@@ -26,12 +26,12 @@ export class BFRPlayer<T> {
 	private sourceCleanup: (() => void) | null = null
 	private releaseReduxStore: (() => void) | null = null
 
-	private currentPlaylistId: SyncID | null = null
+	private currentPlaylistId: SyncId | null = null
 	private currentPlaylist: PlayerSource[] = []
 	private currentEntryIndex = 0
 
 	private sourceError: any | null = null
-	private lastSeekId: SyncID | null = null
+	private lastSeekId: SyncId | null = null
 
 	private readonly taskAtom = new DefaultTaskAtom()
 

@@ -5,7 +5,7 @@ import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import PlayerSource, {
 	PlayerSourceWithMetadata,
 } from "tws-common/player/source/PlayerSource"
-import { SyncID } from "tws-common/redux/sync/id"
+import { SyncId } from "tws-common/redux/sync/id"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
@@ -13,7 +13,7 @@ import { SyncID } from "tws-common/redux/sync/id"
  */
 export class BFRMetadataLoader<T> {
 	private releaseReduxStore: (() => void) | null = null
-	private currentPlaylistId: SyncID | null = null
+	private currentPlaylistId: SyncId | null = null
 
 	private readonly taskAtom = new DefaultTaskAtom()
 

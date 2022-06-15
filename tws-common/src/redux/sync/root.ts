@@ -1,8 +1,8 @@
-import { generateSyncId, SyncID } from "tws-common/redux/sync/id"
+import { generateSyncId, SyncId } from "tws-common/redux/sync/id"
 
 export type SyncRoot<T> = Readonly<{
 	data: T
-	id: SyncID
+	id: SyncId
 }> & { readonly ty: unique symbol }
 
 /**

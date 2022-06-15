@@ -1,4 +1,4 @@
-import { SyncID } from "tws-common/redux/sync/id"
+import { SyncId } from "tws-common/redux/sync/id"
 import { NamedSyncRoot, SyncRoot } from "tws-common/redux/sync/root"
 
 export type SynchronizerAction<S, A> = (state: S) =>
@@ -19,15 +19,15 @@ export type SynchronizerAction<S, A> = (state: S) =>
  */
 export type Synchronizer<S, A> = {
 	readonly name: string
-	getId(state: S): SyncID | undefined
+	getId(state: S): SyncId | undefined
 	doSync: SynchronizerAction<S, A>
 }
 
-export const makeSimpleSynchronizerAction =
-	<S, A>(...actions: A[]): SynchronizerAction<S, A> =>
-	() => ({
+export const makeActionSynchronizerAction =
+	<S, A>(factory: (state: S) => A[]): SynchronizerAction<S, A> =>
+	state => ({
 		type: "actions",
-		actions: actions,
+		actions: factory(state),
 	})
 
 export const makeSyncRootSynchronizer = <S, A>(
