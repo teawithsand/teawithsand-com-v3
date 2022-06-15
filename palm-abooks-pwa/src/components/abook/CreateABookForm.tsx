@@ -6,31 +6,13 @@ import {
 } from "react-final-form"
 import { Form, Button } from "tws-common/ui"
 import { formatFileSize } from "tws-common/lang/fileSize"
+import { abookFilesMimesAndExtensions } from "@app/util/fileTypes"
 
 export type CreateABookFormData = {
 	name: string
 	description: string
 	files: File[]
 }
-
-const validInputTypes = [
-	"audio/mpeg",
-	".mp3",
-	".ogg",
-	"image/jpeg",
-	".jpg",
-	".jpeg",
-	"image/gif",
-	".gif",
-	"image/png",
-	".png",
-	"image/webp",
-	".webp",
-	"image/avif",
-	".avif",
-	"text/plain",
-	".txt",
-].join(",")
 
 const getFiles = (files: any): File[] => {
 	if (files instanceof File) {
@@ -81,7 +63,7 @@ const CreateABookForm = (props: {
 							{({ input }) => {
 								return (
 									<Form.Control
-										accept={validInputTypes}
+										accept={abookFilesMimesAndExtensions.join(",")}
 										type="file"
 										{...{
 											...input,
