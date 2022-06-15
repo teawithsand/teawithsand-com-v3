@@ -8,6 +8,9 @@ const queryClient = new QueryClient()
 
 const Layout = (props: any) => {
 	const { children } = props || {}
+
+	console.log("Redux", store, store.getState())
+
 	return (
 		<>
 			<Provider store={store}>
