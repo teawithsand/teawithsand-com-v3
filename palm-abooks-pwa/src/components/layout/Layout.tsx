@@ -1,15 +1,28 @@
 import Navbar from "@app/components/layout/Navbar"
-import { store } from "@app/domain/redux/store"
-import React from "react"
+import { createStore } from "@app/domain/redux/store"
+import React, { useEffect, useMemo } from "react"
 import { Provider } from "react-redux"
 import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
+import { BFRPlayer } from "tws-common/player/bfr/player"
 
 const queryClient = new QueryClient()
 
 const Layout = (props: any) => {
 	const { children } = props || {}
 
-	console.log("Redux", store, store.getState())
+	const store = useMemo(() => createStore(), [])
+
+	useEffect(() => {
+		const player = new BFRPlayer(
+			new Audio(),
+			store,
+			state => state.bfrState,
+		)
+
+		return () => {
+			player.release()
+		}
+	}, [])
 
 	return (
 		<>

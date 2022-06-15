@@ -53,19 +53,15 @@ const topReducer = (state: State, action: AnyAction): State => {
 	return newState
 }
 
-export const store = configureStore<State>({
-	reducer: topReducer,
-	devTools: false,
-	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware({
-			serializableCheck: false,
-		}),
-})
-
-const initAction = createAction(
-	"noop-initializer-action-unique-1231314242176575",
-)
-store.dispatch(initAction)
+export const createStore = () =>
+	configureStore<State>({
+		reducer: topReducer,
+		devTools: false,
+		middleware: getDefaultMiddleware =>
+			getDefaultMiddleware({
+				serializableCheck: false,
+			}),
+	})
 
 /**
  * Wraps useSelector to use with BFR state.
