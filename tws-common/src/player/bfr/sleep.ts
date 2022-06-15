@@ -5,10 +5,7 @@ import {
 	getNowPerformanceTimestamp,
 	PerformanceTimestampMs,
 } from "tws-common/lang/time/Timestamp"
-import {
-	onSleepDone,
-	onSleepStateChanged,
-} from "tws-common/player/bfr/actions"
+import { onSleepDone, onSleepStateChanged } from "tws-common/player/bfr/actions"
 import { BFRState, SleepConfig } from "tws-common/player/bfr/state"
 
 /**
@@ -38,7 +35,7 @@ export class BFRSleep<T> {
 			if (playerConfig !== null) {
 				if (
 					!playerConfig.isPlayingWhenReady ||
-					state.playerConfig.playlist.length === 0
+					state.playerConfig.playlist.data.length === 0
 				) {
 					this.releaseSleepTask()
 				} else {

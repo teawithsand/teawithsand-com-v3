@@ -1,10 +1,11 @@
 import { Store } from "redux"
 import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
+import { bfrPlaylistSelector, BFRState } from "tws-common/player/bfr/state"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import PlayerSource, {
 	PlayerSourceWithMetadata,
 } from "tws-common/player/source/PlayerSource"
-import { BFRPlaylistSelector, BFRState } from "tws-common/player/bfr/state"
+import { SyncID } from "tws-common/redux/sync/id"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
@@ -12,7 +13,7 @@ import { BFRPlaylistSelector, BFRState } from "tws-common/player/bfr/state"
  */
 export class BFRMetadataLoader<T> {
 	private releaseReduxStore: (() => void) | null = null
-	private currentPlaylistId: string | null = null
+	private currentPlaylistId: SyncID | null = null
 
 	private readonly taskAtom = new DefaultTaskAtom()
 
@@ -28,7 +29,7 @@ export class BFRMetadataLoader<T> {
 	) {
 		const unsubscribe = store.subscribe(() => {
 			const state = selector(store.getState())
-			const [playlist, id] = BFRPlaylistSelector(state)
+			const { data: playlist, id } = bfrPlaylistSelector(state)
 			if (this.currentPlaylistId !== id) {
 				this.currentPlaylistId = id
 
@@ -45,7 +46,7 @@ export class BFRMetadataLoader<T> {
 			if (!claim.isValid) return
 
 			// TODO(teawithsand): here load metadata and then trigger save
-            // + trigger metadata updated event in redux store
+			// + trigger metadata updated event in redux store
 		})()
 	}
 

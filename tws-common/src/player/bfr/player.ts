@@ -9,6 +9,7 @@ import { BFRState } from "tws-common/player/bfr/state"
 import PlayerSource from "tws-common/player/source/PlayerSource"
 import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
 import { readHTMLPlayerState } from "tws-common/player/tool/readState"
+import { SyncID } from "tws-common/redux/sync/id"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
@@ -25,12 +26,12 @@ export class BFRPlayer<T> {
 	private sourceCleanup: (() => void) | null = null
 	private releaseReduxStore: (() => void) | null = null
 
-	private currentPlaylistId: string | null = null
+	private currentPlaylistId: SyncID | null = null
 	private currentPlaylist: PlayerSource[] = []
 	private currentEntryIndex = 0
 
 	private sourceError: any | null = null
-	private lastSeekId: string | null = null
+	private lastSeekId: SyncID | null = null
 
 	private readonly taskAtom = new DefaultTaskAtom()
 
@@ -55,11 +56,12 @@ export class BFRPlayer<T> {
 			this.syncIsPlayingWhenReady(state)
 
 			if (
-				playerConfig.seekData &&
+				playerConfig.seekData.data &&
 				playerConfig.seekData.id !== this.lastSeekId
 			) {
+				const seekData = playerConfig.seekData.data
 				this.lastSeekId = playerConfig.seekData.id
-				this.seek(playerConfig.seekData.position)
+				this.seek(seekData.position)
 			}
 		})
 		this.releaseReduxStore = () => unsubscribe()
@@ -169,7 +171,7 @@ export class BFRPlayer<T> {
 
 	private syncIsPlayingWhenReady = (state: BFRState) => {
 		if (state.playerConfig.isPlayingWhenReady) {
-			this.element.play().catch(e => {
+			this.element.play().catch(() => {
 				// noop here
 				// ignore playing error, we will reset it when we want if needed
 			})
@@ -179,11 +181,10 @@ export class BFRPlayer<T> {
 	}
 
 	private syncPlaylist = (state: BFRState) => {
-		if (state.playerPlaylistState.playlistId !== this.currentPlaylistId) {
+		if (state.playerConfig.playlist.id !== this.currentPlaylistId) {
+			this.currentPlaylistId = state.playerConfig.playlist.id
 
-			this.currentPlaylistId = state.playerPlaylistState.playlistId
-
-			this.currentPlaylist = state.playerConfig.playlist.map(
+			this.currentPlaylist = state.playerConfig.playlist.data.map(
 				v => v.playerSource,
 			)
 			this.currentEntryIndex = -1 // any index, but must not equal current one

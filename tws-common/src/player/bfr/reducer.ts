@@ -1,5 +1,4 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { generateUUID } from "tws-common/lang/uuid"
 import {
 	setIsPlayingWhenReady,
 	setPlaylist,
@@ -7,6 +6,7 @@ import {
 	setVolume,
 } from "tws-common/player/bfr/actions"
 import { BFRState } from "tws-common/player/bfr/state"
+import { makeSyncRoot } from "tws-common/redux/sync/root"
 
 export const BFRReducer = createReducer<BFRState>(
 	{
@@ -14,9 +14,9 @@ export const BFRReducer = createReducer<BFRState>(
 			isPlayingWhenReady: false,
 
 			currentSourceIndex: 0,
-			playlist: [],
+			playlist: makeSyncRoot([]),
 
-			seekData: null,
+			seekData: makeSyncRoot(null),
 
 			speed: 1,
 			volume: 1,
@@ -28,9 +28,6 @@ export const BFRReducer = createReducer<BFRState>(
 			loadedMetadataResultSave: true,
 			loadMetadataPolicy: "not-loaded-or-error",
 		},
-		playerPlaylistState: {
-			playlistId: "initial-playlist-id-1231332131",
-		},
 		playerState: null,
 
 		sleepConfig: null,
@@ -39,8 +36,7 @@ export const BFRReducer = createReducer<BFRState>(
 	builder =>
 		builder
 			.addCase(setPlaylist, (state, action) => {
-				state.playerConfig.playlist = action.payload
-				state.playerPlaylistState.playlistId = generateUUID()
+				state.playerConfig.playlist = makeSyncRoot(action.payload)
 			})
 			.addCase(setIsPlayingWhenReady, (state, action) => {
 				state.playerConfig.isPlayingWhenReady = action.payload

@@ -1,10 +1,13 @@
-import { getNowPerformanceTimestamp, PerformanceTimestampMs } from "tws-common/lang/time/Timestamp";
-import MetadataBag from "tws-common/player/metadata/MetadataBag";
+import {
+	getNowPerformanceTimestamp,
+	PerformanceTimestampMs,
+} from "tws-common/lang/time/Timestamp"
+import MetadataBag from "tws-common/player/metadata/MetadataBag"
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
-import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState";
-import PlayerReadyState from "tws-common/player/tool/PlayerReadyState";
-
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
+import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
+import { NamedSyncRoot } from "tws-common/redux/sync/root"
 
 export type PlaybackState = {
 	playerError: MediaError | null
@@ -30,16 +33,22 @@ export type SleepState = {
 	lastSetAt: PerformanceTimestampMs
 }
 
+export const bfrSeekDataSyncRootName = "tws-common/bfr-seek-data"
+export const bfrPlaylistSyncRootName = "tws-common/bfr-playlist"
+
 export type BFRState = {
 	playerConfig: {
 		isPlayingWhenReady: boolean
 		speed: number
 		volume: number
-		seekData: {
-			position: number
-			id: string
-		} | null
-		playlist: PlayerSourceWithMetadata[]
+		seekData: NamedSyncRoot<
+			{ position: number } | null,
+			typeof bfrSeekDataSyncRootName
+		>
+		playlist: NamedSyncRoot<
+			PlayerSourceWithMetadata[],
+			typeof bfrPlaylistSyncRootName
+		>
 		// Ended state when this is greater than playlist length
 		currentSourceIndex: number
 	}
@@ -59,9 +68,6 @@ export type BFRState = {
 			backBy: number
 		}[]
 	}
-	playerPlaylistState: {
-		playlistId: string
-	}
 	playerState: {
 		playlistState: {
 			metadataBag: MetadataBag
@@ -70,14 +76,10 @@ export type BFRState = {
 	} | null
 }
 
-export const BFRPlaylistSelector = (
-	state: BFRState,
-): [PlayerSourceWithMetadata[], string] => [
-	state.playerConfig.playlist,
-	state.playerPlaylistState.playlistId,
-]
+export const bfrPlaylistSelector = (state: BFRState) =>
+	state.playerConfig.playlist
 
-export const BFRSleepStateSelector = (
+export const bfrSleepStateSelector = (
 	state: BFRState,
 	now?: PerformanceTimestampMs,
 ) => {
