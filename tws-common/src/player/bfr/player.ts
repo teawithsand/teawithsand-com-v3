@@ -1,14 +1,14 @@
 import { Store } from "redux"
 import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
-import PlayerSource from "tws-common/player/source/PlayerSource"
-import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
-import { readHTMLPlayerState } from "tws-common/player/tool/readState"
 import {
 	onExternalSetIsPlayingWhenReady,
 	onNewPlayerState,
 	onSourcePlaybackEnded,
 } from "tws-common/player/bfr/actions"
 import { BFRState } from "tws-common/player/bfr/state"
+import PlayerSource from "tws-common/player/source/PlayerSource"
+import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
+import { readHTMLPlayerState } from "tws-common/player/tool/readState"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
@@ -68,6 +68,8 @@ export class BFRPlayer<T> {
 	private readAndEmitHTMLElementState = () => {
 		if (this.releaseReduxStore === null) return // although it shouldn't, it may happen; exit then
 		const playerState = readHTMLPlayerState(this.element)
+
+		console.log("playerState", playerState)
 
 		// if we can use get state
 		// just do that
@@ -166,20 +168,19 @@ export class BFRPlayer<T> {
 	}
 
 	private syncIsPlayingWhenReady = (state: BFRState) => {
-		if (state.playerConfig.isPlayingWhenReady !== this.element.paused) {
-			if (state.playerConfig.isPlayingWhenReady) {
-				this.element.play().catch(() => {
-					// noop here
-					// ignore playing error, we will reset it when we want if needed
-				})
-			} else {
-				this.element.pause()
-			}
+		if (state.playerConfig.isPlayingWhenReady) {
+			this.element.play().catch(e => {
+				// noop here
+				// ignore playing error, we will reset it when we want if needed
+			})
+		} else {
+			this.element.pause()
 		}
 	}
 
 	private syncPlaylist = (state: BFRState) => {
 		if (state.playerPlaylistState.playlistId !== this.currentPlaylistId) {
+
 			this.currentPlaylistId = state.playerPlaylistState.playlistId
 
 			this.currentPlaylist = state.playerConfig.playlist.map(
@@ -197,7 +198,9 @@ export class BFRPlayer<T> {
 				targetSourceIndex < this.currentPlaylist.length
 					? this.currentPlaylist[targetSourceIndex]
 					: null
+			this.currentEntryIndex = targetSourceIndex
 			const prevSourceCleanup = this.sourceCleanup
+
 			try {
 				this.sourceCleanup = null
 
@@ -222,6 +225,7 @@ export class BFRPlayer<T> {
 							if (!claim.isValid) return
 							this.element.src = ""
 							this.sourceError = e
+							console.error("Resolving source error", e)
 							return
 						}
 						if (!claim.isValid) {
@@ -237,16 +241,17 @@ export class BFRPlayer<T> {
 						this.element.playbackRate = state.playerConfig.speed
 						this.element.volume = state.playerConfig.volume
 
-						this.syncIsPlayingWhenReady(state)
+						this.readAndEmitHTMLElementState()
 					})()
 				} else {
-					this.element.src = ""
+					if (this.element.src !== "") {
+						this.element.src = ""
+						this.readAndEmitHTMLElementState()
+					}
 				}
 			} finally {
 				if (prevSourceCleanup) prevSourceCleanup()
 			}
-
-			this.readAndEmitHTMLElementState()
 		}
 	}
 
