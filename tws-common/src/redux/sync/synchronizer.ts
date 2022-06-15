@@ -11,6 +11,12 @@ export type SynchronizerAction<S, A> = (state: S) =>
 			state: S
 	  }
 
+/**
+ * Type capable of:
+ * 1. Getting some specific id to sync from state
+ * 2. Taking some action, if not in sync
+ * Also, carries unique name identifier to check which key should be checked for is-in-sync.
+ */
 export type Synchronizer<S, A> = {
 	readonly name: string
 	getId(state: S): SyncID | undefined
