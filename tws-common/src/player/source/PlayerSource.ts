@@ -58,7 +58,7 @@ export class BlobPlayerSource extends PlayerSource {
 	}
 
 	get id(): string {
-		return "blb:" + this.id
+		return "blb:" + this.innerId
 	}
 }
 
@@ -77,7 +77,7 @@ export class FunctionPlayerSource extends PlayerSource {
 	}
 
 	get id(): string {
-		return "fcn:" + this.id
+		return "fcn:" + this.innerId
 	}
 }
 
