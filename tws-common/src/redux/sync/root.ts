@@ -5,6 +5,9 @@ export type SyncRoot<T> = Readonly<{
 	id: SyncID
 }> & { readonly ty: unique symbol }
 
+/**
+ * @deprecated Just use .data instead
+ */
 export const getSyncRootValue = <T>(sr: SyncRoot<T>): T => sr.data
 
 export const makeSyncRoot = <T>(data: T): SyncRoot<T> =>
