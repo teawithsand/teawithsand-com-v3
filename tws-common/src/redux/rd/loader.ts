@@ -3,11 +3,12 @@ import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
 import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
 import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
 import { RemoteDataRoot } from "tws-common/redux/rd/data"
+import { generateSyncId, SyncId } from "tws-common/redux/sync/id"
 
 /**
  * Result of loading remote data via redux.
  */
-export type RemoteDataLoadResult<T> =
+export type RemoteDataLoadResult<T> = (
 	| {
 			type: "loading"
 	  }
@@ -19,6 +20,9 @@ export type RemoteDataLoadResult<T> =
 			type: "error"
 			error: any
 	  }
+) & {
+	rootId: SyncId
+}
 
 export interface ReduxRemoteDataLoader<T> {
 	readonly dataBus: StickySubscribable<RemoteDataLoadResult<T>>
@@ -41,6 +45,7 @@ export class DefaultReduxRemoteDataLoader<D, R, S>
 		RemoteDataLoadResult<R>
 	>({
 		type: "loading",
+		rootId: generateSyncId(),
 	})
 
 	private readonly taskAtom = new DefaultTaskAtom()
@@ -65,9 +70,12 @@ export class DefaultReduxRemoteDataLoader<D, R, S>
 			if (this.lastRoot === null || root.id !== this.lastRoot.id) {
 				const claim = this.taskAtom.claim()
 
+				const { id } = root
+
 				// trigger loading here
 				this.innerBus.emitEvent({
 					type: "loading",
+					rootId: id,
 				})
 
 				loader(
@@ -83,6 +91,7 @@ export class DefaultReduxRemoteDataLoader<D, R, S>
 							this.innerBus.emitEvent({
 								type: "loaded",
 								data: v,
+								rootId: id,
 							})
 						}
 					})
@@ -91,6 +100,7 @@ export class DefaultReduxRemoteDataLoader<D, R, S>
 							this.innerBus.emitEvent({
 								type: "error",
 								error: e,
+								rootId: id,
 							})
 						}
 					})
