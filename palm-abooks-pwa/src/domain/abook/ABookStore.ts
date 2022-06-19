@@ -3,13 +3,13 @@ import { ABOOK_FILE_STORE } from "@app/domain/abook/ABookFileStore"
 import ABookStoreImpl from "@app/domain/abook/ABookStoreImpl"
 
 import ObjectFileStore from "tws-common/file/ofs/ObjectFileStore"
-import { Timestamp } from "tws-common/lang/time/Timestamp"
+import { TimestampMs } from "tws-common/lang/time/Timestamp"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 
 export interface ABookMetadata {
 	title: string
 	description: string
-	addedAt: Timestamp
+	addedAt: TimestampMs
 }
 
 export interface LoadedABookData extends ABookData {
