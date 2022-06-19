@@ -37,6 +37,8 @@ export class BFRPlayer<T> {
 	private lastSeekId: SyncId | null = null
 
 	private readonly taskAtom = new DefaultTaskAtom()
+	private isLoadingSource = false
+	private isDoneIsPlayingSyncAfterSourceLoaded = false
 
 	constructor(
 		private readonly element: Element,
@@ -74,28 +76,52 @@ export class BFRPlayer<T> {
 		if (this.releaseReduxStore === null) return // although it shouldn't, it may happen; exit then
 		const playerState = readHTMLPlayerState(this.element)
 
-		LOG.debug(LOG_TAG, "ReadAndEmitPlayerState", playerState)
-
-		// if we can use get state
-		// just do that
-		// even though its hack
-		const state = this.selector(this.store.getState())
-		if (state.playerConfig.isPlayingWhenReady) {
-			if (playerState.paused && !playerState.error) {
-				this.store.dispatch(onExternalSetIsPlayingWhenReady(false))
-			}
-		} else {
-			if (
-				!playerState.paused &&
-				!playerState.error &&
-				playerState.isPlaying
-			) {
-				this.store.dispatch(onExternalSetIsPlayingWhenReady(true))
-			}
-		}
+		LOG.debug(LOG_TAG, "ReadAndEmitPlayerState", {
+			sourceSet: this.sourceCleanup !== null,
+			loadingSource: this.isLoadingSource,
+			...playerState,
+		})
 
 		if (playerState.isEnded) {
 			this.store.dispatch(onSourcePlaybackEnded())
+		}
+
+		if (
+			!this.isLoadingSource &&
+			this.isDoneIsPlayingSyncAfterSourceLoaded &&
+			this.sourceCleanup !== null &&
+			!playerState.isEnded &&
+			!playerState.error &&
+			!playerState.isSeeking
+		) {
+			// Once we are in ended state
+			// pause triggers.
+			//
+			// Also, when we call load
+			// pause gets triggered
+			// so this is covered as well
+			//
+			// Also, setting null source triggers paused case as well
+			// so handle it.
+			//
+			//
+			// Moreover, once source is loaded there is short moment before sync of IPWR is triggered, when we are not playing
+			// which may cause this to fire, which is not what we want, so we capture it.
+
+			// if we can use get state
+			// just do that
+			// even though it's hack
+			const state = this.selector(this.store.getState())
+
+			if (state.playerConfig.isPlayingWhenReady) {
+				if (playerState.paused) {
+					this.store.dispatch(onExternalSetIsPlayingWhenReady(false))
+				}
+			} else {
+				if (!playerState.paused && playerState.isPlaying) {
+					this.store.dispatch(onExternalSetIsPlayingWhenReady(true))
+				}
+			}
 		}
 
 		this.store.dispatch(
@@ -173,13 +199,17 @@ export class BFRPlayer<T> {
 	}
 
 	private syncIsPlayingWhenReady = (state: BFRState) => {
-		if (state.playerConfig.isPlayingWhenReady) {
+		if (!this.isLoadingSource && state.playerConfig.isPlayingWhenReady) {
 			this.element.play().catch(() => {
 				// noop here
 				// ignore playing error, we will reset it when we want if needed
 			})
 		} else {
 			this.element.pause()
+		}
+
+		if (!this.isLoadingSource) {
+			this.isDoneIsPlayingSyncAfterSourceLoaded = true
 		}
 	}
 
@@ -209,7 +239,8 @@ export class BFRPlayer<T> {
 
 			try {
 				this.sourceCleanup = null
-
+				this.isLoadingSource = true
+				this.isDoneIsPlayingSyncAfterSourceLoaded = false
 				if (src !== null) {
 					// TODO(teawithsand): FIXME: this should be synchronized/locked, so only latest one gets executed
 					// It's temporary quick'n'dirty fix
@@ -249,12 +280,15 @@ export class BFRPlayer<T> {
 						this.element.volume = state.playerConfig.volume
 
 						this.readAndEmitHTMLElementState()
-					})()
+					})().finally(() => {
+						this.isLoadingSource = false
+					})
 				} else {
 					if (this.element.src !== "") {
 						this.element.src = ""
 						this.readAndEmitHTMLElementState()
 					}
+					this.isLoadingSource = false
 				}
 			} finally {
 				if (prevSourceCleanup) prevSourceCleanup()

@@ -1,5 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
+import { LOG } from "tws-common/log/logger"
 import {
+	doSeek,
 	onExternalSetIsPlayingWhenReady,
 	onNewPlayerState,
 	onSourcePlaybackEnded,
@@ -11,6 +13,8 @@ import {
 import { BFRState, IDLE_PLAYBACK_STATE } from "tws-common/player/bfr/state"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
 import { makeSyncRoot } from "tws-common/redux/sync/root"
+
+const LOG_TAG = "tws-common/BFRReducer"
 
 // TODO(teawithsand): implement missing reducers
 export const BFRReducer = createReducer<BFRState>(
@@ -90,6 +94,11 @@ export const BFRReducer = createReducer<BFRState>(
 				state.playerConfig.isPlayingWhenReady = action.payload
 			})
 			.addCase(onExternalSetIsPlayingWhenReady, (state, action) => {
+				LOG.debug(
+					LOG_TAG,
+					"Triggered onExternalSetIsPlayingWhenReady",
+					action.payload,
+				)
 				state.playerConfig.isPlayingWhenReady = action.payload
 			})
 			.addCase(setSpeed, (state, action) => {
@@ -97,5 +106,10 @@ export const BFRReducer = createReducer<BFRState>(
 			})
 			.addCase(setVolume, (state, action) => {
 				state.playerConfig.volume = action.payload
+			})
+			.addCase(doSeek, (state, action) => {
+				state.playerConfig.seekData = makeSyncRoot({
+					position: action.payload,
+				})
 			}),
 )

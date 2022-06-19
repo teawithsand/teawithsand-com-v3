@@ -23,18 +23,8 @@ export const setMetadata = createAction<{
 }>(`${prefix}/setMetadata`)
 export const setSpeed = createAction<number>(`${prefix}/setSpeed`)
 export const setVolume = createAction<number>(`${prefix}/setVolume`)
-export const setReleased = createAction<void>(`${prefix}/setReleased`)
 
-export const doSeek = createAction(
-	`${prefix}/doSeek`,
-	(target: number, sourceIndex: number | null = null) => ({
-		payload: {
-			to: target,
-			sourceIndex: sourceIndex,
-			id: generateUUID(),
-		},
-	}),
-)
+export const doSeek = createAction<number>(`${prefix}/doSeek`)
 
 export const onNewPlayerState = createAction<{
 	playerError: MediaError | null
