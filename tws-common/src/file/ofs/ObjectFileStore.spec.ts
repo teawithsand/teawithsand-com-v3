@@ -2,6 +2,8 @@ import KeyValueObjectFileStore from "tws-common/file/ofs/KeyValueObjectFileStore
 import ObjectFileStore from "tws-common/file/ofs/ObjectFileStore"
 import InMemoryKeyValueStore from "tws-common/keyvalue/InMemoryKeyValueStore"
 import { arrayBufferFromBytes } from "tws-common/lang/buffer"
+import { FakeRWLockAdapter, NoopRWLockAdapter } from "tws-common/lang/lock/Lock"
+import { MutexLockAdapter } from "tws-common/lang/lock/MutexLockAdapter"
 import KeyValueWALStore from "tws-common/lang/wal/KeyValueWALStore"
 
 describe("KeyValueObjectFileStore", () => {
@@ -13,6 +15,7 @@ describe("KeyValueObjectFileStore", () => {
 			new InMemoryKeyValueStore(),
 			new InMemoryKeyValueStore(),
 			new KeyValueWALStore(new InMemoryKeyValueStore()),
+			new FakeRWLockAdapter(new MutexLockAdapter()),
 		)
 	})
 
