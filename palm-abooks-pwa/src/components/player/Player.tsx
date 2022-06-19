@@ -18,6 +18,12 @@ const Player = () => {
 		bfr => bfr.playerConfig.isPlayingWhenReady,
 	)
 	const sources = useBFRSelector(bfr => bfr.playerConfig.playlist.data)
+	const currentDuration = useBFRSelector(
+		bfr => bfr.playerState.playbackState.duration,
+	)
+	const currentPosition = useBFRSelector(
+		bfr => bfr.playerState.playbackState.position,
+	)
 
 	const dispatch = useDispatch()
 
@@ -63,9 +69,13 @@ const Player = () => {
 				<Col>
 					<p>Playing file no: {currentSourceIndex + 1}</p>
 					<p>Is playing: {isReallyPlaying ? "Yes" : "No"}</p>
+					<p>
+						Position: {currentPosition ?? 0} out of{" "}
+						{currentDuration ?? 0}
+					</p>
 					<ol>
 						{sources.map((s, i) => (
-							<li key={i}>Source no. #{i + 1}</li>
+							<li key={i}>Source no. {i + 1}</li>
 						))}
 					</ol>
 				</Col>
