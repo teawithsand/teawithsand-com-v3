@@ -1,5 +1,6 @@
 import { Store } from "redux"
 import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
+import { LOG } from "tws-common/log/logger"
 import {
 	onExternalSetIsPlayingWhenReady,
 	onNewPlayerState,
@@ -12,6 +13,8 @@ import { readHTMLPlayerState } from "tws-common/player/tool/readState"
 import { SyncId } from "tws-common/redux/sync/id"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
+
+const LOG_TAG = "tws-common/BFRPlayer"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
@@ -71,7 +74,7 @@ export class BFRPlayer<T> {
 		if (this.releaseReduxStore === null) return // although it shouldn't, it may happen; exit then
 		const playerState = readHTMLPlayerState(this.element)
 
-		console.log("playerState", playerState)
+		LOG.debug(LOG_TAG, "ReadAndEmitPlayerState", playerState)
 
 		// if we can use get state
 		// just do that
@@ -202,6 +205,8 @@ export class BFRPlayer<T> {
 			this.currentEntryIndex = targetSourceIndex
 			const prevSourceCleanup = this.sourceCleanup
 
+			LOG.debug(LOG_TAG, "loading source(or unsetting if none)", src)
+
 			try {
 				this.sourceCleanup = null
 
@@ -226,7 +231,8 @@ export class BFRPlayer<T> {
 							if (!claim.isValid) return
 							this.element.src = ""
 							this.sourceError = e
-							console.error("Resolving source error", e)
+
+							LOG.warn(LOG_TAG, "loading source error", e)
 							return
 						}
 						if (!claim.isValid) {
