@@ -9124,6 +9124,11 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+navigator.locks@^0.8.5:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/navigator.locks/-/navigator.locks-0.8.5.tgz#014a0a6e5571b7f4c874ae563c32d4ccc677f615"
+  integrity sha512-z+l1Ba5W2Pgg8K3Jba/LYSdX1zQ4NuaD4wmPZdsaCznp2qYlLwcChfmYH2yEdpKEWoq6iaKR/obqc1wBUicrvA==
+
 negotiator@0.6.3, negotiator@~0.6.2:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
