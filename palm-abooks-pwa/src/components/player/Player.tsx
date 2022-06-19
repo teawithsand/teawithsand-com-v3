@@ -4,6 +4,7 @@ import { audioMimesAndExtensions } from "@app/util/fileTypes"
 import React from "react"
 import { useDispatch } from "react-redux"
 import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
+import { formatDurationSeconds } from "tws-common/lang/time/format"
 import { BlobPlayerSource } from "tws-common/player/source/PlayerSource"
 import { Button, ButtonGroup, Col, Form, Row } from "tws-common/ui"
 
@@ -70,8 +71,8 @@ const Player = () => {
 					<p>Playing file no: {currentSourceIndex + 1}</p>
 					<p>Is playing: {isReallyPlaying ? "Yes" : "No"}</p>
 					<p>
-						Position: {currentPosition ?? 0} out of{" "}
-						{currentDuration ?? 0}
+						Position: {formatDurationSeconds(currentPosition ?? 0)}{" "}
+						out of {formatDurationSeconds(currentDuration ?? 0)}
 					</p>
 					<ol>
 						{sources.map((s, i) => (
