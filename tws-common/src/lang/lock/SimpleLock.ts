@@ -1,6 +1,9 @@
 import { latePromise } from "tws-common/lang/latePromise"
 import Lock from "tws-common/lang/lock/Lock"
 
+/**
+ * Single JS context-spanning lock, which is just like simple mutex, but on promises.
+ */
 export default class SimpleLock implements Lock {
 	private currentPromise: Promise<void> | null = null
 
