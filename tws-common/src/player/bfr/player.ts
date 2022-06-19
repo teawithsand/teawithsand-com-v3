@@ -246,7 +246,6 @@ export class BFRPlayer<T> {
 				this.isLoadingSource = true
 				this.isIsPlayingSynchronizedAfterSourceLoaded = false
 				if (src !== null) {
-					// TODO(teawithsand): FIXME: this should be synchronized/locked, so only latest one gets executed
 					// It's temporary quick'n'dirty fix
 					// In fact, even though this claim is here
 					// this logic here could use cancelation logic
