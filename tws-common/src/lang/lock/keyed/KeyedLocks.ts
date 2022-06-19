@@ -4,7 +4,7 @@ export interface KeyedLockOptions {
 	mode: "exclusive" | "shared"
 }
 
-export interface KeyedLocks<T extends KeyedLockOptions> {
+export interface KeyedLocks<T extends KeyedLockOptions = KeyedLockOptions> {
 	getLockAdapter(key: string, options: T): LockAdapter
 	getLock(key: string, options: T): Lock
 }

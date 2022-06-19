@@ -1,0 +1,37 @@
+import "navigator.locks"
+import { latePromise } from "tws-common/lang/latePromise"
+import {
+	KeyedLockOptions,
+	KeyedLocks,
+} from "tws-common/lang/lock/keyed/KeyedLocks"
+import { Lock, LockAdapter } from "tws-common/lang/lock/Lock"
+import WebLock from "tws-common/webapi/weblock/WebLock"
+
+export class WebKeyedLocks implements KeyedLocks<KeyedLockOptions> {
+	getLockAdapter = (key: string, options: KeyedLockOptions): LockAdapter => {
+		const wl = new WebLock(key)
+
+		return {
+			lock: async () => {
+				const [locked, resolveLocked] = latePromise<void>()
+				const [done, resolveDone] = latePromise<void>()
+
+				wl.claim({
+					exclusive: options.mode === "exclusive",
+					opWhenAcquired: async () => {
+						resolveLocked()
+
+						await done
+					},
+				})
+
+				await locked
+
+				return () => resolveDone()
+			},
+		}
+	}
+
+	getLock = (key: string, options: KeyedLockOptions): Lock =>
+		new Lock(this.getLockAdapter(key, options))
+}
