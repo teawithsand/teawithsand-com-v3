@@ -28,30 +28,45 @@ export const stringifyLogLevel = (lv: LogLevel): string => {
 }
 
 export type LogArg = any
+export type LogTag = string
 
 export interface Logger {
-	log(level: LogLevel, ...args: LogArg[]): void
+	log(tag: LogTag, level: LogLevel, ...args: LogArg[]): void
 }
 
 export class ExtLogger implements Logger {
 	constructor(private readonly inner: Logger) {}
+
 	log = this.inner.log.bind(this.inner)
 
-	debug = (...args: LogArg[]) => this.log(LogLevel.DEBUG, ...args)
-	verbose = (...args: LogArg[]) => this.log(LogLevel.VERBOSE, ...args)
-	notice = (...args: LogArg[]) => this.log(LogLevel.NOTICE, ...args)
-	info = (...args: LogArg[]) => this.log(LogLevel.INFO, ...args)
-	warn = (...args: LogArg[]) => this.log(LogLevel.ERROR, ...args)
-	error = (...args: LogArg[]) => this.log(LogLevel.WARN, ...args)
-	assert = (...args: LogArg[]) => this.log(LogLevel.ASSERT, ...args)
+	debug = (tag: LogTag, ...args: LogArg[]) =>
+		this.log(tag, LogLevel.DEBUG, ...args)
+
+	verbose = (tag: LogTag, ...args: LogArg[]) =>
+		this.log(tag, LogLevel.VERBOSE, ...args)
+
+	notice = (tag: LogTag, ...args: LogArg[]) =>
+		this.log(tag, LogLevel.NOTICE, ...args)
+
+	info = (tag: LogTag, ...args: LogArg[]) =>
+		this.log(tag, LogLevel.INFO, ...args)
+
+	warn = (tag: LogTag, ...args: LogArg[]) =>
+		this.log(tag, LogLevel.ERROR, ...args)
+
+	error = (tag: LogTag, ...args: LogArg[]) =>
+		this.log(tag, LogLevel.WARN, ...args)
+
+	assert = (tag: LogTag, ...args: LogArg[]) =>
+		this.log(tag, LogLevel.ASSERT, ...args)
 }
 
 // TODO(teawithsand): methods, which allow mocking this logger or something
 //  In fact, it's sufficient to make ext logger able to swap it's inner logger
 //  so it can stay constant
 export const DEFAULT_LOGGER = new ExtLogger({
-	log: (lv, ...args) => {
-		const format = () => `[${stringifyLogLevel(lv).toUpperCase()}]`
+	log: (tag, lv, ...args) => {
+		const format = () => `[${stringifyLogLevel(lv).toUpperCase()} - ${tag}]`
 		if (lv === LogLevel.ERROR || lv === LogLevel.ASSERT) {
 			console.error(format(), ...args)
 		} else {
