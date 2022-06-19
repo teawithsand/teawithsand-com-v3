@@ -1,5 +1,4 @@
 import { createAction } from "@reduxjs/toolkit"
-import { generateUUID } from "tws-common/lang/uuid"
 import { SleepState } from "tws-common/player/bfr/state"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
@@ -25,6 +24,10 @@ export const setSpeed = createAction<number>(`${prefix}/setSpeed`)
 export const setVolume = createAction<number>(`${prefix}/setVolume`)
 
 export const doSeek = createAction<number>(`${prefix}/doSeek`)
+
+export const setAllowExternalSetIsPlayingWhenReady = createAction<boolean>(
+	`${prefix}/setAllowExternalSetIsPlayingWhenReady`,
+)
 
 export const onNewPlayerState = createAction<{
 	playerError: MediaError | null

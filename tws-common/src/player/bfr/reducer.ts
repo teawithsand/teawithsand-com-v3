@@ -5,6 +5,7 @@ import {
 	onExternalSetIsPlayingWhenReady,
 	onNewPlayerState,
 	onSourcePlaybackEnded,
+	setAllowExternalSetIsPlayingWhenReady,
 	setIsPlayingWhenReady,
 	setPlaylist,
 	setSpeed,
@@ -15,7 +16,6 @@ import MetadataBag from "tws-common/player/metadata/MetadataBag"
 import { makeSyncRoot } from "tws-common/redux/sync/root"
 
 const LOG_TAG = "tws-common/BFRReducer"
-
 // TODO(teawithsand): implement missing reducers
 export const BFRReducer = createReducer<BFRState>(
 	{
@@ -29,6 +29,8 @@ export const BFRReducer = createReducer<BFRState>(
 
 			speed: 1,
 			volume: 1,
+
+			allowExternalSetIsPlayingWhenReady: true,
 		},
 		backAfterPauseConfig: {
 			config: [],
@@ -79,6 +81,7 @@ export const BFRReducer = createReducer<BFRState>(
 			})
 			.addCase(setPlaylist, (state, action) => {
 				state.playerConfig.playlist = makeSyncRoot(action.payload)
+				state.playerConfig.currentSourceIndex = 0 // always reset to first one on new playlist
 				state.playerState = {
 					playbackState: IDLE_PLAYBACK_STATE,
 					playlistState: {
@@ -98,8 +101,13 @@ export const BFRReducer = createReducer<BFRState>(
 					LOG_TAG,
 					"Triggered onExternalSetIsPlayingWhenReady",
 					action.payload,
+					"Will change",
+					state.playerConfig.allowExternalSetIsPlayingWhenReady,
 				)
-				state.playerConfig.isPlayingWhenReady = action.payload
+
+				if (state.playerConfig.allowExternalSetIsPlayingWhenReady) {
+					state.playerConfig.isPlayingWhenReady = action.payload
+				}
 			})
 			.addCase(setSpeed, (state, action) => {
 				state.playerConfig.speed = action.payload
@@ -111,5 +119,9 @@ export const BFRReducer = createReducer<BFRState>(
 				state.playerConfig.seekData = makeSyncRoot({
 					position: action.payload,
 				})
+			})
+			.addCase(setAllowExternalSetIsPlayingWhenReady, (state, action) => {
+				state.playerConfig.allowExternalSetIsPlayingWhenReady =
+					action.payload
 			}),
 )

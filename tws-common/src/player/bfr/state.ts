@@ -60,6 +60,7 @@ export type BFRState = {
 			PlayerSourceWithMetadata[],
 			typeof bfrPlaylistSyncRootName
 		>
+		allowExternalSetIsPlayingWhenReady: boolean
 		// Ended state when this is greater than playlist length
 		currentSourceIndex: number
 	}
