@@ -17,7 +17,7 @@ const Player = () => {
 	const isPlayingWhenReady = useBFRSelector(
 		bfr => bfr.playerConfig.isPlayingWhenReady,
 	)
-	const sources = useBFRSelector(bfr => bfr.playerConfig.playlist)
+	const sources = useBFRSelector(bfr => bfr.playerConfig.playlist.data)
 
 	const dispatch = useDispatch()
 
