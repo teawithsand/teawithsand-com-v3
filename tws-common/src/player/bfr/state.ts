@@ -13,14 +13,25 @@ export type PlaybackState = {
 	playerError: MediaError | null
 	sourceError: PlayerSourceError | null
 
-	currentPosition: number | null
-	currentDuration: number | null
+	position: number | null
+	duration: number | null
 
 	isPlaying: boolean
 	isSeeking: boolean
 
 	networkState: PlayerNetworkState
 	readyState: PlayerReadyState
+}
+
+export const IDLE_PLAYBACK_STATE: PlaybackState = {
+	playerError: null,
+	sourceError: null,
+	duration: null,
+	position: null,
+	isPlaying: false,
+	isSeeking: false,
+	networkState: PlayerNetworkState.IDLE,
+	readyState: PlayerReadyState.NOTHING,
 }
 
 export type SleepConfig = {
@@ -73,7 +84,7 @@ export type BFRState = {
 			metadataBag: MetadataBag
 		}
 		playbackState: PlaybackState
-	} | null
+	}
 }
 
 export const bfrPlaylistSelector = (state: BFRState) =>
