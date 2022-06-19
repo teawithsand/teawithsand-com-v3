@@ -4,10 +4,10 @@ import {
 	KeyedLockOptions,
 	KeyedLocks,
 } from "tws-common/lang/lock/keyed/KeyedLocks"
-import { Lock, LockAdapter } from "tws-common/lang/lock/Lock"
+import { LockAdapter, RWLockAdapter } from "tws-common/lang/lock/Lock"
 import WebLock from "tws-common/webapi/weblock/WebLock"
 
-export class WebKeyedLocks implements KeyedLocks<KeyedLockOptions> {
+export class WebKeyedLocks extends KeyedLocks {
 	getLockAdapter = (key: string, options: KeyedLockOptions): LockAdapter => {
 		const wl = new WebLock(key)
 
@@ -32,8 +32,12 @@ export class WebKeyedLocks implements KeyedLocks<KeyedLockOptions> {
 		}
 	}
 
-	getLock = (key: string, options: KeyedLockOptions): Lock =>
-		new Lock(this.getLockAdapter(key, options))
+	getRWLockAdapter = (key: string): RWLockAdapter => {
+		return {
+			read: this.getLockAdapter(key, { mode: "shared" }),
+			write: this.getLockAdapter(key, { mode: "exclusive" }),
+		}
+	}
 }
 
 /**
