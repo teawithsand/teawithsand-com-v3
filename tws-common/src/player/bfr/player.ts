@@ -9,6 +9,7 @@ import {
 import { BFRState } from "tws-common/player/bfr/state"
 import PlayerSource from "tws-common/player/source/PlayerSource"
 import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
+import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { readHTMLPlayerState } from "tws-common/player/tool/readState"
 import { SyncId } from "tws-common/redux/sync/id"
 
@@ -38,7 +39,7 @@ export class BFRPlayer<T> {
 
 	private readonly taskAtom = new DefaultTaskAtom()
 	private isLoadingSource = false
-	private isDoneIsPlayingSyncAfterSourceLoaded = false
+	private isIsPlayingSynchronizedAfterSourceLoaded = false
 
 	constructor(
 		private readonly element: Element,
@@ -79,6 +80,8 @@ export class BFRPlayer<T> {
 		LOG.debug(LOG_TAG, "ReadAndEmitPlayerState", {
 			sourceSet: this.sourceCleanup !== null,
 			loadingSource: this.isLoadingSource,
+			isDoneIsPlayingSyncAfterSourceLoaded:
+				this.isIsPlayingSynchronizedAfterSourceLoaded,
 			...playerState,
 		})
 
@@ -88,11 +91,12 @@ export class BFRPlayer<T> {
 
 		if (
 			!this.isLoadingSource &&
-			this.isDoneIsPlayingSyncAfterSourceLoaded &&
+			this.isIsPlayingSynchronizedAfterSourceLoaded &&
 			this.sourceCleanup !== null &&
 			!playerState.isEnded &&
 			!playerState.error &&
-			!playerState.isSeeking
+			!playerState.isSeeking &&
+			playerState.readyState === PlayerReadyState.FUTURE_DATA
 		) {
 			// Once we are in ended state
 			// pause triggers.
@@ -209,7 +213,7 @@ export class BFRPlayer<T> {
 		}
 
 		if (!this.isLoadingSource) {
-			this.isDoneIsPlayingSyncAfterSourceLoaded = true
+			this.isIsPlayingSynchronizedAfterSourceLoaded = true
 		}
 	}
 
@@ -240,7 +244,7 @@ export class BFRPlayer<T> {
 			try {
 				this.sourceCleanup = null
 				this.isLoadingSource = true
-				this.isDoneIsPlayingSyncAfterSourceLoaded = false
+				this.isIsPlayingSynchronizedAfterSourceLoaded = false
 				if (src !== null) {
 					// TODO(teawithsand): FIXME: this should be synchronized/locked, so only latest one gets executed
 					// It's temporary quick'n'dirty fix
