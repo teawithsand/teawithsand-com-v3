@@ -1,8 +1,10 @@
+import { createReducer } from "@reduxjs/toolkit"
+
 import { ABookActiveRecord } from "@app/domain/abook/ABookStore"
 import { setWhatToPlaySource } from "@app/domain/redux/actions"
 import { State } from "@app/domain/redux/store"
-import { createReducer } from "@reduxjs/toolkit"
-import { generateUUID } from "tws-common/lang/uuid"
+
+import { LOG } from "tws-common/log/logger"
 import { setPlaylist } from "tws-common/player/bfr/actions"
 import PlayerSource, {
 	PlayerSourceWithMetadata,
@@ -12,6 +14,8 @@ import {
 	makeActionSynchronizerAction,
 	makeNamedSyncRootSynchronizer,
 } from "tws-common/redux/sync/synchronizer"
+
+const LOG_TAG = "palm-abooks-pwa/WTPReducer"
 
 export type WhatToPlaySource =
 	| {
@@ -60,10 +64,6 @@ export type WhatToPlayState = {
 		WhatToPlayStateState,
 		typeof whatToPlayStateSyncRootName
 	>
-	syncState: {
-		currentSourcesId: string
-		setSourcesId: string
-	}
 }
 
 export const whatToPlayReducer = createReducer<WhatToPlayState>(
@@ -75,15 +75,10 @@ export const whatToPlayReducer = createReducer<WhatToPlayState>(
 			type: "loaded",
 			sources: [],
 		}),
-		syncState: {
-			currentSourcesId: "no-sources",
-			setSourcesId: "no-sources",
-		},
 	},
 	builder =>
 		builder.addCase(setWhatToPlaySource, (state, action) => {
 			state.config.source = action.payload
-			state.syncState.currentSourcesId = generateUUID()
 
 			if (state.config.source === null) {
 				state.state = makeSyncRoot({
@@ -105,7 +100,11 @@ export const whatToPlayReducer = createReducer<WhatToPlayState>(
 				})
 			} else {
 				// TODO(teawithsand): trigger any load required here
-				console.error("NIY")
+				LOG.assert(
+					LOG_TAG,
+					"Not implemented loading of sources for",
+					state.config.source,
+				)
 				state.state = makeSyncRoot({
 					type: "loading",
 				})

@@ -1,9 +1,10 @@
 import { ABOOK_DATA_STORE } from "@app/domain/abook/ABookDataStore"
 import { ABOOK_FILE_STORE } from "@app/domain/abook/ABookFileStore"
 import ABookStoreImpl from "@app/domain/abook/ABookStoreImpl"
+
 import ObjectFileStore from "tws-common/file/ofs/ObjectFileStore"
-import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import { Timestamp } from "tws-common/lang/time/Timestamp"
+import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 
 export interface ABookMetadata {
 	title: string
@@ -18,7 +19,6 @@ export interface LoadedABookData extends ABookData {
 export interface ABookData {
 	metadata: ABookMetadata
 }
-
 
 export type ABookFileMetadata =
 	| {

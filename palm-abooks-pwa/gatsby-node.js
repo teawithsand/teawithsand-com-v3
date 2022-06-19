@@ -33,7 +33,7 @@ exports.onCreateWebpackConfig = ({
 		},
 		newUrlLoaderRule,
 	]
-	
+
 	/*
 	config.module.rules = [
 		...config.module.rules,

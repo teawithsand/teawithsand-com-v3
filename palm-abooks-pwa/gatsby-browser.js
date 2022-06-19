@@ -1,5 +1,4 @@
 // TODO(teawithsand): configure gatsby-plugin-offline here with custom code in service worker
-
 import "tws-common/scss/ui.scss"
 
 export const onServiceWorkerUpdateReady = () => {

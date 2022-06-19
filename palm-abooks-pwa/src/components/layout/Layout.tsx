@@ -1,9 +1,11 @@
-import Navbar from "@app/components/layout/Navbar"
-import { createStore } from "@app/domain/redux/store"
 import React, { useEffect, useMemo } from "react"
 import { Provider } from "react-redux"
-import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
+
+import Navbar from "@app/components/layout/Navbar"
+import { createStore } from "@app/domain/redux/store"
+
 import { BFRPlayer } from "tws-common/player/bfr/player"
+import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
 
 const queryClient = new QueryClient()
 

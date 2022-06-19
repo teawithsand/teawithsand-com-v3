@@ -1,12 +1,14 @@
 import React from "react"
 import {
-	Form as FinalForm,
 	Field as FinalField,
+	Form as FinalForm,
 	FormSpy,
 } from "react-final-form"
-import { Form, Button } from "tws-common/ui"
-import { formatFileSize } from "tws-common/lang/fileSize"
+
 import { abookFilesMimesAndExtensions } from "@app/util/fileTypes"
+
+import { formatFileSize } from "tws-common/lang/fileSize"
+import { Button, Form } from "tws-common/ui"
 
 export type CreateABookFormData = {
 	name: string
@@ -63,7 +65,9 @@ const CreateABookForm = (props: {
 							{({ input }) => {
 								return (
 									<Form.Control
-										accept={abookFilesMimesAndExtensions.join(",")}
+										accept={abookFilesMimesAndExtensions.join(
+											",",
+										)}
 										type="file"
 										{...{
 											...input,

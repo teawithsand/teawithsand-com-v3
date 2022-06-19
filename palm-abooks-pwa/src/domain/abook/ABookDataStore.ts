@@ -1,4 +1,5 @@
 import { ABookData } from "@app/domain/abook/ABookStore"
+
 import LocalForageKeyValueStore from "tws-common/keyvalue/LocalForageKeyValueStore"
 
 export const ABOOK_DATA_STORE =

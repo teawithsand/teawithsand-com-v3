@@ -1,14 +1,15 @@
 import {
-	playlistSynchronizer,
-	whatToPlayReducer,
-	WhatToPlayState,
-} from "@app/domain/redux/reducer"
-import {
 	combineReducers,
 	configureStore,
 	createReducer,
 } from "@reduxjs/toolkit"
 import { useSelector } from "react-redux"
+
+import {
+	playlistSynchronizer,
+	whatToPlayReducer,
+	WhatToPlayState,
+} from "@app/domain/redux/reducer"
 
 import { BFRReducer } from "tws-common/player/bfr/reducer"
 import { BFRState } from "tws-common/player/bfr/state"
@@ -54,3 +55,6 @@ export const createStore = () =>
  */
 export const useBFRSelector = <T>(selector: (state: BFRState) => T) =>
 	useSelector((state: State) => selector(state.bfrState))
+
+export const useWTPSelector = <T>(selector: (state: WhatToPlayState) => T) =>
+	useSelector((state: State) => selector(state.whatToPlayState))

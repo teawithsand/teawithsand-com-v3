@@ -1,9 +1,10 @@
+import AppTranslationEN from "@app/trans/AppTranslationEN"
+
+import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
 import Translator, {
 	createTranslatorContext,
 	useTranslator,
 } from "tws-common/trans/Translator"
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
-import AppTranslationEN from "@app/trans/AppTranslationEN"
 
 export default interface AppTranslation {
 	appName: string

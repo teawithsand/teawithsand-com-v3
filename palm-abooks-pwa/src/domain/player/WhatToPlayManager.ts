@@ -1,16 +1,12 @@
-import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
-import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
-import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import PlayerSource, {
-	FunctionPlayerSource,
-} from "tws-common/player/source/PlayerSource"
-
 import {
+	ABOOK_STORE,
 	ABookActiveRecord,
 	ABookFileMetadata,
 	ABookID,
-	ABOOK_STORE,
 } from "@app/domain/abook/ABookStore"
+
+import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
+import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
 import DefaultTaskManager from "tws-common/lang/task/DefaultTaskManager"
 import { DefaultTaskAtom, TaskAtomHandle } from "tws-common/lang/task/TaskAtom"
 import TaskManager from "tws-common/lang/task/TaskManager"
@@ -19,7 +15,11 @@ import {
 	MetadataLoadingResult,
 	MetadataLoadingResultType,
 } from "tws-common/player/metadata/Metadata"
+import MetadataBag from "tws-common/player/metadata/MetadataBag"
 import MetadataLoader from "tws-common/player/metadata/MetadataLoader"
+import PlayerSource, {
+	FunctionPlayerSource,
+} from "tws-common/player/source/PlayerSource"
 
 export type Playable = {
 	type: "abook"

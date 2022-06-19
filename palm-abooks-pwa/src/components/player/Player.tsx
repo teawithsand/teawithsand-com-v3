@@ -1,10 +1,12 @@
+import React from "react"
+import { useDispatch } from "react-redux"
+
 import { setWhatToPlaySource } from "@app/domain/redux/actions"
 import { useBFRSelector } from "@app/domain/redux/store"
 import { audioMimesAndExtensions } from "@app/util/fileTypes"
-import React from "react"
-import { useDispatch } from "react-redux"
-import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
+
 import { formatDurationSeconds } from "tws-common/lang/time/format"
+import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
 import { BlobPlayerSource } from "tws-common/player/source/PlayerSource"
 import { Button, ButtonGroup, Col, Form, Row } from "tws-common/ui"
 
@@ -18,7 +20,8 @@ const Player = () => {
 	const isPlayingWhenReady = useBFRSelector(
 		bfr => bfr.playerConfig.isPlayingWhenReady,
 	)
-	const sources = useBFRSelector(bfr => bfr.playerConfig.playlist.data)
+	// const sources = useWTPSelector(wtp => wtp.syncState.)
+	const sources = []
 	const currentDuration = useBFRSelector(
 		bfr => bfr.playerState.playbackState.duration,
 	)

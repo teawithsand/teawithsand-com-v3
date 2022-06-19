@@ -1,8 +1,8 @@
 import React from "react"
-import { Container, Nav, Navbar as Bar } from "tws-common/ui"
-import LinkContainer from "tws-common/ui/LinkContainer"
-
 import styled from "styled-components"
+
+import { Navbar as Bar, Container, Nav } from "tws-common/ui"
+import LinkContainer from "tws-common/ui/LinkContainer"
 
 const ToEndPaginator = styled.span`
 	margin-left: auto;

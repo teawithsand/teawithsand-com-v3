@@ -1,4 +1,5 @@
 import React from "react"
+
 import ActualLayout from "./components/layout/Layout"
 
 const Layout = props => {
