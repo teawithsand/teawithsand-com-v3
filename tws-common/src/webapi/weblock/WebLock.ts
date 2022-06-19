@@ -1,10 +1,10 @@
 /**
  * Better api for WebLocks, with potential of polyfill implementation.
  *
- * // TODO(teawithsand): make it implement lock interface
+ * It's nothing more than a simple wrapper over existing WebLocks API.
  */
 export default class WebLock {
-	constructor(private readonly key: string) {}
+	constructor(public readonly key: string) {}
 
 	claim = async (
 		opts:
