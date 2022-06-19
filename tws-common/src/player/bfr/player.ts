@@ -54,6 +54,21 @@ export class BFRPlayer<T> {
 				element.playbackRate = playerConfig.speed
 			}
 
+			const anyElement = element as any
+			if (
+				"preservesPitch" in anyElement &&
+				anyElement.preservesPitch !== playerConfig.preservePitchForSpeed
+			) {
+				anyElement.preservesPitch = playerConfig.preservePitchForSpeed
+			} else if (
+				"mozPreservesPitch" in anyElement &&
+				anyElement.mozPreservesPitch !==
+					playerConfig.preservePitchForSpeed
+			) {
+				anyElement.mozPreservesPitch =
+					playerConfig.preservePitchForSpeed
+			}
+
 			if (playerConfig.volume !== element.volume) {
 				element.volume = playerConfig.volume
 			}
@@ -125,7 +140,7 @@ export class BFRPlayer<T> {
 					playerState.readyState === PlayerReadyState.FUTURE_DATA ||
 					playerState.readyState === PlayerReadyState.ENOUGH_DATA ||
 					playerState.readyState === PlayerReadyState.CURRENT_DATA
-					
+
 				if (
 					!playerState.paused &&
 					isReadyStateOk &&

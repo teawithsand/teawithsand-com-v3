@@ -21,6 +21,9 @@ export const setMetadata = createAction<{
 	metadata: MetadataLoadingResult
 }>(`${prefix}/setMetadata`)
 export const setSpeed = createAction<number>(`${prefix}/setSpeed`)
+export const setPreservePitchForSpeed = createAction<boolean>(
+	`${prefix}/setPreservePitchForSpeed`,
+)
 export const setVolume = createAction<number>(`${prefix}/setVolume`)
 
 export const doSeek = createAction<number>(`${prefix}/doSeek`)

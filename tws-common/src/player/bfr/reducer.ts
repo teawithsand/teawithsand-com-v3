@@ -8,6 +8,7 @@ import {
 	setAllowExternalSetIsPlayingWhenReady,
 	setIsPlayingWhenReady,
 	setPlaylist,
+	setPreservePitchForSpeed,
 	setSpeed,
 	setVolume,
 } from "tws-common/player/bfr/actions"
@@ -28,6 +29,7 @@ export const BFRReducer = createReducer<BFRState>(
 			seekData: makeSyncRoot(null),
 
 			speed: 1,
+			preservePitchForSpeed: false,
 			volume: 1,
 
 			allowExternalSetIsPlayingWhenReady: true,
@@ -123,5 +125,8 @@ export const BFRReducer = createReducer<BFRState>(
 			.addCase(setAllowExternalSetIsPlayingWhenReady, (state, action) => {
 				state.playerConfig.allowExternalSetIsPlayingWhenReady =
 					action.payload
+			})
+			.addCase(setPreservePitchForSpeed, (state, action) => {
+				state.playerConfig.preservePitchForSpeed = action.payload
 			}),
 )

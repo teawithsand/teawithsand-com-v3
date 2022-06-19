@@ -1,13 +1,11 @@
-import {
-	getNowPerformanceTimestamp,
-	PerformanceTimestampMs,
-} from "tws-common/lang/time/Timestamp"
-import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
-import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
-import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
-import { NamedSyncRoot } from "tws-common/redux/sync/root"
+import { getNowPerformanceTimestamp, PerformanceTimestampMs } from "tws-common/lang/time/Timestamp";
+import MetadataBag from "tws-common/player/metadata/MetadataBag";
+import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource";
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
+import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState";
+import PlayerReadyState from "tws-common/player/tool/PlayerReadyState";
+import { NamedSyncRoot } from "tws-common/redux/sync/root";
+
 
 export type PlaybackState = {
 	playerError: MediaError | null
@@ -51,6 +49,7 @@ export type BFRState = {
 	playerConfig: {
 		isPlayingWhenReady: boolean
 		speed: number
+		preservePitchForSpeed: boolean
 		volume: number
 		seekData: NamedSyncRoot<
 			{ position: number } | null,
