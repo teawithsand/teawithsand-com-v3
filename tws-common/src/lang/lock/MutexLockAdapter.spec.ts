@@ -1,9 +1,10 @@
-import SimpleLock from "tws-common/lang/lock/SimpleLock"
+import { Lock } from "tws-common/lang/lock/Lock"
+import { MutexLockAdapter } from "tws-common/lang/lock/MutexLockAdapter"
 import { simpleSleep } from "tws-common/lang/sleep"
 
 describe("SimpleLock", () => {
 	it("does what locks are supposed to do", async () => {
-		const lock = new SimpleLock()
+		const lock = new Lock(new MutexLockAdapter())
 
 		let isTaskRunning = false
 		const promises = []
