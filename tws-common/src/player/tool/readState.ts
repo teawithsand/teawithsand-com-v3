@@ -27,13 +27,13 @@ const flattenBuffered = (ranges: TimeRanges) => {
 export type HTMLPlayerState = {
 	error: MediaError | null
 	paused: boolean
-	networkState: number
-	readyState: number
+	// rawNetworkState: number
+	// rawReadyState: number
 	isSeeking: boolean
 	isEnded: boolean
 
-	simpleNetworkState: PlayerNetworkState
-	simpleReadyState: PlayerReadyState
+	networkState: PlayerNetworkState
+	readyState: PlayerReadyState
 
 	isPlaying: boolean
 
@@ -50,8 +50,8 @@ export const readHTMLPlayerState = (element: Element): HTMLPlayerState => {
 	const {
 		error,
 		paused,
-		networkState,
-		readyState,
+		networkState: rawNetworkState,
+		readyState: rawReadyState,
 		currentTime,
 		duration,
 		seeking,
@@ -59,8 +59,8 @@ export const readHTMLPlayerState = (element: Element): HTMLPlayerState => {
 		buffered,
 	} = element
 
-	const simpleNetworkState = simplePlayerNetworkStateFromNative(networkState)
-	const simpleReadyState = simplePlayerReadyStateFromNative(readyState)
+	const networkState = simplePlayerNetworkStateFromNative(rawNetworkState)
+	const readyState = simplePlayerReadyStateFromNative(rawReadyState)
 
 	return {
 		error,
@@ -69,16 +69,19 @@ export const readHTMLPlayerState = (element: Element): HTMLPlayerState => {
 		currentTime: sanitizeTime(currentTime),
 		duration: sanitizeTime(duration),
 		isSeeking: seeking,
-		networkState, // : simplePlayerNetworkStateFromNative(networkState),
-		readyState, //: simplePlayerReadyStateFromNative(readyState),
-		simpleReadyState,
-		simpleNetworkState,
+
+		// rawNetworkState,
+		// rawReadyState,
+
+		readyState,
+		networkState,
+
 		buffered: flattenBuffered(buffered),
 
 		isPlaying:
 			!seeking &&
 			!paused &&
 			!ended &&
-			simpleReadyState === PlayerReadyState.ENOUGH_DATA,
+			readyState === PlayerReadyState.ENOUGH_DATA,
 	}
 }

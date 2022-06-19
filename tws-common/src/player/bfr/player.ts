@@ -95,8 +95,7 @@ export class BFRPlayer<T> {
 			this.sourceCleanup !== null &&
 			!playerState.isEnded &&
 			!playerState.error &&
-			!playerState.isSeeking &&
-			playerState.readyState === PlayerReadyState.FUTURE_DATA
+			!playerState.isSeeking
 		) {
 			// Once we are in ended state
 			// pause triggers.
@@ -122,7 +121,16 @@ export class BFRPlayer<T> {
 					this.store.dispatch(onExternalSetIsPlayingWhenReady(false))
 				}
 			} else {
-				if (!playerState.paused && playerState.isPlaying) {
+				const isReadyStateOk =
+					playerState.readyState === PlayerReadyState.FUTURE_DATA ||
+					playerState.readyState === PlayerReadyState.ENOUGH_DATA ||
+					playerState.readyState === PlayerReadyState.CURRENT_DATA
+					
+				if (
+					!playerState.paused &&
+					isReadyStateOk &&
+					playerState.isPlaying
+				) {
 					this.store.dispatch(onExternalSetIsPlayingWhenReady(true))
 				}
 			}
