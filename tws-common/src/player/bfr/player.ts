@@ -92,7 +92,7 @@ export class BFRPlayer<T> {
 			) {
 				const seekData = playerConfig.seekData.data
 				this.lastSeekId = playerConfig.seekData.id
-				this.seek(seekData.position)
+				this.element.currentTime = seekData.position
 			}
 		})
 		this.releaseReduxStore = () => unsubscribe()
@@ -341,9 +341,5 @@ export class BFRPlayer<T> {
 				if (prevSourceCleanup) prevSourceCleanup()
 			}
 		}
-	}
-
-	private seek = (to: number) => {
-		this.element.currentTime = to
 	}
 }
