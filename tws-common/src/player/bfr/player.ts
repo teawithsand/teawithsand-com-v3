@@ -322,8 +322,9 @@ export class BFRPlayer<T> {
 
 						// load resets playback rate and volume(?)
 						this.element.load()
-						this.element.playbackRate = state.playerConfig.speed
-						this.element.volume = state.playerConfig.volume
+						// This is not needed, as sync from reading state and emitting it to redux will trigger anyway
+						// this.element.playbackRate = state.playerConfig.speed
+						// this.element.volume = state.playerConfig.volume
 
 						this.readAndEmitHTMLElementState()
 					})().finally(() => {
