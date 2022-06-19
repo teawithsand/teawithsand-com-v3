@@ -45,6 +45,19 @@ export class RWLock {
 }
 
 /**
+ * Adapter, which returns same adapter for read and write locks.
+ */
+export class FakeRWLockAdapter implements RWLockAdapter {
+	public readonly read: LockAdapter
+	public readonly write: LockAdapter
+
+	constructor(adapter: LockAdapter) {
+		this.read = adapter
+		this.write = adapter
+	}
+}
+
+/**
  * Simple wrapper on LockAdapter, which provides additional features and makes using lock adapter simple and less error-prone.
  */
 export class Lock {
