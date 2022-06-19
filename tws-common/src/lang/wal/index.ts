@@ -13,7 +13,7 @@ export interface WALStore<T> {
 export class SimpleWALHelper<T, C = void> {
 	constructor(
 		private readonly store: WALStore<T>,
-		private readonly handler: ( data: T, ctx: C) => Promise<void>,
+		private readonly handler: (data: T, ctx: C) => Promise<void>,
 	) {}
 
 	/**
@@ -36,7 +36,7 @@ export class SimpleWALHelper<T, C = void> {
 		try {
 			await this.handler(data, ctx)
 		} finally {
-            // operation has to be considered done always
+			// operation has to be considered done always
 			await this.store.dropOperationData(id)
 		}
 	}

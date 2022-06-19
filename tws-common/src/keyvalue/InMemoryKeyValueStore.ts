@@ -2,8 +2,10 @@ import KeyValueStore, {
 	PrefixKeyValueStore,
 } from "tws-common/keyvalue/KeyValueStore"
 
-export default class InMemoryKeyValueStore<V extends {}, K extends string = string>
-	implements KeyValueStore<V, K>, PrefixKeyValueStore<V, K>
+export default class InMemoryKeyValueStore<
+	V extends {},
+	K extends string = string,
+> implements KeyValueStore<V, K>, PrefixKeyValueStore<V, K>
 {
 	constructor(private readonly map: Map<K, V> = new Map()) {}
 

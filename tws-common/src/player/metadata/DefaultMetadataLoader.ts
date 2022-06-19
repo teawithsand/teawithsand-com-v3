@@ -5,7 +5,9 @@ import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerS
 
 export default class DefaultMetadataLoader implements MetadataLoader {
 	loadMetadata = async (src: PlayerSource): Promise<Metadata> => {
-		const [url, closer] = await DEFAULT_PLAYER_SOURCE_RESOLVER.obtainURL(src)
+		const [url, closer] = await DEFAULT_PLAYER_SOURCE_RESOLVER.obtainURL(
+			src,
+		)
 
 		try {
 			const audio = new Audio()
@@ -36,9 +38,7 @@ export default class DefaultMetadataLoader implements MetadataLoader {
 
 				const timeout = setTimeout(() => {
 					reject(
-						new Error(
-							`Timeout when loading metadata for ${src}`,
-						),
+						new Error(`Timeout when loading metadata for ${src}`),
 					)
 				}, 30 * 1000) // 30s is a lot of timeout btw
 

@@ -1,6 +1,9 @@
-import ObjectFileStore, { ObjectFileStoreObject, PrefixObjectFileStore, StoredFileObject } from "tws-common/file/ofs/ObjectFileStore";
-import { collectAsyncIterable } from "tws-common/lang/asyncIterator";
-
+import ObjectFileStore, {
+	ObjectFileStoreObject,
+	PrefixObjectFileStore,
+	StoredFileObject,
+} from "tws-common/file/ofs/ObjectFileStore"
+import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 
 export default class MutatingObjectFileStore<M extends {}, E extends {}>
 	implements ObjectFileStore<M>, PrefixObjectFileStore<M>

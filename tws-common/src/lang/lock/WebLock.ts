@@ -1,6 +1,6 @@
 /**
  * Better api for WebLocks, with potential of polyfill implementation.
- * 
+ *
  * // TODO(teawithsand): make it implement lock interface
  */
 export default class WebLock {
@@ -30,11 +30,11 @@ export default class WebLock {
 				ifAvailable: ifAvailable ?? false,
 			},
 			async lock => {
-                if (lock === null && ifAvailable) {
-                    await opWhenNotAcquired()
-                } else {
-                    await opWhenAcquired()
-                }
+				if (lock === null && ifAvailable) {
+					await opWhenNotAcquired()
+				} else {
+					await opWhenAcquired()
+				}
 			},
 		)
 	}

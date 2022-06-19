@@ -1,7 +1,6 @@
-import { default as localforage } from "localforage";
-import { INDEXEDDB, LOCALSTORAGE, WEBSQL } from "localforage";
-import { extendPrototype } from "localforage-startswith";
-
+import { default as localforage } from "localforage"
+import { INDEXEDDB, LOCALSTORAGE, WEBSQL } from "localforage"
+import { extendPrototype } from "localforage-startswith"
 
 extendPrototype(localforage)
 const newLocalForage = localforage as ReturnType<typeof extendPrototype>
