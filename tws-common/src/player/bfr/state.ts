@@ -1,11 +1,14 @@
-import { getNowPerformanceTimestamp, PerformanceTimestampMs } from "tws-common/lang/time/Timestamp";
-import MetadataBag from "tws-common/player/metadata/MetadataBag";
-import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource";
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
-import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState";
-import PlayerReadyState from "tws-common/player/tool/PlayerReadyState";
-import { NamedSyncRoot } from "tws-common/redux/sync/root";
-
+import {
+	getNowPerformanceTimestamp,
+	PerformanceTimestampMs,
+} from "tws-common/lang/time/Timestamp"
+import { AudioFilter } from "tws-common/player/filter/filter"
+import MetadataBag from "tws-common/player/metadata/MetadataBag"
+import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
+import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
+import { NamedSyncRoot } from "tws-common/redux/sync/root"
 
 export type PlaybackState = {
 	playerError: MediaError | null
@@ -44,6 +47,7 @@ export type SleepState = {
 
 export const bfrSeekDataSyncRootName = "tws-common/bfr-seek-data"
 export const bfrPlaylistSyncRootName = "tws-common/bfr-playlist"
+export const bfrAudioFiltersSyncRootName = "tws-common/bfr-audio-filters"
 
 export type BFRState = {
 	playerConfig: {
@@ -59,6 +63,7 @@ export type BFRState = {
 			PlayerSourceWithMetadata[],
 			typeof bfrPlaylistSyncRootName
 		>
+		filters: NamedSyncRoot<AudioFilter[], typeof bfrPlaylistSyncRootName>
 		allowExternalSetIsPlayingWhenReady: boolean
 		// Ended state when this is greater than playlist length
 		currentSourceIndex: number

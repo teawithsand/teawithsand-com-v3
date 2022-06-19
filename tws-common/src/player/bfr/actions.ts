@@ -1,5 +1,6 @@
 import { createAction } from "@reduxjs/toolkit"
 import { SleepState } from "tws-common/player/bfr/state"
+import { AudioFilter } from "tws-common/player/filter/filter"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
@@ -24,6 +25,7 @@ export const setSpeed = createAction<number>(`${prefix}/setSpeed`)
 export const setPreservePitchForSpeed = createAction<boolean>(
 	`${prefix}/setPreservePitchForSpeed`,
 )
+export const setFilters = createAction<AudioFilter[]>(`${prefix}/setFilters`)
 export const setVolume = createAction<number>(`${prefix}/setVolume`)
 
 export const doSeek = createAction<number>(`${prefix}/doSeek`)

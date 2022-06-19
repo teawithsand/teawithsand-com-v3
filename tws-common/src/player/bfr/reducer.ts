@@ -6,6 +6,7 @@ import {
 	onNewPlayerState,
 	onSourcePlaybackEnded,
 	setAllowExternalSetIsPlayingWhenReady,
+	setFilters,
 	setIsPlayingWhenReady,
 	setPlaylist,
 	setPreservePitchForSpeed,
@@ -27,6 +28,8 @@ export const BFRReducer = createReducer<BFRState>(
 			playlist: makeSyncRoot([]),
 
 			seekData: makeSyncRoot(null),
+
+			filters: makeSyncRoot([]),
 
 			speed: 1,
 			preservePitchForSpeed: false,
@@ -128,5 +131,8 @@ export const BFRReducer = createReducer<BFRState>(
 			})
 			.addCase(setPreservePitchForSpeed, (state, action) => {
 				state.playerConfig.preservePitchForSpeed = action.payload
+			})
+			.addCase(setFilters, (state, action) => {
+				state.playerConfig.filters = makeSyncRoot(action.payload)
 			}),
 )

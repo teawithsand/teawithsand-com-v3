@@ -7,6 +7,7 @@ import {
 	onSourcePlaybackEnded,
 } from "tws-common/player/bfr/actions"
 import { BFRState } from "tws-common/player/bfr/state"
+import { WebAudioFilterManager } from "tws-common/player/filter/filter"
 import PlayerSource from "tws-common/player/source/PlayerSource"
 import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
@@ -31,6 +32,7 @@ export class BFRPlayer<T> {
 	private releaseReduxStore: (() => void) | null = null
 
 	private currentPlaylistId: SyncId | null = null
+	private currentFiltersId: SyncId | null = null
 	private currentPlaylist: PlayerSource[] = []
 	private currentEntryIndex = 0
 
@@ -41,11 +43,18 @@ export class BFRPlayer<T> {
 	private isLoadingSource = false
 	private isIsPlayingSynchronizedAfterSourceLoaded = false
 
+	private readonly filtersHelper: WebAudioFilterManager | null
 	constructor(
 		private readonly element: Element,
 		private readonly store: Store<T>,
 		private readonly selector: (storeState: T) => BFRState,
 	) {
+		if (window.AudioContext) {
+			this.filtersHelper = new WebAudioFilterManager(element)
+		} else {
+			this.filtersHelper = null
+		}
+
 		this.hookToElement()
 		const unsubscribe = store.subscribe(() => {
 			const state = selector(store.getState())
@@ -75,6 +84,7 @@ export class BFRPlayer<T> {
 			this.syncPlaylist(state)
 			this.syncSource(state)
 			this.syncIsPlayingWhenReady(state)
+			this.syncFilters(state)
 
 			if (
 				playerConfig.seekData.data &&
@@ -123,7 +133,7 @@ export class BFRPlayer<T> {
 			// so handle it.
 			//
 			//
-			// Moreover, once source is loaded there is short moment before sync of IPWR is triggered, when we are not playing
+			// Moreover, once source is loaded there is short moment before sync of IsPlayingWhenReady is triggered, when we are not playing
 			// which may cause this to fire, which is not what we want, so we capture it.
 
 			// if we can use get state
@@ -222,6 +232,16 @@ export class BFRPlayer<T> {
 				this.sourceCleanup()
 				this.sourceCleanup = null
 			}
+		}
+	}
+
+	private syncFilters = (state: BFRState) => {
+		if (
+			this.filtersHelper !== null &&
+			state.playerConfig.filters.id !== this.currentFiltersId
+		) {
+			this.filtersHelper.applyFilters(state.playerConfig.filters.data)
+			this.currentFiltersId = state.playerConfig.filters.id
 		}
 	}
 
