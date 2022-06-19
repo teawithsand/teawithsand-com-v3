@@ -1,5 +1,16 @@
 export type Unlock = () => void
 
+export const NoopLockAdapter: LockAdapter = {
+	lock: async () => () => {
+		// noop
+	},
+}
+
+export const NoopRWLockAdapter: RWLockAdapter = {
+	read: NoopLockAdapter,
+	write: NoopLockAdapter,
+}
+
 export interface LockAdapter {
 	lock(): Promise<Unlock>
 }
