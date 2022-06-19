@@ -43,8 +43,10 @@ class DocumentTitleHelperImpl {
 		let isReleased = false
 		return {
 			setTitle: title => {
-				claim.value = title
-				this.syncWindowTitle()
+				if (claim.value !== title) {
+					claim.value = title
+					this.syncWindowTitle()
+				}
 			},
 			release: () => {
 				if (!isReleased) {
