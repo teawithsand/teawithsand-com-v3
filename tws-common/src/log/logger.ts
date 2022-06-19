@@ -30,12 +30,12 @@ export const stringifyLogLevel = (lv: LogLevel): string => {
 export type LogArg = any
 export type LogTag = string
 
-export interface Logger {
+export interface Log {
 	log(tag: LogTag, level: LogLevel, ...args: LogArg[]): void
 }
 
-export class ExtLogger implements Logger {
-	constructor(private readonly inner: Logger) {}
+export class ExtLog implements Log {
+	constructor(private readonly inner: Log) {}
 
 	log = this.inner.log.bind(this.inner)
 
@@ -64,7 +64,7 @@ export class ExtLogger implements Logger {
 // TODO(teawithsand): methods, which allow mocking this logger or something
 //  In fact, it's sufficient to make ext logger able to swap it's inner logger
 //  so it can stay constant
-export const DEFAULT_LOGGER = new ExtLogger({
+export const LOG = new ExtLog({
 	log: (tag, lv, ...args) => {
 		const format = () => `[${stringifyLogLevel(lv).toUpperCase()} - ${tag}]`
 		if (lv === LogLevel.ERROR || lv === LogLevel.ASSERT) {
