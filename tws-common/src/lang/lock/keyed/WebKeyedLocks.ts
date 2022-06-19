@@ -35,3 +35,8 @@ export class WebKeyedLocks implements KeyedLocks<KeyedLockOptions> {
 	getLock = (key: string, options: KeyedLockOptions): Lock =>
 		new Lock(this.getLockAdapter(key, options))
 }
+
+/**
+ * In fact, web keyed locks under the hood is singleton, so this is fine.
+ */
+export const GLOBAL_WEB_KEYED_LOCKS = new WebKeyedLocks()
