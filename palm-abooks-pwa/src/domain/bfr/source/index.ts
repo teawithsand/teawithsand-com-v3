@@ -12,8 +12,6 @@ export type MPlayerSource = {
 	id: string
 } & PlayerSource
 
-export type MPlaylistMetadata = {}
-
 let globalInstance: MPlayerSourceResolver | null = null
 export class MPlayerSourceResolver extends BasePlayerSourceResolver<MPlayerSource> {
 	public static getInstance(): MPlayerSourceResolver {
