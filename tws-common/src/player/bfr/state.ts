@@ -53,7 +53,7 @@ export type BFRPlaylist<M, S> = {
 	sources: S[]
 }
 
-export type BFRState<PM = any, PS = any> = {
+export type BFRState<PM = unknown, PS = unknown> = {
 	playerConfig: {
 		isPlayingWhenReady: boolean
 		speed: number

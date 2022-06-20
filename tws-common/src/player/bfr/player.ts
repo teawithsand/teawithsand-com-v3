@@ -48,7 +48,7 @@ export class BFRPlayer<T, PS extends PlayerSource> {
 		private readonly element: Element,
 		private readonly store: Store<T>,
 		private readonly sourceResolver: PlayerSourceResolver<PS>,
-		private readonly selector: (storeState: T) => BFRState<any, PS>,
+		private readonly selector: (storeState: T) => BFRState<unknown, PS>,
 	) {
 		if (window.AudioContext) {
 			this.filtersHelper = new WebAudioFilterManager(element)
@@ -261,13 +261,13 @@ export class BFRPlayer<T, PS extends PlayerSource> {
 		}
 	}
 
-	private syncPlaylist = (state: BFRState) => {
+	private syncPlaylist = (state: BFRState<unknown, PS>) => {
 		if (state.playerConfig.playlist.id !== this.currentPlaylistId) {
 			this.currentPlaylistId = state.playerConfig.playlist.id
 
 			this.currentPlaylist = (
 				state.playerConfig.playlist.data?.sources ?? []
-			).map(v => v.playerSource)
+			)
 			this.currentEntryIndex = -1 // any index, but must not equal current one
 		}
 	}
