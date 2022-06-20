@@ -17,7 +17,7 @@ import {
 import {
 	BFRPlaylist,
 	BFRState,
-	IDLE_PLAYBACK_STATE,
+	IDLE_BFR_PLAYER_STATE,
 } from "tws-common/player/bfr/state"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
 import { makeSyncRoot } from "tws-common/redux/sync/root"
@@ -50,12 +50,8 @@ export const createBFRReducer = <PM, PS>() =>
 				loadedMetadataResultSave: true,
 				loadMetadataPolicy: "not-loaded-or-error",
 			},
-			playerState: {
-				playbackState: IDLE_PLAYBACK_STATE,
-				playlistState: {
-					metadataBag: new MetadataBag([]),
-				},
-			},
+			metadataState: new MetadataBag([]),
+			playerState: IDLE_BFR_PLAYER_STATE,
 
 			sleepConfig: null,
 			sleepState: null,
@@ -74,17 +70,14 @@ export const createBFRReducer = <PM, PS>() =>
 						sourceError,
 					} = action.payload
 					state.playerState = {
-						...state.playerState,
-						playbackState: {
-							duration,
-							position,
-							isPlaying,
-							isSeeking,
-							networkState,
-							playerError,
-							readyState,
-							sourceError,
-						},
+						duration,
+						position,
+						isPlaying,
+						isSeeking,
+						networkState,
+						playerError,
+						readyState,
+						sourceError,
 					}
 				})
 				.addCase(onSourcePlaybackEnded, state => {
@@ -95,13 +88,13 @@ export const createBFRReducer = <PM, PS>() =>
 						castDraft(action.payload as BFRPlaylist<PM, PS>),
 					)
 					state.playerConfig.currentSourceIndex = 0 // always reset to first one on new playlist
-					state.playerState = {
-						playbackState: IDLE_PLAYBACK_STATE,
-						playlistState: {
-							// TODO(teawithsand): fix it, at least length should match
-							metadataBag: new MetadataBag([]),
-						},
-					}
+					state.playerState = IDLE_BFR_PLAYER_STATE
+					state.metadataState = new MetadataBag(
+						new Array(
+							state.playerConfig.playlist.data?.sources.length ??
+								0,
+						).fill(null),
+					)
 				})
 				.addCase(setIsPlayingWhenReady, (state, action) => {
 					state.playerConfig.isPlayingWhenReady = action.payload

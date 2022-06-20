@@ -9,7 +9,7 @@ import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { NamedSyncRoot } from "tws-common/redux/sync/root"
 
-export type PlaybackState = {
+export type BFRPlayerState = {
 	playerError: MediaError | null
 	sourceError: PlayerSourceError | null
 
@@ -23,7 +23,7 @@ export type PlaybackState = {
 	readyState: PlayerReadyState
 }
 
-export const IDLE_PLAYBACK_STATE: PlaybackState = {
+export const IDLE_BFR_PLAYER_STATE: BFRPlayerState = {
 	playerError: null,
 	sourceError: null,
 	duration: null,
@@ -34,13 +34,13 @@ export const IDLE_PLAYBACK_STATE: PlaybackState = {
 	readyState: PlayerReadyState.NOTHING,
 }
 
-export type SleepConfig = {
+export type BFRSleepConfig = {
 	resetOnDeviceShake: boolean
 	turnVolumeDownBeforeEnd: boolean
 	durationMs: number
 }
 
-export type SleepState = {
+export type BFRSleepState = {
 	lastSetAt: PerformanceTimestampMs
 }
 
@@ -77,8 +77,9 @@ export type BFRState<PM = any, PS = any> = {
 		loadMetadataPolicy: "never" | "not-loaded" | "not-loaded-or-error"
 		loadedMetadataResultSave: boolean
 	}
-	sleepConfig: SleepConfig | null // when null, then sleep unset
-	sleepState: SleepState | null // when null, then sleep task unset, for instance because playback is paused
+	metadataState: MetadataBag // empty bag when no playlist or it has no sources
+	sleepConfig: BFRSleepConfig | null // when null, then sleep unset
+	sleepState: BFRSleepState | null // when null, then sleep task unset, for instance because playback is paused
 	backAfterPauseConfig: {
 		// Sorted sequence of pairs
 		// If pause is up to given time, then on before playback starts
@@ -88,12 +89,7 @@ export type BFRState<PM = any, PS = any> = {
 			backBy: number
 		}[]
 	}
-	playerState: {
-		playlistState: {
-			metadataBag: MetadataBag
-		}
-		playbackState: PlaybackState
-	}
+	playerState: BFRPlayerState
 }
 
 export const bfrPlaylistSelector = <PM, PS>(state: BFRState<PM, PS>) =>

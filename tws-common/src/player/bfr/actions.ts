@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit"
-import { BFRPlaylist, SleepState } from "tws-common/player/bfr/state"
+import { BFRPlaylist, BFRSleepState } from "tws-common/player/bfr/state"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
@@ -54,7 +54,7 @@ export const onExternalSetIsPlayingWhenReady = createAction<boolean>(
 )
 export const onSourcePlaybackEnded = createAction<void>(`${prefix}/onEnded`)
 
-export const onSleepStateChanged = createAction<SleepState | null>(
+export const onSleepStateChanged = createAction<BFRSleepState | null>(
 	`${prefix}/onSleepStateChanged`,
 )
 export const onSleepDone = createAction<void>(`${prefix}/onSleepDone`)

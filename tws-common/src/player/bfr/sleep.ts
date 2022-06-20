@@ -6,7 +6,7 @@ import {
 	PerformanceTimestampMs,
 } from "tws-common/lang/time/Timestamp"
 import { onSleepDone, onSleepStateChanged } from "tws-common/player/bfr/actions"
-import { BFRState, SleepConfig } from "tws-common/player/bfr/state"
+import { BFRState, BFRSleepConfig } from "tws-common/player/bfr/state"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
@@ -18,7 +18,7 @@ export class BFRSleep<T> {
 		taskHandle: any
 		realDuration: number
 		startedTimestamp: PerformanceTimestampMs
-		config: SleepConfig
+		config: BFRSleepConfig
 	} | null = null
 
 	private readonly atom = new DefaultTaskAtom()
@@ -47,7 +47,7 @@ export class BFRSleep<T> {
 		this.releaseReduxStore = () => unsubscribe()
 	}
 
-	private submitSleepConfig = (config: SleepConfig | null) => {
+	private submitSleepConfig = (config: BFRSleepConfig | null) => {
 		// Reset sleep:
 		// 1. If config changed/mismatch
 		// 2. When paused(done above)
@@ -84,7 +84,7 @@ export class BFRSleep<T> {
 		}
 	}
 
-	private setSleepTask = (config: SleepConfig) => {
+	private setSleepTask = (config: BFRSleepConfig) => {
 		this.releaseSleepTask(false)
 
 		const now = getNowPerformanceTimestamp()
