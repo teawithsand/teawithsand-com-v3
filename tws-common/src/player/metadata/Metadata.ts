@@ -1,4 +1,4 @@
-type Metadata = {
+export type Metadata = {
 	duration: number | null
 }
 

@@ -1,6 +1,6 @@
 import Metadata from "tws-common/player/metadata/Metadata"
-import PlayerSource from "tws-common/player/source/PlayerSource"
+import { NewPlayerSource } from "tws-common/player/newsource/NewPlayerSource"
 
-export default interface MetadataLoader {
-	loadMetadata(src: PlayerSource): Promise<Metadata>
+export default interface MetadataLoader<T extends NewPlayerSource> {
+	loadMetadata(src: T): Promise<Metadata>
 }

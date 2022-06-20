@@ -1,18 +1,19 @@
-import PlayerSource, {
-	BlobPlayerSource,
-	FunctionPlayerSource,
-	LoadingPlayerSource,
-	URLPlayerSource,
-} from "tws-common/player/source/PlayerSource"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import PlayerSource, { BlobPlayerSource, FunctionPlayerSource, LoadingPlayerSource, URLPlayerSource } from "tws-common/player/source/PlayerSource";
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
+
 
 /**
  * Util, which takes source and makes URLs from it.
+ *
+ * @deprecated as well as old PlayerSource
  */
 export default interface PlayerSourceResolver {
 	obtainURL(source: PlayerSource): Promise<[string, () => void]>
 }
 
+/**
+ * @deprecated as well as old PlayerSource
+ */
 export class DefaultPlayerSourceResolver implements PlayerSourceResolver {
 	private readonly cachedSourcesIds: Map<
 		string,
@@ -130,4 +131,7 @@ export class DefaultPlayerSourceResolver implements PlayerSourceResolver {
 	}
 }
 
+/**
+ * @deprecated as well as old PlayerSource
+ */
 export const DEFAULT_PLAYER_SOURCE_RESOLVER = new DefaultPlayerSourceResolver()
