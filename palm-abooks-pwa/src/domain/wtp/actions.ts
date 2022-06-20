@@ -1,6 +1,6 @@
 import { createAction } from "@reduxjs/toolkit"
 
-import { WhatToPlaySource } from "@app/domain/redux/reducer"
+import { WhatToPlaySource } from "@app/domain/wtp/reducer"
 
 import { makeActionPrefix } from "tws-common/redux/action"
 

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from "react"
 import { Provider } from "react-redux"
 
 import Navbar from "@app/components/layout/Navbar"
+import { MPlayerSourceResolver } from "@app/domain/bfr/source"
 import { createStore } from "@app/domain/redux/store"
 
 import { BFRPlayer } from "tws-common/player/bfr/player"
@@ -18,6 +19,7 @@ const Layout = (props: any) => {
 		const player = new BFRPlayer(
 			new Audio(),
 			store,
+			MPlayerSourceResolver.getInstance(),
 			state => state.bfrState,
 		)
 

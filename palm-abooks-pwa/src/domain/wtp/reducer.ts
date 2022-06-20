@@ -1,35 +1,23 @@
 import { createReducer } from "@reduxjs/toolkit"
 
-import { ABookActiveRecord } from "@app/domain/abook/ABookStore"
-import { setWhatToPlaySource } from "@app/domain/redux/actions"
+import { MPlayerSource } from "@app/domain/bfr/source"
 import { State } from "@app/domain/redux/store"
 
 import { LOG } from "tws-common/log/logger"
 import { setPlaylist } from "tws-common/player/bfr/actions"
-import PlayerSource, {
-	PlayerSourceWithMetadata,
-} from "tws-common/player/source/PlayerSource"
 import { makeSyncRoot, NamedSyncRoot } from "tws-common/redux/sync/root"
 import {
 	makeActionSynchronizerAction,
 	makeNamedSyncRootSynchronizer,
 } from "tws-common/redux/sync/synchronizer"
+import { setWhatToPlaySource } from "@app/domain/wtp/actions"
 
 const LOG_TAG = "palm-abooks-pwa/WTPReducer"
 
-export type WhatToPlaySource =
-	| {
-			type: "abook"
-			abook: ABookActiveRecord
-	  }
-	| {
-			type: "raw-no-meta"
-			sources: PlayerSource[]
-	  }
-	| {
-			type: "raw-with-meta"
-			sources: PlayerSourceWithMetadata[]
-	  }
+export type WhatToPlaySource = {
+	type: "files"
+	sources: MPlayerSource[]
+}
 
 type WhatToPlayStateState =
 	| {
@@ -37,7 +25,7 @@ type WhatToPlayStateState =
 	  }
 	| {
 			type: "loaded"
-			sources: PlayerSourceWithMetadata[]
+			sources: MPlayerSource[]
 	  }
 
 export const whatToPlayStateSyncRootName = "palm-abooks-pwa/what-to-play-state"
@@ -49,9 +37,19 @@ export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 		const data = s.whatToPlayState.state.data
 
 		if (data.type === "loading") {
-			return [setPlaylist([])]
+			return [
+				setPlaylist({
+					metadata: {},
+					sources: [],
+				}),
+			]
 		} else {
-			return [setPlaylist(data.sources)]
+			return [
+				setPlaylist({
+					metadata: {},
+					sources: data.sources,
+				}),
+			]
 		}
 	}),
 )
@@ -85,15 +83,7 @@ export const whatToPlayReducer = createReducer<WhatToPlayState>(
 					type: "loaded",
 					sources: [],
 				})
-			} else if (state.config.source.type === "raw-no-meta") {
-				state.state = makeSyncRoot({
-					type: "loaded",
-					sources: state.config.source.sources.map(v => ({
-						metadata: null,
-						playerSource: v,
-					})),
-				})
-			} else if (state.config.source.type === "raw-with-meta") {
+			} else if (state.config.source.type === "files") {
 				state.state = makeSyncRoot({
 					type: "loaded",
 					sources: state.config.source.sources,

@@ -5,19 +5,16 @@ import {
 } from "@reduxjs/toolkit"
 import { useSelector } from "react-redux"
 
-import {
-	playlistSynchronizer,
-	whatToPlayReducer,
-	WhatToPlayState,
-} from "@app/domain/redux/reducer"
+import { MBFRState } from "@app/domain/bfr/state"
 
-import { BFRReducer } from "tws-common/player/bfr/reducer"
+import { createBFRReducer } from "tws-common/player/bfr/reducer"
 import { BFRState } from "tws-common/player/bfr/state"
 import { SyncedIdStore, wrapReducerForSync } from "tws-common/redux/sync/store"
+import { playlistSynchronizer, whatToPlayReducer, WhatToPlayState } from "@app/domain/wtp/reducer"
 
 export type State = {
 	whatToPlayState: WhatToPlayState
-	bfrState: BFRState
+	bfrState: MBFRState
 	syncedIdStore: SyncedIdStore
 }
 
@@ -26,7 +23,7 @@ const syncedIdStoreReducer = createReducer<SyncedIdStore>({}, () => {
 })
 
 const innerReducer = combineReducers<State>({
-	bfrState: BFRReducer,
+	bfrState: createBFRReducer(),
 	whatToPlayState: whatToPlayReducer,
 	syncedIdStore: syncedIdStoreReducer,
 })
@@ -47,7 +44,7 @@ export const createStore = () =>
 		middleware: getDefaultMiddleware =>
 			getDefaultMiddleware({
 				serializableCheck: false,
-			}),
+			}) as unknown as any, // this is ok but TS complaints for some reason
 	})
 
 /**

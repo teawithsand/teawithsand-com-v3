@@ -1,8 +1,9 @@
 import React from "react"
 import { useDispatch } from "react-redux"
 
-import { setWhatToPlaySource } from "@app/domain/redux/actions"
+import { MPlayerSource } from "@app/domain/bfr/source"
 import { useBFRSelector } from "@app/domain/redux/store"
+import { setWhatToPlaySource } from "@app/domain/wtp/actions"
 import { audioMimesAndExtensions } from "@app/util/fileTypes"
 
 import { formatDurationSeconds } from "tws-common/lang/time/format"
@@ -11,7 +12,6 @@ import {
 	setIsPlayingWhenReady,
 	setSpeed,
 } from "tws-common/player/bfr/actions"
-import { BlobPlayerSource } from "tws-common/player/source/PlayerSource"
 import { Button, ButtonGroup, Col, Form, Row } from "tws-common/ui"
 
 const ZERO_ONE_RANGE_FIELD_MULTIPLIER = 100000
@@ -22,18 +22,12 @@ const Player = () => {
 	const currentSourceIndex = useBFRSelector(
 		bfr => bfr.playerConfig.currentSourceIndex,
 	)
-	const isReallyPlaying = useBFRSelector(
-		bfr => bfr.playerState?.playbackState?.isPlaying ?? false,
-	)
+	const isReallyPlaying = useBFRSelector(bfr => bfr.playerState.isPlaying)
 	const isPlayingWhenReady = useBFRSelector(
 		bfr => bfr.playerConfig.isPlayingWhenReady,
 	)
-	const currentDuration = useBFRSelector(
-		bfr => bfr.playerState.playbackState.duration,
-	)
-	const currentPosition = useBFRSelector(
-		bfr => bfr.playerState.playbackState.position,
-	)
+	const currentDuration = useBFRSelector(bfr => bfr.playerState.duration)
+	const currentPosition = useBFRSelector(bfr => bfr.playerState.position)
 
 	const currentSpeed = useBFRSelector(bfr => bfr.playerConfig.speed)
 	return (
@@ -63,9 +57,14 @@ const Player = () => {
 
 								dispatch(
 									setWhatToPlaySource({
-										type: "raw-no-meta",
+										type: "files",
 										sources: files.map(
-											f => new BlobPlayerSource(f),
+											f =>
+												({
+													type: "external-file",
+													name: f.name,
+													blob: f,
+												} as MPlayerSource),
 										),
 									}),
 								)
@@ -87,7 +86,8 @@ const Player = () => {
 						out of {formatDurationSeconds(currentDuration ?? 0)}{" "}
 						{Math.round(
 							((currentPosition ?? 0) / (currentDuration ?? 1)) *
-								100 * 10,
+								100 *
+								10,
 						) / 10}
 						%
 					</p>
