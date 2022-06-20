@@ -6,14 +6,14 @@ import {
 	BFRState,
 } from "tws-common/player/bfr/state"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import { NewPlayerSource } from "tws-common/player/source/NewPlayerSource"
+import { PlayerSource } from "tws-common/player/source/PlayerSource"
 import { SyncId } from "tws-common/redux/sync/id"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
  * in order to provide controls.
  */
-export class BFRMetadataLoader<T, PM, PS extends NewPlayerSource> {
+export class BFRMetadataLoader<T, PM, PS extends PlayerSource> {
 	private releaseReduxStore: (() => void) | null = null
 	private currentPlaylistId: SyncId | null = null
 

@@ -1,12 +1,12 @@
 import Metadata from "tws-common/player/metadata/Metadata"
 import MetadataLoader from "tws-common/player/metadata/MetadataLoader"
-import { NewPlayerSource } from "tws-common/player/source/NewPlayerSource"
-import { NewPlayerSourceResolver } from "tws-common/player/source/NewPlayerSourceResolver"
+import { PlayerSource } from "tws-common/player/source/PlayerSource"
+import { PlayerSourceResolver } from "tws-common/player/source/PlayerSourceResolver"
 
-export default class DefaultMetadataLoader<T extends NewPlayerSource>
+export default class DefaultMetadataLoader<T extends PlayerSource>
 	implements MetadataLoader<T>
 {
-	constructor(private readonly resolver: NewPlayerSourceResolver<T>) {}
+	constructor(private readonly resolver: PlayerSourceResolver<T>) {}
 
 	loadMetadata = async (src: T): Promise<Metadata> => {
 		const [url, closer] = await this.resolver.resolveSourceToURL(src)

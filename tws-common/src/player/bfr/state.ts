@@ -4,14 +4,14 @@ import {
 } from "tws-common/lang/time/Timestamp"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import NewPlayerSourceError from "tws-common/player/source/NewPlayerSourceError"
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { NamedSyncRoot } from "tws-common/redux/sync/root"
 
 export type BFRPlayerState = {
 	playerError: MediaError | null
-	sourceError: NewPlayerSourceError | null
+	sourceError: PlayerSourceError | null
 
 	position: number | null
 	duration: number | null

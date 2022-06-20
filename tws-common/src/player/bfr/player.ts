@@ -8,8 +8,8 @@ import {
 } from "tws-common/player/bfr/actions"
 import { BFRState } from "tws-common/player/bfr/state"
 import { WebAudioFilterManager } from "tws-common/player/filter/filter"
-import { NewPlayerSource } from "tws-common/player/source/NewPlayerSource"
-import { NewPlayerSourceResolver } from "tws-common/player/source/NewPlayerSourceResolver"
+import { PlayerSource } from "tws-common/player/source/PlayerSource"
+import { PlayerSourceResolver } from "tws-common/player/source/PlayerSourceResolver"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { readHTMLPlayerState } from "tws-common/player/tool/readState"
 import { SyncId } from "tws-common/redux/sync/id"
@@ -22,7 +22,7 @@ const LOG_TAG = "tws-common/BFRPlayer"
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
  * in order to provide controls.
  */
-export class BFRPlayer<T, PS extends NewPlayerSource> {
+export class BFRPlayer<T, PS extends PlayerSource> {
 	private eventListeners: {
 		event: string
 		listener: any
@@ -47,7 +47,7 @@ export class BFRPlayer<T, PS extends NewPlayerSource> {
 	constructor(
 		private readonly element: Element,
 		private readonly store: Store<T>,
-		private readonly sourceResolver: NewPlayerSourceResolver<PS>,
+		private readonly sourceResolver: PlayerSourceResolver<PS>,
 		private readonly selector: (storeState: T) => BFRState<any, PS>,
 	) {
 		if (window.AudioContext) {

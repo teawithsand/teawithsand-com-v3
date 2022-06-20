@@ -2,7 +2,7 @@ import { createAction } from "@reduxjs/toolkit"
 import { BFRPlaylist, BFRSleepState } from "tws-common/player/bfr/state"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import NewPlayerSourceError from "tws-common/player/source/NewPlayerSourceError"
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { makeActionPrefix } from "tws-common/redux/action"
@@ -38,7 +38,7 @@ export const setAllowExternalSetIsPlayingWhenReady = createAction<boolean>(
 
 export const onNewPlayerState = createAction<{
 	playerError: MediaError | null
-	sourceError: NewPlayerSourceError | null
+	sourceError: PlayerSourceError | null
 	isPlaying: boolean
 	isSeeking: boolean
 	isInnerEnded: boolean
