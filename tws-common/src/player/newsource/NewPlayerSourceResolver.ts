@@ -4,7 +4,7 @@ export type NewPlayerSourceResolver<T extends NewPlayerSource> = {
 	/**
 	 * Resolves player source into URL, which should be released once it's not needed.
 	 */
-	resolveSourceToURL(source: T): [string, () => void]
+	resolveSourceToURL(source: T): Promise<[string, () => void]>
 }
 
 export abstract class NewPlayerSourceResolverImpl<T extends NewPlayerSource>
@@ -100,7 +100,7 @@ export abstract class NewPlayerSourceResolverImpl<T extends NewPlayerSource>
 		id: string
 	}
 
-	resolveSourceToURL = (source: T): [string, () => void] => {
+	resolveSourceToURL = async (source: T): Promise<[string, () => void]> => {
 		const data = this.extractData(source)
 		if (data.type === "url") {
 			return [
