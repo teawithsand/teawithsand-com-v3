@@ -25,7 +25,7 @@ export class BFRSleep<T> {
 
 	constructor(
 		private readonly store: Store<T>,
-		selector: (storeState: T) => BFRState,
+		selector: (storeState: T) => BFRState<any, any>,
 	) {
 		const unsubscribe = store.subscribe(() => {
 			const state = selector(store.getState())
@@ -35,7 +35,8 @@ export class BFRSleep<T> {
 			if (playerConfig !== null) {
 				if (
 					!playerConfig.isPlayingWhenReady ||
-					state.playerConfig.playlist.data.length === 0
+					(state.playerConfig.playlist.data?.sources.length ?? 0) ===
+						0
 				) {
 					this.releaseSleepTask()
 				} else {

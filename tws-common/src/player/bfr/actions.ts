@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit"
-import { SleepState } from "tws-common/player/bfr/state"
+import { BFRPlaylist, SleepState } from "tws-common/player/bfr/state"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
@@ -14,7 +14,10 @@ export const setIsPlayingWhenReady = createAction<boolean>(
 	`${prefix}/setIsPlayingWhenReady`,
 )
 
-export const setPlaylist = createAction<PlayerSourceWithMetadata[]>(
+// TODO(teawithsand): this action is not type safe to use, create one which is
+//  right now one can just dispatch it and reducer has to just typecast it into valid type.
+//  It will result in bug, if invalid type gets passed here.
+export const setPlaylist = createAction<BFRPlaylist<unknown, unknown>>(
 	`${prefix}/setPlaylist`,
 )
 export const setMetadata = createAction<{

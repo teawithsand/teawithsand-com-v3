@@ -8,8 +8,8 @@ import {
 } from "tws-common/player/bfr/actions"
 import { BFRState } from "tws-common/player/bfr/state"
 import { WebAudioFilterManager } from "tws-common/player/filter/filter"
-import PlayerSource from "tws-common/player/source/PlayerSource"
-import { DEFAULT_PLAYER_SOURCE_RESOLVER } from "tws-common/player/source/PlayerSourceResolver"
+import { NewPlayerSource } from "tws-common/player/newsource/NewPlayerSource"
+import { NewPlayerSourceResolver } from "tws-common/player/newsource/NewPlayerSourceResolver"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { readHTMLPlayerState } from "tws-common/player/tool/readState"
 import { SyncId } from "tws-common/redux/sync/id"
@@ -22,7 +22,7 @@ const LOG_TAG = "tws-common/BFRPlayer"
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
  * in order to provide controls.
  */
-export class BFRPlayer<T> {
+export class BFRPlayer<T, PS extends NewPlayerSource> {
 	private eventListeners: {
 		event: string
 		listener: any
@@ -33,7 +33,7 @@ export class BFRPlayer<T> {
 
 	private currentPlaylistId: SyncId | null = null
 	private currentFiltersId: SyncId | null = null
-	private currentPlaylist: PlayerSource[] = []
+	private currentPlaylist: PS[] = []
 	private currentEntryIndex = 0
 
 	private sourceError: any | null = null
@@ -47,7 +47,8 @@ export class BFRPlayer<T> {
 	constructor(
 		private readonly element: Element,
 		private readonly store: Store<T>,
-		private readonly selector: (storeState: T) => BFRState,
+		private readonly sourceResolver: NewPlayerSourceResolver<PS>,
+		private readonly selector: (storeState: T) => BFRState<any, PS>,
 	) {
 		if (window.AudioContext) {
 			this.filtersHelper = new WebAudioFilterManager(element)
@@ -264,9 +265,9 @@ export class BFRPlayer<T> {
 		if (state.playerConfig.playlist.id !== this.currentPlaylistId) {
 			this.currentPlaylistId = state.playerConfig.playlist.id
 
-			this.currentPlaylist = state.playerConfig.playlist.data.map(
-				v => v.playerSource,
-			)
+			this.currentPlaylist = (
+				state.playerConfig.playlist.data?.sources ?? []
+			).map(v => v.playerSource)
 			this.currentEntryIndex = -1 // any index, but must not equal current one
 		}
 	}
@@ -301,7 +302,7 @@ export class BFRPlayer<T> {
 						let close: () => void
 						try {
 							;[url, close] =
-								await DEFAULT_PLAYER_SOURCE_RESOLVER.obtainURL(
+								await this.sourceResolver.resolveSourceToURL(
 									src,
 								)
 						} catch (e) {

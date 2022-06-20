@@ -4,7 +4,6 @@ import {
 } from "tws-common/lang/time/Timestamp"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import { PlayerSourceWithMetadata } from "tws-common/player/source/PlayerSource"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
@@ -49,7 +48,12 @@ export const bfrSeekDataSyncRootName = "tws-common/bfr-seek-data"
 export const bfrPlaylistSyncRootName = "tws-common/bfr-playlist"
 export const bfrAudioFiltersSyncRootName = "tws-common/bfr-audio-filters"
 
-export type BFRState = {
+export type BFRPlaylist<M, S> = {
+	metadata: M
+	sources: S[]
+}
+
+export type BFRState<PM = any, PS = any> = {
 	playerConfig: {
 		isPlayingWhenReady: boolean
 		speed: number
@@ -60,7 +64,7 @@ export type BFRState = {
 			typeof bfrSeekDataSyncRootName
 		>
 		playlist: NamedSyncRoot<
-			PlayerSourceWithMetadata[],
+			BFRPlaylist<PM, PS> | null,
 			typeof bfrPlaylistSyncRootName
 		>
 		filters: NamedSyncRoot<AudioFilter[], typeof bfrPlaylistSyncRootName>
@@ -92,7 +96,7 @@ export type BFRState = {
 	}
 }
 
-export const bfrPlaylistSelector = (state: BFRState) =>
+export const bfrPlaylistSelector = <PM, PS>(state: BFRState<PM, PS>) =>
 	state.playerConfig.playlist
 
 export const bfrSleepStateSelector = (

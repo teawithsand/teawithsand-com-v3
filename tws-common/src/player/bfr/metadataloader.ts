@@ -1,17 +1,19 @@
 import { Store } from "redux"
 import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
-import { bfrPlaylistSelector, BFRState } from "tws-common/player/bfr/state"
+import {
+	BFRPlaylist,
+	bfrPlaylistSelector,
+	BFRState,
+} from "tws-common/player/bfr/state"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import PlayerSource, {
-	PlayerSourceWithMetadata,
-} from "tws-common/player/source/PlayerSource"
+import PlayerSource from "tws-common/player/source/PlayerSource"
 import { SyncId } from "tws-common/redux/sync/id"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
  * in order to provide controls.
  */
-export class BFRMetadataLoader<T> {
+export class BFRMetadataLoader<T, PM, PS> {
 	private releaseReduxStore: (() => void) | null = null
 	private currentPlaylistId: SyncId | null = null
 
@@ -19,7 +21,7 @@ export class BFRMetadataLoader<T> {
 
 	constructor(
 		private readonly store: Store<T>,
-		private readonly selector: (storeState: T) => BFRState,
+		private readonly selector: (storeState: T) => BFRState<PM, PS>,
 		// Adapter for external metadata saving mechanism
 		// it has to be
 		private readonly saveMetadata: (
@@ -34,13 +36,15 @@ export class BFRMetadataLoader<T> {
 				this.currentPlaylistId = id
 
 				// TODO(teawithsand): pass metadata loader config to this method
-				this.triggerMetadataLoading(playlist)
+				if (playlist && playlist.sources.length > 0) {
+					this.triggerMetadataLoading(playlist)
+				}
 			}
 		})
 		this.releaseReduxStore = () => unsubscribe()
 	}
 
-	private triggerMetadataLoading = (playlist: PlayerSourceWithMetadata[]) => {
+	private triggerMetadataLoading = (playlist: BFRPlaylist<PM, PS>) => {
 		const claim = this.taskAtom.claim()
 		;(async () => {
 			if (!claim.isValid) return
