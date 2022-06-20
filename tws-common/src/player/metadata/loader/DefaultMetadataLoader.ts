@@ -1,5 +1,5 @@
+import MetadataLoader from "tws-common/player/metadata/loader/MetadataLoader"
 import Metadata from "tws-common/player/metadata/Metadata"
-import MetadataLoader from "tws-common/player/metadata/MetadataLoader"
 import { PlayerSource } from "tws-common/player/source/PlayerSource"
 import { PlayerSourceResolver } from "tws-common/player/source/PlayerSourceResolver"
 
