@@ -1,1 +1,1 @@
-export type PlayerSource = {} & { readonly ty: unique symbol }
+export type PlayerSource = {}

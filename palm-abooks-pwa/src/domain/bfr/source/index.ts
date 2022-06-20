@@ -12,7 +12,7 @@ export type MPlayerSource = {
 	id: string
 } & PlayerSource
 
-export type MPlaylistMetadata = {} & { readonly ty: unique symbol }
+export type MPlaylistMetadata = {}
 
 let globalInstance: MPlayerSourceResolver | null = null
 export class MPlayerSourceResolver extends BasePlayerSourceResolver<MPlayerSource> {
