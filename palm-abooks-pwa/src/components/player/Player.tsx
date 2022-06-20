@@ -6,11 +6,19 @@ import { useBFRSelector } from "@app/domain/redux/store"
 import { audioMimesAndExtensions } from "@app/util/fileTypes"
 
 import { formatDurationSeconds } from "tws-common/lang/time/format"
-import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
+import {
+	doSeek,
+	setIsPlayingWhenReady,
+	setSpeed,
+} from "tws-common/player/bfr/actions"
 import { BlobPlayerSource } from "tws-common/player/source/PlayerSource"
 import { Button, ButtonGroup, Col, Form, Row } from "tws-common/ui"
 
+const ZERO_ONE_RANGE_FIELD_MULTIPLIER = 100000
+
 const Player = () => {
+	const dispatch = useDispatch()
+
 	const currentSourceIndex = useBFRSelector(
 		bfr => bfr.playerConfig.currentSourceIndex,
 	)
@@ -20,8 +28,6 @@ const Player = () => {
 	const isPlayingWhenReady = useBFRSelector(
 		bfr => bfr.playerConfig.isPlayingWhenReady,
 	)
-	// const sources = useWTPSelector(wtp => wtp.syncState.)
-	const sources = []
 	const currentDuration = useBFRSelector(
 		bfr => bfr.playerState.playbackState.duration,
 	)
@@ -29,8 +35,7 @@ const Player = () => {
 		bfr => bfr.playerState.playbackState.position,
 	)
 
-	const dispatch = useDispatch()
-
+	const currentSpeed = useBFRSelector(bfr => bfr.playerConfig.speed)
 	return (
 		<div>
 			<Row>
@@ -74,14 +79,61 @@ const Player = () => {
 					<p>Playing file no: {currentSourceIndex + 1}</p>
 					<p>Is playing: {isReallyPlaying ? "Yes" : "No"}</p>
 					<p>
-						Position: {formatDurationSeconds(currentPosition ?? 0)}{" "}
-						out of {formatDurationSeconds(currentDuration ?? 0)}
+						Is playing when possible:{" "}
+						{isPlayingWhenReady ? "Yes" : "No"}
 					</p>
-					<ol>
-						{sources.map((s, i) => (
-							<li key={i}>Source no. {i + 1}</li>
-						))}
-					</ol>
+					<p>
+						Position: {formatDurationSeconds(currentPosition ?? 0)}{" "}
+						out of {formatDurationSeconds(currentDuration ?? 0)}{" "}
+						{Math.round(
+							((currentPosition ?? 0) / (currentDuration ?? 1)) *
+								100 * 10,
+						) / 10}
+						%
+					</p>
+				</Col>
+			</Row>
+			<Row>
+				<Col>
+					<Form.Range
+						max={ZERO_ONE_RANGE_FIELD_MULTIPLIER}
+						min={0}
+						step={1}
+						disabled={
+							currentDuration === null || currentPosition === null
+						}
+						value={
+							((currentPosition ?? 1) / (currentDuration ?? 1)) *
+							ZERO_ONE_RANGE_FIELD_MULTIPLIER
+						}
+						onChange={e => {
+							const v =
+								(Math.round(parseFloat(e.target.value)) /
+									ZERO_ONE_RANGE_FIELD_MULTIPLIER) *
+								(currentDuration ?? 1)
+
+							dispatch(doSeek(v))
+						}}
+					/>
+				</Col>
+			</Row>
+			<Row>
+				<Col>
+					<Form.Group>
+						<Form.Label>Speed: {currentSpeed}x</Form.Label>
+						<Form.Range
+							max={4}
+							min={0.25}
+							step={0.05}
+							value={currentSpeed}
+							onChange={e => {
+								const v = parseFloat(e.target.value)
+								if (isFinite(v)) {
+									dispatch(setSpeed(v))
+								}
+							}}
+						/>
+					</Form.Group>
 				</Col>
 			</Row>
 			<Row>
