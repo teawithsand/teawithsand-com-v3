@@ -1,0 +1,1 @@
+export type NewPlayerSource = {} & { readonly ty: unique symbol }
