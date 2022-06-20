@@ -6,7 +6,7 @@ import {
 	BFRState,
 } from "tws-common/player/bfr/state"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import { NewPlayerSource } from "tws-common/player/newsource/NewPlayerSource"
+import { NewPlayerSource } from "tws-common/player/source/NewPlayerSource"
 import { SyncId } from "tws-common/redux/sync/id"
 
 /**

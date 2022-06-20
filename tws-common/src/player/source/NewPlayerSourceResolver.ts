@@ -1,4 +1,4 @@
-import { NewPlayerSource } from "tws-common/player/newsource/NewPlayerSource"
+import { NewPlayerSource } from "tws-common/player/source/NewPlayerSource"
 
 export type NewPlayerSourceResolver<T extends NewPlayerSource> = {
 	/**

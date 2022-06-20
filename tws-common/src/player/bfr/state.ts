@@ -4,7 +4,7 @@ import {
 } from "tws-common/lang/time/Timestamp"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import NewPlayerSourceError from "tws-common/player/newsource/NewPlayerSourceError"
+import NewPlayerSourceError from "tws-common/player/source/NewPlayerSourceError"
 import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { NamedSyncRoot } from "tws-common/redux/sync/root"

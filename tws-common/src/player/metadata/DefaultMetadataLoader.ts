@@ -1,7 +1,7 @@
 import Metadata from "tws-common/player/metadata/Metadata"
 import MetadataLoader from "tws-common/player/metadata/MetadataLoader"
-import { NewPlayerSource } from "tws-common/player/newsource/NewPlayerSource"
-import { NewPlayerSourceResolver } from "tws-common/player/newsource/NewPlayerSourceResolver"
+import { NewPlayerSource } from "tws-common/player/source/NewPlayerSource"
+import { NewPlayerSourceResolver } from "tws-common/player/source/NewPlayerSourceResolver"
 
 export default class DefaultMetadataLoader<T extends NewPlayerSource>
 	implements MetadataLoader<T>
