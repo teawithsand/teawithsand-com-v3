@@ -1,6 +1,13 @@
+export type ID3Metadata = {
+	title: string | null
+	artist: string | null
+	album: string | null
+	year: number | null
+}
+
 export type Metadata = {
 	duration: number | null
-}
+} & ID3Metadata
 
 export enum MetadataLoadingResultType {
 	OK = 1,
