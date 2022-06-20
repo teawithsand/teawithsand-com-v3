@@ -6,14 +6,14 @@ import {
 	BFRState,
 } from "tws-common/player/bfr/state"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import PlayerSource from "tws-common/player/source/PlayerSource"
+import { NewPlayerSource } from "tws-common/player/newsource/NewPlayerSource"
 import { SyncId } from "tws-common/redux/sync/id"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
  * in order to provide controls.
  */
-export class BFRMetadataLoader<T, PM, PS> {
+export class BFRMetadataLoader<T, PM, PS extends NewPlayerSource> {
 	private releaseReduxStore: (() => void) | null = null
 	private currentPlaylistId: SyncId | null = null
 
@@ -25,7 +25,7 @@ export class BFRMetadataLoader<T, PM, PS> {
 		// Adapter for external metadata saving mechanism
 		// it has to be
 		private readonly saveMetadata: (
-			source: PlayerSource,
+			source: PS,
 			result: MetadataLoadingResult,
 		) => Promise<void>,
 	) {

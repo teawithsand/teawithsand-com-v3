@@ -1,3 +1,8 @@
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError";
+import { ExtendableBuiltin } from "tws-common/lang/extendable"
 
-export type NewPlayerSourceError = PlayerSourceError
+export default class NewPlayerSourceError extends ExtendableBuiltin(Error) {
+	constructor(msg: string) {
+		super(msg)
+		this.name = "PlayerSourceError"
+	}
+}
