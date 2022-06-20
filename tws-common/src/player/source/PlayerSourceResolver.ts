@@ -7,7 +7,20 @@ export type PlayerSourceResolver<T extends PlayerSource> = {
 	resolveSourceToURL(source: T): Promise<[string, () => void]>
 }
 
-export abstract class NewPlayerSourceResolverImpl<T extends PlayerSource>
+export type BasePlayerSourceResolverExtractedData = (
+	| {
+			type: "blob"
+			blob: Blob
+	  }
+	| {
+			type: "url"
+			url: string
+	  }
+) & {
+	id: string
+}
+
+export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 	implements PlayerSourceResolver<T>
 {
 	private readonly cachedSourcesIds: Map<
@@ -87,18 +100,9 @@ export abstract class NewPlayerSourceResolverImpl<T extends PlayerSource>
 		]
 	}
 
-	protected abstract extractData(source: T): (
-		| {
-				type: "blob"
-				blob: Blob
-		  }
-		| {
-				type: "url"
-				url: string
-		  }
-	) & {
-		id: string
-	}
+	protected abstract extractData(
+		source: T,
+	): BasePlayerSourceResolverExtractedData
 
 	resolveSourceToURL = async (source: T): Promise<[string, () => void]> => {
 		const data = this.extractData(source)
