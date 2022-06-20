@@ -1,5 +1,6 @@
-import { generateUUID } from "tws-common/lang/uuid"
-import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
+import { generateUUID } from "tws-common/lang/uuid";
+import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata";
+
 
 /**
  * A source, which can be played.
@@ -7,6 +8,8 @@ import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
  * is easier.
  *
  * Source can be closed, which releases any resources associated with it.
+ * 
+ * @deprecated in favour of NewPlayerSource
  */
 export abstract class PlayerSource {
 	abstract equals(b: PlayerSource): boolean
@@ -23,6 +26,9 @@ export type LoginPlayerSourceContent =
 			url: string
 	  }
 
+/**
+ * @deprecated in favour of NewPlayerSource
+ */
 export abstract class LoadingPlayerSource extends PlayerSource {
 	abstract loadTarget(): Promise<LoginPlayerSourceContent>
 }
@@ -30,6 +36,8 @@ export abstract class LoadingPlayerSource extends PlayerSource {
 /**
  * Simple source, which is just an URL.
  * It has noop closer.
+ * 
+ * @deprecated in favour of NewPlayerSource
  */
 export class URLPlayerSource extends PlayerSource {
 	constructor(public readonly url: string) {
@@ -45,6 +53,9 @@ export class URLPlayerSource extends PlayerSource {
 	}
 }
 
+/**
+ * @deprecated in favour of NewPlayerSource
+ */
 export class BlobPlayerSource extends PlayerSource {
 	constructor(
 		public readonly blob: Blob | MediaSource | File,
@@ -64,6 +75,9 @@ export class BlobPlayerSource extends PlayerSource {
 
 // TODO(teawithsand): optimize this to have only single instance of blob/file available at a time
 //  preferably, using some counter of how many users use it and release when it gets to zero
+/**
+ * @deprecated in favour of NewPlayerSource
+ */
 export class FunctionPlayerSource extends PlayerSource {
 	constructor(
 		public readonly blobGetter: () => Promise<Blob | File>,
@@ -83,6 +97,9 @@ export class FunctionPlayerSource extends PlayerSource {
 
 export default PlayerSource
 
+/**
+ * @deprecated in favour of NewPlayerSource
+ */
 export type PlayerSourceWithMetadata = {
 	playerSource: PlayerSource
 	metadata: MetadataLoadingResult | null
