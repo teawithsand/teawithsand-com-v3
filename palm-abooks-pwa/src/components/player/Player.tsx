@@ -7,6 +7,7 @@ import { setWhatToPlaySource } from "@app/domain/wtp/actions"
 import { audioMimesAndExtensions } from "@app/util/fileTypes"
 
 import { formatDurationSeconds } from "tws-common/lang/time/format"
+import { generateUUID } from "tws-common/lang/uuid"
 import {
 	doSeek,
 	setIsPlayingWhenReady,
@@ -59,12 +60,12 @@ const Player = () => {
 									setWhatToPlaySource({
 										type: "files",
 										sources: files.map(
-											f =>
-												({
-													type: "external-file",
-													name: f.name,
-													blob: f,
-												} as MPlayerSource),
+											(f): MPlayerSource => ({
+												type: "external-file",
+												name: f.name,
+												blob: f,
+												id: generateUUID(),
+											}),
 										),
 									}),
 								)
