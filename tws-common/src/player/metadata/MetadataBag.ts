@@ -9,7 +9,7 @@ import {
  */
 export default class MetadataBag {
 	private sumDurationToIndex: number[] = []
-	private readonly results: (MetadataLoadingResult | null)[] = []
+	private readonly innerResults: (MetadataLoadingResult | null)[] = []
 	private readonly innerIsDone: boolean
 
 	constructor(
@@ -27,9 +27,9 @@ export default class MetadataBag {
 			results = arr
 		}
 
-		this.results = [...results]
+		this.innerResults = [...results]
 
-		this.innerIsDone = this.results.every(r => r !== null)
+		this.innerIsDone = this.innerResults.every(r => r !== null)
 
 		this.sumDurationToIndex = []
 		let sum: number | null = 0
@@ -58,7 +58,17 @@ export default class MetadataBag {
 	}
 
 	get length() {
-		return this.results.length
+		return this.innerResults.length
+	}
+
+	get results() {
+		// create copy, so we surely won't mutate bag.
+		return [...this.innerResults]
+	}
+
+	getResult = (i: number): MetadataLoadingResult | null => {
+		if (i >= this.innerResults.length) return null
+		return this.innerResults[i]
 	}
 
 	/**
@@ -71,7 +81,7 @@ export default class MetadataBag {
 		if (duration < 0) return null
 		if (!inclusive) return duration
 
-		const result = this.results[i]
+		const result = this.innerResults[i]
 		if (
 			result &&
 			result.type === MetadataLoadingResultType.OK &&
@@ -91,7 +101,7 @@ export default class MetadataBag {
 	 * Returns `this.length` if position is after the end
 	 */
 	getIndexFromPosition = (position: number): number | null => {
-		for (let i = 0; i < this.results.length; i++) {
+		for (let i = 0; i < this.innerResults.length; i++) {
 			const res = this.getDurationToIndex(i, true)
 			if (res === null) return null
 
