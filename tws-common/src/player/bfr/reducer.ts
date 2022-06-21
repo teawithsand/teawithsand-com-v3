@@ -9,6 +9,7 @@ import {
 	setAllowExternalSetIsPlayingWhenReady,
 	setFilters,
 	setIsPlayingWhenReady,
+	setMetadataLoadingResults,
 	setPlaylist,
 	setPreservePitchForSpeed,
 	setSpeed,
@@ -135,5 +136,8 @@ export const createBFRReducer = <PM, PS>() =>
 				})
 				.addCase(setFilters, (state, action) => {
 					state.playerConfig.filters = makeSyncRoot(action.payload)
+				})
+				.addCase(setMetadataLoadingResults, (state, action) => {
+					state.metadataState = new MetadataBag(action.payload)
 				}),
 	)

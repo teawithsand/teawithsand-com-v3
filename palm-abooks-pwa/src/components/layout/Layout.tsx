@@ -2,9 +2,11 @@ import React, { useEffect, useMemo } from "react"
 import { Provider } from "react-redux"
 
 import Navbar from "@app/components/layout/Navbar"
+import { MBFRMetadataLoaderAdapter } from "@app/domain/bfr/metadataLoader"
 import { MPlayerSourceResolver } from "@app/domain/bfr/source"
 import { createStore } from "@app/domain/redux/store"
 
+import { BFRMetadataLoader } from "tws-common/player/bfr/metadataLoader"
 import { BFRPlayer } from "tws-common/player/bfr/player"
 import DefaultMetadataLoader from "tws-common/player/metadata/loader/DefaultMetadataLoader"
 import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
@@ -29,7 +31,19 @@ const Layout = (props: any) => {
 		}
 	}, [])
 
-/*
+	useEffect(() => {
+		const loader = new BFRMetadataLoader(
+			store,
+			state => state.bfrState,
+			new MBFRMetadataLoaderAdapter(MPlayerSourceResolver.getInstance()),
+		)
+
+		return () => {
+			loader.release()
+		}
+	}, [])
+
+	/*
 	useEffect(() => {
 		let called = false
 		const clean = store.subscribe(() => {

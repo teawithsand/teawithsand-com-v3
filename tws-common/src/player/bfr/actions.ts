@@ -1,4 +1,5 @@
 import { createAction } from "@reduxjs/toolkit"
+import { BFRMetadataLoaderResults } from "tws-common/player/bfr/metadataLoader"
 import { BFRPlaylist, BFRSleepState } from "tws-common/player/bfr/state"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
@@ -19,10 +20,6 @@ export const setIsPlayingWhenReady = createAction<boolean>(
 export const setPlaylist = createAction<BFRPlaylist<unknown, unknown>>(
 	`${prefix}/setPlaylist`,
 )
-export const setMetadata = createAction<{
-	i: number
-	metadata: MetadataLoadingResult
-}>(`${prefix}/setMetadata`)
 export const setSpeed = createAction<number>(`${prefix}/setSpeed`)
 export const setPreservePitchForSpeed = createAction<boolean>(
 	`${prefix}/setPreservePitchForSpeed`,
@@ -34,6 +31,9 @@ export const doSeek = createAction<number>(`${prefix}/doSeek`)
 
 export const setAllowExternalSetIsPlayingWhenReady = createAction<boolean>(
 	`${prefix}/setAllowExternalSetIsPlayingWhenReady`,
+)
+export const setMetadataLoadingResults = createAction<BFRMetadataLoaderResults>(
+	`${prefix}/setMetadataLoadingResults`,
 )
 
 export const onNewPlayerState = createAction<{
