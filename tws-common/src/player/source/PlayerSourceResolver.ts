@@ -5,6 +5,7 @@ export type PlayerSourceResolver<T extends PlayerSource> = {
 	 * Resolves player source into URL, which should be released once it's not needed.
 	 */
 	resolveSourceToURL(source: T): Promise<[string, () => void]>
+	resolveSourceToBlob(source: T): Promise<[Blob | File, () => void]>
 }
 
 export type BasePlayerSourceResolverExtractedData = (
@@ -23,7 +24,7 @@ export type BasePlayerSourceResolverExtractedData = (
 export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 	implements PlayerSourceResolver<T>
 {
-	private readonly cachedSourcesIds: Map<
+	private readonly cachedObjectURLs: Map<
 		string,
 		{
 			url: string
@@ -32,45 +33,52 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 		}
 	> = new Map()
 
-	private getURLCached = (id: string, url: string): [string, () => void] => {
-		if (!this.cachedSourcesIds.has(id)) {
-			this.cachedSourcesIds.set(id, {
+	private readonly cachedBlobs: Map<
+		string,
+		{
+			value: Blob | File
+			counter: number
+		}
+	> = new Map()
+
+	private getCachedBlob = async (
+		id: string,
+		blobLoader: () => Promise<Blob | File>,
+	): Promise<[Blob | File, () => void]> => {
+		if (!this.cachedBlobs.has(id)) {
+			this.cachedBlobs.set(id, {
 				counter: 1,
-				release: () => {
-					// noop, we do not release URLs
-				},
-				url,
+				value: await blobLoader(),
 			})
 		}
 
-		const cached = this.cachedSourcesIds.get(id)
+		const cached = this.cachedBlobs.get(id)
 		if (!cached) throw new Error("unreachable code")
 
 		cached.counter += 1
 		let closed = false
 		return [
-			cached.url,
+			cached.value,
 			() => {
 				if (!closed) {
 					cached.counter -= 1
 					closed = true
 
 					if (cached.counter === 0) {
-						cached.release()
-						this.cachedSourcesIds.delete(id)
+						this.cachedBlobs.delete(id)
 					}
 				}
 			},
 		]
 	}
 
-	private getCachedBlobURL = (
+	private getCachedObjectURL = (
 		id: string,
 		blob: Blob | File | MediaSource,
 	): [string, () => void] => {
-		if (!this.cachedSourcesIds.has(id)) {
+		if (!this.cachedObjectURLs.has(id)) {
 			const url = URL.createObjectURL(blob)
-			this.cachedSourcesIds.set(id, {
+			this.cachedObjectURLs.set(id, {
 				counter: 1,
 				release: () => {
 					URL.revokeObjectURL(url)
@@ -79,7 +87,7 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 			})
 		}
 
-		const cached = this.cachedSourcesIds.get(id)
+		const cached = this.cachedObjectURLs.get(id)
 		if (!cached) throw new Error("unreachable code")
 
 		cached.counter += 1
@@ -93,7 +101,7 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 
 					if (cached.counter === 0) {
 						cached.release()
-						this.cachedSourcesIds.delete(id)
+						this.cachedObjectURLs.delete(id)
 					}
 				}
 			},
@@ -103,6 +111,26 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 	protected abstract extractData(
 		source: T,
 	): BasePlayerSourceResolverExtractedData
+
+	resolveSourceToBlob = async (
+		source: T,
+	): Promise<[Blob | File, () => void]> => {
+		const data = this.extractData(source)
+		if (data.type === "url") {
+			return this.getCachedBlob(data.id, () =>
+				fetch(data.url).then(r => r.blob()),
+			)
+		} else if (data.type === "blob") {
+			return [
+				data.blob,
+				() => {
+					// noop
+				},
+			]
+		} else {
+			throw new Error("unreachable code")
+		}
+	}
 
 	resolveSourceToURL = async (source: T): Promise<[string, () => void]> => {
 		const data = this.extractData(source)
@@ -114,7 +142,7 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 				},
 			]
 		} else if (data.type === "blob") {
-			return this.getCachedBlobURL(data.id, data.blob)
+			return this.getCachedObjectURL(data.id, data.blob)
 		} else {
 			throw new Error("unreachable code")
 		}
