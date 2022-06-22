@@ -1,6 +1,7 @@
 import { Store } from "redux"
 import {
 	BFRMediaSessionMode,
+	BFRPlaylist,
 	bfrPlaylistSelector,
 	BFRState,
 } from "tws-common/player/bfr/state"
@@ -18,10 +19,21 @@ const LOG_TAG = "tws-common/BFRMediaSession"
 
 export type BFRMetadataLoaderResults = (MetadataLoadingResult | null)[]
 
-export interface BFRMediaSessionAdapter<S, PM> {
+/**
+ * For now, this adapter is bunch of selectors.
+ */
+export interface BFRMediaSessionAdapter<S, PM, PS> {
 	selectPlayerState(state: S): "playing" | "paused" | "none"
 	selectPositionState(state: S): MediaSessionPositionState
-	selectMetadata(playerMetadata: PM): MediaSessionMetadata
+
+	/**
+	 * Note: currentSourceIndex may be out of bounds.
+	 * In such case, one should set no-op metadata.
+	 */
+	selectMetadata(
+		playlist: BFRPlaylist<PM, PS>,
+		currentSourceIndex: number,
+	): MediaSessionMetadata | null
 
 	/**
 	 * Dispatch should be supplied externally.
@@ -34,14 +46,14 @@ export interface BFRMediaSessionAdapter<S, PM> {
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
  * in order to provide controls.
  */
-export class BFRMediaSession<T, PM> {
+export class BFRMediaSession<T, PM, PS> {
 	private innerRelease: (() => void) | null = null
 	private currentPlaylistId: SyncId | null = null
 
 	constructor(
 		store: Store<T>,
-		selector: (storeState: T) => BFRState<PM, unknown>,
-		adapter: BFRMediaSessionAdapter<T, PM>,
+		selector: (storeState: T) => BFRState<PM, PS>,
+		adapter: BFRMediaSessionAdapter<T, PM, PS>,
 	) {
 		const unsubscribeStore = store.subscribe(() => {
 			const innerState = store.getState()
@@ -66,10 +78,9 @@ export class BFRMediaSession<T, PM> {
 
 					// We have playlist here and we are playing/paused/error or sth on something
 					const mediaSessionMetadata = adapter.selectMetadata(
-						playlist.metadata,
+						playlist,
+						state.playerConfig.currentSourceIndex,
 					)
-                    // TODO(teawithsand): call this function less often, only when it's needed
-                    //  because values have changed
 					MediaSessionHelper.setMetadata(mediaSessionMetadata)
 
 					const isPlaying = state.playerConfig.isPlayingWhenReady
