@@ -35,9 +35,14 @@ const Player = () => {
 	const currentSpeed = useBFRSelector(bfr => bfr.playerConfig.speed)
 	return (
 		<>
-			{/*Some perquisites here*/}
 			<SpeedModal />
+
 			<div>
+				<Row className="mb-3">
+					<Col>
+						<PlayerBar />
+					</Col>
+				</Row>
 				<Row>
 					<Form
 						onSubmit={(e: any) => {
@@ -78,11 +83,6 @@ const Player = () => {
 							/>
 						</Form.Group>
 					</Form>
-				</Row>
-				<Row>
-					<Col>
-						<PlayerBar />
-					</Col>
 				</Row>
 				<Row>
 					<Col>
