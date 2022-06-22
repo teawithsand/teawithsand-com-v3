@@ -63,6 +63,5 @@ export const useBFRSelector = <T>(selector: (state: BFRState) => T) =>
 export const useWTPSelector = <T>(selector: (state: WhatToPlayState) => T) =>
 	useSelector((state: State) => selector(state.whatToPlayState))
 
-export const usePlayerUiSelector = <T>(
-	selector: (state: PlayerUIState) => T,
-) => useSelector((state: State) => selector(state.playerUi))
+export const usePlayerUiSelector = <T>(selector: (state: PlayerUIState) => T) =>
+	useSelector((state: State) => selector(state.playerUi))

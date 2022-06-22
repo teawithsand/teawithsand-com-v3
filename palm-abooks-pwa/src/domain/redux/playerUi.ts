@@ -1,9 +1,6 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
+import { createAction, createReducer } from "@reduxjs/toolkit"
 
-
-
-import { makeActionPrefix } from "tws-common/redux/action";
-
+import { makeActionPrefix } from "tws-common/redux/action"
 
 export type PlayerUIModal = "speed" | "sleep"
 

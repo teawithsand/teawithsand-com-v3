@@ -2,6 +2,7 @@ import { createReducer } from "@reduxjs/toolkit"
 
 import { MPlayerSource } from "@app/domain/bfr/source"
 import { State } from "@app/domain/redux/store"
+import { setWhatToPlaySource } from "@app/domain/wtp/actions"
 
 import { LOG } from "tws-common/log/logger"
 import { setPlaylist } from "tws-common/player/bfr/actions"
@@ -10,7 +11,6 @@ import {
 	makeActionSynchronizerAction,
 	makeNamedSyncRootSynchronizer,
 } from "tws-common/redux/sync/synchronizer"
-import { setWhatToPlaySource } from "@app/domain/wtp/actions"
 
 const LOG_TAG = "palm-abooks-pwa/WTPReducer"
 
