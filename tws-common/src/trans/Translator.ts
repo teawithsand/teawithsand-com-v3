@@ -14,11 +14,13 @@ export default class Translator<T extends TranslationObject> {
 		private translations: Map<string, T>,
 		private fallbackLanguage = DEFAULT_LANGUAGE,
 	) {
-		if (translations.has(fallbackLanguage))
+		if (!translations.has(fallbackLanguage))
 			throw new Error(
-				`Fallback language ${fallbackLanguage} not present in provided languages: ${[
+				`Fallback language "${fallbackLanguage}" not present in provided languages: ${[
 					...translations.keys(),
-				].join(", ")}`,
+				]
+					.map(v => `"${v}"`)
+					.join(", ")}`,
 			)
 	}
 
