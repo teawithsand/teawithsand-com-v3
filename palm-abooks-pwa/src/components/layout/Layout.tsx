@@ -7,6 +7,7 @@ import { MPlaylistMetadata } from "@app/domain/bfr/playlist"
 import { MPlayerSource, MPlayerSourceResolver } from "@app/domain/bfr/source"
 import { createStore } from "@app/domain/redux/store"
 
+import { addLogFilter, LogLevel } from "tws-common/log/logger"
 import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
 import { BFRMediaSession } from "tws-common/player/bfr/mediaSession"
 import { BFRMetadataLoader } from "tws-common/player/bfr/metadataLoader"
@@ -89,6 +90,22 @@ const Layout = (props: any) => {
 
 		return () => {
 			mediaSession.release()
+		}
+	}, [])
+
+	useEffect(() => {
+		const release = addLogFilter(({ tag, level }) => {
+			if (tag !== "tws-common/BFRPlayer") {
+				return true
+			}
+			if (level !== LogLevel.DEBUG) {
+				return true
+			}
+
+			return false
+		})
+		return () => {
+			release()
 		}
 	}, [])
 
