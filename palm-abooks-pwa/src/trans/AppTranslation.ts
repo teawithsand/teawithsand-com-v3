@@ -8,6 +8,19 @@ import Translator, {
 
 export default interface AppTranslation {
 	appName: string
+	generic: {
+		modalClose: string
+	}
+	player: {
+		speedModal: {
+			title: string
+			currentSpeed: (speed: number) => string
+			preservePitch: string
+		}
+		optionsBar: {
+			speed: string
+		}
+	}
 }
 
 const translations = new Map<string, AppTranslation>()

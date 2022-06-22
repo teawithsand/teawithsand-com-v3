@@ -6,16 +6,22 @@ import {
 import { useSelector } from "react-redux"
 
 import { MBFRState } from "@app/domain/bfr/state"
+import { playerUiReducer, PlayerUIState } from "@app/domain/redux/playerUi"
+import {
+	playlistSynchronizer,
+	whatToPlayReducer,
+	WhatToPlayState,
+} from "@app/domain/wtp/reducer"
 
 import { createBFRReducer } from "tws-common/player/bfr/reducer"
 import { BFRState } from "tws-common/player/bfr/state"
 import { SyncedIdStore, wrapReducerForSync } from "tws-common/redux/sync/store"
-import { playlistSynchronizer, whatToPlayReducer, WhatToPlayState } from "@app/domain/wtp/reducer"
 
 export type State = {
 	whatToPlayState: WhatToPlayState
 	bfrState: MBFRState
 	syncedIdStore: SyncedIdStore
+	playerUi: PlayerUIState
 }
 
 const syncedIdStoreReducer = createReducer<SyncedIdStore>({}, () => {
@@ -26,6 +32,7 @@ const innerReducer = combineReducers<State>({
 	bfrState: createBFRReducer(),
 	whatToPlayState: whatToPlayReducer,
 	syncedIdStore: syncedIdStoreReducer,
+	playerUi: playerUiReducer,
 })
 
 const finalReducer = wrapReducerForSync(
@@ -55,3 +62,7 @@ export const useBFRSelector = <T>(selector: (state: BFRState) => T) =>
 
 export const useWTPSelector = <T>(selector: (state: WhatToPlayState) => T) =>
 	useSelector((state: State) => selector(state.whatToPlayState))
+
+export const usePlayerUiSelector = <T>(
+	selector: (state: PlayerUIState) => T,
+) => useSelector((state: State) => selector(state.playerUi))
