@@ -72,31 +72,32 @@ export default class DefaultMetadataLoader<T extends PlayerSource>
 		}
 	}
 
-	private loadOtherMetadata = async (
-		src: T,
-		url: string,
-	): Promise<ID3Metadata> => {
+	private loadOtherMetadata = async (src: T): Promise<ID3Metadata> => {
 		// TODO(teawithsand): custom exception here
 
-		const blob = await fetch(url).then(r => r.blob())
+		const [blob, release] = await this.resolver.resolveSourceToBlob(src)
 
-		const p = new Promise<ID3Metadata>((resolve, reject) => {
-			;(jsMediaTags as any).read(blob, {
-				onSuccess: (tags: any) => {
-					const { artist, year, album, title } = tags.tags
-					resolve({
-						album: album ?? null,
-						artist: artist ?? null,
-						title: title ?? null,
-						year: parseInt(year ?? "") || null,
-					})
-				},
-				onError: reject,
+		try {
+			const p = new Promise<ID3Metadata>((resolve, reject) => {
+				;(jsMediaTags as any).read(blob, {
+					onSuccess: (tags: any) => {
+						const { artist, year, album, title } = tags.tags
+						resolve({
+							album: album ?? null,
+							artist: artist ?? null,
+							title: title ?? null,
+							year: parseInt(year ?? "") || null,
+						})
+					},
+					onError: reject,
+				})
 			})
-		})
 
-		const res = await p
-		return res
+			const res = await p
+			return res
+		} finally {
+			release()
+		}
 	}
 
 	loadMetadata = async (src: T): Promise<Metadata> => {
@@ -104,7 +105,7 @@ export default class DefaultMetadataLoader<T extends PlayerSource>
 
 		try {
 			const duration = await this.loadDuration(src, url)
-			const id3 = await this.loadOtherMetadata(src, url)
+			const id3 = await this.loadOtherMetadata(src)
 
 			const res = {
 				duration,
