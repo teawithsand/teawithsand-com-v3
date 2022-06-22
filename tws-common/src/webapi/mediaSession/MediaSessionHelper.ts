@@ -1,6 +1,5 @@
-import { SimpleEventBus } from "tws-common/lang/bus/EventBus";
-import { Subscribable } from "tws-common/lang/bus/stateSubscribe";
-
+import { SimpleEventBus } from "tws-common/lang/bus/EventBus"
+import { Subscribable } from "tws-common/lang/bus/stateSubscribe"
 
 export type MediaSessionMetadata = {
 	title: string
@@ -224,9 +223,11 @@ class MediaSessionHelperImpl {
 		this.supportedActions = castedActions
 	}
 
-	setMetadata = (metadata: MediaSessionMetadata) => {
+	setMetadata = (metadata: MediaSessionMetadata | null) => {
 		if (this.checkSupport())
-			navigator.mediaSession.metadata = new MediaMetadata(metadata)
+			navigator.mediaSession.metadata = metadata
+				? new MediaMetadata(metadata)
+				: null
 	}
 
 	setPlaybackState = (state: "playing" | "paused" | "none") => {
