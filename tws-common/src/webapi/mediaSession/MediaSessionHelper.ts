@@ -1,5 +1,6 @@
-import { SimpleEventBus } from "tws-common/lang/bus/EventBus"
-import { Subscribable } from "tws-common/lang/bus/stateSubscribe"
+import { SimpleEventBus } from "tws-common/lang/bus/EventBus";
+import { Subscribable } from "tws-common/lang/bus/stateSubscribe";
+
 
 export type MediaSessionMetadata = {
 	title: string
@@ -77,6 +78,18 @@ export type MediaSessionActionType =
 	| "previoustrack"
 	| "nexttrack"
 	| "skipad"
+
+export const allMediaSessionActions: MediaSessionActionType[] = [
+	"play",
+	"pause",
+	"stop",
+	"seekbackward",
+	"seekforward",
+	"seekto",
+	"previoustrack",
+	"nexttrack",
+	"skipad",
+]
 
 const tuplesToMap = <T, E>(iterable: Iterable<[T, E]>): Map<T, E> => {
 	const m = new Map()
@@ -173,17 +186,7 @@ class MediaSessionHelperImpl {
 	])
 
 	constructor() {
-		this.setSupportedActions([
-			"play",
-			"pause",
-			"stop",
-			"seekbackward",
-			"seekforward",
-			"seekto",
-			"previoustrack",
-			"nexttrack",
-			"skipad",
-		])
+		this.setSupportedActions(allMediaSessionActions)
 	}
 
 	setSupportedActions = (
