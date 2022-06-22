@@ -1,5 +1,6 @@
 import { SimpleEventBus } from "tws-common/lang/bus/EventBus"
 import { Subscribable } from "tws-common/lang/bus/stateSubscribe"
+import { objectEquals } from "tws-common/lang/equal"
 
 export type MediaSessionMetadata = {
 	title: string
@@ -109,6 +110,9 @@ class MediaSessionHelperImpl {
 	public readonly isSupported = this.checkSupport()
 
 	private supportedActions: Set<MediaSessionActionType> = new Set()
+
+	private lastSetMediaSessionMetadata: MediaSessionMetadata | null = null
+	private lastSetMediaPositionState: MediaSessionPositionState | null = null
 
 	private readonly actionHandlers: Map<
 		MediaSessionActionType,
@@ -224,10 +228,21 @@ class MediaSessionHelperImpl {
 	}
 
 	setMetadata = (metadata: MediaSessionMetadata | null) => {
-		if (this.checkSupport())
-			navigator.mediaSession.metadata = metadata
-				? new MediaMetadata(metadata)
-				: null
+		if (this.checkSupport()) {
+			if (!objectEquals(metadata, this.lastSetMediaSessionMetadata)) {
+				navigator.mediaSession.metadata = metadata
+					? new MediaMetadata(metadata)
+					: null
+				if (metadata) {
+					this.lastSetMediaSessionMetadata = {
+						...metadata,
+						artwork: [...metadata.artwork],
+					}
+				} else {
+					this.lastSetMediaSessionMetadata = null
+				}
+			}
+		}
 	}
 
 	setPlaybackState = (state: "playing" | "paused" | "none") => {
@@ -236,24 +251,28 @@ class MediaSessionHelperImpl {
 
 	setPositionState = (state: MediaSessionPositionState) => {
 		if (this.checkSupport() && navigator.mediaSession.setPositionState) {
-			let duration = state.duration ?? Infinity
-			if (duration < 0) duration = 0
+			if (!objectEquals(this.lastSetMediaPositionState, state)) {
+				this.lastSetMediaPositionState = { ...state }
 
-			let position = state.position
-			if (!isFinite(position) || position < 0) position = 0
+				let duration = state.duration ?? Infinity
+				if (duration < 0) duration = 0
 
-			position = Math.min(position, duration)
+				let position = state.position
+				if (!isFinite(position) || position < 0) position = 0
 
-			if (state.playbackRate === 0)
-				throw new Error(
-					"Playback rate may not be zero, it has to be positive or negative integer(neg if playing backwards)",
-				)
+				position = Math.min(position, duration)
 
-			navigator.mediaSession.setPositionState({
-				playbackRate: state.playbackRate,
-				duration,
-				position,
-			})
+				if (state.playbackRate === 0)
+					throw new Error(
+						"Playback rate may not be zero, it has to be positive or negative integer(neg if playing backwards)",
+					)
+
+				navigator.mediaSession.setPositionState({
+					playbackRate: state.playbackRate,
+					duration,
+					position,
+				})
+			}
 		}
 	}
 }
