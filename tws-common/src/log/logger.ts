@@ -1,3 +1,6 @@
+import { TimestampMs } from "tws-common/lang/time/Timestamp"
+import { FilteringLog } from "tws-common/log/filter"
+
 export enum LogLevel {
 	DEBUG = 1,
 	VERBOSE = 2,
@@ -30,8 +33,18 @@ export const stringifyLogLevel = (lv: LogLevel): string => {
 export type LogArg = any
 export type LogTag = string
 
+export type LogMessage = {
+	tag: LogTag
+	level: LogLevel
+	args: LogArg[]
+}
+
 export interface Log {
 	log(tag: LogTag, level: LogLevel, ...args: LogArg[]): void
+}
+
+export interface TaggedLogger {
+	log(level: LogLevel, ...args: LogArg[]): void
 }
 
 export class ExtLog implements Log {
@@ -61,12 +74,13 @@ export class ExtLog implements Log {
 		this.log(tag, LogLevel.ASSERT, ...args)
 }
 
-// TODO(teawithsand): methods, which allow mocking this logger or something
-//  In fact, it's sufficient to make ext logger able to swap it's inner logger
-//  so it can stay constant
-export const LOG = new ExtLog({
+const filteringLog = new FilteringLog({
 	log: (tag, lv, ...args) => {
-		const format = () => `[${stringifyLogLevel(lv).toUpperCase()} - ${tag}]`
+		const now = new Date()
+		const format = () =>
+			`[${now.toLocaleString("pl-PL").replace(",", "")}.${Math.round(
+				now.getMilliseconds(),
+			).toFixed(0)} ${stringifyLogLevel(lv).toUpperCase()} - ${tag}]`
 		if (lv === LogLevel.ERROR || lv === LogLevel.ASSERT) {
 			console.error(format(), ...args)
 		} else {
@@ -74,3 +88,10 @@ export const LOG = new ExtLog({
 		}
 	},
 })
+
+export const addLogFilter = filteringLog.addFilter
+
+// TODO(teawithsand): methods, which allow mocking this logger or something
+//  In fact, it's sufficient to make ext logger able to swap it's inner logger
+//  so it can stay constant
+export const LOG: ExtLog = new ExtLog(filteringLog)
