@@ -9,6 +9,15 @@ import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { NamedSyncRoot } from "tws-common/redux/sync/root"
 
+export enum BFRMediaSessionMode {
+	ENABLED_WHEN_PLAYLIST_SET = 1,
+	DISABLED = 2,
+}
+
+export type BFRMediaSessionConfig = {
+	mode: BFRMediaSessionMode
+}
+
 export type BFRPlayerState = {
 	playerError: MediaError | null
 	sourceError: PlayerSourceError | null
@@ -72,7 +81,7 @@ export type BFRState<PM = unknown, PS = unknown> = {
 		// Ended state when this is greater than playlist length
 		currentSourceIndex: number
 	}
-
+	mediaSessionConfig: BFRMediaSessionConfig
 	metadataLoaderConfig: {
 		loadMetadataPolicy: "never" | "not-loaded" | "not-loaded-or-error"
 		loadedMetadataResultSave: boolean

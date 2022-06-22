@@ -16,6 +16,7 @@ import {
 	setVolume,
 } from "tws-common/player/bfr/actions"
 import {
+	BFRMediaSessionMode,
 	BFRPlaylist,
 	BFRState,
 	IDLE_BFR_PLAYER_STATE,
@@ -43,6 +44,9 @@ export const createBFRReducer = <PM, PS>() =>
 				volume: 1,
 
 				allowExternalSetIsPlayingWhenReady: true,
+			},
+			mediaSessionConfig: {
+				mode: BFRMediaSessionMode.ENABLED_WHEN_PLAYLIST_SET,
 			},
 			backAfterPauseConfig: {
 				config: [],
