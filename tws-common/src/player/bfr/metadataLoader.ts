@@ -104,6 +104,14 @@ export class BFRMetadataLoader<T, PM, PS extends PlayerSource> {
 
 					if (!claim.isValid) return
 					this.store.dispatch(setMetadataLoadingResults(results))
+
+					LOG.debug(
+						LOG_TAG,
+						"Loaded metadata for source with index",
+						i,
+						":",
+						results[i],
+					)
 				}
 			}
 
