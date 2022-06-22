@@ -1,4 +1,5 @@
 import { PlayerSource } from "tws-common/player/source/PlayerSource"
+import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 
 export type PlayerSourceResolver<T extends PlayerSource> = {
 	/**
@@ -118,7 +119,15 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 		const data = this.extractData(source)
 		if (data.type === "url") {
 			return this.getCachedBlob(data.id, () =>
-				fetch(data.url).then(r => r.blob()),
+				fetch(data.url)
+					.then(r => r.blob())
+					.catch(e =>
+						Promise.reject(
+							new PlayerSourceError(
+								`Filed to fetch blob from ${data.url} to resolve source with id ${data.id}: ${e}`,
+							),
+						),
+					),
 			)
 		} else if (data.type === "blob") {
 			return [
