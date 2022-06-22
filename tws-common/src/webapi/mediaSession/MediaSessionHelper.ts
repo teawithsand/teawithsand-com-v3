@@ -98,8 +98,13 @@ const tuplesToMap = <T, E>(iterable: Iterable<[T, E]>): Map<T, E> => {
 }
 
 class MediaSessionHelperImpl {
-	private checkSupport = () =>
-		window && window.navigator && window.navigator.mediaSession
+	private checkSupport = () => {
+		return (
+			typeof window !== "undefined" &&
+			window.navigator &&
+			window.navigator.mediaSession
+		)
+	}
 
 	private innerEventBus = new SimpleEventBus<MediaSessionEvent>()
 
@@ -254,11 +259,23 @@ class MediaSessionHelperImpl {
 			if (!objectEquals(this.lastSetMediaPositionState, state)) {
 				this.lastSetMediaPositionState = { ...state }
 
-				let duration = state.duration ?? Infinity
+				let duration = state.duration
+				if (duration === null) {
+					duration = Infinity
+				}
+
+				if (isNaN(duration)) duration = 0
 				if (duration < 0) duration = 0
 
+				// Even though MDN says otherwise
+				// Firefox does not like duration which if +Infinity
+				if (!isFinite(duration)) {
+					duration = 24 * 60 * 60 * 30
+				}
+
 				let position = state.position
-				if (!isFinite(position) || position < 0) position = 0
+				if (!isFinite(position) || isNaN(position) || position < 0)
+					position = 0
 
 				position = Math.min(position, duration)
 
