@@ -6,7 +6,7 @@ import {
 	MPlayerPlaylistMetadata,
 	MPlayerPlaylistMetadataType,
 } from "@app/domain/bfr/playlist"
-import { MPlayerSource, MPlayerSourceType } from "@app/domain/bfr/source"
+import { MPlayerSource } from "@app/domain/bfr/source"
 import { WTPSourceType } from "@app/domain/wtp/source"
 
 import {
