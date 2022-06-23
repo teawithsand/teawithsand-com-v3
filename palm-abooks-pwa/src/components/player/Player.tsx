@@ -5,7 +5,7 @@ import PlayerBar from "@app/components/player/PlayerBar"
 import SpeedModal from "@app/components/player/SpeedModal"
 import { MPlayerSource } from "@app/domain/bfr/source"
 import { useBFRSelector } from "@app/domain/redux/store"
-import { setWhatToPlaySource } from "@app/domain/wtp/actions"
+import { setWTPPlaylist } from "@app/domain/wtp/actions"
 import { audioMimesAndExtensions } from "@app/util/fileTypes"
 
 import { formatDurationSeconds } from "tws-common/lang/time/format"
@@ -67,7 +67,7 @@ const Player = () => {
 									)
 
 									dispatch(
-										setWhatToPlaySource({
+										setWTPPlaylist({
 											type: "files",
 											sources: files.map(
 												(f): MPlayerSource => ({

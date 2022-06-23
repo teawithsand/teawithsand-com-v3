@@ -1,11 +1,15 @@
 import { createReducer } from "@reduxjs/toolkit"
 
 import { State } from "@app/domain/redux/store"
-import { setWhatToPlaySource } from "@app/domain/wtp/actions"
-import { WTPPlaylistType } from "@app/domain/wtp/playlist"
+import {
+	setWTPError,
+	setWTPPlaylist,
+	setWTPResolved,
+} from "@app/domain/wtp/actions"
 import { whatToPlayStateSyncRootName, WTPState } from "@app/domain/wtp/state"
 
 import { LOG } from "tws-common/log/logger"
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import { setPlaylist } from "tws-common/player/bfr/actions"
 import { makeSyncRoot } from "tws-common/redux/sync/root"
 import {
@@ -13,7 +17,7 @@ import {
 	makeNamedSyncRootSynchronizer,
 } from "tws-common/redux/sync/synchronizer"
 
-const LOG_TAG = "palm-abooks-pwa/WTPReducer"
+const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/WTPReducer")
 
 export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 	whatToPlayStateSyncRootName,
@@ -45,37 +49,48 @@ export const whatToPlayReducer = createReducer<WTPState>(
 			playlist: null,
 		},
 		state: makeSyncRoot({
-			type: "loaded",
-			sources: [],
+			type: "no-sources",
 		}),
 	},
 	builder =>
-		builder.addCase(setWhatToPlaySource, (state, action) => {
-			state.config.playlist = action.payload
+		builder
+			.addCase(setWTPPlaylist, (state, action) => {
+				state.config.playlist = action.payload
 
-			if (state.config.playlist === null) {
-				state.state = makeSyncRoot({
-					type: "loaded",
-					sources: [],
-				})
-			} else if (
-				state.config.playlist.type === WTPPlaylistType.ANY_SOURCES
-			) {
-				throw new Error("NIY Resolve WTPSource into MPlayerSource")
-			} else if (state.config.playlist.type === WTPPlaylistType.ABOOK) {
-				throw new Error(
-					"NIY Resolve abook into WTPSources and then into MPlayerSources",
-				)
-			} else {
-				// TODO(teawithsand): trigger any load required here
-				LOG.assert(
-					LOG_TAG,
-					"Not implemented loading of sources for",
-					state.config.playlist,
-				)
-				state.state = makeSyncRoot({
-					type: "loading",
-				})
-			}
-		}),
+				if (state.config.playlist === null) {
+					state.state = makeSyncRoot({
+						type: "no-sources",
+					})
+				} else {
+					state.state = makeSyncRoot({
+						type: "loading",
+					})
+				}
+			})
+			.addCase(setWTPError, (state, action) => {
+				if (state.state.data.type === "loading") {
+					state.state = makeSyncRoot({
+						type: "error",
+						error: action.payload,
+					})
+				} else {
+					LOG.warn(
+						LOG_TAG,
+						"Tried to set WTP error in not-loading state; ignoring this call",
+					)
+				}
+			})
+			.addCase(setWTPResolved, (state, action) => {
+				if (state.state.data.type === "loading") {
+					state.state = makeSyncRoot({
+						type: "loaded",
+						bfrPlaylist: action.payload,
+					})
+				} else {
+					LOG.warn(
+						LOG_TAG,
+						"Tried to set WTP resolved in not-loading state; ignoring this call",
+					)
+				}
+			}),
 )
