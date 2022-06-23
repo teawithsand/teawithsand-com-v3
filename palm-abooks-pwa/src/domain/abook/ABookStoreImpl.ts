@@ -68,6 +68,8 @@ export default class ABookStoreImpl implements ABookStore {
 		const data = await this.dataStore.get(id)
 		if (!data) return null
 
+		const files = this.getABookFileStore(id)
+		let deleted = false
 		return {
 			id,
 			metadata: data.metadata,
@@ -77,12 +79,22 @@ export default class ABookStoreImpl implements ABookStore {
 				metadata: data.metadata,
 			},
 
-			files: this.getABookFileStore(id),
+			get files() {
+				if (deleted) {
+					// TODO(teawithsand): handle case when already deleted store
+					//  this is important, as it prevents AR from further usage once it was deleted.
+				}
+				return files
+			},
 
 			delete: async () => {
 				await this.delete(id)
+				deleted = true
 			},
 			setMetadata: async metadata => {
+				if (deleted) {
+					return
+				}
 				await this.dataStore.set(id, {
 					metadata,
 				})
