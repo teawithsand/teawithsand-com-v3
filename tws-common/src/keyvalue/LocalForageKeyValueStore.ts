@@ -1,3 +1,4 @@
+import { LOCALSTORAGE } from "localforage"
 import KeyValueStore, {
 	PrefixKeyValueStore,
 } from "tws-common/keyvalue/KeyValueStore"
@@ -14,14 +15,41 @@ export default class LocalForageKeyValueStore<
 {
 	constructor(private readonly forage: LocalForage) {}
 
-	static readonly simple = <V extends {}>(name: string) => {
+	/**
+	 * Creates simple store using IndexedDB.
+	 */
+	static readonly simpleIDB = <V extends {}>(name: string, version = 1) => {
 		return new LocalForageKeyValueStore<V>(
 			localforage.createInstance({
 				driver: [INDEXEDDB],
 				name,
 				storeName: name,
-				description: `Store ${name} - simple one`,
-				version: 1,
+				description: `Store ${name} - simple one(using IDB)`,
+				version,
+			}),
+		)
+	}
+
+	/**
+	 * @deprecated use simpleIDB instead
+	 */
+	static readonly simple = LocalForageKeyValueStore.simpleIDB
+
+	/**
+	 * This one should be preferred to simple one, when low latency is needed along with persistence
+	 * and amount of data is small(typical usage for WAL for instance).
+	 */
+	static readonly simpleLocalStorage = <V extends {}>(
+		name: string,
+		version = 1,
+	) => {
+		return new LocalForageKeyValueStore<V>(
+			localforage.createInstance({
+				driver: [LOCALSTORAGE],
+				name,
+				storeName: name,
+				description: `Store ${name} - simple one(using local storage)`,
+				version,
 			}),
 		)
 	}
