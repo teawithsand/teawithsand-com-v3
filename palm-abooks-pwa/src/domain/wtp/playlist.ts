@@ -1,5 +1,8 @@
 import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
-import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
+import {
+	MPlayerPlaylistMetadata,
+	MPlayerPlaylistMetadataType,
+} from "@app/domain/bfr/playlist"
 import { WTPSource } from "@app/domain/wtp/source"
 
 import BaseError from "tws-common/lang/error"
@@ -24,9 +27,28 @@ export class WTPPlaylistResolverError extends BaseError {}
 export class WTPPlaylistResolver {
 	constructor(private readonly abookStore: ABookStore) {}
 
-	resolveWTPSource = (
+	resolveWTPSource = async (
 		playlist: WTPPlaylist,
 	): Promise<MPlayerPlaylistMetadata> => {
-		throw new Error("NIY")
+		if (playlist.type === WTPPlaylistType.ANY_SOURCES) {
+			return {
+				type: MPlayerPlaylistMetadataType.NONE,
+				wtpPlaylist: playlist,
+			}
+		} else {
+			const abookActiveRecord = await this.abookStore.get(
+				playlist.abookId,
+			)
+			if (!abookActiveRecord)
+				throw new WTPPlaylistResolverError(
+					`ABook with id ${playlist.abookId} does not exist`,
+				)
+
+			return {
+				type: MPlayerPlaylistMetadataType.ABOOK,
+				abook: abookActiveRecord,
+				wtpPlaylist: playlist,
+			}
+		}
 	}
 }
