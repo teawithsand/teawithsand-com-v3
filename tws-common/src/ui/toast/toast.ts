@@ -18,7 +18,10 @@ export type Toast = {
 	// Unique counter value to resolve TS conflicts
 	counter: number
 
-	livenessSeconds: number
+	// If null, then infinite.
+	// Do not use inf here.
+	// Liveness should be finite, positive integer.
+	livenessSeconds: number | null
 	title: string
 	message: string
 }

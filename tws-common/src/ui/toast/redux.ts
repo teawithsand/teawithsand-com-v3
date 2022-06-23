@@ -19,13 +19,19 @@ export const toastReducer = createReducer<ToastState>(
 		builder
 			.addCase(addToast, (state, action) => {
 				state.toasts = state.toasts.filter(
-					v => v.id !== action.payload.id,
+					v =>
+						v.id !== action.payload.id &&
+						(v.livenessSeconds === null || v.livenessSeconds > 0),
 				)
 				state.toasts.push(action.payload)
 				state.toasts = sortToasts(state.toasts)
 			})
 			.addCase(removeToast, (state, action) => {
-				state.toasts = state.toasts.filter(v => v.id !== action.payload)
+				state.toasts = state.toasts.filter(
+					v =>
+						v.id !== action.payload &&
+						(v.livenessSeconds === null || v.livenessSeconds > 0),
+				)
 				state.toasts = sortToasts(state.toasts)
 			}),
 )
