@@ -2,6 +2,7 @@ import {
 	getNowPerformanceTimestamp,
 	PerformanceTimestampMs,
 } from "tws-common/lang/time/Timestamp"
+import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
@@ -53,9 +54,18 @@ export type BFRSleepState = {
 	lastSetAt: PerformanceTimestampMs
 }
 
-export const bfrSeekDataSyncRootName = "tws-common/bfr-seek-data"
-export const bfrPlaylistSyncRootName = "tws-common/bfr-playlist"
-export const bfrAudioFiltersSyncRootName = "tws-common/bfr-audio-filters"
+export const bfrSeekDataSyncRootName = claimId(
+	NS_SYNC_ROOT,
+	"tws-common/bfr-seek-data",
+)
+export const bfrPlaylistSyncRootName = claimId(
+	NS_SYNC_ROOT,
+	"tws-common/bfr-playlist",
+)
+export const bfrAudioFiltersSyncRootName = claimId(
+	NS_SYNC_ROOT,
+	"tws-common/bfr-audio-filters",
+)
 
 export type BFRPlaylist<M, S> = {
 	metadata: M
