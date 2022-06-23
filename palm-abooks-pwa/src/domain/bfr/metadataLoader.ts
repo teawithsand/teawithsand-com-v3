@@ -42,6 +42,12 @@ export class MBFRMetadataLoaderAdapter
 		i: number,
 	): Promise<void> => {
 		const source = playlist.sources[i]
+
+		if (source.preloadedMetadata !== null) {
+			results[i] = source.preloadedMetadata
+			return
+		}
+
 		try {
 			const metadata = await this.metadataLoader.loadMetadata(source)
 			results[i] = {
