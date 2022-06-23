@@ -7,6 +7,7 @@ export const NS_REDUX_ACTION: GlobalIDNamespace =
 export const NS_REDUX_ACTION_PREFIX: GlobalIDNamespace =
 	"REDUX_PREFIX" as GlobalIDNamespace
 export const NS_LOG_TAG: GlobalIDNamespace = "LOG_TAG" as GlobalIDNamespace
+export const NS_SYNC_ROOT: GlobalIDNamespace = "SR_NAME" as GlobalIDNamespace
 
 class GlobalIDManagerImpl {
 	private readonly claimedIds: Map<GlobalIDNamespace, Set<string>> = new Map()
