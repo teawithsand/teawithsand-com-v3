@@ -52,6 +52,13 @@ export default class ABookStoreImpl implements ABookStore {
 	}
 
 	delete = async (id: string): Promise<void> => {
+		// Deleting ABook = delete source files + main one
+		// In fact, we could WAL-log it.
+		// TODO(teawithsand): make this store WAL-logged
+		const fileStore = this.getABookFileStore(id)
+		for await (const sourceId of fileStore.keysWithPrefix("")) {
+			await fileStore.delete(sourceId)
+		}
 		await this.fileStore.delete(id)
 	}
 
