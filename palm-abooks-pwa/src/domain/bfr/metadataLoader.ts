@@ -78,7 +78,9 @@ export class MBFRMetadataLoaderAdapter
 				const r = results[i]
 
 				if (
-					s.whatToPlaySource.type === WTPSourceType.ABOOK_FILE_SOURCE
+					s.whatToPlaySource.type ===
+						WTPSourceType.ABOOK_FILE_SOURCE &&
+					s.whatToPlaySource.abookId === playlist.metadata.abook.id
 				) {
 					const metadata =
 						await playlist.metadata.abook.files.getMetadata(
