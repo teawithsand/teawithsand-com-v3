@@ -1,6 +1,4 @@
-import { ABOOK_DATA_STORE } from "@app/domain/abook/ABookDataStore"
-import { ABOOK_FILE_STORE } from "@app/domain/abook/ABookFileStore"
-import { ABookID } from "@app/domain/abook/ABookStore"
+import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
 import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
 import { WTPSource } from "@app/domain/wtp/source"
 
@@ -24,10 +22,7 @@ export type WTPPlaylist =
 export class WTPPlaylistResolverError extends BaseError {}
 
 export class WTPPlaylistResolver {
-	constructor(
-		private readonly abookStore: typeof ABOOK_DATA_STORE,
-		private readonly abookFilesStore: typeof ABOOK_FILE_STORE,
-	) {}
+	constructor(private readonly abookStore: ABookStore) {}
 
 	resolveWTPSource = (
 		playlist: WTPPlaylist,

@@ -1,6 +1,4 @@
-import { ABOOK_DATA_STORE } from "@app/domain/abook/ABookDataStore"
-import { ABOOK_FILE_STORE } from "@app/domain/abook/ABookFileStore"
-import { ABookID } from "@app/domain/abook/ABookStore"
+import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
 import { MPlayerSource } from "@app/domain/bfr/source"
 
 import BaseError from "tws-common/lang/error"
@@ -38,10 +36,7 @@ export type WTPSource =
 export class WTPSourceResolverError extends BaseError {}
 
 export class WTPSourceResolver {
-	constructor(
-		private readonly abookStore: typeof ABOOK_DATA_STORE,
-		private readonly abookFilesStore: typeof ABOOK_FILE_STORE,
-	) {}
+	constructor(private readonly abookStore: ABookStore) {}
 
 	resolveWTPSource = (source: WTPSource): Promise<MPlayerSource> => {
 		throw new Error("NIY")
