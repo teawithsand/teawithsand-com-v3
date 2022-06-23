@@ -1,10 +1,13 @@
 import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
+import { ABookFileMetadataType } from "@app/domain/abook/typedef"
 import {
 	MPlayerPlaylistMetadata,
 	MPlayerPlaylistMetadataType,
 } from "@app/domain/bfr/playlist"
-import { WTPSource } from "@app/domain/wtp/source"
+import { MPlayerSourceType } from "@app/domain/bfr/source"
+import { WTPSource, WTPSourceType } from "@app/domain/wtp/source"
 
+import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 import BaseError from "tws-common/lang/error"
 
 export enum WTPPlaylistType {
@@ -29,11 +32,17 @@ export class WTPPlaylistResolver {
 
 	resolveWTPSource = async (
 		playlist: WTPPlaylist,
-	): Promise<MPlayerPlaylistMetadata> => {
+	): Promise<{
+		metadata: MPlayerPlaylistMetadata
+		sources: WTPSource[]
+	}> => {
 		if (playlist.type === WTPPlaylistType.ANY_SOURCES) {
 			return {
-				type: MPlayerPlaylistMetadataType.NONE,
-				wtpPlaylist: playlist,
+				metadata: {
+					type: MPlayerPlaylistMetadataType.NONE,
+					wtpPlaylist: playlist,
+				},
+				sources: [...playlist.sources],
 			}
 		} else {
 			const abookActiveRecord = await this.abookStore.get(
@@ -44,10 +53,30 @@ export class WTPPlaylistResolver {
 					`ABook with id ${playlist.abookId} does not exist`,
 				)
 
+			const files: string[] = []
+			for await (const sourceId of abookActiveRecord.files.keys()) {
+				const metadata = await abookActiveRecord.files.getMetadata(
+					sourceId,
+				)
+				if (!metadata) continue // log it?
+
+				if (metadata.type === ABookFileMetadataType.PLAYABLE) {
+					files.push(sourceId)
+				}
+			}
+
 			return {
-				type: MPlayerPlaylistMetadataType.ABOOK,
-				abook: abookActiveRecord,
-				wtpPlaylist: playlist,
+				metadata: {
+					type: MPlayerPlaylistMetadataType.ABOOK,
+					abook: abookActiveRecord,
+					wtpPlaylist: playlist,
+				},
+				sources: files.map(sourceId => ({
+					type: WTPSourceType.ABOOK_FILE_SOURCE,
+					abookId: abookActiveRecord.id,
+					id: "abook/" + abookActiveRecord.id + "/" + sourceId,
+					sourceId,
+				})),
 			}
 		}
 	}
