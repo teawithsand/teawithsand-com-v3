@@ -1,11 +1,13 @@
 import {
 	ABookActiveRecord,
-	ABookData,
-	ABookFileMetadata,
 	ABookID,
-	ABookMetadata,
 	ABookStore,
 } from "@app/domain/abook/ABookStore"
+import {
+	ABookData,
+	ABookFileMetadata,
+	ABookMetadata,
+} from "@app/domain/abook/typedef"
 
 import MutatingObjectFileStore from "tws-common/file/ofs/MutatingObjectFileStore"
 import { PrefixObjectFileStore } from "tws-common/file/ofs/ObjectFileStore"
