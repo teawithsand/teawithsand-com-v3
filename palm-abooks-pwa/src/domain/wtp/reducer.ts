@@ -1,34 +1,19 @@
 import { createReducer } from "@reduxjs/toolkit"
 
-import { MPlayerSource } from "@app/domain/bfr/source"
 import { State } from "@app/domain/redux/store"
 import { setWhatToPlaySource } from "@app/domain/wtp/actions"
+import { WTPPlaylistType } from "@app/domain/wtp/playlist"
+import { whatToPlayStateSyncRootName, WTPState } from "@app/domain/wtp/state"
 
 import { LOG } from "tws-common/log/logger"
 import { setPlaylist } from "tws-common/player/bfr/actions"
-import { makeSyncRoot, NamedSyncRoot } from "tws-common/redux/sync/root"
+import { makeSyncRoot } from "tws-common/redux/sync/root"
 import {
 	makeActionSynchronizerAction,
 	makeNamedSyncRootSynchronizer,
 } from "tws-common/redux/sync/synchronizer"
 
 const LOG_TAG = "palm-abooks-pwa/WTPReducer"
-
-export type WhatToPlaySource = {
-	type: "files"
-	sources: MPlayerSource[]
-}
-
-type WhatToPlayStateState =
-	| {
-			type: "loading"
-	  }
-	| {
-			type: "loaded"
-			sources: MPlayerSource[]
-	  }
-
-export const whatToPlayStateSyncRootName = "palm-abooks-pwa/what-to-play-state"
 
 export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 	whatToPlayStateSyncRootName,
@@ -54,20 +39,10 @@ export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 	}),
 )
 
-export type WhatToPlayState = {
-	config: {
-		source: WhatToPlaySource | null
-	}
-	state: NamedSyncRoot<
-		WhatToPlayStateState,
-		typeof whatToPlayStateSyncRootName
-	>
-}
-
-export const whatToPlayReducer = createReducer<WhatToPlayState>(
+export const whatToPlayReducer = createReducer<WTPState>(
 	{
 		config: {
-			source: null,
+			playlist: null,
 		},
 		state: makeSyncRoot({
 			type: "loaded",
@@ -76,24 +51,27 @@ export const whatToPlayReducer = createReducer<WhatToPlayState>(
 	},
 	builder =>
 		builder.addCase(setWhatToPlaySource, (state, action) => {
-			state.config.source = action.payload
+			state.config.playlist = action.payload
 
-			if (state.config.source === null) {
+			if (state.config.playlist === null) {
 				state.state = makeSyncRoot({
 					type: "loaded",
 					sources: [],
 				})
-			} else if (state.config.source.type === "files") {
-				state.state = makeSyncRoot({
-					type: "loaded",
-					sources: state.config.source.sources,
-				})
+			} else if (
+				state.config.playlist.type === WTPPlaylistType.ANY_SOURCES
+			) {
+				throw new Error("NIY Resolve WTPSource into MPlayerSource")
+			} else if (state.config.playlist.type === WTPPlaylistType.ABOOK) {
+				throw new Error(
+					"NIY Resolve abook into WTPSources and then into MPlayerSources",
+				)
 			} else {
 				// TODO(teawithsand): trigger any load required here
 				LOG.assert(
 					LOG_TAG,
 					"Not implemented loading of sources for",
-					state.config.source,
+					state.config.playlist,
 				)
 				state.state = makeSyncRoot({
 					type: "loading",

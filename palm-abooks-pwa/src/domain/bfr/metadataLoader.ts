@@ -1,4 +1,4 @@
-import { MPlaylistMetadata } from "@app/domain/bfr/playlist"
+import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
 import { MPlayerSource } from "@app/domain/bfr/source"
 
 import {
@@ -12,7 +12,7 @@ import { MetadataLoadingResultType } from "tws-common/player/metadata/Metadata"
 import { PlayerSourceResolver } from "tws-common/player/source/PlayerSourceResolver"
 
 export class MBFRMetadataLoaderAdapter
-	implements BFRMetadataLoaderAdapter<MPlaylistMetadata, MPlayerSource>
+	implements BFRMetadataLoaderAdapter<MPlayerPlaylistMetadata, MPlayerSource>
 {
 	private readonly metadataLoader: MetadataLoader<MPlayerSource>
 	constructor(
@@ -22,14 +22,14 @@ export class MBFRMetadataLoaderAdapter
 	}
 
 	loadFromPlaylistMetadata = async (
-		playlist: BFRPlaylist<MPlaylistMetadata, MPlayerSource>,
+		playlist: BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource>,
 		results: BFRMetadataLoaderResults,
 	): Promise<void> => {
 		// noop
 	}
 
 	loadForSource = async (
-		playlist: BFRPlaylist<MPlaylistMetadata, MPlayerSource>,
+		playlist: BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource>,
 		results: BFRMetadataLoaderResults,
 		i: number,
 	): Promise<void> => {
@@ -49,9 +49,13 @@ export class MBFRMetadataLoaderAdapter
 	}
 
 	saveResults = async (
-		playlist: BFRPlaylist<MPlaylistMetadata, MPlayerSource>,
+		playlist: BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource>,
 		results: BFRMetadataLoaderResults,
 	): Promise<void> => {
 		// noop for now
+		// in future, save results using playlist info
+		// please note that this should be locked action
+		// since we should not do race condition here
+		// and write to same data simultaneously in some rare cases
 	}
 }

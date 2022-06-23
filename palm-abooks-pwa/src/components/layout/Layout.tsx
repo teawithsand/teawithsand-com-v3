@@ -3,7 +3,7 @@ import { Provider } from "react-redux"
 
 import Navbar from "@app/components/layout/Navbar"
 import { MBFRMetadataLoaderAdapter } from "@app/domain/bfr/metadataLoader"
-import { MPlaylistMetadata } from "@app/domain/bfr/playlist"
+import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
 import { MPlayerSource, MPlayerSourceResolver } from "@app/domain/bfr/source"
 import { createStore } from "@app/domain/redux/store"
 
@@ -63,7 +63,7 @@ const Layout = (props: any) => {
 					}
 				},
 				selectMetadata: (
-					playlist: BFRPlaylist<MPlaylistMetadata, MPlayerSource>,
+					playlist: BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource>,
 					i,
 				) => ({
 					title: "PalmABooks PWA playing",
