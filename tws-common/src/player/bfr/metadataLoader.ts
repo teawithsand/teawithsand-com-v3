@@ -1,6 +1,7 @@
 import { Store } from "redux"
 import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
 import { LOG } from "tws-common/log/logger"
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import { setMetadataLoadingResults } from "tws-common/player/bfr/actions"
 import {
 	BFRPlaylist,
@@ -14,7 +15,7 @@ import {
 import { PlayerSource } from "tws-common/player/source/PlayerSource"
 import { SyncId } from "tws-common/redux/sync/id"
 
-const LOG_TAG = "tws-common/BFRMetadataLoader"
+const LOG_TAG = claimId(NS_LOG_TAG, "tws-common/BFRMetadataLoader")
 
 export type BFRMetadataLoaderResults = (MetadataLoadingResult | null)[]
 

@@ -1,6 +1,7 @@
 import { Store } from "redux"
 import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
 import { LOG } from "tws-common/log/logger"
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import {
 	onExternalSetIsPlayingWhenReady,
 	onNewPlayerState,
@@ -16,7 +17,7 @@ import { SyncId } from "tws-common/redux/sync/id"
 
 type Element = HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
 
-const LOG_TAG = "tws-common/BFRPlayer"
+const LOG_TAG = claimId(NS_LOG_TAG, "tws-common/BFRPlayer")
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
@@ -265,9 +266,8 @@ export class BFRPlayer<T, PS extends PlayerSource> {
 		if (state.playerConfig.playlist.id !== this.currentPlaylistId) {
 			this.currentPlaylistId = state.playerConfig.playlist.id
 
-			this.currentPlaylist = (
+			this.currentPlaylist =
 				state.playerConfig.playlist.data?.sources ?? []
-			)
 			this.currentEntryIndex = -1 // any index, but must not equal current one
 		}
 	}

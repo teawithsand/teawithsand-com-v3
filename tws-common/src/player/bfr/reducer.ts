@@ -1,6 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
 import { castDraft } from "immer"
 import { LOG } from "tws-common/log/logger"
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import {
 	doSeek,
 	onExternalSetIsPlayingWhenReady,
@@ -24,7 +25,8 @@ import {
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
 import { makeSyncRoot } from "tws-common/redux/sync/root"
 
-const LOG_TAG = "tws-common/BFRReducer"
+const LOG_TAG = claimId(NS_LOG_TAG, "tws-common/BFRReducer")
+
 // TODO(teawithsand): implement missing reducers
 export const createBFRReducer = <PM, PS>() =>
 	createReducer<BFRState<PM, PS>>(

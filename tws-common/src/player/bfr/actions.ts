@@ -1,14 +1,16 @@
 import { createAction } from "@reduxjs/toolkit"
+import {
+	claimId,
+	NS_REDUX_ACTION_PREFIX,
+} from "tws-common/misc/GlobalIDManager"
 import { BFRMetadataLoaderResults } from "tws-common/player/bfr/metadataLoader"
 import { BFRPlaylist, BFRSleepState } from "tws-common/player/bfr/state"
 import { AudioFilter } from "tws-common/player/filter/filter"
-import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
-import { makeActionPrefix } from "tws-common/redux/action"
 
-const prefix = makeActionPrefix("bfr")
+const prefix = claimId(NS_REDUX_ACTION_PREFIX, "tws-common/bfr")
 
 export const setIsPlayingWhenReady = createAction<boolean>(
 	`${prefix}/setIsPlayingWhenReady`,

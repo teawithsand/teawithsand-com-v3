@@ -1,4 +1,5 @@
 import { Store } from "redux"
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import {
 	BFRMediaSessionMode,
 	BFRPlaylist,
@@ -15,7 +16,7 @@ import {
 	MediaSessionPositionState,
 } from "tws-common/webapi/mediaSession/MediaSessionHelper"
 
-const LOG_TAG = "tws-common/BFRMediaSession"
+const LOG_TAG = claimId(NS_LOG_TAG, "tws-common/BFRMediaSession")
 
 export type BFRMetadataLoaderResults = (MetadataLoadingResult | null)[]
 
