@@ -19,4 +19,10 @@ describe("GlobalIDManager", () => {
 		}
 		throw new Error("can't reach here")
 	})
+
+	it("allows same id in same ns when disabled", () => {
+		GlobalIdManager.disable()
+		GlobalIdManager.claimId(NS_STORE, "some-id")
+		GlobalIdManager.claimId(NS_STORE, "some-id")
+	})
 })
