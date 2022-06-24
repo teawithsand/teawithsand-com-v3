@@ -21,7 +21,7 @@ const ABookLibraryPage = () => {
 		<PageContainer>
 			<Row>
 				<Col>
-					<h1 className="text-center">ABook library management</h1>
+					<h1 className="text-center mb-4">ABook library management</h1>
 				</Col>
 			</Row>
 			<ButtonList className="mb-3">
