@@ -1,11 +1,16 @@
 import { PlayerSource } from "tws-common/player/source/PlayerSource"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import { PlayerSourceError } from "tws-common/player/source/PlayerSourceError"
 
 export type PlayerSourceResolver<T extends PlayerSource> = {
 	/**
 	 * Resolves player source into URL, which should be released once it's not needed.
+	 * @throws PlayerSourceError
 	 */
 	resolveSourceToURL(source: T): Promise<[string, () => void]>
+
+	/**
+	 * @throws PlayerSourceError
+	 */
 	resolveSourceToBlob(source: T): Promise<[Blob | File, () => void]>
 }
 
@@ -173,11 +178,13 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 				data
 					.loader()
 					.catch(e =>
-						Promise.reject(
-							new PlayerSourceError(
-								`Filed to fetch blob using loader to resolve source with id ${data.id}: ${e}`,
-							),
-						),
+						e instanceof PlayerSourceError
+							? Promise.reject(e)
+							: Promise.reject(
+									new PlayerSourceError(
+										`Filed to fetch blob using loader to resolve source with id ${data.id}: ${e}`,
+									),
+							  ),
 					),
 			)
 

@@ -16,6 +16,7 @@ import {
 	setSpeed,
 	setVolume,
 } from "tws-common/player/bfr/actions"
+import { MediaBFRPlayerError } from "tws-common/player/bfr/error"
 import {
 	BFRMediaSessionMode,
 	BFRPlaylist,
@@ -82,7 +83,12 @@ export const createBFRReducer = <PM, PS>() =>
 						isPlaying,
 						isSeeking,
 						networkState,
-						playerError,
+						playerError: playerError
+							? new MediaBFRPlayerError(
+									"An error occurred while playing source",
+									playerError,
+							  )
+							: null,
 						readyState,
 						sourceError,
 					}

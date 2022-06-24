@@ -3,9 +3,10 @@ import {
 	PerformanceTimestampMs,
 } from "tws-common/lang/time/Timestamp"
 import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager"
+import { BFRPlayerError } from "tws-common/player/bfr/error"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import { PlayerSourceError } from "tws-common/player/source/PlayerSourceError"
 import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { NamedSyncRoot } from "tws-common/redux/sync/root"
@@ -20,7 +21,7 @@ export type BFRMediaSessionConfig = {
 }
 
 export type BFRPlayerState = {
-	playerError: MediaError | null
+	playerError: BFRPlayerError | null
 	sourceError: PlayerSourceError | null
 
 	position: number | null
