@@ -108,7 +108,7 @@ const Layout = (props: any) => {
 		return () => {
 			resolver.release()
 		}
-	})
+	}, [])
 
 	useEffect(() => {
 		const release = addLogFilter(({ tag, level }) => {
