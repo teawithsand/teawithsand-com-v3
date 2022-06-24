@@ -8,6 +8,7 @@ export const NS_REDUX_ACTION_PREFIX: GlobalIDNamespace =
 	"REDUX_PREFIX" as GlobalIDNamespace
 export const NS_LOG_TAG: GlobalIDNamespace = "LOG_TAG" as GlobalIDNamespace
 export const NS_SYNC_ROOT: GlobalIDNamespace = "SR_NAME" as GlobalIDNamespace
+export const NS_REACT_QUERY: GlobalIDNamespace = "RQ_NAME" as GlobalIDNamespace
 
 class GlobalIDManagerImpl {
 	private claimedIds: Map<GlobalIDNamespace, Set<string>> | null = new Map()
@@ -15,11 +16,11 @@ class GlobalIDManagerImpl {
 	/**
 	 * Actually, this is useful for testing only.
 	 * Removes all previously registered ids.
-	 * 
+	 *
 	 * Also, reenables GlobalIDManager
 	 */
 	reset = () => {
-		this.claimedIds = new Map
+		this.claimedIds = new Map()
 	}
 
 	/**
