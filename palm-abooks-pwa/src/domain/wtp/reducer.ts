@@ -25,7 +25,11 @@ export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 	makeActionSynchronizerAction((s: State) => {
 		const data = s.whatToPlayState.state.data
 
-		if (data.type === "loading") {
+		if (
+			data.type === "loading" ||
+			data.type === "error" ||
+			data.type === "no-sources"
+		) {
 			return [
 				setPlaylist({
 					metadata: {},
@@ -33,12 +37,7 @@ export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 				}),
 			]
 		} else {
-			return [
-				setPlaylist({
-					metadata: {},
-					sources: data.sources,
-				}),
-			]
+			return [setPlaylist(data.bfrPlaylist)]
 		}
 	}),
 )
