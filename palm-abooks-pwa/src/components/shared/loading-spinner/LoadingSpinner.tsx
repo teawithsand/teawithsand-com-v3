@@ -34,7 +34,7 @@ const SpinnerText = styled.div`
 	font-size: 1.5em;
 `
 
-export default () => {
+const LoadingSpinner = () => {
 	return (
 		<SpinnerContainer>
 			<SpinnerImage alt={"Loading..."} />
@@ -42,3 +42,5 @@ export default () => {
 		</SpinnerContainer>
 	)
 }
+
+export default LoadingSpinner
