@@ -4,16 +4,32 @@ import styled from "styled-components"
 
 import PageContainer from "@app/components/layout/PageContainer"
 import { LoadedABookData } from "@app/domain/abook/typedef"
-import { libraryABookIndex, libraryAddABookFromLocalFSPath } from "@app/paths"
+import {
+	libraryABookIndex,
+	libraryABookViewPath,
+	libraryAddABookFromLocalFSPath,
+} from "@app/paths"
 
 import { Button, Card, Col, Row } from "tws-common/ui"
+import LinkContainer from "tws-common/ui/LinkContainer"
 
-const CenteredElementGrid = styled.div`
+const NoAbooksGrid = styled.div`
 	display: grid;
 	grid-auto-flow: row;
 	gap: 1em;
 	justify-items: center;
 	grid-template-row: minmax(0, auto);
+`
+
+const ABookEntriesGrid = styled.div`
+	display: grid;
+	grid-auto-flow: row;
+	gap: 1em;
+`
+
+const ABookCardGrid = styled.div`
+	display: grid;
+	grid-auto-flow: row;
 `
 
 const ABookList = (props: { abooks: LoadedABookData[] }) => {
@@ -22,7 +38,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 	if (abooks.length === 0) {
 		return (
 			<PageContainer>
-				<CenteredElementGrid>
+				<NoAbooksGrid>
 					<h1>No ABooks in library</h1>
 					<Button
 						size="lg"
@@ -40,38 +56,43 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 					>
 						Go to ABook library management
 					</Button>
-				</CenteredElementGrid>
+				</NoAbooksGrid>
 			</PageContainer>
 		)
 	} else {
 		return (
 			<PageContainer>
-				<Row className="mb-3">
-					<Col>
-						<h1>Total {abooks.length} ABooks:</h1>
-					</Col>
-				</Row>
-				{abooks.map(abook => (
-					<Row key={abook.id} className="mt-2">
-						<Col>
-							<Card>
-								<Card.Body>
-									<Card.Title>
-										{abook.metadata.title}
-									</Card.Title>
-									<Card.Text>
+				<ABookEntriesGrid>
+					<h1>Total {abooks.length} ABooks:</h1>
+					{abooks.map(abook => (
+						<Card key={abook.id}>
+							<Card.Body>
+								<Card.Title>
+									Title:{" "}
+									{abook.metadata.title ||
+										`ABook with no title #${abook.id}`}
+								</Card.Title>
+								<ABookCardGrid>
+									<p>
 										{abook.metadata.description ||
 											"No description"}
-									</Card.Text>
-								</Card.Body>
-							</Card>
-						</Col>
-					</Row>
-				))}
+									</p>
+									<p>
+										<LinkContainer
+											to={libraryABookViewPath(abook.id)}
+										>
+											<Button href="#">Show ABook</Button>
+										</LinkContainer>
+									</p>
+								</ABookCardGrid>
+							</Card.Body>
+						</Card>
+					))}
+				</ABookEntriesGrid>
 				<hr />
 				<Row className="mt-5 text-center">
 					<Col>
-						<CenteredElementGrid>
+						<NoAbooksGrid>
 							<h1>No ABook you were looking for?</h1>
 							<Button
 								size="lg"
@@ -81,7 +102,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 							>
 								Go to ABook library management
 							</Button>
-						</CenteredElementGrid>
+						</NoAbooksGrid>
 					</Col>
 				</Row>
 			</PageContainer>

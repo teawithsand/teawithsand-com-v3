@@ -1,68 +1,48 @@
-import React, { ReactFragment, ReactNode } from "react"
+import React from "react"
 
+import ABookView from "@app/components/abook/ABookView"
 import PageContainer from "@app/components/layout/PageContainer"
+import ErrorExplainer from "@app/components/shared/error-explainer/ErrorExplainer"
+import NotFoundErrorExplainer from "@app/components/shared/error-explainer/NotFoundErrorExplainer"
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { useABookStore } from "@app/domain/abook/ABookStore"
+import { libraryListABookPath } from "@app/paths"
 
 import { useQuery } from "tws-common/react/hook/query"
 import { useGetParamsObject } from "tws-common/react/hook/useGetParams"
-import { Col, Row } from "tws-common/ui"
 
-const ABookView = () => {
+const ABookViewPage = () => {
 	const store = useABookStore()
 	const { id } = useGetParamsObject()
 
-	const {
-		data: abookAR,
-		isLoading,
-		isError,
-	} = useQuery(["abook-view-get-abook", id], async () => {
-		const abookAR = await store.get(id ?? "")
-		return abookAR
-	})
+	const { data, status, error } = useQuery(
+		["abook-view-get-abook", id],
+		async () => {
+			const abookAR = await store.get(id ?? "")
+			return abookAR
+		},
+	)
 
-	let inner: ReactFragment | ReactNode = null
-	if (isLoading) {
-		inner = (
-			<>
-				<LoadingSpinner />
-			</>
-		)
-	} else if (isError) {
-		inner = (
-			<div>
-				An error occurred while loading ABook with id `{id ?? ""}`
-			</div>
-		)
-	} else if (abookAR) {
-		inner = (
-			<>
-				<Row>
-					<Col>
-						<h1>{abookAR.metadata.title}</h1>
-					</Col>
-				</Row>
-				<Row>
-					<Col>
-						<p>{abookAR.metadata.description}</p>
-					</Col>
-				</Row>
-			</>
-		)
+	let inner = null
+	if (status === "idle" || status === "loading") {
+		inner = <LoadingSpinner />
+	} else if (status === "error") {
+		inner = <ErrorExplainer error={error} />
 	} else {
-		inner = (
-			<>
-				<Row>
-					{/* TODO(teawithsand): make this not-found-generic-component */}
-					<Col>
-						<h1>No such ABook exists. Go back.</h1>
-					</Col>
-				</Row>
-			</>
-		)
+		if (data === null) {
+			inner = (
+				<NotFoundErrorExplainer
+					title="Given ABook was not found"
+					buttonTargetPath={libraryListABookPath}
+					buttonText="Go to list"
+				/>
+			)
+		} else {
+			inner = <ABookView abook={data} />
+		}
 	}
 
 	return <PageContainer>{inner}</PageContainer>
 }
 
-export default ABookView
+export default ABookViewPage

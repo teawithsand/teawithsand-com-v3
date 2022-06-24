@@ -34,6 +34,7 @@ const Player = () => {
 	const currentPosition = useBFRSelector(bfr => bfr.playerState.position)
 
 	const currentSpeed = useBFRSelector(bfr => bfr.playerConfig.speed)
+
 	return (
 		<>
 			<SpeedModal />

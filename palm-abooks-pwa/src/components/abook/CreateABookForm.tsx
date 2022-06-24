@@ -11,7 +11,7 @@ import { formatFileSize } from "tws-common/lang/fileSize"
 import { Button, Form } from "tws-common/ui"
 
 export type CreateABookFormData = {
-	name: string
+	title: string
 	description: string
 	files: File[]
 }
@@ -31,7 +31,7 @@ const CreateABookForm = (props: {
 			onSubmit={values =>
 				props.onSubmit({
 					files: [],
-					name: "",
+					title: "",
 					description: "",
 					...values,
 				})
@@ -41,7 +41,7 @@ const CreateABookForm = (props: {
 					<Form.Group className="mb-3">
 						<Form.Label>ABook name</Form.Label>
 
-						<FinalField name="name">
+						<FinalField name="title">
 							{({ input }) => (
 								<Form.Control type="text" {...input} />
 							)}
