@@ -3,9 +3,10 @@ import { useDispatch } from "react-redux"
 
 import PlayerBar from "@app/components/player/PlayerBar"
 import SpeedModal from "@app/components/player/SpeedModal"
-import { MPlayerSource } from "@app/domain/bfr/source"
 import { useBFRSelector } from "@app/domain/redux/store"
 import { setWTPPlaylist } from "@app/domain/wtp/actions"
+import { WTPPlaylistMetadataType } from "@app/domain/wtp/playlist"
+import { WTPSource, WTPSourceType } from "@app/domain/wtp/source"
 import { audioMimesAndExtensions } from "@app/util/fileTypes"
 
 import { formatDurationSeconds } from "tws-common/lang/time/format"
@@ -68,12 +69,13 @@ const Player = () => {
 
 									dispatch(
 										setWTPPlaylist({
-											type: "files",
+											type: WTPPlaylistMetadataType.ANY_SOURCES,
 											sources: files.map(
-												(f): MPlayerSource => ({
-													type: "external-file",
-													name: f.name,
+												(f): WTPSource => ({
+													type: WTPSourceType.BLOB_SOURCE,
 													blob: f,
+													preloadedMetadata: null,
+													fileName: f.name,
 													id: generateUUID(),
 												}),
 											),
