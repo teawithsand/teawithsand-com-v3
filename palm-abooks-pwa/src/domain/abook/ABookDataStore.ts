@@ -1,5 +1,4 @@
-import { ABookData } from "@app/domain/abook/ABookStore"
-
+import { ABookData } from "@app/domain/abook/typedef"
 import LocalForageKeyValueStore from "tws-common/keyvalue/LocalForageKeyValueStore"
 import { claimId, NS_STORE } from "tws-common/misc/GlobalIDManager"
 

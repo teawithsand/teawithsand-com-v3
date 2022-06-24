@@ -1,11 +1,13 @@
 import {
 	ABookActiveRecord,
-	ABookData,
-	ABookFileMetadata,
 	ABookID,
-	ABookMetadata,
 	ABookStore,
 } from "@app/domain/abook/ABookStore"
+import {
+	ABookData,
+	ABookFileMetadata,
+	ABookMetadata,
+} from "@app/domain/abook/typedef"
 
 import MutatingObjectFileStore from "tws-common/file/ofs/MutatingObjectFileStore"
 import { PrefixObjectFileStore } from "tws-common/file/ofs/ObjectFileStore"
@@ -52,6 +54,13 @@ export default class ABookStoreImpl implements ABookStore {
 	}
 
 	delete = async (id: string): Promise<void> => {
+		// Deleting ABook = delete source files + main one
+		// In fact, we could WAL-log it.
+		// TODO(teawithsand): make this store WAL-logged
+		const fileStore = this.getABookFileStore(id)
+		for await (const sourceId of fileStore.keysWithPrefix("")) {
+			await fileStore.delete(sourceId)
+		}
 		await this.fileStore.delete(id)
 	}
 
@@ -59,6 +68,8 @@ export default class ABookStoreImpl implements ABookStore {
 		const data = await this.dataStore.get(id)
 		if (!data) return null
 
+		const files = this.getABookFileStore(id)
+		let deleted = false
 		return {
 			id,
 			metadata: data.metadata,
@@ -68,12 +79,22 @@ export default class ABookStoreImpl implements ABookStore {
 				metadata: data.metadata,
 			},
 
-			files: this.getABookFileStore(id),
+			get files() {
+				if (deleted) {
+					// TODO(teawithsand): handle case when already deleted store
+					//  this is important, as it prevents AR from further usage once it was deleted.
+				}
+				return files
+			},
 
 			delete: async () => {
 				await this.delete(id)
+				deleted = true
 			},
 			setMetadata: async metadata => {
+				if (deleted) {
+					return
+				}
 				await this.dataStore.set(id, {
 					metadata,
 				})

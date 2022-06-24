@@ -1,34 +1,23 @@
 import { createReducer } from "@reduxjs/toolkit"
 
-import { MPlayerSource } from "@app/domain/bfr/source"
 import { State } from "@app/domain/redux/store"
-import { setWhatToPlaySource } from "@app/domain/wtp/actions"
+import {
+	setWTPError,
+	setWTPPlaylist,
+	setWTPResolved,
+} from "@app/domain/wtp/actions"
+import { whatToPlayStateSyncRootName, WTPState } from "@app/domain/wtp/state"
 
 import { LOG } from "tws-common/log/logger"
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import { setPlaylist } from "tws-common/player/bfr/actions"
-import { makeSyncRoot, NamedSyncRoot } from "tws-common/redux/sync/root"
+import { makeSyncRoot } from "tws-common/redux/sync/root"
 import {
 	makeActionSynchronizerAction,
 	makeNamedSyncRootSynchronizer,
 } from "tws-common/redux/sync/synchronizer"
 
-const LOG_TAG = "palm-abooks-pwa/WTPReducer"
-
-export type WhatToPlaySource = {
-	type: "files"
-	sources: MPlayerSource[]
-}
-
-type WhatToPlayStateState =
-	| {
-			type: "loading"
-	  }
-	| {
-			type: "loaded"
-			sources: MPlayerSource[]
-	  }
-
-export const whatToPlayStateSyncRootName = "palm-abooks-pwa/what-to-play-state"
+const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/WTPReducer")
 
 export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 	whatToPlayStateSyncRootName,
@@ -36,7 +25,11 @@ export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 	makeActionSynchronizerAction((s: State) => {
 		const data = s.whatToPlayState.state.data
 
-		if (data.type === "loading") {
+		if (
+			data.type === "loading" ||
+			data.type === "error" ||
+			data.type === "no-sources"
+		) {
 			return [
 				setPlaylist({
 					metadata: {},
@@ -44,60 +37,59 @@ export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 				}),
 			]
 		} else {
-			return [
-				setPlaylist({
-					metadata: {},
-					sources: data.sources,
-				}),
-			]
+			return [setPlaylist(data.bfrPlaylist)]
 		}
 	}),
 )
 
-export type WhatToPlayState = {
-	config: {
-		source: WhatToPlaySource | null
-	}
-	state: NamedSyncRoot<
-		WhatToPlayStateState,
-		typeof whatToPlayStateSyncRootName
-	>
-}
-
-export const whatToPlayReducer = createReducer<WhatToPlayState>(
+export const whatToPlayReducer = createReducer<WTPState>(
 	{
 		config: {
-			source: null,
+			playlist: makeSyncRoot(null),
 		},
 		state: makeSyncRoot({
-			type: "loaded",
-			sources: [],
+			type: "no-sources",
 		}),
 	},
 	builder =>
-		builder.addCase(setWhatToPlaySource, (state, action) => {
-			state.config.source = action.payload
+		builder
+			.addCase(setWTPPlaylist, (state, action) => {
+				state.config.playlist = makeSyncRoot(action.payload)
 
-			if (state.config.source === null) {
-				state.state = makeSyncRoot({
-					type: "loaded",
-					sources: [],
-				})
-			} else if (state.config.source.type === "files") {
-				state.state = makeSyncRoot({
-					type: "loaded",
-					sources: state.config.source.sources,
-				})
-			} else {
-				// TODO(teawithsand): trigger any load required here
-				LOG.assert(
-					LOG_TAG,
-					"Not implemented loading of sources for",
-					state.config.source,
-				)
-				state.state = makeSyncRoot({
-					type: "loading",
-				})
-			}
-		}),
+				if (state.config.playlist === null) {
+					state.state = makeSyncRoot({
+						type: "no-sources",
+					})
+				} else {
+					state.state = makeSyncRoot({
+						type: "loading",
+					})
+				}
+			})
+			.addCase(setWTPError, (state, action) => {
+				if (state.state.data.type === "loading") {
+					state.state = makeSyncRoot({
+						type: "error",
+						error: action.payload,
+					})
+				} else {
+					LOG.warn(
+						LOG_TAG,
+						"Tried to set WTP error in not-loading state; ignoring this call",
+					)
+				}
+			})
+			.addCase(setWTPResolved, (state, action) => {
+				if (state.state.data.type === "loading") {
+					state.state = makeSyncRoot({
+						type: "loaded",
+						bfrPlaylist: action.payload,
+					})
+				} else {
+					LOG.warn(
+						LOG_TAG,
+						"Tried to set WTP resolved in not-loading state; ignoring this call",
+					)
+				}
+			}),
 )

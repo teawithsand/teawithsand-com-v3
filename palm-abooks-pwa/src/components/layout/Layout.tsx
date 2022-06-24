@@ -6,6 +6,7 @@ import { MBFRMetadataLoaderAdapter } from "@app/domain/bfr/metadataLoader"
 import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
 import { MPlayerSource, MPlayerSourceResolver } from "@app/domain/bfr/source"
 import { createStore } from "@app/domain/redux/store"
+import { WTPResolver } from "@app/domain/wtp/resolver"
 
 import { addLogFilter, LogLevel } from "tws-common/log/logger"
 import { GlobalIdManager } from "tws-common/misc/GlobalIDManager"
@@ -99,6 +100,14 @@ const Layout = (props: any) => {
 			mediaSession.release()
 		}
 	}, [])
+
+	useEffect(() => {
+		const resolver = new WTPResolver(store, s => s.whatToPlayState)
+
+		return () => {
+			resolver.release()
+		}
+	})
 
 	useEffect(() => {
 		const release = addLogFilter(({ tag, level }) => {

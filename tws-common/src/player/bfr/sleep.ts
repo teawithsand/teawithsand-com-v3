@@ -6,7 +6,7 @@ import {
 	PerformanceTimestampMs,
 } from "tws-common/lang/time/Timestamp"
 import { onSleepDone, onSleepStateChanged } from "tws-common/player/bfr/actions"
-import { BFRState, BFRSleepConfig } from "tws-common/player/bfr/state"
+import { BFRSleepConfig, BFRState } from "tws-common/player/bfr/state"
 
 /**
  * SimplePlayer, which uses HTMLAudioElement | HTMLMediaElement | HTMLVideoElement
@@ -124,6 +124,9 @@ export class BFRSleep<T> {
 	release = () => {
 		if (this.releaseReduxStore !== null) {
 			this.releaseReduxStore()
+			this.releaseSleepTask()
+			this.atom.invalidate()
+			
 			this.releaseReduxStore = null
 		}
 	}

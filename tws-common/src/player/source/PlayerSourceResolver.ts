@@ -18,6 +18,10 @@ export type BasePlayerSourceResolverExtractedData = (
 			type: "url"
 			url: string
 	  }
+	| {
+			type: "blob-loader"
+			loader: () => Promise<Blob>
+	  }
 ) & {
 	id: string
 }
@@ -136,6 +140,18 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 					// noop
 				},
 			]
+		} else if (data.type === "blob-loader") {
+			return this.getCachedBlob(data.id, () =>
+				data
+					.loader()
+					.catch(e =>
+						Promise.reject(
+							new PlayerSourceError(
+								`Filed to fetch blob using loader to resolve source with id ${data.id}: ${e}`,
+							),
+						),
+					),
+			)
 		} else {
 			throw new Error("unreachable code")
 		}
@@ -152,6 +168,28 @@ export abstract class BasePlayerSourceResolver<T extends PlayerSource>
 			]
 		} else if (data.type === "blob") {
 			return this.getCachedObjectURL(data.id, data.blob)
+		} else if (data.type === "blob-loader") {
+			const [blob, closer] = await this.getCachedBlob(data.id, () =>
+				data
+					.loader()
+					.catch(e =>
+						Promise.reject(
+							new PlayerSourceError(
+								`Filed to fetch blob using loader to resolve source with id ${data.id}: ${e}`,
+							),
+						),
+					),
+			)
+
+			const [url, secondCloser] = this.getCachedObjectURL(data.id, blob)
+
+			return [
+				url,
+				() => {
+					secondCloser() // release URL first
+					closer() // then blob; never vice-versa
+				},
+			]
 		} else {
 			throw new Error("unreachable code")
 		}

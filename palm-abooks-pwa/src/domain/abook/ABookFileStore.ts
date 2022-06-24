@@ -1,4 +1,4 @@
-import { ABookFileMetadata } from "@app/domain/abook/ABookStore"
+import { ABookFileMetadata } from "@app/domain/abook/typedef"
 
 import KeyValueObjectFileStore from "tws-common/file/ofs/KeyValueObjectFileStore"
 import { PrefixObjectFileStore } from "tws-common/file/ofs/ObjectFileStore"

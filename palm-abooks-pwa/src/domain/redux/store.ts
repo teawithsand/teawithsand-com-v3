@@ -10,15 +10,15 @@ import { playerUiReducer, PlayerUIState } from "@app/domain/redux/playerUi"
 import {
 	playlistSynchronizer,
 	whatToPlayReducer,
-	WhatToPlayState,
 } from "@app/domain/wtp/reducer"
+import { WTPState } from "@app/domain/wtp/state"
 
 import { createBFRReducer } from "tws-common/player/bfr/reducer"
 import { BFRState } from "tws-common/player/bfr/state"
 import { SyncedIdStore, wrapReducerForSync } from "tws-common/redux/sync/store"
 
 export type State = {
-	whatToPlayState: WhatToPlayState
+	whatToPlayState: WTPState
 	bfrState: MBFRState
 	syncedIdStore: SyncedIdStore
 	playerUi: PlayerUIState
