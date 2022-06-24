@@ -83,6 +83,9 @@ const filteringLog = new FilteringLog({
 			).toFixed(0)} ${stringifyLogLevel(lv).toUpperCase()} - ${tag}]`
 		if (lv === LogLevel.ERROR || lv === LogLevel.ASSERT) {
 			console.error(format(), ...args)
+		}
+		if (lv === LogLevel.WARN) {
+			console.warn(format(), ...args)
 		} else {
 			console.log(format(), ...args)
 		}
