@@ -8,18 +8,18 @@ import { WTPSource, WTPSourceType } from "@app/domain/wtp/source"
 
 import BaseError from "tws-common/lang/error"
 
-export enum WTPPlaylistType {
+export enum WTPPlaylistMetadataType {
 	ABOOK = "abook",
 	ANY_SOURCES = "anySources",
 }
 
-export type WTPPlaylist =
+export type WTPPlaylistMetadata =
 	| {
-			type: WTPPlaylistType.ABOOK
+			type: WTPPlaylistMetadataType.ABOOK
 			abookId: ABookID
 	  }
 	| {
-			type: WTPPlaylistType.ANY_SOURCES
+			type: WTPPlaylistMetadataType.ANY_SOURCES
 			sources: WTPSource[]
 	  }
 
@@ -28,27 +28,27 @@ export class WTPPlaylistResolverError extends BaseError {}
 export class WTPPlaylistResolver {
 	constructor(private readonly abookStore: ABookStore) {}
 
-	resolveWTPSource = async (
-		playlist: WTPPlaylist,
+	resolveWTPPlaylist = async (
+		playlistMetadata: WTPPlaylistMetadata,
 	): Promise<{
-		metadata: MPlayerPlaylistMetadata
+		playlistMetadata: MPlayerPlaylistMetadata
 		sources: WTPSource[]
 	}> => {
-		if (playlist.type === WTPPlaylistType.ANY_SOURCES) {
+		if (playlistMetadata.type === WTPPlaylistMetadataType.ANY_SOURCES) {
 			return {
-				metadata: {
+				playlistMetadata: {
 					type: MPlayerPlaylistMetadataType.NONE,
-					wtpPlaylist: playlist,
+					wtpPlaylist: playlistMetadata,
 				},
-				sources: [...playlist.sources],
+				sources: [...playlistMetadata.sources],
 			}
 		} else {
 			const abookActiveRecord = await this.abookStore.get(
-				playlist.abookId,
+				playlistMetadata.abookId,
 			)
 			if (!abookActiveRecord)
 				throw new WTPPlaylistResolverError(
-					`ABook with id ${playlist.abookId} does not exist`,
+					`ABook with id ${playlistMetadata.abookId} does not exist`,
 				)
 
 			const files: string[] = []
@@ -64,10 +64,10 @@ export class WTPPlaylistResolver {
 			}
 
 			return {
-				metadata: {
+				playlistMetadata: {
 					type: MPlayerPlaylistMetadataType.ABOOK,
 					abook: abookActiveRecord,
-					wtpPlaylist: playlist,
+					wtpPlaylist: playlistMetadata,
 				},
 				sources: files.map(sourceId => ({
 					type: WTPSourceType.ABOOK_FILE_SOURCE,

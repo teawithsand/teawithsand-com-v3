@@ -46,7 +46,7 @@ export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
 export const whatToPlayReducer = createReducer<WTPState>(
 	{
 		config: {
-			playlist: null,
+			playlist: makeSyncRoot(null),
 		},
 		state: makeSyncRoot({
 			type: "no-sources",
@@ -55,7 +55,7 @@ export const whatToPlayReducer = createReducer<WTPState>(
 	builder =>
 		builder
 			.addCase(setWTPPlaylist, (state, action) => {
-				state.config.playlist = action.payload
+				state.config.playlist = makeSyncRoot(action.payload)
 
 				if (state.config.playlist === null) {
 					state.state = makeSyncRoot({

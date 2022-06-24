@@ -1,5 +1,5 @@
 import { ABookActiveRecord } from "@app/domain/abook/ABookStore"
-import { WTPPlaylist } from "@app/domain/wtp/playlist"
+import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist"
 
 export enum MPlayerPlaylistMetadataType {
 	// No metadata whatsoever, no playlist title or sth
@@ -22,5 +22,5 @@ export type MPlayerPlaylistMetadata = (
 	  }
 ) & {
 	// playlist given playlist metadata was created from
-	wtpPlaylist: WTPPlaylist
+	wtpPlaylist: WTPPlaylistMetadata
 }
