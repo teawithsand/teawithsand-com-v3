@@ -15,6 +15,19 @@ const AppTranslationEN: AppTranslation = {
 			speed: "Speed",
 		},
 	},
+	globalUi: {
+		navbar: {
+			abookLibraryDropdown: {
+				title: "ABooks",
+				addLocalABook: "Add ABook from local device",
+				listABooks: "List ABooks",
+				managementPanel: "ABook management panel",
+			},
+			localPlayer: "Play local files",
+			pageTitle: "PalmABooks PWA",
+			homePage: "Home",
+		},
+	},
 }
 
 export default AppTranslationEN

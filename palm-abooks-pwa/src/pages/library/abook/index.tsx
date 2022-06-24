@@ -4,7 +4,7 @@ import styled from "styled-components"
 
 import PageContainer from "@app/components/layout/PageContainer"
 import StorageEstimate from "@app/components/shared/storage-estimate/StorageEstimate"
-import { libraryAddABookPath, libraryListABookPath } from "@app/paths"
+import { libraryAddABookFromLocalFSPath, libraryListABookPath } from "@app/paths"
 
 import { Button, Col, Row } from "tws-common/ui"
 
@@ -38,7 +38,7 @@ const ABookLibraryPage = () => {
 					className="w-100"
 					size="lg"
 					onClick={() => {
-						navigate(libraryAddABookPath)
+						navigate(libraryAddABookFromLocalFSPath)
 					}}
 				>
 					Add ABook from local storage

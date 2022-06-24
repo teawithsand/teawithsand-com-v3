@@ -1,15 +1,29 @@
-import AppTranslationEN from "@app/trans/AppTranslationEN"
+import AppTranslationEN from "@app/trans/AppTranslationEN";
 
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
-import Translator, {
-	createTranslatorContext,
-	useTranslator,
-} from "tws-common/trans/Translator"
+
+
+import { DEFAULT_LANGUAGE } from "tws-common/trans/language";
+import Translator, { createTranslatorContext, useTranslator } from "tws-common/trans/Translator";
+
 
 export default interface AppTranslation {
 	appName: string
 	generic: {
 		modalClose: string
+	}
+	globalUi: {
+		navbar: {
+			pageTitle: string
+			homePage: string
+			localPlayer: string
+
+			abookLibraryDropdown: {
+				title: string
+				managementPanel: string
+				addLocalABook: string
+				listABooks: string
+			}
+		}
 	}
 	player: {
 		speedModal: {
@@ -33,3 +47,6 @@ export const TranslatorContext = createTranslatorContext<AppTranslation>(
 
 export const useAppTranslation = (): AppTranslation =>
 	useTranslator(TranslatorContext).getTranslationForLanguage()
+
+export const useAppTranslationSelector = <T>(s: (t: AppTranslation) => T): T =>
+	s(useAppTranslation())

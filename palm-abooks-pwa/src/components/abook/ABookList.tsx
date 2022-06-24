@@ -4,7 +4,7 @@ import styled from "styled-components"
 
 import PageContainer from "@app/components/layout/PageContainer"
 import { LoadedABookData } from "@app/domain/abook/typedef"
-import { libraryABookIndex, libraryAddABookPath } from "@app/paths"
+import { libraryABookIndex, libraryAddABookFromLocalFSPath } from "@app/paths"
 
 import { Button, Card, Col, Row } from "tws-common/ui"
 
@@ -27,7 +27,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 					<Button
 						size="lg"
 						onClick={() => {
-							navigate(libraryAddABookPath)
+							navigate(libraryAddABookFromLocalFSPath)
 						}}
 					>
 						Add ABook from local storage

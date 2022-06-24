@@ -75,7 +75,7 @@ const CreateABookForm = (props: {
 											value: undefined,
 
 											// instead of the default target.value
-											onChange: e => {
+											onChange: (e: any) => {
 												// TODO(teawithsand): check if it works on older browsers, works on state-of-art ff
 												const files = [
 													...(e.target.files || []),
