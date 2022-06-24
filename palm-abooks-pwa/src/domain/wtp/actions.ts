@@ -15,6 +15,6 @@ export const setWTPPlaylist = createAction<WTPPlaylistMetadata | null>(
 
 export const setWTPResolved = createAction<
 	BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource>
->(`${prefix}/setWTPPlaylist`)
+>(`${prefix}/setWTPResolved`)
 
 export const setWTPError = createAction<any>(`${prefix}/setWTPError`)
