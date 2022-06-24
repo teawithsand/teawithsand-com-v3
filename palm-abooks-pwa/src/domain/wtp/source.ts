@@ -1,8 +1,8 @@
 import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
 import { ABookFileMetadataType } from "@app/domain/abook/typedef"
 import { MPlayerSource, MPlayerSourceType } from "@app/domain/bfr/source"
+import WTPError from "@app/domain/wtp/WTPError"
 
-import BaseError from "tws-common/lang/error"
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 
@@ -38,7 +38,7 @@ export type WTPSource = (
 	id: string
 }
 
-export class WTPSourceResolverError extends BaseError {}
+export class WTPSourceResolverError extends WTPError {}
 
 export class WTPSourceResolver {
 	constructor(private readonly abookStore: ABookStore) {}
@@ -93,10 +93,11 @@ export class WTPSourceResolver {
 					const res = await abookActiveRecord.files.getFile(
 						source.sourceId,
 					)
-					if (!res || res.innerObject.size === 0)
-						throw new PlayerSourceError(
+					if (!res || res.innerObject.size === 0) {
+						throw new WTPSourceResolverError(
 							`ABook with id "${source.abookId}" *had* source with id "${source.sourceId}" but it's not there anymore(or it's empty) (requested by source with id "${source.id}")`,
 						)
+					}
 
 					return res.innerObject
 				},

@@ -6,7 +6,7 @@ import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager"
 import { BFRPlayerError } from "tws-common/player/bfr/error"
 import { AudioFilter } from "tws-common/player/filter/filter"
 import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import { PlayerSourceError } from "tws-common/player/source/PlayerSourceError"
+import { SourcePlayerError } from "tws-common/player/source/SourcePlayerError"
 import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 import { NamedSyncRoot } from "tws-common/redux/sync/root"
@@ -22,7 +22,7 @@ export type BFRMediaSessionConfig = {
 
 export type BFRPlayerState = {
 	playerError: BFRPlayerError | null
-	sourceError: PlayerSourceError | null
+	sourceError: SourcePlayerError | null
 
 	position: number | null
 	duration: number | null

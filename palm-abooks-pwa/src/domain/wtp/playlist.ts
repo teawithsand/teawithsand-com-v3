@@ -1,12 +1,9 @@
-import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
-import { ABookFileMetadataType } from "@app/domain/abook/typedef"
-import {
-	MPlayerPlaylistMetadata,
-	MPlayerPlaylistMetadataType,
-} from "@app/domain/bfr/playlist"
+import { ABookID, ABookStore } from "@app/domain/abook/ABookStore";
+import { ABookFileMetadataType } from "@app/domain/abook/typedef";
+import { MPlayerPlaylistMetadata, MPlayerPlaylistMetadataType } from "@app/domain/bfr/playlist";
 import { WTPSource, WTPSourceType } from "@app/domain/wtp/source"
+import WTPError from "@app/domain/wtp/WTPError";
 
-import BaseError from "tws-common/lang/error"
 
 export enum WTPPlaylistMetadataType {
 	ABOOK = "abook",
@@ -23,7 +20,7 @@ export type WTPPlaylistMetadata =
 			sources: WTPSource[]
 	  }
 
-export class WTPPlaylistResolverError extends BaseError {}
+export class WTPPlaylistResolverError extends WTPError {}
 
 export class WTPPlaylistResolver {
 	constructor(private readonly abookStore: ABookStore) {}

@@ -6,7 +6,7 @@ import {
 import { BFRMetadataLoaderResults } from "tws-common/player/bfr/metadataLoader"
 import { BFRPlaylist, BFRSleepState } from "tws-common/player/bfr/state"
 import { AudioFilter } from "tws-common/player/filter/filter"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
+import { SourcePlayerError } from "tws-common/player/source/SourcePlayerError"
 import PlayerNetworkState from "tws-common/player/tool/PlayerNetworkState"
 import PlayerReadyState from "tws-common/player/tool/PlayerReadyState"
 
@@ -40,7 +40,7 @@ export const setMetadataLoadingResults = createAction<BFRMetadataLoaderResults>(
 
 export const onNewPlayerState = createAction<{
 	playerError: MediaError | null
-	sourceError: PlayerSourceError | null
+	sourceError: SourcePlayerError | null
 	isPlaying: boolean
 	isSeeking: boolean
 	isInnerEnded: boolean
