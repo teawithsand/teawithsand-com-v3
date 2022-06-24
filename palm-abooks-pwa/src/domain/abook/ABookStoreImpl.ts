@@ -17,12 +17,15 @@ import { generateUUID } from "tws-common/lang/uuid"
 
 export default class ABookStoreImpl implements ABookStore {
 	private readonly lock: RWLock
+	public readonly compoundOperationsLock: RWLock
 	constructor(
 		private readonly dataStore: KeyValueStore<ABookData, ABookID>,
 		private readonly fileStore: PrefixObjectFileStore<ABookFileMetadata>,
 		lockAdapter: RWLockAdapter,
+		private readonly compoundLockAdapter: RWLockAdapter,
 	) {
 		this.lock = new RWLock(lockAdapter)
+		this.compoundOperationsLock = new RWLock(compoundLockAdapter)
 	}
 
 	private generateFileNamePrefix = (bookId: ABookID): string => {

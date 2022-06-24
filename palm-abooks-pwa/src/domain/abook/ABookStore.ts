@@ -1,6 +1,9 @@
 import { ABOOK_DATA_STORE } from "@app/domain/abook/ABookDataStore"
 import { ABOOK_FILE_STORE } from "@app/domain/abook/ABookFileStore"
-import { ABOOK_LOCK_ADAPTER } from "@app/domain/abook/ABookLock"
+import {
+	ABOOK_COMPOUND_LOCK_ADAPTER,
+	ABOOK_LOCK_ADAPTER,
+} from "@app/domain/abook/ABookLock"
 import ABookStoreImpl from "@app/domain/abook/ABookStoreImpl"
 import {
 	ABookFileMetadata,
@@ -9,6 +12,7 @@ import {
 } from "@app/domain/abook/typedef"
 
 import ObjectFileStore from "tws-common/file/ofs/ObjectFileStore"
+import { RWLock } from "tws-common/lang/lock/Lock"
 
 export type ABookID = string
 
@@ -28,11 +32,19 @@ export interface ABookStore {
 	get(id: ABookID): Promise<ABookActiveRecord | null>
 	has(id: ABookID): Promise<boolean>
 	keys(): AsyncIterable<ABookID>
+
+	// TODO(teawithsand): implement it among all operations performed
+	/**
+	 * Util lock used to prevent multi-staged operations from overlapping each other.
+	 * It should be claimed for as short as it's possible, since it's global for whole ABook store.
+	 */
+	readonly compoundOperationsLock: RWLock
 }
 
 export const ABOOK_STORE: ABookStore = new ABookStoreImpl(
 	ABOOK_DATA_STORE,
 	ABOOK_FILE_STORE,
 	ABOOK_LOCK_ADAPTER,
+	ABOOK_COMPOUND_LOCK_ADAPTER,
 )
 export const useABookStore = (): ABookStore => ABOOK_STORE
