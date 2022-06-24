@@ -7,8 +7,9 @@ const ToastDisplay = (props: {
 	onClose: (id: string) => void
 }) => {
 	const { toasts, onClose } = props
+	// TODO(teawithsand): limit amount of displayed toasts ,especially when screen is small.
 	return (
-		<ToastContainer position="top-start">
+		<ToastContainer position="bottom-center" className="mb-3">
 			{toasts.map(v => (
 				<ToastComponent
 					key={v.id}
@@ -16,7 +17,9 @@ const ToastDisplay = (props: {
 						onClose(v.id)
 					}}
 					autohide={v.livenessSeconds !== null}
-					delay={v.livenessSeconds ?? undefined}
+					delay={
+						Math.round((v.livenessSeconds ?? 0) * 1000) || undefined
+					}
 				>
 					<ToastComponent.Header>
 						<strong className="me-auto">{v.title}</strong>
