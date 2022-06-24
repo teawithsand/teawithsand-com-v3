@@ -10,13 +10,22 @@ export const NS_LOG_TAG: GlobalIDNamespace = "LOG_TAG" as GlobalIDNamespace
 export const NS_SYNC_ROOT: GlobalIDNamespace = "SR_NAME" as GlobalIDNamespace
 
 class GlobalIDManagerImpl {
-	private readonly claimedIds: Map<GlobalIDNamespace, Set<string>> = new Map()
+	private claimedIds: Map<GlobalIDNamespace, Set<string>> | null = new Map()
 
 	/**
 	 * Actually, this is useful for testing only.
+	 * Removes all previously registered ids.i
 	 */
 	reset = () => {
-		this.claimedIds.clear()
+		if (this.claimedIds) this.claimedIds.clear()
+	}
+
+	/**
+	 * Disables GlobalIDManager.
+	 * This is useful sometimes, since this manager does not work with HMR well.
+	 */
+	disable = () => {
+		this.claimedIds = null
 	}
 
 	/**
@@ -28,6 +37,7 @@ class GlobalIDManagerImpl {
 	 * @returns id provided
 	 */
 	claimId = <T extends string>(ns: GlobalIDNamespace, id: T): T => {
+		if (this.claimedIds === null) return id
 		const set = this.claimedIds.get(ns) ?? new Set()
 
 		if (set.has(id)) throw new Error(`ID: ${id} was already claimed`)
