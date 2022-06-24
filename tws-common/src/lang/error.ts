@@ -5,11 +5,16 @@ import { ExtendableBuiltin } from "./extendable"
  */
 export default class BaseError extends ExtendableBuiltin(Error) {
 	public readonly __isBaseError
+	public readonly cause?: any
 
-	constructor(message: string) {
+	constructor(message: string, cause?: any) {
 		super(message)
 
 		this.name = this.constructor.name
+		this.message = message
+		if (cause) {
+			this.cause = cause
+		}
 
 		if (typeof Error.captureStackTrace === "function") {
 			Error.captureStackTrace(this, this.constructor)
