@@ -1,11 +1,11 @@
+import { ABOOK_LOCK_ADAPTER } from "@app/domain/abook/ABookLock"
 import { ABookFileMetadata } from "@app/domain/abook/typedef"
 
 import KeyValueObjectFileStore from "tws-common/file/ofs/KeyValueObjectFileStore"
 import { PrefixObjectFileStore } from "tws-common/file/ofs/ObjectFileStore"
 import LocalForageKeyValueStore from "tws-common/keyvalue/LocalForageKeyValueStore"
-import { GLOBAL_WEB_KEYED_LOCKS } from "tws-common/lang/lock/keyed/WebKeyedLocks"
 import KeyValueWALStore from "tws-common/lang/wal/KeyValueWALStore"
-import { claimId, NS_STORE, NS_WEB_LOCK } from "tws-common/misc/GlobalIDManager"
+import { claimId, NS_STORE } from "tws-common/misc/GlobalIDManager"
 
 export const ABOOK_FILE_STORE: PrefixObjectFileStore<ABookFileMetadata> =
 	new KeyValueObjectFileStore<ABookFileMetadata>(
@@ -20,9 +20,7 @@ export const ABOOK_FILE_STORE: PrefixObjectFileStore<ABookFileMetadata> =
 				claimId(NS_STORE, "palm-abooks-pwa/abook-files-wal"),
 			),
 		),
-		GLOBAL_WEB_KEYED_LOCKS.getRWLockAdapter(
-			claimId(NS_WEB_LOCK, "palm-abooks-pwa/abook-files-lock"),
-		),
+		ABOOK_LOCK_ADAPTER,
 	)
 
 export const useAbookFileStore = () => ABOOK_FILE_STORE

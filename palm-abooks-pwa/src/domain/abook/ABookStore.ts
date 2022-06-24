@@ -1,5 +1,6 @@
 import { ABOOK_DATA_STORE } from "@app/domain/abook/ABookDataStore"
 import { ABOOK_FILE_STORE } from "@app/domain/abook/ABookFileStore"
+import { ABOOK_LOCK_ADAPTER } from "@app/domain/abook/ABookLock"
 import ABookStoreImpl from "@app/domain/abook/ABookStoreImpl"
 import {
 	ABookFileMetadata,
@@ -32,5 +33,6 @@ export interface ABookStore {
 export const ABOOK_STORE: ABookStore = new ABookStoreImpl(
 	ABOOK_DATA_STORE,
 	ABOOK_FILE_STORE,
+	ABOOK_LOCK_ADAPTER,
 )
 export const useABookStore = (): ABookStore => ABOOK_STORE

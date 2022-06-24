@@ -12,13 +12,18 @@ import {
 import MutatingObjectFileStore from "tws-common/file/ofs/MutatingObjectFileStore"
 import { PrefixObjectFileStore } from "tws-common/file/ofs/ObjectFileStore"
 import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
+import { RWLock, RWLockAdapter } from "tws-common/lang/lock/Lock"
 import { generateUUID } from "tws-common/lang/uuid"
 
 export default class ABookStoreImpl implements ABookStore {
+	private readonly lock: RWLock
 	constructor(
 		private readonly dataStore: KeyValueStore<ABookData, ABookID>,
 		private readonly fileStore: PrefixObjectFileStore<ABookFileMetadata>,
-	) {}
+		lockAdapter: RWLockAdapter,
+	) {
+		this.lock = new RWLock(lockAdapter)
+	}
 
 	private generateFileNamePrefix = (bookId: ABookID): string => {
 		return bookId + "/"
@@ -46,8 +51,10 @@ export default class ABookStoreImpl implements ABookStore {
 	create = async (metadata: ABookMetadata): Promise<string> => {
 		const id = generateUUID()
 
-		await this.dataStore.set(id, {
-			metadata,
+		await this.lock.withLockWrite(async () => {
+			await this.dataStore.set(id, {
+				metadata,
+			})
 		})
 
 		return id
@@ -57,15 +64,19 @@ export default class ABookStoreImpl implements ABookStore {
 		// Deleting ABook = delete source files + main one
 		// In fact, we could WAL-log it.
 		// TODO(teawithsand): make this store WAL-logged
-		const fileStore = this.getABookFileStore(id)
-		for await (const sourceId of fileStore.keysWithPrefix("")) {
-			await fileStore.delete(sourceId)
-		}
-		await this.fileStore.delete(id)
+		await this.lock.withLockWrite(async () => {
+			const fileStore = this.getABookFileStore(id)
+			for await (const sourceId of fileStore.keysWithPrefix("")) {
+				await fileStore.delete(sourceId)
+			}
+			await this.fileStore.delete(id)
+		})
 	}
 
 	get = async (id: string): Promise<ABookActiveRecord | null> => {
-		const data = await this.dataStore.get(id)
+		const data = await this.lock.withLockRead(
+			async () => await this.dataStore.get(id),
+		)
 		if (!data) return null
 
 		const files = this.getABookFileStore(id)
@@ -95,8 +106,12 @@ export default class ABookStoreImpl implements ABookStore {
 				if (deleted) {
 					return
 				}
-				await this.dataStore.set(id, {
-					metadata,
+				await this.lock.withLockWrite(async () => {
+					if (await this.dataStore.has(id)) {
+						await this.dataStore.set(id, {
+							metadata,
+						})
+					}
 				})
 			},
 		}
