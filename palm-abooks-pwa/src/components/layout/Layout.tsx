@@ -17,6 +17,7 @@ import { BFRPlayer } from "tws-common/player/bfr/player"
 import { BFRPlaylist } from "tws-common/player/bfr/state"
 import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
 import { MediaSessionEventType } from "tws-common/webapi/mediaSession/MediaSessionHelper"
+import InnerToastDisplay from "@app/components/layout/InnerToastDisplay"
 
 const queryClient = new QueryClient()
 
@@ -129,6 +130,7 @@ const Layout = (props: any) => {
 		<>
 			<Provider store={store}>
 				<Navbar />
+				<InnerToastDisplay />
 				<QueryClientProvider client={queryClient}>
 					{children}
 				</QueryClientProvider>
