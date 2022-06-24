@@ -14,10 +14,12 @@ class GlobalIDManagerImpl {
 
 	/**
 	 * Actually, this is useful for testing only.
-	 * Removes all previously registered ids.i
+	 * Removes all previously registered ids.
+	 * 
+	 * Also, reenables GlobalIDManager
 	 */
 	reset = () => {
-		if (this.claimedIds) this.claimedIds.clear()
+		this.claimedIds = new Map
 	}
 
 	/**
