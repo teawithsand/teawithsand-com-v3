@@ -22,5 +22,3 @@ export const ABOOK_FILE_STORE: PrefixObjectFileStore<ABookFileMetadata> =
 		),
 		ABOOK_LOCK_ADAPTER,
 	)
-
-export const useAbookFileStore = () => ABOOK_FILE_STORE
