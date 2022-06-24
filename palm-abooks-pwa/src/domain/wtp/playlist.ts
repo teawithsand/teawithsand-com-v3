@@ -1,9 +1,11 @@
-import { ABookID, ABookStore } from "@app/domain/abook/ABookStore";
-import { ABookFileMetadataType } from "@app/domain/abook/typedef";
-import { MPlayerPlaylistMetadata, MPlayerPlaylistMetadataType } from "@app/domain/bfr/playlist";
+import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
+import { ABookFileMetadataType } from "@app/domain/abook/typedef"
+import {
+	MPlayerPlaylistMetadata,
+	MPlayerPlaylistMetadataType,
+} from "@app/domain/bfr/playlist"
 import { WTPSource, WTPSourceType } from "@app/domain/wtp/source"
-import WTPError from "@app/domain/wtp/WTPError";
-
+import { WTPError } from "@app/domain/wtp/WTPError"
 
 export enum WTPPlaylistMetadataType {
 	ABOOK = "abook",

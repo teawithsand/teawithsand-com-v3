@@ -1,6 +1,7 @@
 import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
 import { MPlayerSource } from "@app/domain/bfr/source"
 import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist"
+import { WTPError } from "@app/domain/wtp/WTPError"
 
 import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager"
 import { BFRPlaylist } from "tws-common/player/bfr/state"
@@ -29,7 +30,7 @@ export type WTPStateState =
 	  }
 	| {
 			type: "error"
-			error: any // TODO(teawithsand): type error to provide user with useful feedback
+			error: WTPError // TODO(teawithsand): type error to provide user with useful feedback
 	  }
 
 export type WTPState = {

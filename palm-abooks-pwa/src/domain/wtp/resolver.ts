@@ -8,6 +8,7 @@ import {
 } from "@app/domain/wtp/playlist"
 import { WTPSourceResolver } from "@app/domain/wtp/source"
 import { WTPState } from "@app/domain/wtp/state"
+import { WTPError } from "@app/domain/wtp/WTPError"
 
 import { DefaultTaskAtom, TaskAtomHandle } from "tws-common/lang/task/TaskAtom"
 import { LOG } from "tws-common/log/logger"
@@ -78,6 +79,10 @@ export class WTPResolver<S> {
 				}),
 			)
 		} catch (e) {
+			let err = e
+			if (!(err instanceof WTPError)) {
+				err = new WTPError("Filed to resolve WTPPlaylistMetadata", e)
+			}
 			LOG.warn(
 				LOG_TAG,
 				"Filed to resolve WTPPlaylist: ",
@@ -87,7 +92,7 @@ export class WTPResolver<S> {
 			)
 			if (!claim.isValid) return
 
-			this.store.dispatch(setWTPError(e))
+			this.store.dispatch(setWTPError(err))
 		}
 	}
 

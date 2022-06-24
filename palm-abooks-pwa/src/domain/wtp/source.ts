@@ -1,7 +1,7 @@
 import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
 import { ABookFileMetadataType } from "@app/domain/abook/typedef"
 import { MPlayerSource, MPlayerSourceType } from "@app/domain/bfr/source"
-import WTPError from "@app/domain/wtp/WTPError"
+import { WTPError } from "@app/domain/wtp/WTPError"
 
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
