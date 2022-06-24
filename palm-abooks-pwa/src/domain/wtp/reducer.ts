@@ -76,6 +76,8 @@ export const whatToPlayReducer = createReducer<WTPState>(
 					LOG.warn(
 						LOG_TAG,
 						"Tried to set WTP error in not-loading state; ignoring this call",
+						"Current state: ",
+						state.state.data.type,
 					)
 				}
 			})
@@ -89,6 +91,8 @@ export const whatToPlayReducer = createReducer<WTPState>(
 					LOG.warn(
 						LOG_TAG,
 						"Tried to set WTP resolved in not-loading state; ignoring this call",
+						"Current state: ",
+						state.state.data.type,
 					)
 				}
 			}),

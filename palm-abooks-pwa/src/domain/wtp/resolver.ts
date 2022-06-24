@@ -43,6 +43,11 @@ export class WTPResolver<S> {
 				const claim = this.taskAtom.claim()
 				if (playlist.data !== null) {
 					this.doResolvePlaylist(playlist.data, claim)
+					LOG.debug(
+						LOG_TAG,
+						"Triggered non-noop resolving playlist with id",
+						playlist.id,
+					)
 				}
 			}
 		})
