@@ -1,16 +1,20 @@
 import { navigate } from "gatsby"
 import React from "react"
+import { useDispatch } from "react-redux"
 import styled from "styled-components"
 
 import PageContainer from "@app/components/layout/PageContainer"
 import { LoadedABookData } from "@app/domain/abook/typedef"
+import { setWTPPlaylist } from "@app/domain/wtp/actions"
+import { WTPPlaylistMetadataType } from "@app/domain/wtp/playlist"
 import {
+	abookLibraryAddFromLocalFSPath,
 	abookLibraryIndexPath,
 	abookLibraryViewPath,
-	abookLibraryAddFromLocalFSPath,
 } from "@app/paths"
 
-import { Button, Card, Col, Row } from "tws-common/ui"
+import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
+import { Button, ButtonGroup, Card, Col, Row } from "tws-common/ui"
 import LinkContainer from "tws-common/ui/LinkContainer"
 
 const NoAbooksGrid = styled.div`
@@ -34,6 +38,8 @@ const ABookCardGrid = styled.div`
 
 const ABookList = (props: { abooks: LoadedABookData[] }) => {
 	const { abooks } = props
+
+	const dispatch = useDispatch()
 
 	if (abooks.length === 0) {
 		return (
@@ -70,20 +76,39 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 								<Card.Title>
 									Title:{" "}
 									{abook.metadata.title ||
-										`ABook with no title #${abook.id}`}
+										`ABook #${abook.id}`}
 								</Card.Title>
 								<ABookCardGrid>
 									<p>
 										{abook.metadata.description ||
 											"No description"}
 									</p>
-									<p>
+									<ButtonGroup>
 										<LinkContainer
 											to={abookLibraryViewPath(abook.id)}
 										>
 											<Button href="#">Show ABook</Button>
 										</LinkContainer>
-									</p>
+										<Button href="#" variant="danger">
+											Delete ABook
+										</Button>
+										<Button
+											onClick={() => {
+												dispatch(
+													setWTPPlaylist({
+														type: WTPPlaylistMetadataType.ABOOK,
+														abookId: abook.id,
+													}),
+												)
+												dispatch(
+													setIsPlayingWhenReady(true),
+												)
+											}}
+											variant="success"
+										>
+											Play ABook
+										</Button>
+									</ButtonGroup>
 								</ABookCardGrid>
 							</Card.Body>
 						</Card>
@@ -94,14 +119,11 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 					<Col>
 						<NoAbooksGrid>
 							<h1>No ABook you were looking for?</h1>
-							<Button
-								size="lg"
-								onClick={() => {
-									navigate(abookLibraryIndexPath)
-								}}
-							>
-								Go to ABook library management
-							</Button>
+							<LinkContainer to={abookLibraryIndexPath}>
+								<Button size="lg" href="#">
+									Go to ABook library management
+								</Button>
+							</LinkContainer>
 						</NoAbooksGrid>
 					</Col>
 				</Row>
