@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react"
 import { Provider } from "react-redux"
 
+import InnerToastDisplay from "@app/components/layout/InnerToastDisplay"
 import Navbar from "@app/components/layout/Navbar"
 import { MBFRMetadataLoaderAdapter } from "@app/domain/bfr/metadataLoader"
 import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
@@ -17,7 +18,6 @@ import { BFRPlayer } from "tws-common/player/bfr/player"
 import { BFRPlaylist } from "tws-common/player/bfr/state"
 import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
 import { MediaSessionEventType } from "tws-common/webapi/mediaSession/MediaSessionHelper"
-import InnerToastDisplay from "@app/components/layout/InnerToastDisplay"
 
 const queryClient = new QueryClient()
 
