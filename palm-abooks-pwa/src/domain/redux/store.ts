@@ -16,12 +16,14 @@ import { WTPState } from "@app/domain/wtp/state"
 import { createBFRReducer } from "tws-common/player/bfr/reducer"
 import { BFRState } from "tws-common/player/bfr/state"
 import { SyncedIdStore, wrapReducerForSync } from "tws-common/redux/sync/store"
+import { toastReducer, ToastState } from "tws-common/ui/toast"
 
 export type State = {
 	whatToPlayState: WTPState
 	bfrState: MBFRState
 	syncedIdStore: SyncedIdStore
 	playerUi: PlayerUIState
+	toasts: ToastState
 }
 
 const syncedIdStoreReducer = createReducer<SyncedIdStore>({}, () => {
@@ -33,6 +35,7 @@ const innerReducer = combineReducers<State>({
 	whatToPlayState: whatToPlayReducer,
 	syncedIdStore: syncedIdStoreReducer,
 	playerUi: playerUiReducer,
+	toasts: toastReducer,
 })
 
 const finalReducer = wrapReducerForSync(
@@ -60,7 +63,7 @@ export const createStore = () =>
 export const useBFRSelector = <T>(selector: (state: BFRState) => T) =>
 	useSelector((state: State) => selector(state.bfrState))
 
-export const useWTPSelector = <T>(selector: (state: WhatToPlayState) => T) =>
+export const useWTPSelector = <T>(selector: (state: WTPState) => T) =>
 	useSelector((state: State) => selector(state.whatToPlayState))
 
 export const usePlayerUiSelector = <T>(selector: (state: PlayerUIState) => T) =>
