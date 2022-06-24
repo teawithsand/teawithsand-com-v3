@@ -2,10 +2,10 @@ import React from "react"
 import styled from "styled-components"
 
 import {
-	libraryABookIndex,
-	libraryAddABookFromLocalFSPath,
-	libraryListABookPath,
-	localPlayerPath,
+	abookLibraryIndexPath,
+	abookLibraryAddFromLocalFSPath,
+	abookLibraryListPath,
+	playerLocalPath,
 } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
@@ -33,15 +33,12 @@ const Navbar = () => {
 						<LinkContainer to={"/"}>
 							<Nav.Link>{translations.homePage}</Nav.Link>
 						</LinkContainer>
-						<LinkContainer to={localPlayerPath}>
-							<Nav.Link>{translations.localPlayer}</Nav.Link>
-						</LinkContainer>
 
 						<NavDropdown
 							title={translations.abookLibraryDropdown.title}
 							align={"end"}
 						>
-							<LinkContainer to={libraryABookIndex}>
+							<LinkContainer to={abookLibraryIndexPath}>
 								<NavDropdown.Item>
 									{
 										translations.abookLibraryDropdown
@@ -50,7 +47,7 @@ const Navbar = () => {
 								</NavDropdown.Item>
 							</LinkContainer>
 							<NavDropdown.Divider />
-							<LinkContainer to={libraryAddABookFromLocalFSPath}>
+							<LinkContainer to={abookLibraryAddFromLocalFSPath}>
 								<NavDropdown.Item>
 									{
 										translations.abookLibraryDropdown
@@ -58,12 +55,23 @@ const Navbar = () => {
 									}
 								</NavDropdown.Item>
 							</LinkContainer>
-							<LinkContainer to={libraryListABookPath}>
+							<LinkContainer to={abookLibraryListPath}>
 								<NavDropdown.Item>
 									{
 										translations.abookLibraryDropdown
 											.listABooks
 									}
+								</NavDropdown.Item>
+							</LinkContainer>
+						</NavDropdown>
+
+						<NavDropdown
+							title={translations.playerDropdown.title}
+							align={"end"}
+						>
+							<LinkContainer to={playerLocalPath}>
+								<NavDropdown.Item>
+									{translations.playerDropdown.playLocal}
 								</NavDropdown.Item>
 							</LinkContainer>
 						</NavDropdown>

@@ -6,7 +6,7 @@ import ErrorExplainer from "@app/components/shared/error-explainer/ErrorExplaine
 import NotFoundErrorExplainer from "@app/components/shared/error-explainer/NotFoundErrorExplainer"
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { useABookStore } from "@app/domain/abook/ABookStore"
-import { libraryListABookPath } from "@app/paths"
+import { abookLibraryListPath } from "@app/paths"
 
 import { useQuery } from "tws-common/react/hook/query"
 import { useGetParamsObject } from "tws-common/react/hook/useGetParams"
@@ -33,7 +33,7 @@ const ABookViewPage = () => {
 			inner = (
 				<NotFoundErrorExplainer
 					title="Given ABook was not found"
-					buttonTargetPath={libraryListABookPath}
+					buttonTargetPath={abookLibraryListPath}
 					buttonText="Go to list"
 				/>
 			)

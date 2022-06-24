@@ -15,13 +15,17 @@ export default interface AppTranslation {
 		navbar: {
 			pageTitle: string
 			homePage: string
-			localPlayer: string
 
 			abookLibraryDropdown: {
 				title: string
 				managementPanel: string
 				addLocalABook: string
 				listABooks: string
+			}
+
+			playerDropdown: {
+				title: string
+				playLocal: string
 			}
 		}
 	}

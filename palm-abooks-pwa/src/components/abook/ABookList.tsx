@@ -5,9 +5,9 @@ import styled from "styled-components"
 import PageContainer from "@app/components/layout/PageContainer"
 import { LoadedABookData } from "@app/domain/abook/typedef"
 import {
-	libraryABookIndex,
-	libraryABookViewPath,
-	libraryAddABookFromLocalFSPath,
+	abookLibraryIndexPath,
+	abookLibraryViewPath,
+	abookLibraryAddFromLocalFSPath,
 } from "@app/paths"
 
 import { Button, Card, Col, Row } from "tws-common/ui"
@@ -43,7 +43,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 					<Button
 						size="lg"
 						onClick={() => {
-							navigate(libraryAddABookFromLocalFSPath)
+							navigate(abookLibraryAddFromLocalFSPath)
 						}}
 					>
 						Add ABook from local storage
@@ -51,7 +51,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 					<Button
 						size="lg"
 						onClick={() => {
-							navigate(libraryABookIndex)
+							navigate(abookLibraryIndexPath)
 						}}
 					>
 						Go to ABook library management
@@ -79,7 +79,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 									</p>
 									<p>
 										<LinkContainer
-											to={libraryABookViewPath(abook.id)}
+											to={abookLibraryViewPath(abook.id)}
 										>
 											<Button href="#">Show ABook</Button>
 										</LinkContainer>
@@ -97,7 +97,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 							<Button
 								size="lg"
 								onClick={() => {
-									navigate(libraryABookIndex)
+									navigate(abookLibraryIndexPath)
 								}}
 							>
 								Go to ABook library management

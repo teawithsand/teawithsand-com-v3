@@ -23,7 +23,10 @@ const AppTranslationEN: AppTranslation = {
 				listABooks: "List ABooks",
 				managementPanel: "ABook management panel",
 			},
-			localPlayer: "Play local files",
+			playerDropdown: {
+				title: "Player",
+				playLocal: "Play files form this computer",
+			},
 			pageTitle: "PalmABooks PWA",
 			homePage: "Home",
 		},
