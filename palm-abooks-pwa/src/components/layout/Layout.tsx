@@ -6,6 +6,7 @@ import { MBFRMetadataLoaderAdapter } from "@app/domain/bfr/metadataLoader"
 import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
 import { MPlayerSource, MPlayerSourceResolver } from "@app/domain/bfr/source"
 import { createStore } from "@app/domain/redux/store"
+import { WTPResolver } from "@app/domain/wtp/resolver"
 
 import { addLogFilter, LogLevel } from "tws-common/log/logger"
 import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
@@ -63,7 +64,10 @@ const Layout = (props: any) => {
 					}
 				},
 				selectMetadata: (
-					playlist: BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource>,
+					playlist: BFRPlaylist<
+						MPlayerPlaylistMetadata,
+						MPlayerSource
+					>,
 					i,
 				) => ({
 					title: "PalmABooks PWA playing",
@@ -92,6 +96,14 @@ const Layout = (props: any) => {
 			mediaSession.release()
 		}
 	}, [])
+
+	useEffect(() => {
+		const resolver = new WTPResolver(store, s => s.whatToPlayState)
+
+		return () => {
+			resolver.release()
+		}
+	})
 
 	useEffect(() => {
 		const release = addLogFilter(({ tag, level }) => {
