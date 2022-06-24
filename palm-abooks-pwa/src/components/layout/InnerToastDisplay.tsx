@@ -9,7 +9,6 @@ const InnerToastDisplay = () => {
 	const toasts = useSelector((s: State) => s.toasts.toasts)
 	const dispatch = useDispatch()
 
-	console.error({ toasts })
 	return (
 		<ToastDisplay
 			toasts={toasts}
