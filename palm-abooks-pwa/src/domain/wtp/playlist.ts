@@ -7,6 +7,8 @@ import {
 import { WTPSource, WTPSourceType } from "@app/domain/wtp/source"
 import { WTPError } from "@app/domain/wtp/WTPError"
 
+import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
+
 export enum WTPPlaylistMetadataType {
 	ABOOK = "abook",
 	ANY_SOURCES = "anySources",
@@ -51,7 +53,15 @@ export class WTPPlaylistResolver {
 				)
 
 			const files: string[] = []
-			for await (const sourceId of abookActiveRecord.files.keys()) {
+			const fileIds = await collectAsyncIterable(
+				abookActiveRecord.files.keys(),
+			)
+
+			// TODO(teawithsand): this kind of sorting is useless, but gives stability for now
+			//  it should be fixed to sort files by name, special offset or some other parameter
+			fileIds.sort((a, b) => a.localeCompare(b))
+
+			for (const sourceId of fileIds) {
 				const metadata = await abookActiveRecord.files.getMetadata(
 					sourceId,
 				)

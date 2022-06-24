@@ -4,7 +4,6 @@ import { MPlayerSource, MPlayerSourceType } from "@app/domain/bfr/source"
 import { WTPError } from "@app/domain/wtp/WTPError"
 
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import PlayerSourceError from "tws-common/player/source/PlayerSourceError"
 
 export enum WTPSourceType {
 	URL_SOURCE = "urlSource",
