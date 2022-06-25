@@ -103,6 +103,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 												dispatch(
 													setIsPlayingWhenReady(true),
 												)
+												// TODO(teawithsand): navigate to player here
 											}}
 											variant="success"
 										>
