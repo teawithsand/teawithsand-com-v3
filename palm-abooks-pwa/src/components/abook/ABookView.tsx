@@ -1,19 +1,54 @@
 import React from "react"
+import { useDispatch } from "react-redux"
+import styled from "styled-components"
 
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { ABookActiveRecord } from "@app/domain/abook/ABookStore"
+import {
+	ABookFileMetadata,
+	ABookFileMetadataType,
+} from "@app/domain/abook/typedef"
+import { setWTPPlaylist } from "@app/domain/wtp/actions"
+import { WTPPlaylistMetadataType } from "@app/domain/wtp/playlist"
 
 import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
+import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
 import { useQuery } from "tws-common/react/hook/query"
+import { Button, ButtonGroup, Table } from "tws-common/ui"
 
 const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/abook-view")
+
+const ElementsGrid = styled.div`
+	display: grid;
+	grid-auto-flow: row;
+	gap: 1em;
+`
+
+const PageTitle = styled.h1`
+	text-align: center;
+`
 
 const ABookView = (props: { abook: ABookActiveRecord }) => {
 	const { abook } = props
 	const {
 		data: { metadata, id },
 	} = abook
+
+	const dispatch = useDispatch()
+
+	const explainFileType = (type: ABookFileMetadataType): string => {
+		switch (type) {
+			case ABookFileMetadataType.IMAGE:
+				return "Image"
+			case ABookFileMetadataType.PLAYABLE:
+				return "Sound"
+			case ABookFileMetadataType.TXT_DESCRIPTION:
+				return "Description"
+			default:
+				return "Unknown"
+		}
+	}
 
 	const {
 		error,
@@ -22,13 +57,19 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 	} = useQuery(`abook/view/files/${id}`, async ({ signal }) => {
 		try {
 			const isAborted = () => signal?.aborted ?? false
-			const files = []
+			const files: {
+				key: string
+				metadata: ABookFileMetadata
+			}[] = []
 			for await (const k of abook.files.keys()) {
 				if (isAborted()) break
-				const m = abook.files.getMetadata(k)
+				const m = await abook.files.getMetadata(k)
 				if (!m) continue // shouldn't happen unless race condition
 
-				files.push(m)
+				files.push({
+					key: k,
+					metadata: m,
+				})
 			}
 
 			return files
@@ -46,18 +87,87 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 	} else if (status === "success") {
 		// TODO(teawithsand): implement files panel + operations for each file like force metadata load
 		//  reading MIME/manually setting disposition/delete and other stuff
-		files = <h3>It has: {abookFiles.length} files</h3>
+		files = (
+			<Table hover striped bordered>
+				<thead>
+					<tr>
+						<td>No.</td>
+						<td>Name</td>
+						<td>Type</td>
+						<td>Actions</td>
+					</tr>
+				</thead>
+				<tbody>
+					{abookFiles.map((f, i) => (
+						<tr key={f.key}>
+							<td>{i + 1}</td>
+							<td>{f.metadata.fileName}</td>
+							<td>{explainFileType(f.metadata.type)}</td>
+							<td>
+								<ButtonGroup>
+									<Button href="#" variant="danger">
+										Delete File
+									</Button>
+								</ButtonGroup>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</Table>
+		)
 	}
 
 	return (
-		<div>
-			<h1>ABook details</h1>
-			<h2>Title: {metadata.title}</h2>
-			<p>{metadata.description || "No description"}</p>
-			<hr />
+		<ElementsGrid>
+			<PageTitle>ABook details: {metadata.title}</PageTitle>
+			<div>
+				<Table striped bordered hover>
+					<tbody>
+						<tr>
+							<td>Title</td>
+							<td>{metadata.title}</td>
+						</tr>
+						<tr>
+							<td>Description</td>
+							<td>{metadata.description}</td>
+						</tr>
+						<tr>
+							<td>Operations</td>
+							<td>
+								<ButtonGroup>
+									<Button href="#" variant="danger">
+										Delete ABook
+									</Button>
+									<Button
+										onClick={() => {
+											dispatch(
+												setWTPPlaylist({
+													type: WTPPlaylistMetadataType.ABOOK,
+													abookId: abook.id,
+												}),
+											)
 
-			{files}
-		</div>
+											dispatch(
+												setIsPlayingWhenReady(true),
+											)
+											// TODO(teawithsand): navigate to player here
+										}}
+										variant="success"
+									>
+										Play ABook
+									</Button>
+								</ButtonGroup>
+							</td>
+						</tr>
+					</tbody>
+				</Table>
+			</div>
+			<div>
+				<h3>ABook Files</h3>
+			</div>
+
+			<div>{files}</div>
+		</ElementsGrid>
 	)
 }
 
