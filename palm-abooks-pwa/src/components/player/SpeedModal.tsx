@@ -31,13 +31,12 @@ const SpeedModal = () => {
 		<Modal
 			fullscreen={true}
 			show={show}
-			aria-labelledby="contained-modal-title-vcenter"
 			centered
 			onHide={onHide}
 		>
 			<Modal.Header closeButton>
-				<Modal.Title id="contained-modal-title-vcenter">
-					Modal heading
+				<Modal.Title>
+					{translation.player.speedModal.title}
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
