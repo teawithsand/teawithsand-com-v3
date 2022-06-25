@@ -1,15 +1,23 @@
-import AppTranslationEN from "@app/trans/AppTranslationEN";
+import AppTranslationEN from "@app/trans/AppTranslationEN"
 
-
-
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language";
-import Translator, { createTranslatorContext, useTranslator } from "tws-common/trans/Translator";
-
+import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
+import Translator, {
+	createTranslatorContext,
+	useTranslator,
+} from "tws-common/trans/Translator"
 
 export default interface AppTranslation {
 	appName: string
 	generic: {
 		modalClose: string
+	}
+	common: {
+		sureModal: {
+			defaultTitle: string
+			defaultDescription: string
+			confirm: string
+			cancel: string
+		}
 	}
 	globalUi: {
 		navbar: {
