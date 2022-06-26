@@ -15,6 +15,7 @@ import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
 import { useQuery } from "tws-common/react/hook/query"
+import { usePendingPromise } from "tws-common/react/hook/usePendingPromise"
 import { Button, ButtonGroup, Table } from "tws-common/ui"
 
 const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/abook-view")
@@ -29,6 +30,28 @@ const PageTitle = styled.h1`
 	text-align: center;
 `
 
+/*
+const FancyTable = styled.div`
+	display: grid;
+	grid-auto-flow: row;
+	gap: 1em;
+	border: 1px solid rgba(0, 0, 0, 0.7);
+
+	& > *:nth-child(2n) {
+		background-color: rgba(0, 0, 0, 0.3);
+	}
+`
+
+const FancyTableTitle = styled.div`
+	font-size: 0.8em;
+	color: rgba(0, 0, 0, 0.7);
+`
+
+const FancyTableContent = styled.div``
+
+const FancyTableRow = styled.div``
+*/
+
 const ABookView = (props: { abook: ABookActiveRecord }) => {
 	const { abook } = props
 	const {
@@ -36,6 +59,8 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 	} = abook
 
 	const dispatch = useDispatch()
+
+	const [taskData, setTaskData] = usePendingPromise()
 
 	const explainFileType = (type: ABookFileMetadataType): string => {
 		switch (type) {
@@ -105,7 +130,7 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 							<td>{explainFileType(f.metadata.type)}</td>
 							<td>
 								<ButtonGroup>
-									<Button href="#" variant="danger">
+									<Button onClick={() => {}} variant="danger">
 										Delete File
 									</Button>
 								</ButtonGroup>
