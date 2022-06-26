@@ -1,26 +1,12 @@
 import React from "react"
 
-import ABookList from "@app/components/abook/ABookList"
-
-import { getNowTimestamp } from "tws-common/lang/time/Timestamp"
-import { generateUUID } from "tws-common/lang/uuid"
+import PageContainer from "@app/components/layout/PageContainer"
 
 const IndexPage = () => {
 	return (
-		<div>
-			<ABookList
-				abooks={[
-					{
-						id: generateUUID(),
-						metadata: {
-							title: "Book one",
-							description: "Lorem ipsum dolor sir",
-							addedAt: getNowTimestamp(),
-						},
-					},
-				]}
-			/>
-		</div>
+		<PageContainer>
+			<h1>Home page(NIY)</h1>
+		</PageContainer>
 	)
 }
 
