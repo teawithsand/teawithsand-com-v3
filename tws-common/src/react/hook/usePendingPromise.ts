@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
+import { generateUUID } from "tws-common/lang/uuid"
 
-export type PendingPromiseState<R extends {}, H extends {}> =
+export type PendingPromiseState<R, H> = (
 	| {
 			status: "idle"
 			header?: undefined
@@ -31,27 +32,32 @@ export type PendingPromiseState<R extends {}, H extends {}> =
 			error: any
 			result?: undefined
 	  }
+) & {
+	runId: string
+}
 
-export const usePendingPromise = <R extends {}, H extends {}>(): [
+export const usePendingPromise = <R, H>(): [
 	PendingPromiseState<R, H>,
 	(header: H, promise: Promise<R>) => void,
 ] => {
 	const [currentPromiseData, setCurrentPromiseData] = useState<
-		[H, Promise<R>] | null
+		[H, Promise<R>, string] | null
 	>(null)
 	const [currentPromiseResult, setCurrentPromiseResult] = useState<
 		PendingPromiseState<R, H>
 	>({
 		status: "idle",
+		runId: generateUUID(),
 	})
 
 	useEffect(() => {
 		if (currentPromiseData !== null) {
-			const [header, currentPromise] = currentPromiseData
+			const [header, currentPromise, runId] = currentPromiseData
 			currentPromise
 				.then((data: R) => {
 					setCurrentPromiseResult({
 						status: "done",
+						runId,
 						header,
 						promise: currentPromise,
 						result: data,
@@ -60,6 +66,7 @@ export const usePendingPromise = <R extends {}, H extends {}>(): [
 				.catch((e: any) => {
 					setCurrentPromiseResult({
 						status: "error",
+						runId,
 						header,
 						promise: currentPromise,
 						error: e,
@@ -69,12 +76,14 @@ export const usePendingPromise = <R extends {}, H extends {}>(): [
 	}, [currentPromiseData])
 
 	const setPromise = (header: H, promise: Promise<R>) => {
+		const runId = generateUUID()
 		setCurrentPromiseResult({
 			status: "loading",
+			runId,
 			header,
 			promise,
 		})
-		setCurrentPromiseData([header, promise])
+		setCurrentPromiseData([header, promise, runId])
 	}
 
 	return [currentPromiseResult, setPromise]
