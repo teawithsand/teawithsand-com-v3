@@ -38,7 +38,7 @@ export type PendingPromiseState<R, H> = (
 
 export const usePendingPromise = <R, H>(): [
 	PendingPromiseState<R, H>,
-	(header: H, promise: Promise<R>) => void,
+	(promise: Promise<R>, header: H) => void,
 ] => {
 	const [currentPromiseData, setCurrentPromiseData] = useState<
 		[H, Promise<R>, string] | null
@@ -75,7 +75,7 @@ export const usePendingPromise = <R, H>(): [
 		}
 	}, [currentPromiseData])
 
-	const setPromise = (header: H, promise: Promise<R>) => {
+	const setPromise = (promise: Promise<R>, header: H) => {
 		const runId = generateUUID()
 		setCurrentPromiseResult({
 			status: "loading",
