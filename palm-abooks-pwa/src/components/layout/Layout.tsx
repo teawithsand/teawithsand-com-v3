@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react"
 import { Provider } from "react-redux"
 
+import InnerFlashMessagesDisplay from "@app/components/layout/InnerFlashMessagesDisplay"
 import InnerToastDisplay from "@app/components/layout/InnerToastDisplay"
 import Navbar from "@app/components/layout/Navbar"
 import { MBFRMetadataLoaderAdapter } from "@app/domain/bfr/metadataLoader"
@@ -131,6 +132,7 @@ const Layout = (props: any) => {
 			<Provider store={store}>
 				<Navbar />
 				<InnerToastDisplay />
+				<InnerFlashMessagesDisplay />
 				<QueryClientProvider client={queryClient}>
 					{children}
 				</QueryClientProvider>

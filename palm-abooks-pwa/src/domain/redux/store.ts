@@ -1,22 +1,21 @@
-import {
-	combineReducers,
-	configureStore,
-	createReducer,
-} from "@reduxjs/toolkit"
-import { useSelector } from "react-redux"
+import { combineReducers, configureStore, createReducer } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 
-import { MBFRState } from "@app/domain/bfr/state"
-import { playerUiReducer, PlayerUIState } from "@app/domain/redux/playerUi"
-import {
-	playlistSynchronizer,
-	whatToPlayReducer,
-} from "@app/domain/wtp/reducer"
-import { WTPState } from "@app/domain/wtp/state"
 
-import { createBFRReducer } from "tws-common/player/bfr/reducer"
-import { BFRState } from "tws-common/player/bfr/state"
-import { SyncedIdStore, wrapReducerForSync } from "tws-common/redux/sync/store"
-import { toastReducer, ToastState } from "tws-common/ui/toast"
+
+import { MBFRState } from "@app/domain/bfr/state";
+import { playerUiReducer, PlayerUIState } from "@app/domain/redux/playerUi";
+import { playlistSynchronizer, whatToPlayReducer } from "@app/domain/wtp/reducer";
+import { WTPState } from "@app/domain/wtp/state";
+
+
+
+import { createBFRReducer } from "tws-common/player/bfr/reducer";
+import { BFRState } from "tws-common/player/bfr/state";
+import { SyncedIdStore, wrapReducerForSync } from "tws-common/redux/sync/store";
+import { flashMessageReducer, FlashMessagesState } from "tws-common/ui/flash";
+import { toastReducer, ToastState } from "tws-common/ui/toast";
+
 
 export type State = {
 	whatToPlayState: WTPState
@@ -24,6 +23,7 @@ export type State = {
 	syncedIdStore: SyncedIdStore
 	playerUi: PlayerUIState
 	toasts: ToastState
+	flashes: FlashMessagesState
 }
 
 const syncedIdStoreReducer = createReducer<SyncedIdStore>({}, () => {
@@ -36,6 +36,7 @@ const innerReducer = combineReducers<State>({
 	syncedIdStore: syncedIdStoreReducer,
 	playerUi: playerUiReducer,
 	toasts: toastReducer,
+	flashes: flashMessageReducer,
 })
 
 const finalReducer = wrapReducerForSync(
