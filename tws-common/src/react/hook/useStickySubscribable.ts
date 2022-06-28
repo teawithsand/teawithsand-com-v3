@@ -4,7 +4,9 @@ import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
 /**
  * Subscribes to specified StickySubscribable using react.
  */
-export default <A>(subscribable: StickySubscribable<A>): A => {
+export const useStickySubscribable = <T>(
+	subscribable: StickySubscribable<T>,
+): T => {
 	// TODO(teawithsand): make it work with any event bus, not event sourcing
 
 	const [aggregate, setAggregate] = useState(subscribable.lastEvent)
@@ -21,3 +23,5 @@ export default <A>(subscribable: StickySubscribable<A>): A => {
 
 	return aggregate
 }
+
+export default useStickySubscribable
