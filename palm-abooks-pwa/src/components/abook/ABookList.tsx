@@ -22,7 +22,7 @@ const NoAbooksGrid = styled.div`
 	grid-auto-flow: row;
 	gap: 1em;
 	justify-items: center;
-	grid-template-row: minmax(0, auto);
+	grid-template-rows: minmax(0, auto);
 `
 
 const ABookEntriesGrid = styled.div`
@@ -42,29 +42,7 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 	const dispatch = useDispatch()
 
 	if (abooks.length === 0) {
-		return (
-			<PageContainer>
-				<NoAbooksGrid>
-					<h1>No ABooks in library</h1>
-					<Button
-						size="lg"
-						onClick={() => {
-							navigate(abookLibraryAddFromLocalFSPath)
-						}}
-					>
-						Add ABook from local storage
-					</Button>
-					<Button
-						size="lg"
-						onClick={() => {
-							navigate(abookLibraryIndexPath)
-						}}
-					>
-						Go to ABook library management
-					</Button>
-				</NoAbooksGrid>
-			</PageContainer>
-		)
+		return <NoAbookComponent />
 	} else {
 		return (
 			<PageContainer>
@@ -134,3 +112,27 @@ const ABookList = (props: { abooks: LoadedABookData[] }) => {
 }
 
 export default ABookList
+
+const NoAbookComponent = () => (
+	<PageContainer>
+		<NoAbooksGrid>
+			<h1>No ABooks in library</h1>
+			<Button
+				size="lg"
+				onClick={() => {
+					navigate(abookLibraryAddFromLocalFSPath)
+				}}
+			>
+				Add ABook from local storage
+			</Button>
+			<Button
+				size="lg"
+				onClick={() => {
+					navigate(abookLibraryIndexPath)
+				}}
+			>
+				Go to ABook library management
+			</Button>
+		</NoAbooksGrid>
+	</PageContainer>
+)
