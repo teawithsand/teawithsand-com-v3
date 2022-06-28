@@ -4,17 +4,17 @@ import { Toast } from "tws-common/ui/toast/toast"
 
 const ToastDisplay = (props: {
 	toasts: Toast[]
-	onClose: (id: string) => void
+	onClose: (id: string, i: number) => void
 }) => {
 	const { toasts, onClose } = props
 	// TODO(teawithsand): limit amount of displayed toasts ,especially when screen is small.
 	return (
 		<ToastContainer position="bottom-center" className="mb-3">
-			{toasts.map(v => (
+			{toasts.map((v, i) => (
 				<ToastComponent
 					key={v.id}
 					onClose={() => {
-						onClose(v.id)
+						onClose(v.id, i)
 					}}
 					autohide={v.livenessSeconds !== null}
 					delay={
