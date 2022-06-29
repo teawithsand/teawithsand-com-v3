@@ -1,25 +1,18 @@
 import React from "react"
-import { useDispatch } from "react-redux"
 import styled from "styled-components"
 
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { ABookActiveRecord } from "@app/domain/abook/ABookStore"
 import {
 	ABookFileMetadata,
-	ABookFileMetadataType
+	ABookFileMetadataType,
 } from "@app/domain/abook/typedef"
-import { AppGTaskRunnerContext, GTaskGroupImpl } from "@app/domain/gtask"
-import { setWTPPlaylist } from "@app/domain/wtp/actions"
-import { WTPPlaylistMetadataType } from "@app/domain/wtp/playlist"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
-import { useGTaskRunnerContext } from "tws-common/misc/gtask"
-import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
 import { useQuery } from "tws-common/react/hook/query"
 import { Button, ButtonGroup, Table } from "tws-common/ui"
-import { addFlashMessage, createFlashMessage } from "tws-common/ui/flash"
 
 const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/abook-view")
 
@@ -33,15 +26,17 @@ const PageTitle = styled.h1`
 	text-align: center;
 `
 
-const ABookView = (props: { abook: ABookActiveRecord }) => {
-	const { abook } = props
+const ABookView = (props: {
+	abook: ABookActiveRecord
+	onDelete?: () => void
+	onFileDelete?: (id: string) => void
+	onPlay?: () => void
+	onAddFile?: () => void
+}) => {
+	const { abook, onDelete, onFileDelete, onPlay, onAddFile } = props
 	const {
 		data: { metadata, id },
 	} = abook
-
-	const dispatch = useDispatch()
-	const taskRunner = useGTaskRunnerContext(AppGTaskRunnerContext)
-
 	const trans = useAppTranslationSelector(t => t.library.abook)
 
 	const explainFileType = (type: ABookFileMetadataType): string => {
@@ -61,7 +56,6 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 		error,
 		data: abookFiles,
 		status,
-		refetch,
 	} = useQuery(`abook/view/files/${id}`, async ({ signal }) => {
 		try {
 			const isAborted = () => signal?.aborted ?? false
@@ -100,68 +94,37 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 				<thead>
 					<tr>
 						<td>No.</td>
-						<td>Name</td>
+						<td>Name/URL</td>
 						<td>Type</td>
 						<td>Actions</td>
 					</tr>
 				</thead>
 				<tbody>
-					{abookFiles.map((f, i) => (
-						<tr key={f.id}>
-							<td>{i + 1}</td>
-							<td>{f.metadata.fileName}</td>
-							<td>{explainFileType(f.metadata.type)}</td>
-							<td>
-								<ButtonGroup>
-									<Button
-										onClick={() => {
-											taskRunner.putTask({
-												metadata: {
-													group: GTaskGroupImpl.ABOOK,
-													abookLockType: "write",
-												},
-												task: async ctx => {
-													if (!ctx.claim.isValid)
-														return
-
-													await abook.files.delete(
-														f.id,
-													)
-
-													dispatch(
-														addFlashMessage(
-															createFlashMessage({
-																message:
-																	trans.flash.abookFileRemoveSuccessFlash(
-																		abook
-																			.data
-																			.metadata
-																			.title,
-																		f
-																			.metadata
-																			.fileName ??
-																			f
-																				.metadata
-																				.url ??
-																			"no file name",
-																	),
-															}),
-														),
-													)
-
-													refetch()
-												},
-											})
-											// noop
-										}}
-										variant="danger"
-									>
-										Delete File
-									</Button>
-								</ButtonGroup>
-							</td>
-						</tr>
-					))}
+					{abookFiles.map((f, i) => {
+						return (
+							<tr key={f.id}>
+								<td>{i + 1}</td>
+								<td>{f.metadata.fileName}</td>
+								<td>{explainFileType(f.metadata.type)}</td>
+								<td>
+									<ButtonGroup>
+										<Button
+											onClick={
+												onFileDelete
+													? () => {
+															onFileDelete(f.id)
+													  }
+													: undefined
+											}
+											variant="danger"
+										>
+											Delete File
+										</Button>
+									</ButtonGroup>
+								</td>
+							</tr>
+						)
+					})}
 				</tbody>
 			</Table>
 		)
@@ -185,28 +148,13 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 							<td>Actions</td>
 							<td>
 								<ButtonGroup>
-									<Button href="#" variant="danger">
+									<Button onClick={onDelete} variant="danger">
 										Delete ABook
 									</Button>
-									<Button
-										onClick={() => {
-											dispatch(
-												setWTPPlaylist({
-													type: WTPPlaylistMetadataType.ABOOK,
-													abookId: abook.id,
-												}),
-											)
-
-											dispatch(
-												setIsPlayingWhenReady(true),
-											)
-											// TODO(teawithsand): navigate to player here
-										}}
-										variant="success"
-									>
+									<Button onClick={onPlay} variant="success">
 										Play ABook
 									</Button>
-									<Button href="#">
+									<Button onClick={onAddFile}>
 										Add file(s)
 									</Button>
 								</ButtonGroup>
