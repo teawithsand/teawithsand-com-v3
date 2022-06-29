@@ -71,7 +71,7 @@ export const AppGTaskRunner: GTaskRunner<GTaskMetadata> =
 // TODO(teawithsand): using this bus implement react component, which handles showing loader thing while
 //  some ABook operation is pending
 export const ABookGTaskRunnerBus = InnerABookTaskRunner.currentTaskHandle
-export const GTaskRunnerContext = createGTaskRunnerContext<
+export const AppGTaskRunnerContext = createGTaskRunnerContext<
 	typeof AppGTaskRunner,
 	GTaskMetadata
 >(AppGTaskRunner)
