@@ -6,14 +6,13 @@ import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinne
 import { ABookActiveRecord } from "@app/domain/abook/ABookStore"
 import {
 	ABookFileMetadata,
-	ABookFileMetadataType,
+	ABookFileMetadataType
 } from "@app/domain/abook/typedef"
 import { AppGTaskRunnerContext, GTaskGroupImpl } from "@app/domain/gtask"
 import { setWTPPlaylist } from "@app/domain/wtp/actions"
 import { WTPPlaylistMetadataType } from "@app/domain/wtp/playlist"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
-import { simpleSleep } from "tws-common/lang/sleep"
 import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import { useGTaskRunnerContext } from "tws-common/misc/gtask"
@@ -183,7 +182,7 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 							<td>{metadata.description}</td>
 						</tr>
 						<tr>
-							<td>Operations</td>
+							<td>Actions</td>
 							<td>
 								<ButtonGroup>
 									<Button href="#" variant="danger">
@@ -206,6 +205,9 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 										variant="success"
 									>
 										Play ABook
+									</Button>
+									<Button href="#">
+										Add file(s)
 									</Button>
 								</ButtonGroup>
 							</td>
