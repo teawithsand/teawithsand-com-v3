@@ -96,8 +96,6 @@ const filteringLog = new FilteringLog({
 		} else {
 			console.info(format(), ...args)
 		}
-
-		console.assert()
 	},
 })
 
