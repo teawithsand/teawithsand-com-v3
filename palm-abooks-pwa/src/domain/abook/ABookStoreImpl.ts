@@ -1,19 +1,18 @@
-import {
-	ABookActiveRecord,
-	ABookID,
-	ABookStore,
-} from "@app/domain/abook/ABookStore"
-import {
-	ABookData,
-	ABookFileMetadata,
-	ABookMetadata,
-} from "@app/domain/abook/typedef"
+import { ABookActiveRecord, ABookID, ABookStore } from "@app/domain/abook/ABookStore";
+import { ABookData, ABookFileMetadata, ABookMetadata } from "@app/domain/abook/typedef";
 
-import MutatingObjectFileStore from "tws-common/file/ofs/MutatingObjectFileStore"
-import { PrefixObjectFileStore } from "tws-common/file/ofs/ObjectFileStore"
-import KeyValueStore from "tws-common/keyvalue/KeyValueStore"
-import { RWLock, RWLockAdapter } from "tws-common/lang/lock/Lock"
-import { generateUUID } from "tws-common/lang/uuid"
+
+
+import MutatingObjectFileStore from "tws-common/file/ofs/MutatingObjectFileStore";
+import { PrefixObjectFileStore } from "tws-common/file/ofs/ObjectFileStore";
+import KeyValueStore from "tws-common/keyvalue/KeyValueStore";
+import { RWLock, RWLockAdapter } from "tws-common/lang/lock/Lock";
+import { generateUUID } from "tws-common/lang/uuid";
+import { LOG } from "tws-common/log/logger";
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager";
+
+
+const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/ABookStoreImpl")
 
 export default class ABookStoreImpl implements ABookStore {
 	private readonly lock: RWLock
@@ -68,11 +67,13 @@ export default class ABookStoreImpl implements ABookStore {
 		// In fact, we could WAL-log it.
 		// TODO(teawithsand): make this store WAL-logged
 		await this.lock.withLockWrite(async () => {
+			LOG.assert(LOG_TAG, `Deleting ABook with id: ${id}`)
+
 			const fileStore = this.getABookFileStore(id)
 			for await (const sourceId of fileStore.keysWithPrefix("")) {
 				await fileStore.delete(sourceId)
 			}
-			await this.fileStore.delete(id)
+			await this.dataStore.delete(id)
 		})
 	}
 
