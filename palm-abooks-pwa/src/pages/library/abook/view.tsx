@@ -6,10 +6,9 @@ import ErrorExplainer from "@app/components/shared/error-explainer/ErrorExplaine
 import NotFoundErrorExplainer from "@app/components/shared/error-explainer/NotFoundErrorExplainer"
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { useABookStore } from "@app/domain/abook/ABookStore"
-import { ABookGTaskRunnerBus, GTaskRunnerContext } from "@app/domain/gtask"
+import { ABookGTaskRunnerBus } from "@app/domain/gtask"
 import { abookLibraryListPath } from "@app/paths"
 
-import { useGTaskRunnerContext } from "tws-common/misc/gtask"
 import { useQuery } from "tws-common/react/hook/query"
 import { useGetParamsObject } from "tws-common/react/hook/useGetParams"
 import { useStickySubscribable } from "tws-common/react/hook/useStickySubscribable"
@@ -26,7 +25,6 @@ const ABookViewPage = () => {
 		},
 	)
 
-	const runner = useGTaskRunnerContext(GTaskRunnerContext)
 	const currentTask = useStickySubscribable(ABookGTaskRunnerBus)
 	if (currentTask !== null) {
 		return <LoadingSpinner />

@@ -6,8 +6,10 @@ import ErrorExplainer from "@app/components/shared/error-explainer/ErrorExplaine
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { useABookStore } from "@app/domain/abook/ABookStore"
 import { LoadedABookData } from "@app/domain/abook/typedef"
+import { ABookGTaskRunnerBus } from "@app/domain/gtask"
 
 import { useQuery } from "tws-common/react/hook/query"
+import useStickySubscribable from "tws-common/react/hook/useStickySubscribable"
 
 const ABookListPage = () => {
 	const store = useABookStore()
@@ -21,6 +23,11 @@ const ABookListPage = () => {
 		}
 		return abooks
 	})
+
+	const currentTask = useStickySubscribable(ABookGTaskRunnerBus)
+	if (currentTask !== null) {
+		return <LoadingSpinner />
+	}
 
 	let inner = null
 	if (status === "idle" || status === "loading") {

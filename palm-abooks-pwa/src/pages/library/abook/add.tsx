@@ -7,9 +7,17 @@ import { ABookFileMetadataType } from "@app/domain/abook/typedef"
 
 import { getNowTimestamp } from "tws-common/lang/time/Timestamp"
 import { generateUUID } from "tws-common/lang/uuid"
+import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
+import useStickySubscribable from "tws-common/react/hook/useStickySubscribable"
+import { ABookGTaskRunnerBus } from "@app/domain/gtask"
 
 const ABookListPage = () => {
 	const store = useABookStore()
+
+	const currentTask = useStickySubscribable(ABookGTaskRunnerBus)
+	if (currentTask !== null) {
+		return <LoadingSpinner />
+	}
 
 	return (
 		<PageContainer>
