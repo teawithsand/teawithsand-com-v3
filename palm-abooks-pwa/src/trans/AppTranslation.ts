@@ -37,6 +37,17 @@ export default interface AppTranslation {
 			}
 		}
 	}
+	library: {
+		abook: {
+			flash: {
+				abookRemoveSuccessFlash: (name: string) => string
+				abookFileRemoveSuccessFlash: (
+					abookName: string,
+					fileName: string,
+				) => string
+			}
+		}
+	}
 	player: {
 		speedModal: {
 			title: string

@@ -15,6 +15,16 @@ const AppTranslationEN: AppTranslation = {
 			speed: "Speed",
 		},
 	},
+	library: {
+		abook: {
+			flash: {
+				abookFileRemoveSuccessFlash: (abookName, fileName) =>
+					`Successfully removed file: "${fileName}" from ABook: "${abookName}"`,
+				abookRemoveSuccessFlash: abookName =>
+					`Successfully deleted ABook: "${abookName}"`,
+			},
+		},
+	},
 	globalUi: {
 		navbar: {
 			abookLibraryDropdown: {
@@ -29,6 +39,14 @@ const AppTranslationEN: AppTranslation = {
 			},
 			pageTitle: "PalmABooks PWA",
 			homePage: "Home",
+		},
+	},
+	common: {
+		sureModal: {
+			defaultTitle: `Are you sure?`,
+			defaultDescription: `This operation requires confirmation.`,
+			confirm: `Proceed`,
+			cancel: `Cancel`,
 		},
 	},
 }
