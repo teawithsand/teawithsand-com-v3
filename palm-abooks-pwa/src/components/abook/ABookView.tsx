@@ -8,15 +8,19 @@ import {
 	ABookFileMetadata,
 	ABookFileMetadataType,
 } from "@app/domain/abook/typedef"
+import { AppGTaskRunnerContext, GTaskGroupImpl } from "@app/domain/gtask"
 import { setWTPPlaylist } from "@app/domain/wtp/actions"
 import { WTPPlaylistMetadataType } from "@app/domain/wtp/playlist"
+import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
+import { simpleSleep } from "tws-common/lang/sleep"
 import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
+import { useGTaskRunnerContext } from "tws-common/misc/gtask"
 import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
 import { useQuery } from "tws-common/react/hook/query"
-import { usePendingPromise } from "tws-common/react/hook/usePendingPromise"
 import { Button, ButtonGroup, Table } from "tws-common/ui"
+import { addFlashMessage, createFlashMessage } from "tws-common/ui/flash"
 
 const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/abook-view")
 
@@ -30,28 +34,6 @@ const PageTitle = styled.h1`
 	text-align: center;
 `
 
-/*
-const FancyTable = styled.div`
-	display: grid;
-	grid-auto-flow: row;
-	gap: 1em;
-	border: 1px solid rgba(0, 0, 0, 0.7);
-
-	& > *:nth-child(2n) {
-		background-color: rgba(0, 0, 0, 0.3);
-	}
-`
-
-const FancyTableTitle = styled.div`
-	font-size: 0.8em;
-	color: rgba(0, 0, 0, 0.7);
-`
-
-const FancyTableContent = styled.div``
-
-const FancyTableRow = styled.div``
-*/
-
 const ABookView = (props: { abook: ABookActiveRecord }) => {
 	const { abook } = props
 	const {
@@ -59,8 +41,9 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 	} = abook
 
 	const dispatch = useDispatch()
+	const taskRunner = useGTaskRunnerContext(AppGTaskRunnerContext)
 
-	const [taskData, setTaskData] = usePendingPromise()
+	const trans = useAppTranslationSelector(t => t.library.abook)
 
 	const explainFileType = (type: ABookFileMetadataType): string => {
 		switch (type) {
@@ -79,11 +62,12 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 		error,
 		data: abookFiles,
 		status,
+		refetch,
 	} = useQuery(`abook/view/files/${id}`, async ({ signal }) => {
 		try {
 			const isAborted = () => signal?.aborted ?? false
 			const files: {
-				key: string
+				id: string
 				metadata: ABookFileMetadata
 			}[] = []
 			for await (const k of abook.files.keys()) {
@@ -92,7 +76,7 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 				if (!m) continue // shouldn't happen unless race condition
 
 				files.push({
-					key: k,
+					id: k,
 					metadata: m,
 				})
 			}
@@ -124,13 +108,55 @@ const ABookView = (props: { abook: ABookActiveRecord }) => {
 				</thead>
 				<tbody>
 					{abookFiles.map((f, i) => (
-						<tr key={f.key}>
+						<tr key={f.id}>
 							<td>{i + 1}</td>
 							<td>{f.metadata.fileName}</td>
 							<td>{explainFileType(f.metadata.type)}</td>
 							<td>
 								<ButtonGroup>
-									<Button onClick={() => {}} variant="danger">
+									<Button
+										onClick={() => {
+											taskRunner.putTask({
+												metadata: {
+													group: GTaskGroupImpl.ABOOK,
+													abookLockType: "write",
+												},
+												task: async ctx => {
+													if (!ctx.claim.isValid)
+														return
+
+													await abook.files.delete(
+														f.id,
+													)
+
+													dispatch(
+														addFlashMessage(
+															createFlashMessage({
+																message:
+																	trans.flash.abookFileRemoveSuccessFlash(
+																		abook
+																			.data
+																			.metadata
+																			.title,
+																		f
+																			.metadata
+																			.fileName ??
+																			f
+																				.metadata
+																				.url ??
+																			"no file name",
+																	),
+															}),
+														),
+													)
+
+													refetch()
+												},
+											})
+											// noop
+										}}
+										variant="danger"
+									>
 										Delete File
 									</Button>
 								</ButtonGroup>
