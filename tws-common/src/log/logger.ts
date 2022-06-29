@@ -81,20 +81,31 @@ const filteringLog = new FilteringLog({
 			`[${now.toLocaleString("pl-PL").replace(",", "")}.${Math.round(
 				now.getMilliseconds(),
 			).toFixed(0)} ${stringifyLogLevel(lv).toUpperCase()} - ${tag}]`
+
+		const doLog = (method?: (...args: any[]) => void) => {
+			if (!method) {
+				console.log(format(), ...args)
+			} else {
+				method(format(), ...args)
+			}
+		}
+
 		if (lv === LogLevel.ASSERT) {
-			console.assert(format(), ...args)
+			doLog(console.assert)
 		} else if (lv === LogLevel.ERROR) {
-			console.error(format(), ...args)
+			doLog(console.error)
 		} else if (lv === LogLevel.WARN) {
-			console.warn(format(), ...args)
+			doLog(console.warn)
 		} else if (
 			lv === LogLevel.VERBOSE ||
 			lv === LogLevel.NOTICE ||
 			lv === LogLevel.DEBUG
 		) {
-			console.debug(format(), ...args)
+			doLog(console.debug)
+		} else if (lv === LogLevel.INFO) {
+			doLog(console.info)
 		} else {
-			console.info(format(), ...args)
+			doLog(console.log)
 		}
 	},
 })
