@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo } from "react"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
 import { Provider } from "react-redux"
 
 import InnerFlashMessagesDisplay from "@app/components/layout/InnerFlashMessagesDisplay"
@@ -129,14 +131,16 @@ const Layout = (props: any) => {
 
 	return (
 		<>
-			<Provider store={store}>
-				<Navbar />
-				<InnerToastDisplay />
-				<InnerFlashMessagesDisplay />
-				<QueryClientProvider client={queryClient}>
-					{children}
-				</QueryClientProvider>
-			</Provider>
+			<DndProvider backend={HTML5Backend}>
+				<Provider store={store}>
+					<Navbar />
+					<InnerToastDisplay />
+					<InnerFlashMessagesDisplay />
+					<QueryClientProvider client={queryClient}>
+						{children}
+					</QueryClientProvider>
+				</Provider>
+			</DndProvider>
 		</>
 	)
 }
