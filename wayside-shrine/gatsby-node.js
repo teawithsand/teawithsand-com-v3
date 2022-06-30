@@ -1,7 +1,6 @@
 const path = require(`path`)
 const TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
 
-
 exports.createPages = async ({ graphql, actions, reporter }) => {
 	const { createPage } = actions
 
@@ -11,18 +10,23 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 		const templatePath = path.resolve(`./src/templates/wayside-shrine.js`)
 
 		// Get all markdown blog posts sorted by date
+
+		// TODO(teawithsand): sort posts by date
 		const result = await graphql(`
 			query WaysideShrinesForPages {
 				allFile(
-					filter: { 
+					filter: {
 						sourceInstanceName: { eq: "waysideshrines" }
 						name: { eq: "index" }
 						extension: { eq: "md" }
-					 }
+					}
 				) {
 					nodes {
 						id
 						childMarkdownRemark {
+							fields {
+								path
+							}
 							frontmatter {
 								slug
 								title
@@ -46,11 +50,12 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
 		if (shrines.length > 0) {
 			shrines.forEach((shrine, index) => {
-				const previousShrineId = index === 0 ? null : shrines[index - 1].id
+				const previousShrineId =
+					index === 0 ? null : shrines[index - 1].id
 				const nextShrineId =
 					index === shrines.length - 1 ? null : shrines[index + 1].id
 
-				const shrinePath = "/shrine/view/" + shrine.childMarkdownRemark.frontmatter.slug
+				const shrinePath = shrine.childMarkdownRemark.fields.path
 				createPage({
 					path: shrinePath,
 					component: templatePath,
@@ -111,7 +116,29 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 	*/
 }
 
-exports.createSchemaCustomization = ({ actions, schema }) => {
+exports.onCreateNode = ({ node, actions, getNode }) => {
+	const { createNodeField } = actions
+
+	if (node.internal.type === `MarkdownRemark`) {
+		const slug = node.frontmatter.slug ?? ""
+		const path = slug.startsWith("/")
+			? "/shrine/view" + slug
+			: "/shrine/view/" + slug
+			
+		createNodeField({
+			node,
+			name: "path",
+			value: path,
+		})
+		createNodeField({
+			node,
+			name: "slug",
+			value: slug,
+		})
+	}
+}
+
+exports.createSchemaCustomization = ({ actions }) => {
 	// TODO(teawithsand): add types here, so no error happens when there is no posts
 	const { createTypes } = actions
 
@@ -137,13 +164,7 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
 	`)
 }
 
-exports.onCreateWebpackConfig = ({
-	actions,
-	getConfig,
-	rules,
-	loaders,
-	stage,
-}) => {
+exports.onCreateWebpackConfig = ({ actions, getConfig, rules, stage }) => {
 	const config = getConfig()
 	const imgsRule = rules.images()
 
