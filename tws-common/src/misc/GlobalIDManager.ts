@@ -9,6 +9,7 @@ export const NS_REDUX_ACTION_PREFIX: GlobalIDNamespace =
 export const NS_LOG_TAG: GlobalIDNamespace = "LOG_TAG" as GlobalIDNamespace
 export const NS_SYNC_ROOT: GlobalIDNamespace = "SR_NAME" as GlobalIDNamespace
 export const NS_REACT_QUERY: GlobalIDNamespace = "RQ_NAME" as GlobalIDNamespace
+export const NS_DND_ID: GlobalIDNamespace = "DND_TG" as GlobalIDNamespace
 
 class GlobalIDManagerImpl {
 	private claimedIds: Map<GlobalIDNamespace, Set<string>> | null = new Map()
