@@ -72,13 +72,25 @@ describe("ABookStore", () => {
 		}
 		const id = await store.create(meta)
 
-		const ar = await store.get(id)
-		expect(ar).not.toBeNull()
-		if (ar === null) return // makes ts happy
-
 		await store.delete(id)
 
 		const newAr = await store.get(id)
 		expect(newAr).toBeNull()
+	})
+
+	it("can delete abook when compound lock is claimed", async () => {
+		await store.compoundOperationsLock.withLockWrite(async () => {
+			const meta: ABookMetadata = {
+				addedAt: getNowTimestamp(),
+				description: "Some desc",
+				title: "Some title",
+			}
+			const id = await store.create(meta)
+
+			await store.delete(id)
+
+			const newAr = await store.get(id)
+			expect(newAr).toBeNull()
+		})
 	})
 })

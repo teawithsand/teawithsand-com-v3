@@ -1,4 +1,4 @@
-import { ABOOK_LOCK_ADAPTER } from "@app/domain/abook/ABookLock"
+import { ABOOK_FILE_STORE_LOCK_ADAPTER } from "@app/domain/abook/ABookLock"
 import { ABookFileMetadata } from "@app/domain/abook/typedef"
 
 import KeyValueObjectFileStore from "tws-common/file/ofs/KeyValueObjectFileStore"
@@ -20,5 +20,5 @@ export const ABOOK_FILE_STORE: PrefixObjectFileStore<ABookFileMetadata> =
 				claimId(NS_STORE, "palm-abooks-pwa/abook-files-wal"),
 			),
 		),
-		ABOOK_LOCK_ADAPTER,
+		ABOOK_FILE_STORE_LOCK_ADAPTER,
 	)

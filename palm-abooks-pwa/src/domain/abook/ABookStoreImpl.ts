@@ -15,15 +15,15 @@ import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager";
 const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/ABookStoreImpl")
 
 export default class ABookStoreImpl implements ABookStore {
-	private readonly lock: RWLock
+	private readonly innerLock: RWLock
 	public readonly compoundOperationsLock: RWLock
 	constructor(
 		private readonly dataStore: KeyValueStore<ABookData, ABookID>,
 		private readonly fileStore: PrefixObjectFileStore<ABookFileMetadata>,
-		lockAdapter: RWLockAdapter,
-		private readonly compoundLockAdapter: RWLockAdapter,
+		innerLockAdapter: RWLockAdapter,
+		compoundLockAdapter: RWLockAdapter,
 	) {
-		this.lock = new RWLock(lockAdapter)
+		this.innerLock = new RWLock(innerLockAdapter)
 		this.compoundOperationsLock = new RWLock(compoundLockAdapter)
 	}
 
@@ -53,7 +53,7 @@ export default class ABookStoreImpl implements ABookStore {
 	create = async (metadata: ABookMetadata): Promise<string> => {
 		const id = generateUUID()
 
-		await this.lock.withLockWrite(async () => {
+		await this.innerLock.withLockWrite(async () => {
 			await this.dataStore.set(id, {
 				metadata,
 			})
@@ -66,7 +66,7 @@ export default class ABookStoreImpl implements ABookStore {
 		// Deleting ABook = delete source files + main one
 		// In fact, we could WAL-log it.
 		// TODO(teawithsand): make this store WAL-logged
-		await this.lock.withLockWrite(async () => {
+		await this.innerLock.withLockWrite(async () => {
 			LOG.assert(LOG_TAG, `Deleting ABook with id: ${id}`)
 
 			const fileStore = this.getABookFileStore(id)
@@ -78,7 +78,7 @@ export default class ABookStoreImpl implements ABookStore {
 	}
 
 	get = async (id: string): Promise<ABookActiveRecord | null> => {
-		const data = await this.lock.withLockRead(
+		const data = await this.innerLock.withLockRead(
 			async () => await this.dataStore.get(id),
 		)
 		if (!data) return null
@@ -110,7 +110,7 @@ export default class ABookStoreImpl implements ABookStore {
 				if (deleted) {
 					return
 				}
-				await this.lock.withLockWrite(async () => {
+				await this.innerLock.withLockWrite(async () => {
 					if (await this.dataStore.has(id)) {
 						await this.dataStore.set(id, {
 							metadata,
