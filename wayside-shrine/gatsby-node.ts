@@ -12,7 +12,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 	// Create pages for all shrines
 	{
 		// Define a template for blog post
-		const templatePath = path.resolve(`./src/templates/wayside-shrine.js`)
+		const templatePath = path.resolve(`./src/templates/wayside-shrine.tsx`)
 
 		// Get all markdown blog posts sorted by date
 

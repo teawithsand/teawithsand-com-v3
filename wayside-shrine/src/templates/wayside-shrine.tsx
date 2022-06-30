@@ -1,8 +1,10 @@
 import * as React from "react"
 import { graphql } from "gatsby"
 
-const WaysideShrineTemplate = ({ data }) => {
-	return <>{JSON.stringify(data)}</>
+const WaysideShrineTemplate = (props: {
+	data: Queries.WaysideShrineShowDataQuery
+}) => {
+	return <>{JSON.stringify(props.data)}</>
 }
 
 export default WaysideShrineTemplate
