@@ -24,6 +24,14 @@ export type ABookFileMetadata = (
 	url: string | null
 	// for URLs it may not be provided, otherwise it should be there
 	fileName: string | null
+
+	/**
+	 * Index of this file, which should be used to determine file play order.
+	 * Two files in same ABook *shouldn't* have save ordinalNumber.
+	 *
+	 * ON starts with 0 and is positive, finite integer or +0
+	 */
+	ordinalNumber: number
 }
 
 export type LoadedABookFileMetadata = ABookFileMetadata & { id: string }

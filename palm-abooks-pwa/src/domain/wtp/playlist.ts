@@ -1,5 +1,8 @@
 import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
-import { ABookFileMetadataType } from "@app/domain/abook/typedef"
+import {
+	ABookFileMetadata,
+	ABookFileMetadataType,
+} from "@app/domain/abook/typedef"
 import {
 	MPlayerPlaylistMetadata,
 	MPlayerPlaylistMetadataType,
@@ -52,25 +55,33 @@ export class WTPPlaylistResolver {
 					`ABook with id ${playlistMetadata.abookId} does not exist`,
 				)
 
-			const files: string[] = []
-			const fileIds = await collectAsyncIterable(
+			const files: {
+				ordinalNumber: number
+				id: string
+			}[] = []
+			const inputFileIds = await collectAsyncIterable(
 				abookActiveRecord.files.keys(),
 			)
 
-			// TODO(teawithsand): this kind of sorting is useless, but gives stability for now
-			//  it should be fixed to sort files by name, special offset or some other parameter
-			fileIds.sort((a, b) => a.localeCompare(b))
+			// Sort ids for deterministic order
+			inputFileIds.sort((a, b) => a.localeCompare(b))
 
-			for (const sourceId of fileIds) {
+			for (const sourceId of inputFileIds) {
 				const metadata = await abookActiveRecord.files.getMetadata(
 					sourceId,
 				)
 				if (!metadata) continue // log it?
 
 				if (metadata.type === ABookFileMetadataType.PLAYABLE) {
-					files.push(sourceId)
+					files.push({
+						ordinalNumber: metadata.ordinalNumber,
+						id: sourceId,
+					})
 				}
 			}
+
+			files.sort((a, b) => a.ordinalNumber - b.ordinalNumber)
+			const resultFileIds = files.map(f => f.id)
 
 			return {
 				playlistMetadata: {
@@ -78,7 +89,7 @@ export class WTPPlaylistResolver {
 					abook: abookActiveRecord,
 					wtpPlaylist: playlistMetadata,
 				},
-				sources: files.map(sourceId => ({
+				sources: resultFileIds.map(sourceId => ({
 					type: WTPSourceType.ABOOK_FILE_SOURCE,
 					abookId: abookActiveRecord.id,
 					id: "abook/" + abookActiveRecord.id + "/" + sourceId,

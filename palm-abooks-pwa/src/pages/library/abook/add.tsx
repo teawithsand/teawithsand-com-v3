@@ -52,13 +52,16 @@ const ABookListPage = () => {
 									"Unreachable code - just created abook does not exist",
 								)
 
+							let i = 0
 							for (const f of data.files) {
+								i++
 								const fileId = generateUUID()
 								await abook.files.setFile(fileId, f, {
 									type: ABookFileMetadataType.PLAYABLE,
 									fileName: f.name,
 									metadataLoadingResult: null,
 									url: null,
+									ordinalNumber: i,
 								})
 							}
 
