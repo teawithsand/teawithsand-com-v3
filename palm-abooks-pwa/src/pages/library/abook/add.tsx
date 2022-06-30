@@ -1,7 +1,7 @@
 import { navigate } from "gatsby"
 import React from "react"
 
-import CreateABookForm from "@app/components/abook/CreateABookForm"
+import CreateABookForm from "@app/components/abook/form/CreateABookForm"
 import PageContainer from "@app/components/layout/PageContainer"
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { useABookStore } from "@app/domain/abook/ABookStore"
