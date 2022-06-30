@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
+import AddFilesABookForm from "@app/components/abook/form/AddFilesABookForm"
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { ABookActiveRecord } from "@app/domain/abook/ABookStore"
 import {
@@ -31,9 +32,9 @@ const ABookView = (props: {
 	onDelete?: () => void
 	onFileDelete?: (id: string) => void
 	onPlay?: () => void
-	onAddFile?: () => void
+	onAddFiles?: (files: File[]) => Promise<void>
 }) => {
-	const { abook, onDelete, onFileDelete, onPlay, onAddFile } = props
+	const { abook, onDelete, onFileDelete, onPlay, onAddFiles } = props
 	const {
 		data: { metadata, id },
 	} = abook
@@ -73,6 +74,8 @@ const ABookView = (props: {
 					metadata: m,
 				})
 			}
+
+			files.sort((a, b) => a.metadata.ordinalNumber - b.metadata.ordinalNumber)
 
 			return files
 		} catch (e) {
@@ -154,9 +157,6 @@ const ABookView = (props: {
 									<Button onClick={onPlay} variant="success">
 										Play ABook
 									</Button>
-									<Button onClick={onAddFile}>
-										Add file(s)
-									</Button>
 								</ButtonGroup>
 							</td>
 						</tr>
@@ -168,6 +168,16 @@ const ABookView = (props: {
 			</div>
 
 			<div>{files}</div>
+
+			<h3>Add new files</h3>
+
+			<AddFilesABookForm
+				onSubmit={async data => {
+					if (onAddFiles && data.files.length > 0) {
+						await onAddFiles(data.files)
+					}
+				}}
+			/>
 		</ElementsGrid>
 	)
 }

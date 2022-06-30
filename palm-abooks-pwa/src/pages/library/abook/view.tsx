@@ -7,6 +7,7 @@ import ErrorExplainer from "@app/components/shared/error-explainer/ErrorExplaine
 import NotFoundErrorExplainer from "@app/components/shared/error-explainer/NotFoundErrorExplainer"
 import LoadingSpinner from "@app/components/shared/loading-spinner/LoadingSpinner"
 import { useABookStore } from "@app/domain/abook/ABookStore"
+import { ABookFileMetadataType } from "@app/domain/abook/typedef"
 import {
 	ABookGTaskRunnerBus,
 	AppGTaskRunnerContext,
@@ -17,6 +18,8 @@ import { WTPPlaylistMetadataType } from "@app/domain/wtp/playlist"
 import { abookLibraryListPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
+import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
+import { generateUUID } from "tws-common/lang/uuid"
 import { useGTaskRunnerContext } from "tws-common/misc/gtask"
 import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
 import { useQuery } from "tws-common/react/hook/query"
@@ -53,7 +56,7 @@ const ABookViewPage = () => {
 	} else if (status === "error") {
 		inner = <ErrorExplainer error={error} />
 	} else {
-		if (abook === null) {
+		if (!abook) {
 			inner = (
 				<NotFoundErrorExplainer
 					title="Given ABook was not found"
@@ -65,6 +68,39 @@ const ABookViewPage = () => {
 			inner = (
 				<ABookView
 					abook={abook}
+					onAddFiles={async files => {
+						taskRunner.putTask({
+							metadata: {
+								group: GTaskGroupImpl.ABOOK,
+								abookLockType: "write",
+							},
+							task: async () => {
+								let i = 0
+								for (const f of files) {
+									try {
+										const fileId = generateUUID()
+
+										const fileList =
+											await collectAsyncIterable(
+												abook.files.keys(),
+											)
+
+										await abook.files.setFile(fileId, f, {
+											type: ABookFileMetadataType.PLAYABLE,
+											fileName: f.name,
+											metadataLoadingResult: null,
+											url: null,
+											ordinalNumber: fileList.length + i,
+										})
+									} finally {
+										i++
+									}
+								}
+
+								refetch()
+							},
+						})
+					}}
 					onPlay={() => {
 						dispatch(
 							setWTPPlaylist({
