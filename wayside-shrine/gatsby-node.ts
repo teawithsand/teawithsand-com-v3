@@ -1,7 +1,12 @@
-const path = require(`path`)
-const TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
+import * as path from "path"
+import TSConfigPathsPlugin from "tsconfig-paths-webpack-plugin"
+import type { GatsbyNode } from "gatsby"
 
-exports.createPages = async ({ graphql, actions, reporter }) => {
+export const createPages: GatsbyNode["createPages"] = async ({
+	graphql,
+	actions,
+	reporter,
+}) => {
 	const { createPage } = actions
 
 	// Create pages for all shrines
@@ -46,7 +51,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 			return
 		}
 
-		const shrines = result.data.allFile.nodes.filter(n => !!n)
+		const shrines = (result.data as any).allFile.nodes.filter(n => !!n)
 
 		if (shrines.length > 0) {
 			shrines.forEach((shrine, index) => {
@@ -116,15 +121,22 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 	*/
 }
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
+export const onCreateNode: GatsbyNode["onCreateNode"] = ({
+	node,
+	actions,
+	getNode,
+}) => {
 	const { createNodeField } = actions
 
-	if (node.internal.type === `MarkdownRemark`) {
-		const slug = node.frontmatter.slug ?? ""
+	if (
+		node.internal.type === `MarkdownRemark` &&
+		typeof node.frontmatter === "object"
+	) {
+		const slug = (node as any).frontmatter.slug ?? ""
 		const path = slug.startsWith("/")
 			? "/shrine/view" + slug
 			: "/shrine/view/" + slug
-			
+
 		createNodeField({
 			node,
 			name: "path",
@@ -138,11 +150,12 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 	}
 }
 
-exports.createSchemaCustomization = ({ actions }) => {
-	// TODO(teawithsand): add types here, so no error happens when there is no posts
-	const { createTypes } = actions
+export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
+	({ actions }) => {
+		// TODO(teawithsand): add types here, so no error happens when there is no posts
+		const { createTypes } = actions
 
-	createTypes(`
+		createTypes(`
 	type SiteSiteMetadata {
 		siteUrl: String
 	}
@@ -162,9 +175,14 @@ exports.createSchemaCustomization = ({ actions }) => {
 		slug: String
 	}
 	`)
-}
+	}
 
-exports.onCreateWebpackConfig = ({ actions, getConfig, rules, stage }) => {
+export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] = ({
+	actions,
+	getConfig,
+	rules,
+	stage,
+}) => {
 	const config = getConfig()
 	const imgsRule = rules.images()
 
