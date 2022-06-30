@@ -6,7 +6,7 @@ import { FieldArray } from "react-final-form-arrays"
 import { abookFilesMimesAndExtensions } from "@app/util/fileTypes"
 
 import { formatFileSize } from "tws-common/lang/fileSize"
-import { Button, Form } from "tws-common/ui"
+import { Button, Form, Table } from "tws-common/ui"
 
 export type CreateABookFormData = {
 	title: string
@@ -30,6 +30,11 @@ const CreateABookForm = (props: {
 			mutators={{
 				...arrayMutators,
 			}}
+			initialValues={{
+				files: [],
+				description: "",
+				title: "",
+			}}
 			render={({ handleSubmit, submitting, pristine }) => (
 				<Form onSubmit={handleSubmit}>
 					<Form.Group className="mb-3">
@@ -52,7 +57,9 @@ const CreateABookForm = (props: {
 						</FinalField>
 					</Form.Group>
 					<Form.Group className="mb-3">
-						<Form.Label>ABook files</Form.Label>
+						<Form.Label>
+							ABook files(you can drag-and-drop them onto field)
+						</Form.Label>
 
 						{/* TODO(teawithsand): add drag and drop field/area */}
 						<FinalField<File[]> name="files">
@@ -89,82 +96,56 @@ const CreateABookForm = (props: {
 						</FinalField>
 					</Form.Group>
 
-					<FieldArray name="files">
+					<FieldArray<File> name="files">
 						{({ fields }) => {
 							return (
-								<ul>
-									{fields.value.map((f, i) => (
-										<li key={i}>
-											<b>{f.name}</b>
-											{" - "}
-											{formatFileSize(f.size)}
-										</li>
-									))}
-								</ul>
+								<>
+									<Table hover striped bordered>
+										<thead>
+											<tr>
+												<td>No.</td>
+												<td>Name</td>
+												<td>Size</td>
+												<td>Role</td>
+												<td>Operations</td>
+											</tr>
+										</thead>
+										<tbody>
+											{fields.value.map((f, i) => (
+												<tr key={i}>
+													<td>{i + 1}</td>
+													<td>{f.name}</td>
+													<td>
+														{formatFileSize(f.size)}
+													</td>
+													<td>Music</td>
+													<td>
+														<Button variant="danger">
+															Remove file
+														</Button>
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</Table>
+									<h3>
+										Total{" "}
+										{formatFileSize(
+											fields.value
+												.map(v => v.size)
+												.reduce((pv, cv) => pv + cv, 0),
+										)}
+									</h3>
+								</>
 							)
 						}}
 					</FieldArray>
 
-					{/*
-					{({ fields}) => (
-							<ul>
-							{files.map((f, i) => (
-								<li key={i}>
-									<b>{f.name}</b>
-									{" - "}
-									{formatFileSize(f.size)}
-								</li>
-							))}
-						</ul>
-						{files.length > 0 ? (
-							<h3>
-								Total{" "}
-								{formatFileSize(
-									files.reduce((pv, v) => pv + v.size, 0),
-								)}
-							</h3>
-						) : null}
-						)}
-
-						<FormSpy
-						subscription={{
-							modified: true,
-							pristine: true,
-							values: true,
-						}}
+					<Button
+						className="mt-2"
+						disabled={submitting || pristine}
+						type="submit"
 					>
-						{props => {
-							const files = getFiles(props?.values?.files)
-							return (
-								<>
-									<h3>Picked files ({files.length})</h3>
-									<ul>
-										{files.map((f, i) => (
-											<li key={i}>
-												<b>{f.name}</b>
-												{" - "}
-												{formatFileSize(f.size)}
-											</li>
-										))}
-									</ul>
-									{files.length > 0 ? (
-										<h3>
-											Total{" "}
-											{formatFileSize(
-												files.reduce(
-													(pv, v) => pv + v.size,
-													0,
-												),
-											)}
-										</h3>
-									) : null}
-								</>
-							)
-						}}
-					</FormSpy>
-					*/}
-
-					<Button disabled={submitting || pristine} type="submit">
 						Submit
 					</Button>
 				</Form>
