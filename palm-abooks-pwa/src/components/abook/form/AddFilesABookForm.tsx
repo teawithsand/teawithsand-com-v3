@@ -7,19 +7,15 @@ import FilesFinalField from "@app/components/abook/form/FilesFinalField"
 import { Button, Form } from "tws-common/ui"
 
 export type CreateABookFormData = {
-	title: string
-	description: string
 	files: File[]
 }
 
-const CreateABookForm = (props: {
+const AddFilesABookForm = (props: {
 	onSubmit: (data: CreateABookFormData) => Promise<void>
 }) => {
 	const initialValues: CreateABookFormData = useMemo(
 		() => ({
 			files: [],
-			description: "",
-			title: "",
 		}),
 		[],
 	)
@@ -36,25 +32,6 @@ const CreateABookForm = (props: {
 			initialValues={initialValues}
 			render={({ handleSubmit, submitting, pristine }) => (
 				<Form onSubmit={handleSubmit}>
-					<Form.Group className="mb-3">
-						<Form.Label>ABook name</Form.Label>
-
-						<FinalField name="title">
-							{({ input }) => (
-								<Form.Control type="text" {...input} />
-							)}
-						</FinalField>
-					</Form.Group>
-
-					<Form.Group className="mb-3">
-						<Form.Label>ABook description</Form.Label>
-
-						<FinalField name="description">
-							{({ input }) => (
-								<Form.Control as="textarea" {...input} />
-							)}
-						</FinalField>
-					</Form.Group>
 					<FilesFinalField name="files" />
 
 					<Button
@@ -70,4 +47,4 @@ const CreateABookForm = (props: {
 	)
 }
 
-export default CreateABookForm
+export default AddFilesABookForm
