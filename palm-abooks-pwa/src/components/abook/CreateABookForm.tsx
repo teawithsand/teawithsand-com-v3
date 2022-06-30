@@ -1,9 +1,7 @@
+import arrayMutators from "final-form-arrays"
 import React from "react"
-import {
-	Field as FinalField,
-	Form as FinalForm,
-	FormSpy,
-} from "react-final-form"
+import { Field as FinalField, Form as FinalForm } from "react-final-form"
+import { FieldArray } from "react-final-form-arrays"
 
 import { abookFilesMimesAndExtensions } from "@app/util/fileTypes"
 
@@ -14,13 +12,6 @@ export type CreateABookFormData = {
 	title: string
 	description: string
 	files: File[]
-}
-
-const getFiles = (files: any): File[] => {
-	if (files instanceof File) {
-		return [files]
-	}
-	return [...(files ?? [])]
 }
 
 const CreateABookForm = (props: {
@@ -36,6 +27,9 @@ const CreateABookForm = (props: {
 					...values,
 				})
 			}
+			mutators={{
+				...arrayMutators,
+			}}
 			render={({ handleSubmit, submitting, pristine }) => (
 				<Form onSubmit={handleSubmit}>
 					<Form.Group className="mb-3">
@@ -95,7 +89,44 @@ const CreateABookForm = (props: {
 						</FinalField>
 					</Form.Group>
 
-					<FormSpy
+					<FieldArray name="files">
+						{({ fields }) => {
+							return (
+								<ul>
+									{fields.value.map((f, i) => (
+										<li key={i}>
+											<b>{f.name}</b>
+											{" - "}
+											{formatFileSize(f.size)}
+										</li>
+									))}
+								</ul>
+							)
+						}}
+					</FieldArray>
+
+					{/*
+					{({ fields}) => (
+							<ul>
+							{files.map((f, i) => (
+								<li key={i}>
+									<b>{f.name}</b>
+									{" - "}
+									{formatFileSize(f.size)}
+								</li>
+							))}
+						</ul>
+						{files.length > 0 ? (
+							<h3>
+								Total{" "}
+								{formatFileSize(
+									files.reduce((pv, v) => pv + v.size, 0),
+								)}
+							</h3>
+						) : null}
+						)}
+
+						<FormSpy
 						subscription={{
 							modified: true,
 							pristine: true,
@@ -131,6 +162,7 @@ const CreateABookForm = (props: {
 							)
 						}}
 					</FormSpy>
+					*/}
 
 					<Button disabled={submitting || pristine} type="submit">
 						Submit
