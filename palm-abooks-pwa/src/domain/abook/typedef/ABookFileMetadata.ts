@@ -1,16 +1,24 @@
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
 
 export enum ABookFileMetadataType {
-	PLAYABLE = "playable",
+	PLAYABLE_FILE = "playable_file",
+	PLAYABLE_URL = "playable_url",
 	IMAGE = "image",
 	TXT_DESCRIPTION = "txtDescription",
 }
 
 export type ABookFileMetadata = (
-	| {
-			type: ABookFileMetadataType.PLAYABLE
+	| ((
+			| {
+					type: ABookFileMetadataType.PLAYABLE_FILE
+			  }
+			| {
+					type: ABookFileMetadataType.PLAYABLE_URL
+					url: string
+			  }
+	  ) & {
 			metadataLoadingResult: MetadataLoadingResult | null
-	  }
+	  })
 	| {
 			type: ABookFileMetadataType.IMAGE
 	  }
@@ -18,10 +26,6 @@ export type ABookFileMetadata = (
 			type: ABookFileMetadataType.TXT_DESCRIPTION
 	  }
 ) & {
-	// URL source of given file.
-	// It should be used if file obtained is empty.
-	// It means that it's remote resource, which was not scheduled to be downloaded by user.
-	url: string | null
 	// for URLs it may not be provided, otherwise it should be there
 	fileName: string | null
 

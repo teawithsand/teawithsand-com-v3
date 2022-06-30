@@ -94,7 +94,7 @@ export class MBFRMetadataLoaderAdapter
 						return
 					}
 
-					if (metadata.type === ABookFileMetadataType.PLAYABLE) {
+					if (metadata.type === ABookFileMetadataType.PLAYABLE_FILE || metadata.type === ABookFileMetadataType.PLAYABLE_URL) {
 						const newMetadata: ABookFileMetadata = {
 							...metadata,
 							metadataLoadingResult: r,

@@ -57,10 +57,9 @@ const ABookListPage = () => {
 								try {
 									const fileId = generateUUID()
 									await abook.files.setFile(fileId, f, {
-										type: ABookFileMetadataType.PLAYABLE,
+										type: ABookFileMetadataType.PLAYABLE_FILE,
 										fileName: f.name,
 										metadataLoadingResult: null,
-										url: null,
 										ordinalNumber: i,
 									})
 								} finally {

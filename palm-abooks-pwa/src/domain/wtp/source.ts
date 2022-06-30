@@ -67,14 +67,17 @@ export class WTPSourceResolver {
 				)
 			}
 
-			if (meta.type !== ABookFileMetadataType.PLAYABLE) {
+			if (
+				meta.type !== ABookFileMetadataType.PLAYABLE_FILE &&
+				meta.type !== ABookFileMetadataType.PLAYABLE_URL
+			) {
 				throw new WTPSourceResolverError(
 					`ABook with id "${source.abookId}" has source with id "${source.sourceId}" but it's not playable file (requested by source with id "${source.id}")`,
 				)
 			}
 
 			// TODO(teawithsand): better resolving strategy, which uses cached file if one is available
-			if (meta.url !== null) {
+			if (meta.type === ABookFileMetadataType.PLAYABLE_URL) {
 				return {
 					type: MPlayerSourceType.URL,
 					id: source.id,

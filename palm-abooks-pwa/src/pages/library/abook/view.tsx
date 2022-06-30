@@ -86,10 +86,9 @@ const ABookViewPage = () => {
 											)
 
 										await abook.files.setFile(fileId, f, {
-											type: ABookFileMetadataType.PLAYABLE,
+											type: ABookFileMetadataType.PLAYABLE_FILE,
 											fileName: f.name,
 											metadataLoadingResult: null,
-											url: null,
 											ordinalNumber: fileList.length + i,
 										})
 									} finally {
@@ -135,9 +134,7 @@ const ABookViewPage = () => {
 													trans.flash.abookFileRemoveSuccessFlash(
 														abook.data.metadata
 															.title,
-														f.fileName ??
-															f.url ??
-															"",
+														f.fileName ?? `#${id}`,
 													),
 											}),
 										),

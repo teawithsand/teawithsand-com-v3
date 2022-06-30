@@ -72,7 +72,7 @@ export class WTPPlaylistResolver {
 				)
 				if (!metadata) continue // log it?
 
-				if (metadata.type === ABookFileMetadataType.PLAYABLE) {
+				if (metadata.type === ABookFileMetadataType.PLAYABLE_FILE || metadata.type === ABookFileMetadataType.PLAYABLE_URL) {
 					files.push({
 						ordinalNumber: metadata.ordinalNumber,
 						id: sourceId,

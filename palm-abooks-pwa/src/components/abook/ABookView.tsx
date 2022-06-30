@@ -44,8 +44,10 @@ const ABookView = (props: {
 		switch (type) {
 			case ABookFileMetadataType.IMAGE:
 				return "Image"
-			case ABookFileMetadataType.PLAYABLE:
+			case ABookFileMetadataType.PLAYABLE_FILE:
 				return "Sound"
+			case ABookFileMetadataType.PLAYABLE_URL:
+				return "Remote sound"
 			case ABookFileMetadataType.TXT_DESCRIPTION:
 				return "Description"
 			default:
