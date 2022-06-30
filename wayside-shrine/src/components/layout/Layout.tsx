@@ -1,6 +1,6 @@
 import React from "react"
 import { ReactElement, ReactFragment, ReactNode } from "react"
-import AppNavbar from "@app/components/navbar/Navbar"
+import AppNavbar from "@app/components/layout/Navbar"
 
 const Layout = (props: {
 	children: ReactElement | ReactNode | ReactFragment | null | undefined
