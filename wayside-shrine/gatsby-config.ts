@@ -47,6 +47,17 @@ const config: GatsbyConfig = {
 				component: path.resolve(`./src/Layout.jsx`),
 			},
 		},
+		{
+			resolve: "gatsby-plugin-zopfli",
+			options: {
+				extensions: ["css", "html", "js", "svg", "txt", "json"],
+				compression: {
+					numiterations: 15,
+					blocksplitting: true,
+					blocksplittingmax: 15,
+				},
+			},
+		},
 	],
 }
 
