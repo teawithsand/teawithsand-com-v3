@@ -2,7 +2,7 @@ import * as React from "react"
 import { graphql } from "gatsby"
 
 const WaysideShrineTemplate = (props: {
-	data: Queries.WaysideShrineShowDataQuery
+	data: Queries.WaysideShrineShowQuery
 }) => {
 	return <>{JSON.stringify(props.data)}</>
 }
@@ -10,7 +10,7 @@ const WaysideShrineTemplate = (props: {
 export default WaysideShrineTemplate
 
 export const pageQuery = graphql`
-	query WaysideShrineShowData(
+	query WaysideShrineShow(
 		$id: String!
 		$previousShrineId: String
 		$nextShrineId: String

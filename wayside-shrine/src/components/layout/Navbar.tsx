@@ -16,10 +16,13 @@ const AppNavbar = () => {
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto">
 						<LinkContainer to="/">
-							<Nav.Link href="#">Home</Nav.Link>
+							<Nav.Link href="#">Strona główna</Nav.Link>
 						</LinkContainer>
 						<LinkContainer to="/map">
-							<Nav.Link href="#">Map</Nav.Link>
+							<Nav.Link href="#">Mapa</Nav.Link>
+						</LinkContainer>
+						<LinkContainer to="/search">
+							<Nav.Link href="#">Wyszukiwanie</Nav.Link>
 						</LinkContainer>
 					</Nav>
 				</Navbar.Collapse>
