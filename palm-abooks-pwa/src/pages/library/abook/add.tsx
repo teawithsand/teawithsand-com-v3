@@ -54,15 +54,18 @@ const ABookListPage = () => {
 
 							let i = 0
 							for (const f of data.files) {
-								i++
-								const fileId = generateUUID()
-								await abook.files.setFile(fileId, f, {
-									type: ABookFileMetadataType.PLAYABLE,
-									fileName: f.name,
-									metadataLoadingResult: null,
-									url: null,
-									ordinalNumber: i,
-								})
+								try {
+									const fileId = generateUUID()
+									await abook.files.setFile(fileId, f, {
+										type: ABookFileMetadataType.PLAYABLE,
+										fileName: f.name,
+										metadataLoadingResult: null,
+										url: null,
+										ordinalNumber: i,
+									})
+								} finally {
+									i++
+								}
 							}
 
 							navigate(abookLibraryViewPath(id))
