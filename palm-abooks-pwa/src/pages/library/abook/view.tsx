@@ -24,57 +24,6 @@ import { useGetParamsObject } from "tws-common/react/hook/useGetParams"
 import { useStickySubscribable } from "tws-common/react/hook/useStickySubscribable"
 import { addFlashMessage, createFlashMessage } from "tws-common/ui/flash"
 
-/*
-const removeAbookFile = () => {
-	taskRunner.putTask({
-		metadata: {
-			group: GTaskGroupImpl.ABOOK,
-			abookLockType: "write",
-		},
-		task: async ctx => {
-			if (!ctx.claim.isValid) return
-
-			await abook.files.delete(f.id)
-
-			dispatch(
-				addFlashMessage(
-					createFlashMessage({
-						message:
-							trans.flash.abookFileRemoveSuccessFlash(
-								abook.data.metadata
-									.title,
-								f.metadata.fileName ??
-									f.metadata.url ??
-									"no file name",
-							),
-					}),
-				),
-			)
-
-			refetch()
-		},
-	})
-}
-
-() => {
-	dispatch(
-		setWTPPlaylist({
-			type: WTPPlaylistMetadataType.ABOOK,
-			abookId: abook.id,
-		}),
-	)
-
-	dispatch(
-		setIsPlayingWhenReady(true),
-	)
-	// TODO(teawithsand): navigate to player here
-}
-
-const deleteABook = () => {
-	
-}
-*/
-
 const ABookViewPage = () => {
 	const store = useABookStore()
 	const { id } = useGetParamsObject()
@@ -174,7 +123,6 @@ const ABookViewPage = () => {
 
 								try {
 									await abook.delete()
-
 									dispatch(
 										addFlashMessage(
 											createFlashMessage({
