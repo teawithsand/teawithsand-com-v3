@@ -19,12 +19,52 @@ const config: GatsbyConfig = {
 		{
 			resolve: "gatsby-plugin-manifest",
 			options: {
-				icon: "src/images/icon.png",
+				icon: "./src/images/icon.png",
 			},
 		},
-		"gatsby-plugin-mdx",
+		{
+			resolve: `gatsby-transformer-remark`,
+			options: {
+				// extensions: ['.md', '.mdx'],
+				plugins: [
+					{
+						resolve: `gatsby-remark-images`,
+						options: {
+							srcSetBreakpoints: [
+								1920 / 8,
+								1920 / 4,
+								1920 / 2,
+								1920,
+							],
+							withWebp: {
+								quality: 80,
+							},
+							withAvif: {
+								quality: 80,
+							},
+							tracedSVG: true,
+						},
+					},
+					{
+						resolve: `gatsby-remark-responsive-iframe`,
+						options: {
+							wrapperStyle: `margin-bottom: 1.0725rem`,
+						},
+					},
+					`gatsby-remark-copy-linked-files`,
+					`gatsby-remark-smartypants`,
+				],
+			},
+		},
 		"gatsby-plugin-sharp",
 		"gatsby-transformer-sharp",
+		{
+			resolve: "gatsby-source-filesystem",
+			options: {
+				name: "waysideshrines",
+				path: "./content/waysideshrines",
+			},
+		},
 		{
 			resolve: "gatsby-source-filesystem",
 			options: {
