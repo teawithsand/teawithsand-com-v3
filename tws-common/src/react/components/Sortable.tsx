@@ -191,3 +191,40 @@ const Sortable = <T,>(props: {
 }
 
 export default Sortable
+
+/*
+// Quick example: 
+import React, { useState } from "react"
+import styled from "styled-components"
+
+import PageContainer from "@app/components/layout/PageContainer"
+
+import Sortable from "tws-common/react/components/Sortable"
+
+const Element = styled.li`
+	padding: 0.8rem;
+	border: 1px solid red;
+	filter: ${({ $isDragging }) => ($isDragging ? "blur(5px)" : "none")};
+`
+
+const IndexPage = () => {
+	const [elements, setElements] = useState([1, 2, 3, 4, 5])
+	return (
+		<PageContainer>
+			<h1>Home page(NIY)</h1>
+			<Sortable
+				dragAndDropDataIdentifier="theOnlyDND"
+				elements={elements}
+				onElementsChange={setElements}
+				render={({ item, onRef, isDragging: isDragging }) => (
+					<Element ref={onRef} $isDragging={isDragging}>
+						{item}
+					</Element>
+				)}
+			/>
+		</PageContainer>
+	)
+}
+
+export default IndexPage
+*/
