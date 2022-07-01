@@ -11,7 +11,7 @@ import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 export default class MutatingKeyValueStore<V extends {}, E extends {}>
 	implements KeyValueStore<V, string>, PrefixKeyValueStore<V, string>
 {
-	private constructor(
+	constructor(
 		private readonly mutator: {
 			mutateKey: (k: string) => Promise<string>
 			mutateKeyReverse: (k: string) => Promise<string>
