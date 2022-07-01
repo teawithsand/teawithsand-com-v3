@@ -30,7 +30,7 @@ export default class MutatingKeyValueStore<V extends {}, E extends {}>
 
 	get = async (id: string): Promise<V | null> => {
 		const v = await this.inner.get(await this.mutateKey(id))
-		if (v !== null) this.mutateValue(v)
+		if (v !== null) return this.mutateValue(v)
 		return null
 	}
 	set = async (id: string, value: V): Promise<void> =>

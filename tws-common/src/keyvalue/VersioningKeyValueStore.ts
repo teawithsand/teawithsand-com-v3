@@ -47,16 +47,16 @@ export class VersioningKeyValueStore<
 
 	get = async (id: K): Promise<OV | null> => {
 		const v = await this.inner.get(id)
-		if (v !== null) this.adapter.extractValue(v)
+		if (v !== null) return this.adapter.extractValue(v)
 		return null
 	}
 	set = async (id: K, value: OV): Promise<void> =>
 		await this.inner.set(id, this.adapter.addVersioningData(value))
-	has = this.inner.has
-	delete = this.inner.delete
-	clear = this.inner.clear
-	keys = this.inner.keys
-	keysWithPrefix = this.inner.keysWithPrefix
+	has = async (key: K) => await this.inner.has(key)
+	delete = async (key: K) => await this.inner.delete(key)
+	clear = async () => await this.inner.clear()
+	keys = () => this.inner.keys()
+	keysWithPrefix = (prefix: string) => this.inner.keysWithPrefix(prefix)
 }
 
 export default VersioningKeyValueStore
