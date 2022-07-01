@@ -26,7 +26,6 @@ export interface VersioningKeyValueStoreAdapter<
 	IV extends {}, // Type of previous value
 	OV extends {}, // Type of new value
 > {
-	readonly currentVersion: number
 	// Required, for support of objects when pre-versioning KV store was used
 	addVersioningData(v: OV): IV
 	extractValue(v: IV): OV
@@ -35,13 +34,13 @@ export interface VersioningKeyValueStoreAdapter<
 /**
  * Store, which is capable of taking values of inner type and converting them to outer type.
  */
-export default class VersioningKeyValueStore<
+export class VersioningKeyValueStore<
 	IV extends {},
 	OV extends {},
-	K extends string,
+	K extends string = string,
 > implements KeyValueStore<OV, K>, PrefixKeyValueStore<OV, K>
 {
-	private constructor(
+	constructor(
 		private readonly inner: PrefixKeyValueStore<IV, K>,
 		private readonly adapter: VersioningKeyValueStoreAdapter<IV, OV>,
 	) {}
@@ -59,3 +58,5 @@ export default class VersioningKeyValueStore<
 	keys = this.inner.keys
 	keysWithPrefix = this.inner.keysWithPrefix
 }
+
+export default VersioningKeyValueStore
