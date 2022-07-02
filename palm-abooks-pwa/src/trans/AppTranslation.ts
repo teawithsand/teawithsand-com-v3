@@ -45,6 +45,7 @@ export default interface AppTranslation {
 					abookName: string,
 					fileName: string,
 				) => string
+				abookFileReorderSuccessFlash: (abookName: string) => string
 			}
 		}
 	}

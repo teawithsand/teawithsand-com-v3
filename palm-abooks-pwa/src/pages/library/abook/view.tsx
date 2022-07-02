@@ -20,12 +20,16 @@ import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { collectAsyncIterable } from "tws-common/lang/asyncIterator"
 import { generateUUID } from "tws-common/lang/uuid"
+import { LOG } from "tws-common/log/logger"
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import { useGTaskRunnerContext } from "tws-common/misc/gtask"
 import { setIsPlayingWhenReady } from "tws-common/player/bfr/actions"
 import { useQuery } from "tws-common/react/hook/query"
 import { useGetParamsObject } from "tws-common/react/hook/useGetParams"
 import { useStickySubscribable } from "tws-common/react/hook/useStickySubscribable"
 import { addFlashMessage, createFlashMessage } from "tws-common/ui/flash"
+
+const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/abook-view-page")
 
 const ABookViewPage = () => {
 	const store = useABookStore()
@@ -68,6 +72,60 @@ const ABookViewPage = () => {
 			inner = (
 				<ABookView
 					abook={abook}
+					onReorderABookFiles={async entries => {
+						taskRunner.putTask({
+							metadata: {
+								group: GTaskGroupImpl.ABOOK,
+								abookLockType: "write",
+							},
+							task: async () => {
+								try {
+									for (const {
+										fileId,
+										ordinalNumber,
+									} of entries) {
+										const fileMetadata =
+											await abook.files.getMetadata(
+												fileId,
+											)
+										if (!fileMetadata) {
+											LOG.error(
+												LOG_TAG,
+												`File ${fileId} was removed before reordering happened`,
+											)
+											throw new Error(
+												`File ${fileId} was removed before reordering happened`,
+											)
+										}
+
+										const newMeta = {
+											...fileMetadata,
+											ordinalNumber,
+										}
+
+										await abook.files.setMetadata(
+											fileId,
+											newMeta,
+										)
+									}
+
+									dispatch(
+										addFlashMessage(
+											createFlashMessage({
+												message:
+													trans.flash.abookFileReorderSuccessFlash(
+														abook.data.metadata
+															.title,
+													),
+											}),
+										),
+									)
+								} finally {
+									refetch()
+								}
+							},
+						})
+					}}
 					onAddFiles={async files => {
 						taskRunner.putTask({
 							metadata: {
@@ -116,9 +174,7 @@ const ABookViewPage = () => {
 								group: GTaskGroupImpl.ABOOK,
 								abookLockType: "write",
 							},
-							task: async ctx => {
-								if (!ctx.claim.isValid) return
-
+							task: async () => {
 								try {
 									const f = await abook.files.getMetadata(id)
 									if (!f) {

@@ -22,6 +22,8 @@ const AppTranslationEN: AppTranslation = {
 					`Successfully removed file: "${fileName}" from ABook: "${abookName}"`,
 				abookRemoveSuccessFlash: abookName =>
 					`Successfully deleted ABook: "${abookName}"`,
+				abookFileReorderSuccessFlash: abookName =>
+					`Successfully reordered files in ABook: ${abookName}`,
 			},
 		},
 	},

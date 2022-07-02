@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 
 import AddFilesABookForm from "@app/components/abook/form/AddFilesABookForm"
@@ -11,7 +11,8 @@ import {
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { LOG } from "tws-common/log/logger"
-import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
+import { claimId, NS_DND_ID, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
+import Sortable from "tws-common/react/components/Sortable"
 import { useQuery } from "tws-common/react/hook/query"
 import { Button, ButtonGroup, Table } from "tws-common/ui"
 
@@ -27,14 +28,44 @@ const PageTitle = styled.h1`
 	text-align: center;
 `
 
+const FileRow = styled.tr`
+	font-weight: ${({ $isDragging }) => ($isDragging ? "bold" : "auto")};
+`
+
+const HidableButton = styled(Button)`
+	${({ $isHidden }) =>
+		$isHidden &&
+		`
+		display: none;
+	`}
+`
+
+const ABookFilesDragAndDropId = claimId(
+	NS_DND_ID,
+	"palm-abooks-pwa/abook-view/drag-files",
+)
+
+type FileOrderEntry = {
+	fileId: string
+	ordinalNumber: number
+}
+
 const ABookView = (props: {
 	abook: ABookActiveRecord
 	onDelete?: () => void
 	onFileDelete?: (id: string) => void
 	onPlay?: () => void
 	onAddFiles?: (files: File[]) => Promise<void>
+	onReorderABookFiles?: (entries: FileOrderEntry[]) => void
 }) => {
-	const { abook, onDelete, onFileDelete, onPlay, onAddFiles } = props
+	const {
+		abook,
+		onDelete,
+		onFileDelete,
+		onPlay,
+		onAddFiles,
+		onReorderABookFiles,
+	} = props
 	const {
 		data: { metadata, id },
 	} = abook
@@ -77,7 +108,9 @@ const ABookView = (props: {
 				})
 			}
 
-			files.sort((a, b) => a.metadata.ordinalNumber - b.metadata.ordinalNumber)
+			files.sort(
+				(a, b) => a.metadata.ordinalNumber - b.metadata.ordinalNumber,
+			)
 
 			return files
 		} catch (e) {
@@ -85,6 +118,10 @@ const ABookView = (props: {
 			throw e
 		}
 	})
+
+	const [ephemeralABookFiles, setEphemeralABookFiles] = useState<
+		typeof abookFiles | null
+	>(null)
 
 	let files = null
 	if (status === "loading" || status === "idle") {
@@ -104,11 +141,19 @@ const ABookView = (props: {
 						<td>Actions</td>
 					</tr>
 				</thead>
-				<tbody>
-					{abookFiles.map((f, i) => {
+				<Sortable
+					dragAndDropDataIdentifier={ABookFilesDragAndDropId}
+					elements={ephemeralABookFiles ?? abookFiles}
+					onElementsChange={newABookFilesOrder => {
+						setEphemeralABookFiles(newABookFilesOrder)
+					}}
+					renderParent={({ onRef, children }) => (
+						<tbody ref={onRef}>{children}</tbody>
+					)}
+					renderElement={({ item: f, onRef, isDragging }) => {
 						return (
-							<tr key={f.id}>
-								<td>{i + 1}</td>
+							<FileRow ref={onRef} $isDragging={isDragging}>
+								<td>{f.metadata.ordinalNumber + 1}</td>
 								<td>{f.metadata.fileName}</td>
 								<td>{explainFileType(f.metadata.type)}</td>
 								<td>
@@ -127,10 +172,10 @@ const ABookView = (props: {
 										</Button>
 									</ButtonGroup>
 								</td>
-							</tr>
+							</FileRow>
 						)
-					})}
-				</tbody>
+					}}
+				/>
 			</Table>
 		)
 	}
@@ -166,10 +211,26 @@ const ABookView = (props: {
 				</Table>
 			</div>
 			<div>
-				<h3>ABook Files</h3>
+				<h3>ABook Files(use drag-and-drop to reorder)</h3>
 			</div>
 
 			<div>{files}</div>
+			<HidableButton
+				$isHidden={!ephemeralABookFiles}
+				onClick={() => {
+					if (ephemeralABookFiles && onReorderABookFiles) {
+						const results: FileOrderEntry[] =
+							ephemeralABookFiles.map((v, i) => ({
+								fileId: v.id,
+								ordinalNumber: i,
+							}))
+
+						onReorderABookFiles(results)
+					}
+				}}
+			>
+				Commit file order changes
+			</HidableButton>
 
 			<h3>Add new files</h3>
 
