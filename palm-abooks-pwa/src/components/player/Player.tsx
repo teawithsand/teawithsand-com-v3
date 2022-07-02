@@ -48,48 +48,6 @@ const Player = () => {
 					</Col>
 				</Row>
 				<Row>
-					<Form
-						onSubmit={(e: any) => {
-							e.preventDefault()
-							return false
-						}}
-					>
-						<Form.Group>
-							<Form.Label>Files to play</Form.Label>
-							<Form.Control
-								accept={audioMimesAndExtensions.join(",")}
-								type="file"
-								value={undefined}
-								multiple
-								onChange={(e: any) => {
-									// TODO(teawithsand): check if it works on older browsers, works on state-of-art ff
-									const files: File[] = [
-										...(e.target.files || []),
-									]
-									files.sort((a, b) =>
-										a.name.localeCompare(b.name),
-									)
-
-									dispatch(
-										setWTPPlaylist({
-											type: WTPPlaylistMetadataType.ANY_SOURCES,
-											sources: files.map(
-												(f): WTPSource => ({
-													type: WTPSourceType.BLOB_SOURCE,
-													blob: f,
-													preloadedMetadata: null,
-													fileName: f.name,
-													id: generateUUID(),
-												}),
-											),
-										}),
-									)
-								}}
-							/>
-						</Form.Group>
-					</Form>
-				</Row>
-				<Row>
 					<Col>
 						<p>Playing file no: {currentSourceIndex + 1}</p>
 						<p>Is playing: {isReallyPlaying ? "Yes" : "No"}</p>
