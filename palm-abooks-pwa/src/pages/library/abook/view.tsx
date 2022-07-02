@@ -183,6 +183,13 @@ const ABookViewPage = () => {
 
 									await abook.files.delete(id)
 
+									// TODO(teawithsand): trigger ordinalNumber recomputation here
+									//  it's not critical, since ordinal numbers are ascending sequence of number
+									//  but it causes some files to have same ordinal number, while performing file addition
+									//  which obviously is bad
+									//  so prevent this by recomputing ordinal numbers
+
+
 									dispatch(
 										addFlashMessage(
 											createFlashMessage({
@@ -207,9 +214,7 @@ const ABookViewPage = () => {
 								group: GTaskGroupImpl.ABOOK,
 								abookLockType: "write",
 							},
-							task: async ctx => {
-								if (!ctx.claim.isValid) return
-
+							task: async () => {
 								try {
 									await abook.delete()
 									dispatch(
