@@ -32,7 +32,7 @@ const FileRow = styled.tr`
 	font-weight: ${({ $isDragging }) => ($isDragging ? "bold" : "auto")};
 `
 
-const HidableButton = styled(Button)`
+const HidableButtonGroup = styled(ButtonGroup)`
 	${({ $isHidden }) =>
 		$isHidden &&
 		`
@@ -215,22 +215,34 @@ const ABookView = (props: {
 			</div>
 
 			<div>{files}</div>
-			<HidableButton
-				$isHidden={!ephemeralABookFiles}
-				onClick={() => {
-					if (ephemeralABookFiles && onReorderABookFiles) {
-						const results: FileOrderEntry[] =
-							ephemeralABookFiles.map((v, i) => ({
-								fileId: v.id,
-								ordinalNumber: i,
-							}))
+			<HidableButtonGroup $isHidden={!ephemeralABookFiles}>
+				<Button
+					onClick={() => {
+						if (ephemeralABookFiles && onReorderABookFiles) {
+							const results: FileOrderEntry[] =
+								ephemeralABookFiles.map((v, i) => ({
+									fileId: v.id,
+									ordinalNumber: i,
+								}))
 
-						onReorderABookFiles(results)
-					}
-				}}
-			>
-				Commit file order changes
-			</HidableButton>
+							onReorderABookFiles(results)
+						}
+					}}
+					variant="success"
+					className="w-100"
+				>
+					Commit file order changes
+				</Button>
+				<Button
+					onClick={() => {
+						setEphemeralABookFiles(null)
+					}}
+					variant="warning"
+					className="w-100"
+				>
+					Revert changes
+				</Button>
+			</HidableButtonGroup>
 
 			<h3>Add new files</h3>
 
