@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
+import { TouchBackend } from "react-dnd-touch-backend"
 import { Provider } from "react-redux"
 
 import InnerFlashMessagesDisplay from "@app/components/layout/InnerFlashMessagesDisplay"
