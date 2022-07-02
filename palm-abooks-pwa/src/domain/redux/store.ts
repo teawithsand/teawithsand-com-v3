@@ -6,17 +6,14 @@ import {
 import { useSelector } from "react-redux"
 
 import { MBFRState } from "@app/domain/bfr/state"
-import {
-	displayInfoBFRPlaylistSynchronizer,
-	displayInfoReducer,
-	displayInfoWTPPlaylistSynchronizer,
-} from "@app/domain/displayInfo/reducer"
+import { displayInfoReducer } from "@app/domain/displayInfo/reducer"
 import { DisplayInfoState } from "@app/domain/displayInfo/state"
 import { playerUiReducer, PlayerUIState } from "@app/domain/redux/playerUi"
 import {
-	playlistSynchronizer,
-	whatToPlayReducer,
-} from "@app/domain/wtp/reducer"
+	whatToPlayPlaylistSynchronizer,
+	whatToPlayStateSynchronizer,
+} from "@app/domain/redux/synchronizers"
+import { whatToPlayReducer } from "@app/domain/wtp/reducer"
 import { WTPState } from "@app/domain/wtp/state"
 
 import { createBFRReducer } from "tws-common/player/bfr/reducer"
@@ -55,11 +52,7 @@ const finalReducer = wrapReducerForSync(
 		getSyncedIdStore: (s: State) => s.syncedIdStore,
 		setSyncedIdStore: (s: State, st) => ({ ...s, syncedIdStore: st }),
 	},
-	[
-		playlistSynchronizer,
-		displayInfoBFRPlaylistSynchronizer,
-		displayInfoWTPPlaylistSynchronizer,
-	],
+	[whatToPlayStateSynchronizer, whatToPlayPlaylistSynchronizer],
 )
 
 export const createStore = () =>

@@ -3,6 +3,7 @@ import { MPlayerSource } from "@app/domain/bfr/source"
 import { DisplayInfoError } from "@app/domain/displayInfo/error"
 import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist"
 import { WTPSource } from "@app/domain/wtp/source"
+import { WTPError } from "@app/domain/wtp/WTPError"
 
 import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager"
 import { BFRPlaylist } from "tws-common/player/bfr/state"
@@ -18,6 +19,8 @@ export const displayInfoWTPPlaylistSyncRootName = claimId(
 	NS_SYNC_ROOT,
 	"palm-abooks-pwa/display-info/wtp-playlist",
 )
+
+export const displayInfoWTPErrorSyncRootName = claimId
 
 export type DisplaySource = (
 	| {
@@ -77,14 +80,9 @@ export type DisplayInfoStateState =
 export type DisplayInfoState = {
 	sync: {
 		// TODO(teawithsand): request metadata bag here from BFR
-		bfrPlaylist: NamedSyncRoot<
-			BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource> | null,
-			typeof displayInfoBFRPlaylistSyncRootName
-		>
-		wtpPlaylistMetadata: NamedSyncRoot<
-			WTPPlaylistMetadata | null,
-			typeof displayInfoWTPPlaylistSyncRootName
-		>
+		bfrPlaylist: BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource> | null
+		wtpPlaylistMetadata: WTPPlaylistMetadata | null
+		error: WTPError | null
 	}
 	state: DisplayInfoStateState
 }

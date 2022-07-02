@@ -1,46 +1,17 @@
 import { createReducer } from "@reduxjs/toolkit"
 
-import { State } from "@app/domain/redux/store"
 import {
 	setWTPError,
 	setWTPPlaylist,
 	setWTPResolved,
 } from "@app/domain/wtp/actions"
-import { whatToPlayStateSyncRootName, WTPState } from "@app/domain/wtp/state"
+import { WTPState } from "@app/domain/wtp/state"
 
 import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
-import { setPlaylist } from "tws-common/player/bfr/actions"
 import { makeSyncRoot } from "tws-common/redux/sync/root"
-import {
-	makeActionSynchronizerAction,
-	makeNamedSyncRootSynchronizer,
-} from "tws-common/redux/sync/synchronizer"
 
 const LOG_TAG = claimId(NS_LOG_TAG, "palm-abooks-pwa/WTPReducer")
-
-export const playlistSynchronizer = makeNamedSyncRootSynchronizer(
-	whatToPlayStateSyncRootName,
-	(s: State) => s.whatToPlayState.state,
-	makeActionSynchronizerAction((s: State) => {
-		const data = s.whatToPlayState.state.data
-
-		if (
-			data.type === "loading" ||
-			data.type === "error" ||
-			data.type === "no-sources"
-		) {
-			return [
-				setPlaylist({
-					metadata: {},
-					sources: [],
-				}),
-			]
-		} else {
-			return [setPlaylist(data.bfrPlaylist)]
-		}
-	}),
-)
 
 export const whatToPlayReducer = createReducer<WTPState>(
 	{
