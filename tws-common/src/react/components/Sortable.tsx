@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { ReactNode, useCallback, useMemo, useState } from "react"
 import { ConnectableElement, useDrag, useDrop } from "react-dnd"
 
 export type SortableItemRenderProps<T> = {
@@ -8,6 +8,10 @@ export type SortableItemRenderProps<T> = {
 	onRef: (element: ConnectableElement) => void
 }
 export type SortableItemRenderer<T> = React.FC<SortableItemRenderProps<T>>
+export type ParentRenderer = React.FC<{
+	onRef: (element: ConnectableElement) => void
+	children: ReactNode
+}>
 
 type DropItem = {
 	index: number
@@ -125,12 +129,18 @@ const SortableChild = <T,>(props: {
 
 const Sortable = <T,>(props: {
 	dragAndDropDataIdentifier: string
-	render: SortableItemRenderer<T>
+	renderElement: SortableItemRenderer<T>
+	renderParent: ParentRenderer
 	elements: T[]
 	onElementsChange: (newElements: T[]) => void
 }) => {
-	const { render, elements, onElementsChange, dragAndDropDataIdentifier } =
-		props
+	const {
+		renderElement,
+		renderParent: RenderParent,
+		elements,
+		onElementsChange,
+		dragAndDropDataIdentifier,
+	} = props
 
 	const [arrayOp, setArrayOp] = useState<ArrayOp>({
 		type: "noop",
@@ -172,7 +182,7 @@ const Sortable = <T,>(props: {
 
 	// TODO(teawithsand): use keys better than indices
 	return (
-		<div ref={drop}>
+		<RenderParent onRef={drop}>
 			{renderElements.map(({ element, stableIndex }) => {
 				return (
 					<SortableChild
@@ -180,13 +190,13 @@ const Sortable = <T,>(props: {
 						item={element}
 						index={stableIndex}
 						dragAndDropDataIdentifier={dragAndDropDataIdentifier}
-						render={render}
+						render={renderElement}
 						commitAndUnsetArrayOperation={commitArrayOp}
 						setArrayOperation={setArrayOperation}
 					/>
 				)
 			})}
-		</div>
+		</RenderParent>
 	)
 }
 
