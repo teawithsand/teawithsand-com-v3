@@ -34,6 +34,7 @@ export default interface AppTranslation {
 			playerDropdown: {
 				title: string
 				playLocal: string
+				showPlayerUi: string
 			}
 		}
 	}
@@ -54,6 +55,10 @@ export default interface AppTranslation {
 			title: string
 			currentSpeed: (speed: number) => string
 			preservePitch: string
+		}
+		pickLocalFilesModal: {
+			title: string
+			fileFieldLabel: string
 		}
 		optionsBar: {
 			speed: string

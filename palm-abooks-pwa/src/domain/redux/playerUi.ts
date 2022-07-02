@@ -2,7 +2,7 @@ import { createAction, createReducer } from "@reduxjs/toolkit"
 
 import { makeActionPrefix } from "tws-common/redux/action"
 
-export type PlayerUIModal = "speed" | "sleep"
+export type PlayerUIModal = "speed" | "sleep" | "pick-local-files"
 
 export type PlayerUIState = {
 	shownModal: PlayerUIModal | null

@@ -17,6 +17,7 @@ import {
 	setSpeed,
 } from "tws-common/player/bfr/actions"
 import { Button, ButtonGroup, Col, Form, Row } from "tws-common/ui"
+import PickLocalFilesModal from "@app/components/player/PickLocalFilesModal"
 
 const ZERO_ONE_RANGE_FIELD_MULTIPLIER = 100000
 
@@ -38,6 +39,7 @@ const Player = () => {
 	return (
 		<>
 			<SpeedModal />
+			<PickLocalFilesModal />
 
 			<div>
 				<Row className="mb-3">

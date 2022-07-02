@@ -1,9 +1,12 @@
+import { navigate } from "gatsby"
 import React from "react"
+import { useDispatch } from "react-redux"
 import styled from "styled-components"
 
+import { playerUiSetShownModal } from "@app/domain/redux/playerUi"
 import {
-	abookLibraryIndexPath,
 	abookLibraryAddFromLocalFSPath,
+	abookLibraryIndexPath,
 	abookLibraryListPath,
 	playerLocalPath,
 } from "@app/paths"
@@ -18,6 +21,9 @@ const ToEndPaginator = styled.span`
 
 const Navbar = () => {
 	const translations = useAppTranslationSelector(s => s.globalUi.navbar)
+
+	const dispatch = useDispatch()
+
 	return (
 		<Bar collapseOnSelect expand="lg" bg="dark" variant="dark">
 			<Container fluid={true}>
@@ -71,9 +77,22 @@ const Navbar = () => {
 						>
 							<LinkContainer to={playerLocalPath}>
 								<NavDropdown.Item>
-									{translations.playerDropdown.playLocal}
+									{translations.playerDropdown.showPlayerUi}
 								</NavDropdown.Item>
 							</LinkContainer>
+							
+							<NavDropdown.Item
+								onClick={() => {
+									dispatch(
+										playerUiSetShownModal(
+											"pick-local-files",
+										),
+									)
+									navigate(playerLocalPath)
+								}}
+							>
+								{translations.playerDropdown.playLocal}
+							</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
 				</Bar.Collapse>

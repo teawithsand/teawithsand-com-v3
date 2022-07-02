@@ -11,6 +11,10 @@ const AppTranslationEN: AppTranslation = {
 			title: "Set speed",
 			preservePitch: "Preserve pitch",
 		},
+		pickLocalFilesModal: {
+			title: "Play files from local computer",
+			fileFieldLabel: "Files to play(you can drag and drop them)",
+		},
 		optionsBar: {
 			speed: "Speed",
 		},
@@ -38,6 +42,7 @@ const AppTranslationEN: AppTranslation = {
 			playerDropdown: {
 				title: "Player",
 				playLocal: "Play files form this computer",
+				showPlayerUi: "Show player UI",
 			},
 			pageTitle: "PalmABooks PWA",
 			homePage: "Home",
