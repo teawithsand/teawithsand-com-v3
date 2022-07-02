@@ -2,6 +2,7 @@ export const abookFilesMimesAndExtensions = [
 	"audio/mpeg",
 	".mp3",
 	".ogg",
+	/*
 	"image/jpeg",
 	".jpg",
 	".jpeg",
@@ -15,6 +16,7 @@ export const abookFilesMimesAndExtensions = [
 	".avif",
 	"text/plain",
 	".txt",
+	*/
 ]
 
 export const audioMimesAndExtensions = ["audio/mpeg", ".mp3", ".ogg"]
