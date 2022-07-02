@@ -1,23 +1,19 @@
 import React from "react"
 import { useDispatch } from "react-redux"
 
+import PickLocalFilesModal from "@app/components/player/PickLocalFilesModal"
 import PlayerBar from "@app/components/player/PlayerBar"
+import PlayerEntryList from "@app/components/player/PlayerEntryList"
 import SpeedModal from "@app/components/player/SpeedModal"
 import { useBFRSelector } from "@app/domain/redux/store"
-import { setWTPPlaylist } from "@app/domain/wtp/actions"
-import { WTPPlaylistMetadataType } from "@app/domain/wtp/playlist"
-import { WTPSource, WTPSourceType } from "@app/domain/wtp/source"
-import { audioMimesAndExtensions } from "@app/util/fileTypes"
 
 import { formatDurationSeconds } from "tws-common/lang/time/format"
-import { generateUUID } from "tws-common/lang/uuid"
 import {
 	doSeek,
 	setIsPlayingWhenReady,
 	setSpeed,
 } from "tws-common/player/bfr/actions"
 import { Button, ButtonGroup, Col, Form, Row } from "tws-common/ui"
-import PickLocalFilesModal from "@app/components/player/PickLocalFilesModal"
 
 const ZERO_ONE_RANGE_FIELD_MULTIPLIER = 100000
 
@@ -129,6 +125,16 @@ const Player = () => {
 								Toggle play/pause
 							</Button>
 						</ButtonGroup>
+					</Col>
+				</Row>
+				<Row className="mt-3">
+					<Col>
+						<h3>Source list</h3>
+					</Col>
+				</Row>
+				<Row>
+					<Col>
+						<PlayerEntryList />
 					</Col>
 				</Row>
 			</div>
