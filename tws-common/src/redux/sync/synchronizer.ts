@@ -24,10 +24,10 @@ export type Synchronizer<S, A> = {
 }
 
 export const makeActionSynchronizerAction =
-	<S, A>(factory: (state: S) => A[]): SynchronizerAction<S, A> =>
+	<S, A>(...factories: ((state: S) => A[])[]): SynchronizerAction<S, A> =>
 	state => ({
 		type: "actions",
-		actions: factory(state),
+		actions: factories.flatMap(f => f(state)),
 	})
 
 export const makeSyncRootSynchronizer = <S, A>(
