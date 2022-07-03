@@ -23,7 +23,7 @@ const AutonomousGallery = (props: AutonomousGalleryProps) => {
 	return (
 		<Gallery
 			entries={entries}
-			currentItemIndex={effectiveElementIndex}
+			currentEntryIndex={effectiveElementIndex}
 			mode={mode}
 			size={size}
 			onCurrentEntryTap={() => {

@@ -1,4 +1,10 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react"
+import React, {
+	ReactNode,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from "react"
 import styled from "styled-components"
 
 const InnerGalleryBottomBar = styled.div.attrs(
@@ -95,34 +101,46 @@ const GalleryBottomBarItemContainer = styled.div.attrs(
 	}
 `
 
-const GalleryBottomBarItem = (props: {
-	entry: ReactNode
-	onClick?: () => void
-}) => {
-	const { entry, onClick } = props
-	return (
-		<GalleryBottomBarItemContainer
-			onClick={onClick}
-			{...({ $clickable: !!onClick } as any)}
-		>
-			{entry}
-		</GalleryBottomBarItemContainer>
-	)
-}
+// Apparently eslint thinks that this react fn has no name
+// eslint-disable-next-line react/display-name
+const GalleryBottomBarItem = React.forwardRef(
+	(
+		props: {
+			entry: ReactNode
+			onClick?: () => void
+			index: number
+			active: boolean
+		},
+		ref,
+	) => {
+		const { entry, onClick, index } = props
+		return (
+			<GalleryBottomBarItemContainer
+				data-index={index}
+				ref={ref}
+				onClick={onClick}
+				{...({ $clickable: !!onClick } as any)}
+			>
+				{entry}
+			</GalleryBottomBarItemContainer>
+		)
+	},
+)
 
 const GalleryBottomBar = (props: {
 	entries: ReactNode[]
+	currentEntryIndex: number
 	onElementClick?: (index: number) => void
 	visible?: boolean // defaults to true
 }) => {
-	const { entries, onElementClick, visible } = props
-	const ref = useRef<HTMLDivElement | null>(null)
+	const { entries, onElementClick, visible, currentEntryIndex } = props
+	const containerRef = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 
 	const newTargetScroll = useRef(0)
 
 	useEffect(() => {
-		const { current } = ref
+		const { current } = containerRef
 		if (current) {
 			const observer = new ResizeObserver(() => {
 				const width = current.clientWidth
@@ -155,11 +173,27 @@ const GalleryBottomBar = (props: {
 				observer.unobserve(current)
 			}
 		}
-	}, [ref, ref.current])
+	}, [containerRef, containerRef.current])
+
+	useLayoutEffect(() => {
+		const { current } = containerRef
+		if (current) {
+			const res = current.querySelector(
+				`*[data-index="${currentEntryIndex}"]`,
+			)
+			if (res) {
+				res.scrollIntoView({
+					behavior: "smooth",
+					block: "end",
+					inline: "center",
+				})
+			}
+		}
+	}, [currentEntryIndex, containerRef, containerRef.current])
 
 	return (
 		<InnerGalleryBottomBar
-			ref={ref}
+			ref={containerRef}
 			{...({
 				$itemHeight: dimensions ? dimensions[1] : null,
 				$visible: visible ?? true,
@@ -168,7 +202,9 @@ const GalleryBottomBar = (props: {
 			{entries.map((v, i) => (
 				<GalleryBottomBarItem
 					entry={v}
+					index={i}
 					key={i}
+					active={i === currentEntryIndex}
 					onClick={
 						onElementClick ? () => onElementClick(i) : undefined
 					}

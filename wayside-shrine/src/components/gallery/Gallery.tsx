@@ -66,7 +66,7 @@ export type GalleryEntry = {
 
 export type GalleryProps = {
 	entries: GalleryEntry[]
-	currentItemIndex: number
+	currentEntryIndex: number
 	size: GallerySize
 	mode: GalleryMode
 	onCurrentEntryTap: () => void
@@ -80,7 +80,7 @@ export type GalleryProps = {
 const Gallery = (props: GalleryProps) => {
 	const {
 		entries,
-		currentItemIndex,
+		currentEntryIndex,
 		onBottomEntryTap,
 		onSwipeRight,
 		onSwipeLeft,
@@ -91,11 +91,10 @@ const Gallery = (props: GalleryProps) => {
 		mode,
 	} = props
 
-	const mappedEntries = useMemo(() => {
-		return new Array(100)
-			.fill(entries.map(e => e.mainDisplay))
-			.flatMap(v => v)
-	}, [entries])
+	const mappedEntries = useMemo(
+		() => entries.map(e => e.mainDisplay),
+		[entries],
+	)
 
 	const fsc = useFullscreen({})
 
@@ -128,7 +127,7 @@ const Gallery = (props: GalleryProps) => {
 			{mode === "normal" ? <GalleryTopBar /> : null}
 			<GalleryMiddleBar
 				entries={mappedEntries}
-				currentItemIndex={currentItemIndex}
+				currentItemIndex={currentEntryIndex}
 				onTap={onCurrentEntryTap}
 				onSwipe={direction => {
 					if (direction === "left") {
@@ -146,6 +145,7 @@ const Gallery = (props: GalleryProps) => {
 				<GalleryBottomBar
 					entries={mappedEntries}
 					onElementClick={onBottomEntryTap}
+					currentEntryIndex={currentEntryIndex}
 				/>
 			) : null}
 		</GalleryContainer>
