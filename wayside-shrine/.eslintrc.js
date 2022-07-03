@@ -23,5 +23,6 @@ module.exports = {
 		"@typescript-eslint/no-explicit-any": "off",
 		"react/display-name": "warn",
 		"react/prop-types": "off",
+		"@typescript-eslint/explicit-module-boundary-types": "off",
 	},
 }
