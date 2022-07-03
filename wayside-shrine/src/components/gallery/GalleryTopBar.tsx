@@ -10,6 +10,8 @@ const InnerGalleryTopBar = styled.div`
 	padding-bottom: 0.8rem;
 `
 
-export default () => {
+const GalleryTopBar = () => {
 	return <InnerGalleryTopBar>Top Bar</InnerGalleryTopBar>
 }
+
+export default GalleryTopBar

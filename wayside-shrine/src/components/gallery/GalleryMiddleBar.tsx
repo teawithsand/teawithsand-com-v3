@@ -54,9 +54,10 @@ const GalleryMiddleBarItem = (props: { entry: GalleryEntry }) => {
 	)
 }
 
-export default (props: { entries: GalleryEntry[] }) => {
+const GalleryMiddleBar = (props: { entries: GalleryEntry[] }) => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
+
 	useEffect(() => {
 		const { current } = ref
 		if (current) {
@@ -85,3 +86,5 @@ export default (props: { entries: GalleryEntry[] }) => {
 		</InnerGalleryMiddleBar>
 	)
 }
+
+export default GalleryMiddleBar

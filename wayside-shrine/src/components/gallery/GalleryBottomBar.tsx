@@ -20,14 +20,41 @@ const InnerGalleryBottomBar = styled.div.attrs(
 
 	display: grid;
 	grid-auto-flow: column;
-	grid-auto-columns: minmax(10%, 33%);
+	grid-auto-columns: minmax(15%, 33%);
 	gap: 0.8rem;
 
-	user-select: none;
-	::selection {
-		background: transparent;
+	// Make items non selectable and prevent fancy stuff with touch-action: none
+	& {
+		user-select: none;
+		::selection {
+			background: transparent;
+		}
+		touch-action: none;
 	}
-	touch-action: none;
+
+	// Make all scrollbar pretty
+	& {
+		&::-webkit-scrollbar {
+			height: 6px;
+			width: 6px;
+			background: black;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: white;
+			border-radius: 12px;
+			box-shadow: 0px 1px 2px rgba(255, 255, 255, 0.75);
+		}
+
+		&::-webkit-scrollbar-corner {
+			background: black;
+		}
+
+		scrollbar-color: white black;
+		scrollbar-width: thin;
+
+		scroll-behavior: smooth;
+	}
 `
 
 // TODO(teawithsand): optimize it so it does not has to generate classes for each screen size
@@ -57,9 +84,12 @@ const GalleryBottomBarItem = (props: { entry: GalleryEntry }) => {
 	)
 }
 
-export default (props: { entries: GalleryEntry[] }) => {
+const GalleryBottomBar = (props: { entries: GalleryEntry[] }) => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
+
+	const newTargetScroll = useRef(0)
+
 	useEffect(() => {
 		const { current } = ref
 		if (current) {
@@ -69,6 +99,24 @@ export default (props: { entries: GalleryEntry[] }) => {
 				setDimensions([width, height])
 			})
 			observer.observe(current)
+
+			newTargetScroll.current = current.scrollLeft
+
+			current.addEventListener("wheel", e => {
+				e.preventDefault()
+
+				// or make single scroll pull single image to view
+				// can be easily done using scrollToView method
+				newTargetScroll.current = Math.max(
+					0,
+					Math.min(
+						newTargetScroll.current + e.deltaY,
+						current.scrollWidth,
+					),
+				)
+				current.scrollLeft = newTargetScroll.current
+			})
+
 			return () => {
 				observer.unobserve(current)
 			}
@@ -86,3 +134,4 @@ export default (props: { entries: GalleryEntry[] }) => {
 		</InnerGalleryBottomBar>
 	)
 }
+export default GalleryBottomBar
