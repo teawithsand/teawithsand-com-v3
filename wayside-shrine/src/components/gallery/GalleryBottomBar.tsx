@@ -83,14 +83,14 @@ const GalleryBottomBarItemContainer = styled.div`
 	}
 `
 
-const GalleryBottomBarItem = (props: { entry: GalleryEntry }) => {
+const GalleryBottomBarItem = (props: { entry: ReactNode }) => {
 	const { entry } = props
 	return (
 		<GalleryBottomBarItemContainer>{entry}</GalleryBottomBarItemContainer>
 	)
 }
 
-const GalleryBottomBar = (props: { entries: GalleryEntry[] }) => {
+const GalleryBottomBar = (props: { entries: ReactNode[] }) => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 

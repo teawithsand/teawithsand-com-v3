@@ -7,21 +7,31 @@ const GalleryPage = () => {
 	return (
 		<PageContainer>
 			<main>
-				<Gallery>
-					<StaticImage
-						src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png"
-						alt="Some anime stuff"
-						placeholder="blurred"
-						layout="constrained"
-						objectFit="contain"
-					/>
-					<StaticImage
-						src="https://placekitten.com/3000/3000"
-						alt="A kitten"
-						layout="constrained"
-						objectFit="contain"
-					/>
-				</Gallery>
+				<Gallery
+					entries={[
+						{
+							mainDisplay: (
+								<StaticImage
+									src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png"
+									alt="Some anime stuff"
+									placeholder="blurred"
+									layout="constrained"
+									objectFit="contain"
+								/>
+							),
+						},
+						{
+							mainDisplay: (
+								<StaticImage
+									src="https://placekitten.com/3000/3000"
+									alt="A kitten"
+									layout="constrained"
+									objectFit="contain"
+								/>
+							),
+						},
+					]}
+				/>
 			</main>
 		</PageContainer>
 	)

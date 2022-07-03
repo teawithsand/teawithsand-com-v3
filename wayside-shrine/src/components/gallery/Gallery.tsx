@@ -4,8 +4,6 @@ import GalleryTopBar from "@app/components/gallery/GalleryTopBar"
 import React, { ReactNode, useMemo } from "react"
 import styled from "styled-components"
 
-export type GalleryEntry = ReactNode
-
 const GalleryContainer = styled.div.attrs(
 	(props: { $galleryHeight: string }) => ({
 		style: {
@@ -30,7 +28,6 @@ const GalleryContainer = styled.div.attrs(
 		will-change: initial !important;
 	}
 
-	// Some special stuff for better gatsby images
 	& img,
 	& *.gatsby-image-wrapper > img,
 	& *.gatsby-image-wrapper > picture > img {
@@ -41,18 +38,30 @@ const GalleryContainer = styled.div.attrs(
 	}
 `
 
-const Gallery = (props: { children: GalleryEntry[] | GalleryEntry }) => {
-	const { children } = props
+export type GalleryEntry = {
+	mainDisplay: ReactNode
+}
 
-	const arrayChildren = useMemo(() => {
-		return children instanceof Array ? children : [children]
-	}, [children])
+export type GalleryProps = {
+	entries: GalleryEntry[]
+}
+
+const Gallery = (props: GalleryProps) => {
+	const { entries } = props
+
+	const mappedEntries = useMemo(() => {
+		let arr = entries.map(e => e.mainDisplay)
+		for (let i = 0; i < 5; i++) {
+			arr = [...arr, ...arr]
+		}
+		return arr
+	}, [entries])
 
 	return (
 		<GalleryContainer $galleryHeight="80vh">
 			<GalleryTopBar />
-			<GalleryMiddleBar entries={arrayChildren} />
-			<GalleryBottomBar entries={arrayChildren} />
+			<GalleryMiddleBar entries={mappedEntries} />
+			<GalleryBottomBar entries={mappedEntries} />
 		</GalleryContainer>
 	)
 }

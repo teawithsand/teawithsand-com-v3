@@ -47,14 +47,14 @@ const InnerGalleryMiddleBar = styled.div.attrs(
 	height: 100%; // required, since we are are using JS to measure this element's dimensions.
 `
 
-const GalleryMiddleBarItem = (props: { entry: GalleryEntry }) => {
+const GalleryMiddleBarItem = (props: { entry: ReactNode }) => {
 	const { entry } = props
 	return (
 		<GalleryMiddleBarItemContainer>{entry}</GalleryMiddleBarItemContainer>
 	)
 }
 
-const GalleryMiddleBar = (props: { entries: GalleryEntry[] }) => {
+const GalleryMiddleBar = (props: { entries: ReactNode[] }) => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 
