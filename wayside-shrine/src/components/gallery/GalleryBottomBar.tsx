@@ -24,12 +24,18 @@ const InnerGalleryBottomBar = styled.div.attrs(
 	gap: 0.8rem;
 
 	// Make items non selectable and prevent fancy stuff with touch-action: none
-	& {
+	& * {
 		user-select: none;
 		::selection {
 			background: transparent;
 		}
 		touch-action: none;
+
+		-webkit-user-drag: none;
+		-khtml-user-drag: none;
+		-moz-user-drag: none;
+		-o-user-drag: none;
+		user-drag: none;
 	}
 
 	// Make all scrollbar pretty
