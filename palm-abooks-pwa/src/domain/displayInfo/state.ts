@@ -1,23 +1,21 @@
-import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
-import { MPlayerSource } from "@app/domain/bfr/source"
-import { DisplayInfoError } from "@app/domain/displayInfo/error"
-import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist"
-import { WTPSource } from "@app/domain/wtp/source"
-import { WTPError } from "@app/domain/wtp/WTPError"
+import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist";
+import { MPlayerSource } from "@app/domain/bfr/source";
+import { DisplayInfoError } from "@app/domain/displayInfo/error";
+import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist";
+import { WTPSource } from "@app/domain/wtp/source";
+import { WTPError } from "@app/domain/wtp/WTPError";
 
-import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager"
-import { BFRPlaylist } from "tws-common/player/bfr/state"
-import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import { NamedSyncRoot } from "tws-common/redux/sync/root"
 
-export const displayInfoBFRPlaylistSyncRootName = claimId(
+
+import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager";
+import { BFRPlaylist } from "tws-common/player/bfr/state";
+import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata";
+import { NamedSyncRoot } from "tws-common/redux/sync/root";
+
+
+export const displayInfoPlaylistSyncRootName = claimId(
 	NS_SYNC_ROOT,
 	"palm-abooks-pwa/display-info/bfr-playlist",
-)
-
-export const displayInfoWTPPlaylistSyncRootName = claimId(
-	NS_SYNC_ROOT,
-	"palm-abooks-pwa/display-info/wtp-playlist",
 )
 
 export const displayInfoWTPErrorSyncRootName = claimId
@@ -64,25 +62,49 @@ export type DisplayInfoStateState =
 	| {
 			type: "no-sources"
 	  }
-	| {
-			type: "loading"
+	| ((
+			| {
+					type: "loading"
+			  }
+			| {
+					type: "loaded"
+					info: DisplayInfo // in loaded state full info is requried
+			  }
+			| {
+					type: "error"
+					error: DisplayInfoError // TODO(teawithsand): type error to provide user with useful feedback
+			  }
+	  ) & {
 			info: NullablePartial<DisplayInfo>
+	  })
+
+export type DisplayInfoPlaylist =
+	| {
+			type: "bfr"
+			playlist: BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource>
 	  }
 	| {
-			type: "loaded"
-			info: DisplayInfo
+			type: "wtp"
+			wtp: WTPPlaylistMetadata
+			error: WTPError | null
 	  }
-	| {
-			type: "error"
-			error: DisplayInfoError // TODO(teawithsand): type error to provide user with useful feedback
-	  }
+
+export type DisplayInfoStateResolved = {
+	type: "resolved",
+	// TODO(teawithsand): any data here, like ABook metadata or sth
+} | {
+	type: "error",
+	error: DisplayInfoError
+}
 
 export type DisplayInfoState = {
 	sync: {
 		// TODO(teawithsand): request metadata bag here from BFR
-		bfrPlaylist: BFRPlaylist<MPlayerPlaylistMetadata, MPlayerSource> | null
-		wtpPlaylistMetadata: WTPPlaylistMetadata | null
-		error: WTPError | null
+		playlist: NamedSyncRoot<
+			DisplayInfoPlaylist | null,
+			typeof displayInfoPlaylistSyncRootName
+		>
 	}
+	resolved: DisplayInfoStateResolved | null
 	state: DisplayInfoStateState
 }

@@ -1,10 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit"
 
-import {
-	displayInfoSetBFRPlaylist,
-	displayInfoSetWTPError,
-	displayInfoSetWTPPlaylistMetadata,
-} from "@app/domain/displayInfo/actions"
+import { displayInfoSetStateResolved } from "@app/domain/displayInfo/actions"
 import { State } from "@app/domain/redux/store"
 import {
 	whatToPlayPlaylistSyncRootName,
@@ -40,23 +36,30 @@ export const whatToPlayStateSynchronizer = makeNamedSyncRootSynchronizer(
 			}
 		},
 		(s: State) => {
-			const data = s.whatToPlayState.state.data
+			const { data, id } = s.whatToPlayState.state
+			/*
 			if (data.type === "loading" || data.type === "no-sources") {
 				return [
-					displayInfoSetBFRPlaylist(null),
+					displayInfoSetStateResolved({
+						data,
+						id,
+					}),
 					// displayInfoSetWTPError(null), // setting playlist implies unsetting error
 				]
 			} else if (data.type === "error") {
 				return [displayInfoSetWTPError(data.error)]
 			} else if (data.type === "loaded") {
-				return [displayInfoSetBFRPlaylist(data.bfrPlaylist)]
+				return [displayInfoSetStateResolved(data.bfrPlaylist)]
 			} else {
 				throw new Error("unreachable code")
 			}
+			*/
+			throw new Error("NIY")
 		},
 	),
 )
 
+/*
 export const whatToPlayPlaylistSynchronizer = makeNamedSyncRootSynchronizer(
 	whatToPlayPlaylistSyncRootName,
 	(s: State) => s.whatToPlayState.config.playlist,
@@ -65,3 +68,4 @@ export const whatToPlayPlaylistSynchronizer = makeNamedSyncRootSynchronizer(
 		return [displayInfoSetWTPPlaylistMetadata(data)]
 	}),
 )
+*/
