@@ -9,7 +9,6 @@ const GalleryPage = () => {
 			<main>
 				<Gallery>
 					<StaticImage
-						key={0}
 						src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Wikipe-tan_in_Different_Anime_Styles.png/1024px-Wikipe-tan_in_Different_Anime_Styles.png"
 						alt="Some anime stuff"
 						placeholder="blurred"
@@ -17,8 +16,7 @@ const GalleryPage = () => {
 						objectFit="contain"
 					/>
 					<StaticImage
-						key={1}
-						src="https://placekitten.com/200/200"
+						src="https://placekitten.com/3000/3000"
 						alt="A kitten"
 						layout="constrained"
 						objectFit="contain"

@@ -1,4 +1,6 @@
-import React, { ReactNode } from "react"
+import { GalleryBottomBar } from "@app/components/gallery/GalleryBottomBar"
+import { GalleryMiddleBar } from "@app/components/gallery/GalleryMiddleBar"
+import React, { ReactNode, useMemo } from "react"
 import { useState } from "react"
 import { useRef } from "react"
 import { useEffect } from "react"
@@ -6,58 +8,38 @@ import styled from "styled-components"
 
 export type GalleryEntry = ReactNode
 
-const GalleryContainer = styled.div`
+const GalleryContainer = styled.div.attrs(
+	(props: { $galleryHeight: string }) => ({
+		style: {
+			height: props.$galleryHeight,
+		},
+	}),
+)`
 	display: grid;
 	grid-template-columns: auto;
-	grid-template-rows: minmax(min-content, 0fr) minmax(0, 1fr) minmax(
-			min-content,
-			0fr
-		);
+	// Note: middle row(the one with elements) has to have height defined independently of it's content
+	// so JS measuring code works
+	grid-template-rows: minmax(min-content, 0fr) minmax(0, 1fr) 100px;
 
-	// gallery requires some fixed height. I couldn't make it work with max-height.
-	// max-height works on element presentation though
-	height: 80vh;
+	background-color: black;
+	border-radius: 5px;
+	color: white;
+	padding: 5px;
 
-	border: 3px solid purple;
-`
+	// Bunch of global styles
+	// to fix gatsby stuff
+	& .gatsby-image-wrapper [data-main-image] {
+		will-change: initial !important;
+	}
 
-const GalleryItemsContainer = styled.div`
-	grid-row: 2;
-	grid-column: 1;
-
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: 1fr;
-
-	box-sizing: border-box;
-	padding: 0; // required, since we are are using JS to measure this element's dimensions.
-	// margin: 0; // margins are fine though
-
-	width: 100%; // required, since we are are using JS to measure this element's dimensions.
-	height: 100%; // required, since we are are using JS to measure this element's dimensions.
-
-	border: 3px solid blue;
-`
-
-// TODO(teawithsand): optimize it so it does not has to generate classes for each screen size
-//  that being said, it's ok to leave it as is, since users do not resize their screens that often(I guess...)
-const GalleryItemContainer = styled.div`
-	grid-row: 1;
-	grid-column: 1;
-
-	margin: auto;
-	padding: 0; // this is required for proper usage of $itemHeight
-	box-sizing: border-box;
-
-	max-height: 100%;
-	max-width: 100%;
-
-    overflow: hidden; // just for safety, in case something goes wrong or image decides to ignore our max height
-
-	& > * {
-		box-sizing: border-box;
-		max-height: ${({ $itemHeight }) =>
-			$itemHeight ? `${$itemHeight}px` : "0px"};
+	// Some special stuff for better gatsby images
+	& img,
+	& *.gatsby-image-wrapper > img,
+	& *.gatsby-image-wrapper > picture > img {
+		image-rendering: auto;
+		image-rendering: -webkit-optimize-contrast;
+		image-rendering: smooth;
+		image-rendering: high-quality;
 	}
 `
 
@@ -65,61 +47,75 @@ const GalleryTopBar = styled.div`
 	grid-row: 1;
 	grid-column: 1;
 	text-align: center;
-`
 
-const GalleryBottomBar = styled.div`
-	grid-row: 3;
-	grid-column: 1;
-	text-align: center;
+	padding-top: 0.8rem;
+	padding-bottom: 0.8rem;
 `
-
-const GalleryItem = (props: {
-	entry: GalleryEntry
-	height?: number | null
-}) => {
-	const { entry, height } = props
-	return (
-		<GalleryItemContainer $itemHeight={height ?? null}>
-			{entry}
-		</GalleryItemContainer>
-	)
-}
 
 const Gallery = (props: { children: GalleryEntry[] | GalleryEntry }) => {
 	const { children } = props
 
-	const itemsContainerRef = useRef<HTMLDivElement | null>(null)
-	const [galleryItemsContainerDimensions, setGalleryItemsContainerDimensions] = useState<[number, number] | null>(null)
+	const middleBarRef = useRef<HTMLDivElement | null>(null)
+	const [galleryMiddleBarDimensions, setGalleryMiddleBarDimensions] =
+		useState<[number, number] | null>(null)
 	useEffect(() => {
-		const { current } = itemsContainerRef
+		const { current } = middleBarRef
 		if (current) {
 			const observer = new ResizeObserver(() => {
 				const width = current.clientWidth
 				const height = current.clientHeight
-				setGalleryItemsContainerDimensions([width, height])
+				setGalleryMiddleBarDimensions([width, height])
 			})
 			observer.observe(current)
 			return () => {
 				observer.unobserve(current)
 			}
 		}
-	}, [itemsContainerRef, itemsContainerRef.current])
+	}, [middleBarRef, middleBarRef.current])
+
+	const bottomBarRef = useRef<HTMLDivElement | null>(null)
+	const [galleryBottomBarDimensions, setGalleryBottomBarDimensions] =
+		useState<[number, number] | null>(null)
+	useEffect(() => {
+		const { current } = bottomBarRef
+		if (current) {
+			const observer = new ResizeObserver(() => {
+				const width = current.clientWidth
+				const height = current.clientHeight
+				setGalleryBottomBarDimensions([width, height])
+			})
+			observer.observe(current)
+			return () => {
+				observer.unobserve(current)
+			}
+		}
+	}, [bottomBarRef, bottomBarRef.current])
+
+	const arrayChildren = useMemo(() => {
+		return children instanceof Array ? children : [children]
+	}, [children])
 
 	return (
-		<GalleryContainer>
+		<GalleryContainer $galleryHeight="80vh">
 			<GalleryTopBar>Hell world! I am top bar!</GalleryTopBar>
-			<GalleryItemsContainer ref={itemsContainerRef}>
-				{(children instanceof Array ? children : [children]).map(
-					(v, i) => (
-						<GalleryItem
-							entry={v}
-							key={i}
-							height={galleryItemsContainerDimensions ? galleryItemsContainerDimensions[1] : null}
-						/>
-					),
-				)}
-			</GalleryItemsContainer>
-            <GalleryBottomBar >I am gallery bottom bar</GalleryBottomBar>
+			<GalleryMiddleBar
+				ref={middleBarRef}
+				itemHeight={
+					galleryMiddleBarDimensions
+						? galleryMiddleBarDimensions[1]
+						: null
+				}
+				entries={arrayChildren}
+			/>
+			<GalleryBottomBar
+				ref={bottomBarRef}
+				itemHeight={
+					galleryBottomBarDimensions
+						? galleryBottomBarDimensions[1]
+						: null
+				}
+				entries={arrayChildren}
+			/>
 		</GalleryContainer>
 	)
 }
