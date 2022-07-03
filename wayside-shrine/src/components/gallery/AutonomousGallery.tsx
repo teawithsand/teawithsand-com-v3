@@ -7,10 +7,11 @@ import React, { useState } from "react"
 
 export type AutonomousGalleryProps = {
 	entries: GalleryEntry[]
+	enableKeyboardControls?: boolean
 }
 
 const AutonomousGallery = (props: AutonomousGalleryProps) => {
-	const { entries } = props
+	const { entries, enableKeyboardControls } = props
 
 	const [mode, setMode] = useState<GalleryMode>("normal")
 	const [size, setSize] = useState<GallerySize>("large")
@@ -26,6 +27,9 @@ const AutonomousGallery = (props: AutonomousGalleryProps) => {
 			currentEntryIndex={effectiveElementIndex}
 			mode={mode}
 			size={size}
+			enableKeyboardControls={
+				(enableKeyboardControls ?? false) || size === "fullscreen"
+			}
 			onCurrentEntryTap={() => {
 				if (size === "large") {
 					setSize("fullscreen")

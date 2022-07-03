@@ -69,6 +69,8 @@ export type GalleryProps = {
 	currentEntryIndex: number
 	size: GallerySize
 	mode: GalleryMode
+	enableKeyboardControls: boolean
+
 	onFullscreenExit: () => void
 	onCurrentEntryTap: () => void
 	onBottomEntryTap: (to: number) => void
@@ -89,6 +91,7 @@ const Gallery = (props: GalleryProps) => {
 		onSwipeBottom,
 		onCurrentEntryTap,
 		onFullscreenExit,
+		enableKeyboardControls,
 		size,
 		mode,
 	} = props
@@ -101,7 +104,7 @@ const Gallery = (props: GalleryProps) => {
 	const fsc = useFullscreen({
 		onExit: () => {
 			onFullscreenExit()
-		}
+		},
 	})
 
 	useEffect(() => {
@@ -121,6 +124,23 @@ const Gallery = (props: GalleryProps) => {
 			throw new Error("unreachable code")
 		}
 	}
+
+	useEffect(() => {
+		if (enableKeyboardControls) {
+			const listener = (e: any) => {
+				if (e.key === "ArrowRight") {
+					onSwipeRight()
+				} else if (e.key === "ArrowLeft") {
+					onSwipeLeft()
+				}
+			}
+			document.addEventListener("keydown", listener)
+
+			return () => {
+				document.removeEventListener("keydown", listener)
+			}
+		}
+	}, [enableKeyboardControls, onSwipeRight, onSwipeLeft])
 
 	return (
 		<GalleryContainer
