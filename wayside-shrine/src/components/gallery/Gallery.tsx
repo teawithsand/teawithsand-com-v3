@@ -15,7 +15,7 @@ const GalleryContainer = styled.div.attrs(
 	grid-template-columns: auto;
 	// Note: middle row(the one with elements) has to have height defined independently of it's content
 	// so JS measuring code works
-	grid-template-rows: minmax(min-content, 0fr) minmax(0, 1fr) 100px;
+	grid-template-rows: minmax(min-content, 0fr) minmax(100px, 1fr) 100px;
 
 	background-color: black;
 	border-radius: 5px;
