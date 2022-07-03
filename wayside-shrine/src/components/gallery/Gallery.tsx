@@ -69,6 +69,7 @@ export type GalleryProps = {
 	currentEntryIndex: number
 	size: GallerySize
 	mode: GalleryMode
+	onFullscreenExit: () => void
 	onCurrentEntryTap: () => void
 	onBottomEntryTap: (to: number) => void
 	onSwipeRight: () => void
@@ -87,6 +88,7 @@ const Gallery = (props: GalleryProps) => {
 		onSwipeTop,
 		onSwipeBottom,
 		onCurrentEntryTap,
+		onFullscreenExit,
 		size,
 		mode,
 	} = props
@@ -96,7 +98,11 @@ const Gallery = (props: GalleryProps) => {
 		[entries],
 	)
 
-	const fsc = useFullscreen({})
+	const fsc = useFullscreen({
+		onExit: () => {
+			onFullscreenExit()
+		}
+	})
 
 	useEffect(() => {
 		if (size === "fullscreen") {

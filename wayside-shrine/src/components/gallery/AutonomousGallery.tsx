@@ -36,6 +36,10 @@ const AutonomousGallery = (props: AutonomousGalleryProps) => {
 					setMode("normal")
 				}
 			}}
+			onFullscreenExit={() => {
+				setSize("large")
+				setMode("normal")
+			}}
 			onSwipeRight={() => {
 				setElementIndex((effectiveElementIndex + 1) % entries.length)
 			}}
