@@ -15,6 +15,8 @@ const GalleryPage = () => {
 					onNavigateToPrevElement={() =>
 						setI((i - 1 >= 0 ? i - 1 : 1) % 2)
 					}
+					size="large"
+					mode="normal"
 					entries={[
 						{
 							mainDisplay: (

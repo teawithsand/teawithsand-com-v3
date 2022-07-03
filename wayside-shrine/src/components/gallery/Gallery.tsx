@@ -1,13 +1,29 @@
 import GalleryBottomBar from "@app/components/gallery/GalleryBottomBar"
 import GalleryMiddleBar from "@app/components/gallery/GalleryMiddleBar"
 import GalleryTopBar from "@app/components/gallery/GalleryTopBar"
-import React, { ReactNode, useMemo } from "react"
+import React, { ReactNode, useEffect, useMemo } from "react"
 import styled from "styled-components"
+import { useFullscreen } from "tws-common/react/hook/useFullscreen"
 
 const GalleryContainer = styled.div.attrs(
-	(props: { $galleryHeight: string }) => ({
+	(props: {
+		$galleryHeight: string
+		$fullscreen: boolean
+		$isMiddleOnly: boolean
+	}) => ({
 		style: {
 			height: props.$galleryHeight,
+			...(props.$fullscreen
+				? {
+						position: "fixed",
+						zIndex: 1000,
+						width: "100vw",
+						height: "100vh",
+						top: 0,
+						left: 0,
+						borderRadius: 0, // otherwise user is able to see background of body in corners
+				  }
+				: {}),
 		},
 	}),
 )`
@@ -15,7 +31,10 @@ const GalleryContainer = styled.div.attrs(
 	grid-template-columns: auto;
 	// Note: middle row(the one with elements) has to have height defined independently of it's content
 	// so JS measuring code works
-	grid-template-rows: minmax(min-content, 0fr) minmax(100px, 1fr) 100px;
+	grid-template-rows: ${({ $isMiddleOnly }: { $isMiddleOnly: boolean }) =>
+		$isMiddleOnly
+			? "minmax(min-content, 0fr)"
+			: "minmax(min-content, 0fr) minmax(100px, 1fr) 100px"};
 
 	background-color: black;
 	border-radius: 5px;
@@ -38,6 +57,9 @@ const GalleryContainer = styled.div.attrs(
 	}
 `
 
+export type GallerySize = "large" | "fullscreen"
+export type GalleryMode = "normal" | "image-only"
+
 export type GalleryEntry = {
 	mainDisplay: ReactNode
 }
@@ -45,6 +67,8 @@ export type GalleryEntry = {
 export type GalleryProps = {
 	entries: GalleryEntry[]
 	currentItemIndex: number
+	size: GallerySize
+	mode: GalleryMode
 	onNavigateToElement: (to: number) => void
 	onNavigateToNextElement: () => void
 	onNavigateToPrevElement: () => void
@@ -57,15 +81,43 @@ const Gallery = (props: GalleryProps) => {
 		onNavigateToElement,
 		onNavigateToNextElement,
 		onNavigateToPrevElement,
+		size,
+		mode,
 	} = props
 
 	const mappedEntries = useMemo(() => {
 		return entries.map(e => e.mainDisplay)
 	}, [entries])
 
+	const fsc = useFullscreen({})
+
+	useEffect(() => {
+		if (size === "fullscreen") {
+			fsc.enter()
+		} else {
+			fsc.exit()
+		}
+	}, [size])
+
+	const getHeight = () => {
+		if (size === "large") {
+			return "80vh"
+		} else if (size === "fullscreen") {
+			return "100vh"
+		} else {
+			throw new Error("unreachable code")
+		}
+	}
+
 	return (
-		<GalleryContainer {...({ $galleryHeight: "80vh" } as any)}>
-			<GalleryTopBar />
+		<GalleryContainer
+			{...({
+				$galleryHeight: getHeight(),
+				$fullscreen: fsc.isFullscreen,
+				$isMiddleOnly: mode !== "normal",
+			} as any)}
+		>
+			{mode === "normal" ? <GalleryTopBar /> : null}
 			<GalleryMiddleBar
 				entries={mappedEntries}
 				currentItemIndex={currentItemIndex}
@@ -77,10 +129,12 @@ const Gallery = (props: GalleryProps) => {
 					}
 				}}
 			/>
-			<GalleryBottomBar
-				entries={mappedEntries}
-				onElementClick={onNavigateToElement}
-			/>
+			{mode === "normal" ? (
+				<GalleryBottomBar
+					entries={mappedEntries}
+					onElementClick={onNavigateToElement}
+				/>
+			) : null}
 		</GalleryContainer>
 	)
 }

@@ -2,9 +2,16 @@ import React, { ReactNode, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
 const InnerGalleryBottomBar = styled.div.attrs(
-	({ $itemHeight }: { $itemHeight: number | null }) => ({
+	({
+		$visible,
+		$itemHeight,
+	}: {
+		$itemHeight: number | null
+		$visible: boolean
+	}) => ({
 		style: {
 			"--gallery-item-height": $itemHeight ? `${$itemHeight}px` : "0px",
+			...(!$visible ? { display: "none" } : {}),
 		},
 	}),
 )`
@@ -106,8 +113,9 @@ const GalleryBottomBarItem = (props: {
 const GalleryBottomBar = (props: {
 	entries: ReactNode[]
 	onElementClick?: (index: number) => void
+	visible?: boolean // defaults to true
 }) => {
-	const { entries, onElementClick } = props
+	const { entries, onElementClick, visible } = props
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 
@@ -152,7 +160,10 @@ const GalleryBottomBar = (props: {
 	return (
 		<InnerGalleryBottomBar
 			ref={ref}
-			{...({ $itemHeight: dimensions ? dimensions[1] : null } as any)}
+			{...({
+				$itemHeight: dimensions ? dimensions[1] : null,
+				$visible: visible ?? true,
+			} as any)}
 		>
 			{entries.map((v, i) => (
 				<GalleryBottomBarItem

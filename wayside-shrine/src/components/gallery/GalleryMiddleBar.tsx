@@ -48,9 +48,16 @@ const GalleryMiddleBarItemContainer = styled.div`
 `
 
 const InnerGalleryMiddleBar = styled.div.attrs(
-	({ $itemHeight }: { $itemHeight: number | null }) => ({
+	({
+		$itemHeight,
+		$visible,
+	}: {
+		$itemHeight: number | null
+		$visible: boolean
+	}) => ({
 		style: {
 			"--gallery-item-height": $itemHeight ? `${$itemHeight}px` : "0px",
+			...(!$visible ? { display: "none" } : {}),
 		},
 	}),
 )`
@@ -98,10 +105,12 @@ const GalleryMiddleBarItem = (props: {
 const GalleryMiddleBar = (props: {
 	entries: ReactNode[]
 	currentItemIndex: number
+
+	visible?: boolean // defaults to true
 	onSwipe?: (direction: "left" | "right" | "top" | "bottom") => void
 	onTap?: () => void
 }) => {
-	const { currentItemIndex, entries, onSwipe, onTap } = props
+	const { currentItemIndex, entries, onSwipe, onTap, visible } = props
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 
@@ -166,6 +175,7 @@ const GalleryMiddleBar = (props: {
 			ref={ref as any}
 			{...({
 				$itemHeight: dimensions ? dimensions[1] : null,
+				$visible: visible ?? true,
 			} as any)}
 			{...bind()}
 		>
