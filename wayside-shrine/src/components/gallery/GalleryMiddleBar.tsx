@@ -21,8 +21,6 @@ const GalleryMiddleBarItemContainer = styled.div`
 
 	text-align: center;
 
-	overflow: hidden; // just for safety, in case something goes wrong or image decides to ignore our max height
-
 	& > * {
 		box-sizing: border-box;
 		max-height: var(--gallery-item-height);
@@ -70,6 +68,10 @@ const InnerGalleryMiddleBar = styled.div.attrs(
 
 	touch-action: none;
 	cursor: move;
+
+	// apparently fixes bug in firefox, which causes resize listener not to be triggered
+	// when we exit fullscreen, if this is not set
+	overflow: hidden; 
 
 	box-sizing: border-box;
 	padding: 0; // required, since we are are using JS to measure this element's dimensions.
@@ -120,6 +122,7 @@ const GalleryMiddleBar = (props: {
 			const observer = new ResizeObserver(() => {
 				const width = current.clientWidth
 				const height = current.clientHeight
+				console.error("Dimensions changed", [width, height])
 				setDimensions([width, height])
 			})
 			observer.observe(current)

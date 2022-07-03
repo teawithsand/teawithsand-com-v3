@@ -1,22 +1,13 @@
-import Gallery from "@app/components/gallery/Gallery"
+import AutonomousGallery from "@app/components/gallery/AutonomousGallery"
 import PageContainer from "@app/components/layout/PageContainer"
 import { StaticImage } from "gatsby-plugin-image"
-import React, { useState } from "react"
+import React from "react"
 
 const GalleryPage = () => {
-	const [i, setI] = useState(0)
 	return (
 		<PageContainer>
 			<main>
-				<Gallery
-					currentItemIndex={i}
-					onNavigateToElement={i => setI(i)}
-					onNavigateToNextElement={() => setI((i + 1) % 2)}
-					onNavigateToPrevElement={() =>
-						setI((i - 1 >= 0 ? i - 1 : 1) % 2)
-					}
-					size="large"
-					mode="normal"
+				<AutonomousGallery
 					entries={[
 						{
 							mainDisplay: (
@@ -33,6 +24,16 @@ const GalleryPage = () => {
 							mainDisplay: (
 								<StaticImage
 									src="https://placekitten.com/3000/3000"
+									alt="A kitten"
+									layout="constrained"
+									objectFit="contain"
+								/>
+							),
+						},
+						{
+							mainDisplay: (
+								<StaticImage
+									src="https://i.chzbgr.com/full/9228308480/h8A467A63/boy-both-boy-souid-h-18-yearsold-anime-pet-historycom-a-blood-cell-boy-human-teacher-14-years-old"
 									alt="A kitten"
 									layout="constrained"
 									objectFit="contain"

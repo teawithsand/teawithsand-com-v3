@@ -69,20 +69,24 @@ export type GalleryProps = {
 	currentItemIndex: number
 	size: GallerySize
 	mode: GalleryMode
-	onElementTap: () => void
-	onNavigateToElement: (to: number) => void
-	onNavigateToNextElement: () => void
-	onNavigateToPrevElement: () => void
+	onCurrentEntryTap: () => void
+	onBottomEntryTap: (to: number) => void
+	onSwipeRight: () => void
+	onSwipeLeft: () => void
+	onSwipeTop: () => void
+	onSwipeBottom: () => void
 }
 
 const Gallery = (props: GalleryProps) => {
 	const {
 		entries,
 		currentItemIndex,
-		onNavigateToElement,
-		onNavigateToNextElement,
-		onNavigateToPrevElement,
-		onElementTap,
+		onBottomEntryTap,
+		onSwipeRight,
+		onSwipeLeft,
+		onSwipeTop,
+		onSwipeBottom,
+		onCurrentEntryTap,
 		size,
 		mode,
 	} = props
@@ -125,19 +129,23 @@ const Gallery = (props: GalleryProps) => {
 			<GalleryMiddleBar
 				entries={mappedEntries}
 				currentItemIndex={currentItemIndex}
-				onTap={onElementTap}
+				onTap={onCurrentEntryTap}
 				onSwipe={direction => {
 					if (direction === "left") {
-						onNavigateToPrevElement()
+						onSwipeLeft()
 					} else if (direction === "right") {
-						onNavigateToNextElement()
+						onSwipeRight()
+					} else if (direction === "top") {
+						onSwipeTop()
+					} else if (direction === "bottom") {
+						onSwipeBottom()
 					}
 				}}
 			/>
 			{mode === "normal" ? (
 				<GalleryBottomBar
 					entries={mappedEntries}
-					onElementClick={onNavigateToElement}
+					onElementClick={onBottomEntryTap}
 				/>
 			) : null}
 		</GalleryContainer>
