@@ -78,15 +78,20 @@ const InnerGalleryBottomBar = styled.div.attrs(
 // TODO(teawithsand): optimize it so it does not has to generate classes for each screen size
 //  that being said, it's ok to leave it as is, since users do not resize their screens that often(I guess...)
 const GalleryBottomBarItemContainer = styled.div.attrs(
-	({ $clickable }: { $clickable: boolean }) => ({
+	({ $clickable, $active }: { $clickable: boolean; $active: boolean }) => ({
 		style: {
 			cursor: $clickable ? "pointer" : "initial",
+			...($active
+				? {
+						boxShadow: "0px 0px 12px 3px rgba(255, 255, 255, 1)",
+				  }
+				: {}),
 		},
 	}),
 )`
 	margin: auto;
 	padding: 0; // this is required for proper usage of $itemHeight
-	box-sizing: border-box;
+	box-sizing: content-box;
 
 	max-height: 100%;
 	max-width: 100%;
@@ -113,13 +118,13 @@ const GalleryBottomBarItem = React.forwardRef(
 		},
 		ref,
 	) => {
-		const { entry, onClick, index } = props
+		const { entry, onClick, index, active } = props
 		return (
 			<GalleryBottomBarItemContainer
 				data-index={index}
 				ref={ref}
 				onClick={onClick}
-				{...({ $clickable: !!onClick } as any)}
+				{...({ $clickable: !!onClick, $active: active } as any)}
 			>
 				{entry}
 			</GalleryBottomBarItemContainer>
