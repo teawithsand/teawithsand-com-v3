@@ -1,5 +1,5 @@
 import { GalleryEntry } from "@app/components/gallery/Gallery"
-import React from "react"
+import React, { useRef, useState, useEffect } from "react"
 import styled from "styled-components"
 
 const InnerGalleryBottomBar = styled.div.attrs(
@@ -57,26 +57,32 @@ const GalleryBottomBarItem = (props: { entry: GalleryEntry }) => {
 	)
 }
 
-// eslint-disable-next-line react/display-name
-export const GalleryBottomBar = React.forwardRef(
-	(
-		props: {
-			entries: GalleryEntry[]
-			itemHeight: number | null
-		},
-		ref,
-	) => {
-		return (
-			<InnerGalleryBottomBar
-				// these lines are ok
-				// despite the fact that any cast is needed
-				ref={ref as any}
-				$itemHeight={props.itemHeight}
-			>
-				{props.entries.map((v, i) => (
-					<GalleryBottomBarItem entry={v} key={i} />
-				))}
-			</InnerGalleryBottomBar>
-		)
-	},
-)
+export default (props: { entries: GalleryEntry[] }) => {
+	const ref = useRef<HTMLDivElement | null>(null)
+	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
+	useEffect(() => {
+		const { current } = ref
+		if (current) {
+			const observer = new ResizeObserver(() => {
+				const width = current.clientWidth
+				const height = current.clientHeight
+				setDimensions([width, height])
+			})
+			observer.observe(current)
+			return () => {
+				observer.unobserve(current)
+			}
+		}
+	}, [ref, ref.current])
+
+	return (
+		<InnerGalleryBottomBar
+			ref={ref}
+			$itemHeight={dimensions ? dimensions[1] : null}
+		>
+			{props.entries.map((v, i) => (
+				<GalleryBottomBarItem entry={v} key={i} />
+			))}
+		</InnerGalleryBottomBar>
+	)
+}

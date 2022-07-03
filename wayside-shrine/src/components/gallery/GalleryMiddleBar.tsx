@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import React from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { GalleryEntry } from "@app/components/gallery/Gallery"
 
 // TODO(teawithsand): optimize it so it does not has to generate classes for each screen size
@@ -53,26 +53,35 @@ const GalleryMiddleBarItem = (props: { entry: GalleryEntry }) => {
 		<GalleryMiddleBarItemContainer>{entry}</GalleryMiddleBarItemContainer>
 	)
 }
-// eslint-disable-next-line react/display-name
-export const GalleryMiddleBar = React.forwardRef(
-	(
-		props: {
-			entries: GalleryEntry[]
-			itemHeight: number | null
-		},
-		ref,
-	) => {
-		return (
-			<InnerGalleryMiddleBar
-				// these lines are ok
-				// despite the fact that any cast is needed
-				ref={ref as any}
-				$itemHeight={props.itemHeight}
-			>
-				{props.entries.map((v, i) => (
-					<GalleryMiddleBarItem entry={v} key={i} />
-				))}
-			</InnerGalleryMiddleBar>
-		)
-	},
-)
+
+export default (props: { entries: GalleryEntry[] }) => {
+	const ref = useRef<HTMLDivElement | null>(null)
+	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
+	useEffect(() => {
+		const { current } = ref
+		if (current) {
+			const observer = new ResizeObserver(() => {
+				const width = current.clientWidth
+				const height = current.clientHeight
+				setDimensions([width, height])
+			})
+			observer.observe(current)
+			return () => {
+				observer.unobserve(current)
+			}
+		}
+	}, [ref, ref.current])
+
+	return (
+		<InnerGalleryMiddleBar
+			// these lines are ok
+			// despite the fact that any cast is needed
+			ref={ref as any}
+			$itemHeight={dimensions ? dimensions[1] : null}
+		>
+			{props.entries.map((v, i) => (
+				<GalleryMiddleBarItem entry={v} key={i} />
+			))}
+		</InnerGalleryMiddleBar>
+	)
+}

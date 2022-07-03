@@ -1,9 +1,7 @@
-import { GalleryBottomBar } from "@app/components/gallery/GalleryBottomBar"
-import { GalleryMiddleBar } from "@app/components/gallery/GalleryMiddleBar"
+import GalleryBottomBar from "@app/components/gallery/GalleryBottomBar"
+import GalleryMiddleBar from "@app/components/gallery/GalleryMiddleBar"
+import GalleryTopBar from "@app/components/gallery/GalleryTopBar"
 import React, { ReactNode, useMemo } from "react"
-import { useState } from "react"
-import { useRef } from "react"
-import { useEffect } from "react"
 import styled from "styled-components"
 
 export type GalleryEntry = ReactNode
@@ -43,53 +41,8 @@ const GalleryContainer = styled.div.attrs(
 	}
 `
 
-const GalleryTopBar = styled.div`
-	grid-row: 1;
-	grid-column: 1;
-	text-align: center;
-
-	padding-top: 0.8rem;
-	padding-bottom: 0.8rem;
-`
-
 const Gallery = (props: { children: GalleryEntry[] | GalleryEntry }) => {
 	const { children } = props
-
-	const middleBarRef = useRef<HTMLDivElement | null>(null)
-	const [galleryMiddleBarDimensions, setGalleryMiddleBarDimensions] =
-		useState<[number, number] | null>(null)
-	useEffect(() => {
-		const { current } = middleBarRef
-		if (current) {
-			const observer = new ResizeObserver(() => {
-				const width = current.clientWidth
-				const height = current.clientHeight
-				setGalleryMiddleBarDimensions([width, height])
-			})
-			observer.observe(current)
-			return () => {
-				observer.unobserve(current)
-			}
-		}
-	}, [middleBarRef, middleBarRef.current])
-
-	const bottomBarRef = useRef<HTMLDivElement | null>(null)
-	const [galleryBottomBarDimensions, setGalleryBottomBarDimensions] =
-		useState<[number, number] | null>(null)
-	useEffect(() => {
-		const { current } = bottomBarRef
-		if (current) {
-			const observer = new ResizeObserver(() => {
-				const width = current.clientWidth
-				const height = current.clientHeight
-				setGalleryBottomBarDimensions([width, height])
-			})
-			observer.observe(current)
-			return () => {
-				observer.unobserve(current)
-			}
-		}
-	}, [bottomBarRef, bottomBarRef.current])
 
 	const arrayChildren = useMemo(() => {
 		return children instanceof Array ? children : [children]
@@ -97,25 +50,9 @@ const Gallery = (props: { children: GalleryEntry[] | GalleryEntry }) => {
 
 	return (
 		<GalleryContainer $galleryHeight="80vh">
-			<GalleryTopBar>Hell world! I am top bar!</GalleryTopBar>
-			<GalleryMiddleBar
-				ref={middleBarRef}
-				itemHeight={
-					galleryMiddleBarDimensions
-						? galleryMiddleBarDimensions[1]
-						: null
-				}
-				entries={arrayChildren}
-			/>
-			<GalleryBottomBar
-				ref={bottomBarRef}
-				itemHeight={
-					galleryBottomBarDimensions
-						? galleryBottomBarDimensions[1]
-						: null
-				}
-				entries={arrayChildren}
-			/>
+			<GalleryTopBar />
+			<GalleryMiddleBar entries={arrayChildren} />
+			<GalleryBottomBar entries={arrayChildren} />
 		</GalleryContainer>
 	)
 }
