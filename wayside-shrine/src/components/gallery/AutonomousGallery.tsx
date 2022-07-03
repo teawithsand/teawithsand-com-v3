@@ -40,6 +40,14 @@ const AutonomousGallery = (props: AutonomousGalleryProps) => {
 					setMode("normal")
 				}
 			}}
+			onFullscreenToggleRequested={() => {
+				if (size !== "fullscreen") {
+					setSize("fullscreen")
+				} else {
+					setSize("large")
+					setMode("normal")
+				}
+			}}
 			onFullscreenExit={() => {
 				setSize("large")
 				setMode("normal")

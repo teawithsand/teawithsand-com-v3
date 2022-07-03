@@ -72,6 +72,7 @@ export type GalleryProps = {
 	enableKeyboardControls: boolean
 
 	onFullscreenExit: () => void
+	onFullscreenToggleRequested: () => void
 	onCurrentEntryTap: () => void
 	onBottomEntryTap: (to: number) => void
 	onSwipeRight: () => void
@@ -91,6 +92,7 @@ const Gallery = (props: GalleryProps) => {
 		onSwipeBottom,
 		onCurrentEntryTap,
 		onFullscreenExit,
+		onFullscreenToggleRequested,
 		enableKeyboardControls,
 		size,
 		mode,
@@ -150,7 +152,15 @@ const Gallery = (props: GalleryProps) => {
 				$isMiddleOnly: mode !== "normal",
 			} as any)}
 		>
-			{mode === "normal" ? <GalleryTopBar /> : null}
+			{mode === "normal" ? (
+				<GalleryTopBar
+					currentEntryIndex={currentEntryIndex}
+					entryCount={mappedEntries.length}
+					onToggleFullscreen={() => {
+						onFullscreenToggleRequested()
+					}}
+				/>
+			) : null}
 			<GalleryMiddleBar
 				entries={mappedEntries}
 				currentItemIndex={currentEntryIndex}
