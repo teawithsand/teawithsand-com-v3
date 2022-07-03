@@ -33,6 +33,9 @@ export const pageQuery = graphql`
 					title
 					date(formatString: "MMMM DD, YYYY")
 				}
+				fields {
+					path
+				}
 			}
 		}
 		next: file(id: { eq: $nextShrineId }) {
@@ -41,6 +44,9 @@ export const pageQuery = graphql`
 					tags
 					title
 					date(formatString: "MMMM DD, YYYY")
+				}
+				fields {
+					path
 				}
 			}
 		}
