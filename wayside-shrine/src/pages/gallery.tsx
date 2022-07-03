@@ -1,14 +1,20 @@
 import Gallery from "@app/components/gallery/Gallery"
 import PageContainer from "@app/components/layout/PageContainer"
 import { StaticImage } from "gatsby-plugin-image"
-import React from "react"
+import React, { useState } from "react"
 
 const GalleryPage = () => {
+	const [i, setI] = useState(0)
 	return (
 		<PageContainer>
 			<main>
 				<Gallery
-					currentItemIndex={0}
+					currentItemIndex={i}
+					onNavigateToElement={i => setI(i)}
+					onNavigateToNextElement={() => setI((i + 1) % 2)}
+					onNavigateToPrevElement={() =>
+						setI((i - 1 >= 0 ? i - 1 : 1) % 2)
+					}
 					entries={[
 						{
 							mainDisplay: (

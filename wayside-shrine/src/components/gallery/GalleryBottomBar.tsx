@@ -1,5 +1,4 @@
-import { GalleryEntry } from "@app/components/gallery/Gallery"
-import React, { useRef, useState, useEffect, ReactNode } from "react"
+import React, { ReactNode, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
 const InnerGalleryBottomBar = styled.div.attrs(
@@ -65,7 +64,13 @@ const InnerGalleryBottomBar = styled.div.attrs(
 
 // TODO(teawithsand): optimize it so it does not has to generate classes for each screen size
 //  that being said, it's ok to leave it as is, since users do not resize their screens that often(I guess...)
-const GalleryBottomBarItemContainer = styled.div`
+const GalleryBottomBarItemContainer = styled.div.attrs(
+	({ $clickable }: { $clickable: boolean }) => ({
+		style: {
+			cursor: $clickable ? "pointer" : "initial",
+		},
+	}),
+)`
 	margin: auto;
 	padding: 0; // this is required for proper usage of $itemHeight
 	box-sizing: border-box;
@@ -83,14 +88,26 @@ const GalleryBottomBarItemContainer = styled.div`
 	}
 `
 
-const GalleryBottomBarItem = (props: { entry: ReactNode }) => {
-	const { entry } = props
+const GalleryBottomBarItem = (props: {
+	entry: ReactNode
+	onClick?: () => void
+}) => {
+	const { entry, onClick } = props
 	return (
-		<GalleryBottomBarItemContainer>{entry}</GalleryBottomBarItemContainer>
+		<GalleryBottomBarItemContainer
+			onClick={onClick}
+			{...({ $clickable: !!onClick } as any)}
+		>
+			{entry}
+		</GalleryBottomBarItemContainer>
 	)
 }
 
-const GalleryBottomBar = (props: { entries: ReactNode[] }) => {
+const GalleryBottomBar = (props: {
+	entries: ReactNode[]
+	onElementClick?: (index: number) => void
+}) => {
+	const { entries, onElementClick } = props
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 
@@ -137,8 +154,14 @@ const GalleryBottomBar = (props: { entries: ReactNode[] }) => {
 			ref={ref}
 			{...({ $itemHeight: dimensions ? dimensions[1] : null } as any)}
 		>
-			{props.entries.map((v, i) => (
-				<GalleryBottomBarItem entry={v} key={i} />
+			{entries.map((v, i) => (
+				<GalleryBottomBarItem
+					entry={v}
+					key={i}
+					onClick={
+						onElementClick ? () => onElementClick(i) : undefined
+					}
+				/>
 			))}
 		</InnerGalleryBottomBar>
 	)

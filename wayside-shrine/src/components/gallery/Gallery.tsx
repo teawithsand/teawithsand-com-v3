@@ -45,17 +45,16 @@ export type GalleryEntry = {
 export type GalleryProps = {
 	entries: GalleryEntry[]
 	currentItemIndex: number
+	onNavigateToElement: (to: number) => void
+	onNavigateToNextElement: () => void
+	onNavigateToPrevElement: () => void
 }
 
 const Gallery = (props: GalleryProps) => {
-	const { entries, currentItemIndex } = props
+	const { entries, currentItemIndex, onNavigateToElement } = props
 
 	const mappedEntries = useMemo(() => {
-		let arr = entries.map(e => e.mainDisplay)
-		for (let i = 0; i < 5; i++) {
-			arr = [...arr, ...arr]
-		}
-		return arr
+		return entries.map(e => e.mainDisplay)
 	}, [entries])
 
 	return (
@@ -65,7 +64,10 @@ const Gallery = (props: GalleryProps) => {
 				entries={mappedEntries}
 				currentItemIndex={currentItemIndex}
 			/>
-			<GalleryBottomBar entries={mappedEntries} />
+			<GalleryBottomBar
+				entries={mappedEntries}
+				onElementClick={onNavigateToElement}
+			/>
 		</GalleryContainer>
 	)
 }
