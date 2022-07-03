@@ -44,10 +44,11 @@ export type GalleryEntry = {
 
 export type GalleryProps = {
 	entries: GalleryEntry[]
+	currentItemIndex: number
 }
 
 const Gallery = (props: GalleryProps) => {
-	const { entries } = props
+	const { entries, currentItemIndex } = props
 
 	const mappedEntries = useMemo(() => {
 		let arr = entries.map(e => e.mainDisplay)
@@ -58,9 +59,12 @@ const Gallery = (props: GalleryProps) => {
 	}, [entries])
 
 	return (
-		<GalleryContainer $galleryHeight="80vh">
+		<GalleryContainer {...({ $galleryHeight: "80vh" } as any)}>
 			<GalleryTopBar />
-			<GalleryMiddleBar entries={mappedEntries} />
+			<GalleryMiddleBar
+				entries={mappedEntries}
+				currentItemIndex={currentItemIndex}
+			/>
 			<GalleryBottomBar entries={mappedEntries} />
 		</GalleryContainer>
 	)

@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import React, { useRef, useState, useEffect } from "react"
+import React, { useRef, useState, useEffect, ReactNode } from "react"
 import { GalleryEntry } from "@app/components/gallery/Gallery"
 
 // TODO(teawithsand): optimize it so it does not has to generate classes for each screen size
@@ -47,14 +47,27 @@ const InnerGalleryMiddleBar = styled.div.attrs(
 	height: 100%; // required, since we are are using JS to measure this element's dimensions.
 `
 
-const GalleryMiddleBarItem = (props: { entry: ReactNode }) => {
-	const { entry } = props
+const GalleryMiddleBarItem = (props: {
+	entry: ReactNode
+	visible: boolean
+}) => {
+	const { entry, visible } = props
 	return (
-		<GalleryMiddleBarItemContainer>{entry}</GalleryMiddleBarItemContainer>
+		<GalleryMiddleBarItemContainer
+			style={{
+				visibility: visible ? "visible" : "hidden",
+			}}
+		>
+			{entry}
+		</GalleryMiddleBarItemContainer>
 	)
 }
 
-const GalleryMiddleBar = (props: { entries: ReactNode[] }) => {
+const GalleryMiddleBar = (props: {
+	entries: ReactNode[]
+	currentItemIndex: number
+}) => {
+	const { currentItemIndex, entries } = props
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 
@@ -78,10 +91,14 @@ const GalleryMiddleBar = (props: { entries: ReactNode[] }) => {
 			// these lines are ok
 			// despite the fact that any cast is needed
 			ref={ref as any}
-			$itemHeight={dimensions ? dimensions[1] : null}
+			{...({ $itemHeight: dimensions ? dimensions[1] : null } as any)}
 		>
-			{props.entries.map((v, i) => (
-				<GalleryMiddleBarItem entry={v} key={i} />
+			{entries.map((v, i) => (
+				<GalleryMiddleBarItem
+					entry={v}
+					key={i}
+					visible={i === currentItemIndex}
+				/>
 			))}
 		</InnerGalleryMiddleBar>
 	)

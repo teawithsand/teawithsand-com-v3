@@ -8,6 +8,7 @@ const GalleryPage = () => {
 		<PageContainer>
 			<main>
 				<Gallery
+					currentItemIndex={0}
 					entries={[
 						{
 							mainDisplay: (

@@ -1,5 +1,5 @@
 import { GalleryEntry } from "@app/components/gallery/Gallery"
-import React, { useRef, useState, useEffect } from "react"
+import React, { useRef, useState, useEffect, ReactNode } from "react"
 import styled from "styled-components"
 
 const InnerGalleryBottomBar = styled.div.attrs(
@@ -132,7 +132,7 @@ const GalleryBottomBar = (props: { entries: ReactNode[] }) => {
 	return (
 		<InnerGalleryBottomBar
 			ref={ref}
-			$itemHeight={dimensions ? dimensions[1] : null}
+			{...({ $itemHeight: dimensions ? dimensions[1] : null } as any)}
 		>
 			{props.entries.map((v, i) => (
 				<GalleryBottomBarItem entry={v} key={i} />
