@@ -20,8 +20,8 @@
 		"experimentalDecorators": true,
 		"downlevelIteration": true,
 		"strictPropertyInitialization": true,
-		"strictNullChecks": true
+		"strictNullChecks": true,
 	},
-	"include": ["src/**/*", "posts"],
+	"include": ["src/**/*"],
 	"exclude": ["node_modules"]
 }
