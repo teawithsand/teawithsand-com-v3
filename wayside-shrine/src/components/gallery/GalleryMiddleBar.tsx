@@ -1,6 +1,9 @@
+import React, { ReactNode, useEffect, useRef, useState } from "react"
+import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
-import React, { useRef, useState, useEffect, ReactNode } from "react"
-import { GalleryEntry } from "@app/components/gallery/Gallery"
+
+const transitionName = "dissolve"
+const transitionDuration = 300
 
 // TODO(teawithsand): optimize it so it does not has to generate classes for each screen size
 //  that being said, it's ok to leave it as is, since users do not resize their screens that often(I guess...)
@@ -22,6 +25,24 @@ const GalleryMiddleBarItemContainer = styled.div`
 	& > * {
 		box-sizing: border-box;
 		max-height: var(--gallery-item-height);
+	}
+
+	.${transitionName}-enter {
+		opacity: 0;
+	}
+
+	.${transitionName}-enter-active {
+		opacity: 1;
+		transition: opacity ${transitionDuration}ms;
+	}
+
+	.${transitionName}-exit {
+		opacity: 1;
+	}
+
+	.${transitionName}-exit-active {
+		opacity: 0;
+		transition: opacity ${transitionDuration}ms;
 	}
 `
 
@@ -55,10 +76,17 @@ const GalleryMiddleBarItem = (props: {
 	return (
 		<GalleryMiddleBarItemContainer
 			style={{
-				visibility: visible ? "visible" : "hidden",
+				zIndex: visible ? 1 : 0,
 			}}
 		>
-			{entry}
+			<CSSTransition
+				in={visible}
+				timeout={transitionDuration}
+				classNames={transitionName}
+				unmountOnExit
+			>
+				{() => entry}
+			</CSSTransition>
 		</GalleryMiddleBarItemContainer>
 	)
 }
