@@ -1,16 +1,16 @@
+import React, { useState } from "react"
 import Gallery, {
 	GalleryEntry,
 	GalleryMode,
 	GallerySize,
-} from "@app/components/gallery/Gallery"
-import React, { useState } from "react"
+} from "tws-common/react/components/gallery/Gallery"
 
 export type AutonomousGalleryProps = {
 	entries: GalleryEntry[]
 	enableKeyboardControls?: boolean
 }
 
-const AutonomousGallery = (props: AutonomousGalleryProps) => {
+export const AutonomousGallery = (props: AutonomousGalleryProps) => {
 	const { entries, enableKeyboardControls } = props
 
 	const [mode, setMode] = useState<GalleryMode>("normal")

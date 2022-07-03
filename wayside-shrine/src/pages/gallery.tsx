@@ -1,4 +1,4 @@
-import AutonomousGallery from "@app/components/gallery/AutonomousGallery"
+import { AutonomousGallery } from "tws-common/react/components/gallery"
 import PageContainer from "@app/components/layout/PageContainer"
 import { StaticImage } from "gatsby-plugin-image"
 import React from "react"

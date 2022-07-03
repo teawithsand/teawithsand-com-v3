@@ -1,8 +1,8 @@
-import GalleryBottomBar from "@app/components/gallery/GalleryBottomBar"
-import GalleryMiddleBar from "@app/components/gallery/GalleryMiddleBar"
-import GalleryTopBar from "@app/components/gallery/GalleryTopBar"
 import React, { ReactNode, useEffect, useMemo } from "react"
 import styled from "styled-components"
+import GalleryBottomBar from "tws-common/react/components/gallery/GalleryBottomBar"
+import GalleryMiddleBar from "tws-common/react/components/gallery/GalleryMiddleBar"
+import GalleryTopBar from "tws-common/react/components/gallery/GalleryTopBar"
 import { useFullscreen } from "tws-common/react/hook/useFullscreen"
 
 const GalleryContainer = styled.div.attrs(
@@ -81,7 +81,7 @@ export type GalleryProps = {
 	onSwipeBottom: () => void
 }
 
-const Gallery = (props: GalleryProps) => {
+export const Gallery = (props: GalleryProps) => {
 	const {
 		entries,
 		currentEntryIndex,
