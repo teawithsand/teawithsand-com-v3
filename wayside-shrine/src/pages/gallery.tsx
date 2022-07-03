@@ -36,6 +36,16 @@ const GalleryPage = () => {
 				/>
 			),
 		},
+		{
+			mainDisplay: (
+				<StaticImage
+					src="https://i.kym-cdn.com/photos/images/newsfeed/002/197/024/1a7.jpg"
+					alt="Another death note meme"
+					layout="constrained"
+					objectFit="contain"
+				/>
+			),
+		},
 	]
 
 	const entries = new Array(20).fill(initEntries).flatMap(v => v)
