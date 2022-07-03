@@ -122,7 +122,6 @@ const GalleryMiddleBar = (props: {
 			const observer = new ResizeObserver(() => {
 				const width = current.clientWidth
 				const height = current.clientHeight
-				console.error("Dimensions changed", [width, height])
 				setDimensions([width, height])
 			})
 			observer.observe(current)
