@@ -81,6 +81,8 @@ export type GalleryProps = {
 	onSwipeBottom: () => void
 }
 
+// TODO(teawithsand): make this gallery work better with zooming
+
 export const Gallery = (props: GalleryProps) => {
 	const {
 		entries,
