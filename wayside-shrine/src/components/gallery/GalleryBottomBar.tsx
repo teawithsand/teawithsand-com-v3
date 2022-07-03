@@ -26,7 +26,7 @@ const InnerGalleryBottomBar = styled.div.attrs(
 
 	display: grid;
 	grid-auto-flow: column;
-	grid-auto-columns: minmax(15%, 33%);
+	grid-auto-columns: minmax(100px, 1fr);
 	gap: 0.8rem;
 
 	// Make items non selectable and prevent fancy stuff with touch-action: none
