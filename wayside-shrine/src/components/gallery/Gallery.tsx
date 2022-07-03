@@ -69,6 +69,7 @@ export type GalleryProps = {
 	currentItemIndex: number
 	size: GallerySize
 	mode: GalleryMode
+	onElementTap: () => void
 	onNavigateToElement: (to: number) => void
 	onNavigateToNextElement: () => void
 	onNavigateToPrevElement: () => void
@@ -81,12 +82,15 @@ const Gallery = (props: GalleryProps) => {
 		onNavigateToElement,
 		onNavigateToNextElement,
 		onNavigateToPrevElement,
+		onElementTap,
 		size,
 		mode,
 	} = props
 
 	const mappedEntries = useMemo(() => {
-		return entries.map(e => e.mainDisplay)
+		return new Array(100)
+			.fill(entries.map(e => e.mainDisplay))
+			.flatMap(v => v)
 	}, [entries])
 
 	const fsc = useFullscreen({})
@@ -100,10 +104,10 @@ const Gallery = (props: GalleryProps) => {
 	}, [size])
 
 	const getHeight = () => {
-		if (size === "large") {
-			return "80vh"
-		} else if (size === "fullscreen") {
+		if (fsc.isFullscreen || size === "fullscreen") {
 			return "100vh"
+		} else if (size === "large") {
+			return "80vh"
 		} else {
 			throw new Error("unreachable code")
 		}
@@ -113,7 +117,7 @@ const Gallery = (props: GalleryProps) => {
 		<GalleryContainer
 			{...({
 				$galleryHeight: getHeight(),
-				$fullscreen: fsc.isFullscreen,
+				$fullscreen: fsc.isFullscreen || size === "fullscreen",
 				$isMiddleOnly: mode !== "normal",
 			} as any)}
 		>
@@ -121,6 +125,7 @@ const Gallery = (props: GalleryProps) => {
 			<GalleryMiddleBar
 				entries={mappedEntries}
 				currentItemIndex={currentItemIndex}
+				onTap={onElementTap}
 				onSwipe={direction => {
 					if (direction === "left") {
 						onNavigateToPrevElement()
