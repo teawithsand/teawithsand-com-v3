@@ -45,6 +45,72 @@ const GalleryMiddleBarItemContainer = styled.div`
 	}
 `
 
+const OuterGalleryMiddleBar = styled.div`
+	grid-row: 2;
+	grid-column: 1;
+
+	display: grid;
+	grid-template-rows: 1fr;
+	grid-template-columns: 1fr;
+`
+
+const GoToPrevElement = styled.div`
+	&::before {
+		content: "<";
+	}
+	grid-row: 1;
+	grid-column: 1;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 40px;
+	font-size: 40px;
+
+	overflow: hidden;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.1);
+	z-index: 2;
+
+	opacity: 0;
+
+	transition: opacity 300ms;
+
+	&:hover {
+		opacity: 1;
+	}
+`
+
+const GoToNextElement = styled.div`
+	&::before {
+		content: ">";
+	}
+	margin-left: auto;
+
+	grid-row: 1;
+	grid-column: 1;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 40px;
+	font-size: 40px;
+
+	overflow: hidden;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.1);
+	z-index: 2;
+
+	opacity: 0;
+
+	transition: opacity 300ms;
+	&:hover {
+		opacity: 1;
+	}
+`
+
 const InnerGalleryMiddleBar = styled.div.attrs(
 	({
 		$itemHeight,
@@ -59,7 +125,7 @@ const InnerGalleryMiddleBar = styled.div.attrs(
 		},
 	}),
 )`
-	grid-row: 2;
+	grid-row: 1;
 	grid-column: 1;
 
 	display: grid;
@@ -71,7 +137,7 @@ const InnerGalleryMiddleBar = styled.div.attrs(
 
 	// apparently fixes bug in firefox, which causes resize listener not to be triggered
 	// when we exit fullscreen, if this is not set
-	overflow: hidden; 
+	overflow: hidden;
 
 	box-sizing: border-box;
 	padding: 0; // required, since we are are using JS to measure this element's dimensions.
@@ -171,24 +237,36 @@ const GalleryMiddleBar = (props: {
 	) as unknown as () => Record<string, unknown>
 
 	return (
-		<InnerGalleryMiddleBar
-			// these lines are ok
-			// despite the fact that any cast is needed
-			ref={ref as any}
-			{...({
-				$itemHeight: dimensions ? dimensions[1] : null,
-				$visible: visible ?? true,
-			} as any)}
-			{...bind()}
-		>
-			{entries.map((v, i) => (
-				<GalleryMiddleBarItem
-					entry={v}
-					key={i}
-					visible={i === currentItemIndex}
-				/>
-			))}
-		</InnerGalleryMiddleBar>
+		<OuterGalleryMiddleBar>
+			<GoToPrevElement
+				onClick={() => {
+					if (onSwipe) onSwipe("left")
+				}}
+			></GoToPrevElement>
+			<InnerGalleryMiddleBar
+				// these lines are ok
+				// despite the fact that any cast is needed
+				ref={ref as any}
+				{...({
+					$itemHeight: dimensions ? dimensions[1] : null,
+					$visible: visible ?? true,
+				} as any)}
+				{...bind()}
+			>
+				{entries.map((v, i) => (
+					<GalleryMiddleBarItem
+						entry={v}
+						key={i}
+						visible={i === currentItemIndex}
+					/>
+				))}
+			</InnerGalleryMiddleBar>
+			<GoToNextElement
+				onClick={() => {
+					if (onSwipe) onSwipe("right")
+				}}
+			></GoToNextElement>
+		</OuterGalleryMiddleBar>
 	)
 }
 
