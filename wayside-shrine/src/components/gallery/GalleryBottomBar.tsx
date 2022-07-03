@@ -108,7 +108,7 @@ const GalleryBottomBar = (props: { entries: ReactNode[] }) => {
 
 			newTargetScroll.current = current.scrollLeft
 
-			current.addEventListener("wheel", e => {
+			const listener = (e: any) => {
 				e.preventDefault()
 
 				// or make single scroll pull single image to view
@@ -121,9 +121,12 @@ const GalleryBottomBar = (props: { entries: ReactNode[] }) => {
 					),
 				)
 				current.scrollLeft = newTargetScroll.current
-			})
+			}
+
+			current.addEventListener("wheel", listener)
 
 			return () => {
+				current.removeEventListener("wheel", listener)
 				observer.unobserve(current)
 			}
 		}
