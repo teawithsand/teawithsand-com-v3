@@ -51,7 +51,13 @@ export type GalleryProps = {
 }
 
 const Gallery = (props: GalleryProps) => {
-	const { entries, currentItemIndex, onNavigateToElement } = props
+	const {
+		entries,
+		currentItemIndex,
+		onNavigateToElement,
+		onNavigateToNextElement,
+		onNavigateToPrevElement,
+	} = props
 
 	const mappedEntries = useMemo(() => {
 		return entries.map(e => e.mainDisplay)
@@ -63,6 +69,13 @@ const Gallery = (props: GalleryProps) => {
 			<GalleryMiddleBar
 				entries={mappedEntries}
 				currentItemIndex={currentItemIndex}
+				onSwipe={direction => {
+					if (direction === "left") {
+						onNavigateToPrevElement()
+					} else if (direction === "right") {
+						onNavigateToNextElement()
+					}
+				}}
 			/>
 			<GalleryBottomBar
 				entries={mappedEntries}
