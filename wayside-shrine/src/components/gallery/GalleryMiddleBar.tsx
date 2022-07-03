@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
+import { useGesture } from "@use-gesture/react"
 
 const transitionName = "dissolve"
 const transitionDuration = 300
@@ -60,6 +61,9 @@ const InnerGalleryMiddleBar = styled.div.attrs(
 	grid-template-columns: 1fr;
 	grid-template-rows: 1fr;
 
+	touch-action: none;
+	cursor: move;
+
 	box-sizing: border-box;
 	padding: 0; // required, since we are are using JS to measure this element's dimensions.
 	// margin: 0; // margins are fine though
@@ -94,8 +98,10 @@ const GalleryMiddleBarItem = (props: {
 const GalleryMiddleBar = (props: {
 	entries: ReactNode[]
 	currentItemIndex: number
+	onSwipe?: (direction: "left" | "right" | "top" | "bottom") => void
+	onTap?: () => void
 }) => {
-	const { currentItemIndex, entries } = props
+	const { currentItemIndex, entries, onSwipe, onTap } = props
 	const ref = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 
@@ -114,12 +120,54 @@ const GalleryMiddleBar = (props: {
 		}
 	}, [ref, ref.current])
 
+	const bind = useGesture(
+		{
+			onDrag: data => {
+				const {
+					swipe: [swx, swy],
+					intentional,
+					tap,
+				} = data as any // it looks like @use-gesture/react has something broken with ts typings, so leave this as-is with this any cast
+				if (intentional) {
+					if (tap) {
+						if (onTap) onTap()
+					} else if (swy === 0 && swx !== 0) {
+						if (onSwipe) {
+							if (swx < 0) onSwipe("left")
+							else onSwipe("right")
+						}
+					} else if (swx === 0 && swy !== 0) {
+						if (onSwipe) {
+							if (swy < 0) onSwipe("top")
+							else onSwipe("bottom")
+						}
+					}
+				}
+			},
+
+			// TODO(teawithsand): entering zoom/full mode on pinch
+			onPinch: () => {
+				return
+			},
+		},
+		{
+			drag: {
+				filterTaps: false,
+				preventDefault: true,
+			},
+			pinch: {},
+		},
+	) as unknown as () => Record<string, unknown>
+
 	return (
 		<InnerGalleryMiddleBar
 			// these lines are ok
 			// despite the fact that any cast is needed
 			ref={ref as any}
-			{...({ $itemHeight: dimensions ? dimensions[1] : null } as any)}
+			{...({
+				$itemHeight: dimensions ? dimensions[1] : null,
+			} as any)}
+			{...bind()}
 		>
 			{entries.map((v, i) => (
 				<GalleryMiddleBarItem
