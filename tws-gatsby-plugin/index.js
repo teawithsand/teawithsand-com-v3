@@ -1,6 +1,7 @@
 const path = require("path")
 
 const BasicSitePluginsStart = [
+	// Styling stuff
 	{
 		resolve: `gatsby-plugin-styled-components`,
 		options: {
@@ -9,18 +10,45 @@ const BasicSitePluginsStart = [
 		},
 	},
 	"gatsby-plugin-sass",
+
+	// Image stuff
+	{
+		resolve: `gatsby-plugin-sharp`,
+		options: {
+			defaults: {
+				formats: ["jpg", "webp", "avif"],
+				placeholder: `dominantColor`,
+				quality: 50,
+				breakpoints: [350, 750, 1080, 1366, 1920],
+				backgroundColor: `transparent`,
+			},
+		},
+	},
+	"gatsby-transformer-sharp",
 	"gatsby-plugin-image",
+
+	// Misc
 	"gatsby-plugin-react-helmet",
 	"gatsby-plugin-sitemap",
 ]
 
 const BasicSitePluginsEnd = [
-	"gatsby-plugin-sharp",
-	"gatsby-transformer-sharp",
+	// Compression has to be at the end
 	{
 		resolve: "gatsby-plugin-zopfli",
 		options: {
-			extensions: ["css", "html", "js", "svg", "txt", "json"],
+			extensions: [
+				"css",
+				"html",
+				"js",
+				"svg",
+				"txt",
+				"json",
+				"xml",
+				"rss",
+				"woff",
+				"wasm",
+			],
 			compression: {
 				numiterations: 15,
 				blocksplitting: true,
@@ -145,7 +173,7 @@ module.exports = {
 	BasicSitePluginsEnd,
 	GatsbyTransformerRemarkPlugins,
 
-    SelfPlugins,
+	SelfPlugins,
 
 	makeManifestPlugin,
 	customizeDefaultPlugins,
