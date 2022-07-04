@@ -1,21 +1,24 @@
-import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist";
-import { MPlayerSource } from "@app/domain/bfr/source";
-import { DisplayInfoError } from "@app/domain/displayInfo/error";
-import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist";
-import { WTPSource } from "@app/domain/wtp/source";
-import { WTPError } from "@app/domain/wtp/WTPError";
+import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
+import { MPlayerSource } from "@app/domain/bfr/source"
+import { DisplayInfoError } from "@app/domain/displayInfo/error"
+import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist"
+import { WTPSource } from "@app/domain/wtp/source"
+import { WTPError } from "@app/domain/wtp/WTPError"
 
-
-
-import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager";
-import { BFRPlaylist } from "tws-common/player/bfr/state";
-import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata";
-import { NamedSyncRoot } from "tws-common/redux/sync/root";
-
+import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager"
+import { BFRPlaylist } from "tws-common/player/bfr/state"
+import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
+import MetadataBag from "tws-common/player/metadata/MetadataBag"
+import { NamedSyncRoot } from "tws-common/redux/sync/root"
 
 export const displayInfoPlaylistSyncRootName = claimId(
 	NS_SYNC_ROOT,
 	"palm-abooks-pwa/display-info/bfr-playlist",
+)
+
+export const displayInfoMetadataSyncRootName = claimId(
+	NS_SYNC_ROOT,
+	"palm-abooks-pwa/display-info/metadata-bag",
 )
 
 export const displayInfoWTPErrorSyncRootName = claimId
@@ -68,7 +71,7 @@ export type DisplayInfoStateState =
 			  }
 			| {
 					type: "loaded"
-					info: DisplayInfo // in loaded state full info is requried
+					info: DisplayInfo // in loaded state full info is required
 			  }
 			| {
 					type: "error"
@@ -89,13 +92,15 @@ export type DisplayInfoPlaylist =
 			error: WTPError | null
 	  }
 
-export type DisplayInfoStateResolved = {
-	type: "resolved",
-	// TODO(teawithsand): any data here, like ABook metadata or sth
-} | {
-	type: "error",
-	error: DisplayInfoError
-}
+export type DisplayInfoStateResolved =
+	| {
+			type: "resolved"
+			// TODO(teawithsand): any data here, like ABook metadata or sth
+	  }
+	| {
+			type: "error"
+			error: DisplayInfoError
+	  }
 
 export type DisplayInfoState = {
 	sync: {
@@ -103,6 +108,10 @@ export type DisplayInfoState = {
 		playlist: NamedSyncRoot<
 			DisplayInfoPlaylist | null,
 			typeof displayInfoPlaylistSyncRootName
+		>
+		metadataBag: NamedSyncRoot<
+			MetadataBag,
+			typeof displayInfoMetadataSyncRootName
 		>
 	}
 	resolved: DisplayInfoStateResolved | null

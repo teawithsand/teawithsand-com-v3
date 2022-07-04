@@ -1,8 +1,14 @@
 import { Store } from "redux"
 
-import { DisplayInfoState } from "@app/domain/displayInfo/state"
+import { ABookStore } from "@app/domain/abook/ABookStore"
+import { MBFRPlaylist } from "@app/domain/bfr/playlist"
+import {
+	DisplayInfoPlaylist,
+	DisplayInfoState,
+} from "@app/domain/displayInfo/state"
 
-import { DefaultTaskAtom } from "tws-common/lang/task/TaskAtom"
+import { DefaultTaskAtom, TaskAtomHandle } from "tws-common/lang/task/TaskAtom"
+import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
 import { SyncId } from "tws-common/redux/sync/id"
 
@@ -17,15 +23,41 @@ export class DisplayInfoResolver<S> {
 	constructor(
 		private readonly store: Store<S>,
 		selector: (state: S) => DisplayInfoState,
+		private readonly abookStore: ABookStore,
 	) {
 		const unsubscribe = store.subscribe(() => {
 			const state = selector(store.getState())
-			// TODO(teawithsand): implement this resolver
+
+			const { data, id } = state.sync.playlist
+
+			if (id !== this.lastPlaylistId) {
+				const claim = this.taskAtom.claim()
+				this.lastPlaylistId = id
+
+				if (data !== null && data.type === "bfr") {
+					LOG.info(
+						LOG_TAG,
+						"Running non-noop data loading for playlist",
+						data,
+					)
+					this.runPlaylistDataLoad(claim, data)
+				}
+			}
 		})
 
 		this.releaseReduxStore = () => {
 			unsubscribe()
 		}
+	}
+
+	private runPlaylistDataLoad = async (
+		claim: TaskAtomHandle,
+		playlist: DisplayInfoPlaylist,
+	) => {
+		if (playlist.type !== "bfr") return // we are interested only in playlists with sources loaded
+
+		if (!claim.isValid) return
+		// this.store.dispatch() // TODO(teawithsand): here dispatch resolved data
 	}
 
 	release = () => {

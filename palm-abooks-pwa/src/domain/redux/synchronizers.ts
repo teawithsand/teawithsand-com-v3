@@ -1,16 +1,14 @@
 import { AnyAction } from "@reduxjs/toolkit"
 
-import { displayInfoSetStateResolved } from "@app/domain/displayInfo/actions"
 import { State } from "@app/domain/redux/store"
 import {
-	whatToPlayPlaylistSyncRootName,
-	whatToPlayStateSyncRootName,
+	whatToPlayStateSyncRootName
 } from "@app/domain/wtp/state"
 
 import { setPlaylist } from "tws-common/player/bfr/actions"
 import {
 	makeActionSynchronizerAction,
-	makeNamedSyncRootSynchronizer,
+	makeNamedSyncRootSynchronizer
 } from "tws-common/redux/sync/synchronizer"
 
 export const whatToPlayStateSynchronizer = makeNamedSyncRootSynchronizer(
@@ -58,14 +56,3 @@ export const whatToPlayStateSynchronizer = makeNamedSyncRootSynchronizer(
 		},
 	),
 )
-
-/*
-export const whatToPlayPlaylistSynchronizer = makeNamedSyncRootSynchronizer(
-	whatToPlayPlaylistSyncRootName,
-	(s: State) => s.whatToPlayState.config.playlist,
-	makeActionSynchronizerAction<State, AnyAction>((s: State) => {
-		const data = s.whatToPlayState.config.playlist.data
-		return [displayInfoSetWTPPlaylistMetadata(data)]
-	}),
-)
-*/
