@@ -1,5 +1,6 @@
 import {
 	GatsbyTransformerRemarkPlugins,
+	SelfPlugins,
 	customizeDefaultPlugins,
 	makeManifestPlugin,
 	makeLayoutPlugin,
@@ -13,6 +14,7 @@ const plugins = customizeDefaultPlugins(
 		makeManifestPlugin("./src/images/icon.png"),
 		makeLayoutPlugin("./src/Layout.jsx"),
 	],
+	SelfPlugins,
 	GatsbyTransformerRemarkPlugins,
 	[
 		{
