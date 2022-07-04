@@ -3,7 +3,7 @@ export const blogHomePath = "/blog/post-list"
 export const portfolioPath = "/portfolio"
 export const contactPath = "/contact"
 export const aboutMePath = "/about-me"
-export const paintPath = "/tool/paint"
+export const paintPath = "https://paint.teawithsand.com"
 export const galleryPath = "/tool/gallery"
 export const homePath = "/"
 
