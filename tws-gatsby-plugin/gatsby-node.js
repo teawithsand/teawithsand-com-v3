@@ -1,10 +1,6 @@
-/*
-export const onCreateWebpackConfig = ({
-	actions,
-	getConfig,
-	rules,
-	stage,
-}) => {
+const TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
+
+const onCreateWebpackConfig = ({ actions, getConfig, rules, stage }) => {
 	const config = getConfig()
 	const imgsRule = rules.images()
 
@@ -39,7 +35,7 @@ export const onCreateWebpackConfig = ({
 			type: "asset/resource",
 		},
 	]
-	* /
+	*/
 	config.resolve.plugins = [
 		...(config.resolve.plugins ?? []),
 		new TSConfigPathsPlugin(),
@@ -65,4 +61,4 @@ export const onCreateWebpackConfig = ({
 	}
 }
 
-*/
+module.exports = { onCreateWebpackConfig }
