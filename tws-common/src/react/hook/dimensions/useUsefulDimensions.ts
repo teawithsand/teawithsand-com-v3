@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { requireNoSSR } from "tws-common/ssr"
 
 export type Orientation = "vertical" | "horizontal" | "square"
 export type UsefulDimensions = {
@@ -25,6 +26,8 @@ export const getUsefulDimensions = () => {
 }
 
 export default function useUsefulDimensions(): UsefulDimensions {
+	requireNoSSR()
+
 	const [windowDimensions, setWindowDimensions] = useState(
 		getUsefulDimensions(),
 	)

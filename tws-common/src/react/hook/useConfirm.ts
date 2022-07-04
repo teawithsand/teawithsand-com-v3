@@ -25,6 +25,8 @@ export type ConfirmationRequester<T> = (requestData: T) => Promise<boolean>
 export const useConfirm = <T>(
 	ctx: ConfirmReactContext<T>,
 ): ConfirmationRequester<T> => {
+	// TODO(teawithsand): check if it works with SSR
+
 	return async (data: T) => {
 		const [p, resolve] = latePromise<boolean>()
 

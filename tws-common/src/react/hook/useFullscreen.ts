@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { requireNoSSR } from "tws-common/ssr"
 
 // TODO(teawithsand): hide overflow of html/body when this is active
 export const useFullscreen = ({

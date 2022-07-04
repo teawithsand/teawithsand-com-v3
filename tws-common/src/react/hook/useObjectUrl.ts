@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+import { requireNoSSR } from "tws-common/ssr"
 
 /**
  * Hook, which returns reference to ref, which contains object URL for specified data.
@@ -9,6 +10,7 @@ export default (
 ): {
 	readonly current: string | null
 } => {
+	requireNoSSR()
 	const ref = useRef<string | null>(null)
 
 	useEffect(() => {

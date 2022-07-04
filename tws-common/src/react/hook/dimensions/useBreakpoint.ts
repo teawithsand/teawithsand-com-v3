@@ -1,4 +1,10 @@
-import useWindowDimensions from "./useWindowDimensions"
+import { useIsSSR } from "tws-common/react/hook/isSSR";
+import { isSSR, requireNoSSR } from "tws-common/ssr";
+
+
+
+import useWindowDimensions from "./useWindowDimensions";
+
 
 // TODO(teawithsand): move breakpoint definitions and boundaries to
 
@@ -48,12 +54,22 @@ const resolveBreakpointIndex = (width: number): number => {
 	}
 }
 
-export const useBreakpoint = (): Breakpoint => {
+export const useBreakpoint = (onSSR?: Breakpoint): Breakpoint => {
+	if (!onSSR) requireNoSSR()
+
+	const isSSR = useIsSSR()
+	if (isSSR && onSSR) return onSSR
+
 	const { width } = useWindowDimensions()
 	return BREAKPOINTS[resolveBreakpointIndex(width)]
 }
 
-export const useBreakpointIndex = (): number => {
+export const useBreakpointIndex = (onSSR?: number): number => {
+	if (!onSSR) requireNoSSR()
+
+	const isSSR = useIsSSR()
+	if (isSSR && onSSR) return onSSR
+
 	const { width } = useWindowDimensions()
 	return resolveBreakpointIndex(width)
 }
