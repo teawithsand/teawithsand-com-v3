@@ -9,7 +9,18 @@ const BasicSitePluginsStart = [
 			fileName: false,
 		},
 	},
-	"gatsby-plugin-sass",
+	{
+		resolve: "gatsby-plugin-sass",
+		options: {
+			useResolveUrlLoader: true,
+			cssLoaderOptions: {
+				// camelCase: true,
+				modules: {
+					exportLocalsConvention: "camelCaseOnly",
+				},
+			},
+		},
+	},
 
 	// Image stuff
 	{

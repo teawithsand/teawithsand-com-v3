@@ -1,16 +1,9 @@
-import React from "react"
-import { ReactElement, ReactFragment, ReactNode } from "react"
-import AppNavbar from "@app/components/layout/Navbar"
+import React, { ReactElement, ReactFragment, ReactNode } from "react"
 
 const Layout = (props: {
 	children: ReactElement | ReactNode | ReactFragment | null | undefined
 }) => {
-	return (
-		<>
-			<AppNavbar />
-			{props.children}
-		</>
-	)
+	return <>{props.children}</>
 }
 
 export default Layout

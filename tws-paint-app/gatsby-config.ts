@@ -1,13 +1,10 @@
 import {
-	GatsbyTransformerRemarkPlugins,
-	SelfPlugins,
 	customizeDefaultPlugins,
-	makeManifestPlugin,
-	makeLayoutPlugin,
 	makeConfig,
+	makeLayoutPlugin,
+	makeManifestPlugin,
+	SelfPlugins,
 } from "tws-gatsby-plugin"
-
-import * as fs from "fs"
 
 const plugins = customizeDefaultPlugins(
 	[
@@ -15,44 +12,12 @@ const plugins = customizeDefaultPlugins(
 		makeLayoutPlugin("./src/Layout.jsx"),
 	],
 	SelfPlugins,
-	GatsbyTransformerRemarkPlugins,
-	[
-		{
-			resolve: "gatsby-source-filesystem",
-			options: {
-				name: "waysideshrines",
-				path: "./content/waysideshrines",
-			},
-		},
-		{
-			resolve: "gatsby-source-filesystem",
-			options: {
-				name: "images",
-				path: "./src/images/",
-			},
-			__key: "images",
-		},
-		{
-			resolve: "gatsby-source-filesystem",
-			options: {
-				name: "pages",
-				path: "./src/pages/",
-			},
-			__key: "pages",
-		},
-	],
 )
-// JIC debugging is here
-/*
-fs.writeFileSync(
-	"/workspaces/tws_blog/wayside-shrine/debuginfo.json",
-	JSON.stringify(plugins),
-)
-*/
+
 const config = makeConfig(
 	{
-		title: `wayside-shrine`,
-		siteUrl: `https://szlakiemkapliczek.pl`,
+		title: `tws-paint-app`,
+		siteUrl: `https://paint.teawithsand.com`,
 	},
 	plugins,
 )
