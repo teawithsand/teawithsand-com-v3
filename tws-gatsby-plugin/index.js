@@ -138,10 +138,14 @@ const makeConfig = (siteMetadata, plugins) => ({
 	plugins,
 })
 
+const SelfPlugins = ["tws-gatsby-plugin"]
+
 module.exports = {
 	BasicSitePluginsStart,
 	BasicSitePluginsEnd,
 	GatsbyTransformerRemarkPlugins,
+
+    SelfPlugins,
 
 	makeManifestPlugin,
 	customizeDefaultPlugins,
