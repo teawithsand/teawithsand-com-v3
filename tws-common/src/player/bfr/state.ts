@@ -68,6 +68,11 @@ export const bfrAudioFiltersSyncRootName = claimId(
 	"tws-common/bfr-audio-filters",
 )
 
+export const bfrMetadataStateSyncRootName = claimId(
+	NS_SYNC_ROOT,
+	"tws-common/bfr-metadata-state",
+)
+
 export type BFRPlaylist<M, S> = {
 	metadata: M
 	sources: S[]
@@ -97,7 +102,7 @@ export type BFRState<PM = unknown, PS = unknown> = {
 		loadMetadataPolicy: "never" | "not-loaded" | "not-loaded-or-error"
 		loadedMetadataResultSave: boolean
 	}
-	metadataState: MetadataBag // empty bag when no playlist or it has no sources
+	metadataState: NamedSyncRoot<MetadataBag, typeof bfrMetadataStateSyncRootName> // empty bag when no playlist or it has no sources
 	sleepConfig: BFRSleepConfig | null // when null, then sleep unset
 	sleepState: BFRSleepState | null // when null, then sleep task unset, for instance because playback is paused
 	backAfterPauseConfig: {

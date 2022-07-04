@@ -58,7 +58,7 @@ export const createBFRReducer = <PM, PS>() =>
 				loadedMetadataResultSave: true,
 				loadMetadataPolicy: "not-loaded-or-error",
 			},
-			metadataState: new MetadataBag([]),
+			metadataState: makeSyncRoot(new MetadataBag([])),
 			playerState: IDLE_BFR_PLAYER_STATE,
 
 			sleepConfig: null,
@@ -102,11 +102,13 @@ export const createBFRReducer = <PM, PS>() =>
 					)
 					state.playerConfig.currentSourceIndex = 0 // always reset to first one on new playlist
 					state.playerState = IDLE_BFR_PLAYER_STATE
-					state.metadataState = new MetadataBag(
-						new Array(
-							state.playerConfig.playlist.data?.sources.length ??
-								0,
-						).fill(null),
+					state.metadataState = makeSyncRoot(
+						new MetadataBag(
+							new Array(
+								state.playerConfig.playlist.data?.sources
+									.length ?? 0,
+							).fill(null),
+						),
 					)
 				})
 				.addCase(setIsPlayingWhenReady, (state, action) => {
@@ -150,6 +152,8 @@ export const createBFRReducer = <PM, PS>() =>
 					state.playerConfig.filters = makeSyncRoot(action.payload)
 				})
 				.addCase(setMetadataLoadingResults, (state, action) => {
-					state.metadataState = new MetadataBag(action.payload)
+					state.metadataState = makeSyncRoot(
+						new MetadataBag(action.payload),
+					)
 				}),
 	)
