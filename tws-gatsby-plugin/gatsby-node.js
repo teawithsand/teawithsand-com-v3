@@ -1,14 +1,68 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/node-apis/
- */
-// You can delete this file if you're not using it
+/*
+export const onCreateWebpackConfig = ({
+	actions,
+	getConfig,
+	rules,
+	stage,
+}) => {
+	const config = getConfig()
+	const imgsRule = rules.images()
 
-/**
- * You can uncomment the following line to verify that
- * your plugin is being loaded in your site.
- *
- * See: https://www.gatsbyjs.com/docs/creating-a-local-plugin/#developing-a-local-plugin-that-is-outside-your-project
- */
-exports.onPreInit = () => console.log("Loaded gatsby-starter-plugin")
+	config.plugins = [...(config.plugins ?? [])]
+
+	const newUrlLoaderRule = {
+		...imgsRule,
+		test: new RegExp(
+			imgsRule.test.toString().replace("svg|", "").slice(1, -1),
+		),
+	}
+
+	config.module.rules = [
+		...(config.module.rules ?? []).filter(rule => {
+			if (rule.test) {
+				return rule.test.toString() !== imgsRule.test.toString()
+			}
+			return true
+		}),
+		{
+			test: /.svg$/,
+			use: ["@svgr/webpack"],
+		},
+		newUrlLoaderRule,
+	]
+
+	/*
+	config.module.rules = [
+		...config.module.rules,
+		{
+			test: /.apk$/i,
+			type: "asset/resource",
+		},
+	]
+	* /
+	config.resolve.plugins = [
+		...(config.resolve.plugins ?? []),
+		new TSConfigPathsPlugin(),
+	]
+
+	// Required to make yarn link work
+	// Also required for yarn's link:... dependencies
+	config.resolve.symlinks = false
+
+	if (config.mode === "production") {
+		config.devtool = false
+	}
+
+	if (stage === "build-javascript") {
+		config.output = {
+			...config.output,
+			filename: `[contenthash].js`,
+			chunkFilename: `[contenthash].js`,
+		}
+		actions.replaceWebpackConfig(config)
+	} else {
+		actions.replaceWebpackConfig(config)
+	}
+}
+
+*/
