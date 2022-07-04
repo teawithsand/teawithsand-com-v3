@@ -48,7 +48,8 @@
 		"react-transition-group": "^4.4.2",
 		"sass": "^1.53.0",
 		"styled-components": "^5.3.5",
-		"tws-common": "file:.yalc/tws-common"
+		"tws-common": "file:.yalc/tws-common",
+		"tws-gatsby-plugin": "file:.yalc/tws-gatsby-plugin"
 	},
 	"devDependencies": {
 		"@testing-library/jest-dom": "^5.16.4",
