@@ -20,6 +20,7 @@ import { BFRMediaSession } from "tws-common/player/bfr/mediaSession"
 import { BFRMetadataLoader } from "tws-common/player/bfr/metadataLoader"
 import { BFRPlayer } from "tws-common/player/bfr/player"
 import { BFRPlaylist } from "tws-common/player/bfr/state"
+import { wrapNoSSR } from "tws-common/react/components/NoSSR"
 import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
 import { MediaSessionEventType } from "tws-common/webapi/mediaSession/MediaSessionHelper"
 
@@ -146,4 +147,4 @@ const Layout = (props: any) => {
 	)
 }
 
-export default Layout
+export default wrapNoSSR(Layout)
