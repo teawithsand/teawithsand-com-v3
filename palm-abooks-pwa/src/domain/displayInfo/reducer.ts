@@ -1,6 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit"
 
 import {
+	displayInfoSetMetadataBag,
 	displayInfoSetPlaylist,
 	displayInfoSetStateResolved,
 } from "@app/domain/displayInfo/actions"
@@ -33,6 +34,12 @@ export const displayInfoReducer = createReducer<DisplayInfoState>(
 				const { payload } = action
 				state.sync.playlist = makeSyncRoot(payload)
 				state.resolved = null
+			})
+			.addCase(displayInfoSetMetadataBag, (state, action) => {
+				const { payload } = action
+				state.sync.metadataBag = makeSyncRoot(payload)
+				// TODO(teawithsand): notify reducer that update is pending now
+				//   and unset that pending flag in setResolved call
 			})
 			.addCase(displayInfoSetStateResolved, (state, action) => {
 				const { data, playlistSyncRootId } = action.payload

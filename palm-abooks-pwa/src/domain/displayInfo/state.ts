@@ -113,6 +113,8 @@ export type DisplayInfoState = {
 			MetadataBag,
 			typeof displayInfoMetadataSyncRootName
 		>
+		// TODO(teawithsand): consider mirroring errors in here as well, 
+		//  at least from WTP and forwarding them, so they can be detected more easily
 	}
 	resolved: DisplayInfoStateResolved | null
 	state: DisplayInfoStateState

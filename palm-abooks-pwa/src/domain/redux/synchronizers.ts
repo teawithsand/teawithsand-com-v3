@@ -1,14 +1,17 @@
 import { AnyAction } from "@reduxjs/toolkit"
 
-import { State } from "@app/domain/redux/store"
 import {
-	whatToPlayStateSyncRootName
-} from "@app/domain/wtp/state"
+	displayInfoSetMetadataBag,
+	displayInfoSetPlaylist,
+} from "@app/domain/displayInfo/actions"
+import { State } from "@app/domain/redux/store"
+import { whatToPlayStateSyncRootName } from "@app/domain/wtp/state"
 
 import { setPlaylist } from "tws-common/player/bfr/actions"
+import { bfrPlaylistSyncRootName } from "tws-common/player/bfr/state"
 import {
 	makeActionSynchronizerAction,
-	makeNamedSyncRootSynchronizer
+	makeNamedSyncRootSynchronizer,
 } from "tws-common/redux/sync/synchronizer"
 
 export const whatToPlayStateSynchronizer = makeNamedSyncRootSynchronizer(
@@ -34,25 +37,32 @@ export const whatToPlayStateSynchronizer = makeNamedSyncRootSynchronizer(
 			}
 		},
 		(s: State) => {
-			const { data, id } = s.whatToPlayState.state
-			/*
-			if (data.type === "loading" || data.type === "no-sources") {
-				return [
-					displayInfoSetStateResolved({
-						data,
-						id,
-					}),
-					// displayInfoSetWTPError(null), // setting playlist implies unsetting error
-				]
-			} else if (data.type === "error") {
-				return [displayInfoSetWTPError(data.error)]
+			const { data } = s.whatToPlayState.state
+			if (
+				data.type === "loading" ||
+				data.type === "no-sources" ||
+				data.type === "error"
+			) {
+				return [displayInfoSetPlaylist(null)]
 			} else if (data.type === "loaded") {
-				return [displayInfoSetStateResolved(data.bfrPlaylist)]
+				return [
+					displayInfoSetPlaylist({
+						type: "bfr",
+						playlist: data.bfrPlaylist,
+					}),
+				]
 			} else {
 				throw new Error("unreachable code")
 			}
-			*/
-			throw new Error("NIY")
 		},
 	),
+)
+
+export const bfrMetadataStateSynchronizer = makeNamedSyncRootSynchronizer(
+	bfrPlaylistSyncRootName,
+	(s: State) => s.bfrState.metadataState,
+	makeActionSynchronizerAction<State, AnyAction>((s: State) => {
+		const { data } = s.bfrState.metadataState
+		return [displayInfoSetMetadataBag(data)]
+	}),
 )
