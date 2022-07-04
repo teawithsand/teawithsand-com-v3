@@ -33,7 +33,7 @@ const BasicSitePluginsEnd = [
 /**
  * Integrates gatsby-plugin-manifest using path to manifest
  */
-const MakeManifestPlugin = (iconPath, otherOptions = undefined) => ({
+const makeManifestPlugin = (iconPath, otherOptions = undefined) => ({
 	resolve: "gatsby-plugin-manifest",
 	options: {
 		icon: iconPath,
@@ -41,7 +41,7 @@ const MakeManifestPlugin = (iconPath, otherOptions = undefined) => ({
 	},
 })
 
-const MakeLayoutPlugin = (layoutPath, otherOptions = undefined) => ({
+const makeLayoutPlugin = (layoutPath, otherOptions = undefined) => ({
 	resolve: "gatsby-plugin-layout",
 	options: {
 		component: path.resolve(layoutPath),
@@ -87,7 +87,7 @@ const GatsbyTransformerRemarkPlugins = [
 	},
 ]
 
-const MergePlugins = (...configs) => {
+const mergePlugins = (...configs) => {
 	configs = configs.map(c =>
 		c.map(entry => {
 			if (typeof entry === "string") {
@@ -126,16 +126,26 @@ const MergePlugins = (...configs) => {
 	return theConfig
 }
 
-const CustomizeDefaultPlugins = (...configs) =>
-	MergePlugins(BasicSitePluginsStart, ...configs, BasicSitePluginsEnd)
+const customizeDefaultPlugins = (...configs) =>
+	mergePlugins(BasicSitePluginsStart, ...configs, BasicSitePluginsEnd)
+
+const makeConfig = (siteMetadata, plugins) => ({
+	siteMetadata: siteMetadata,
+	// More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
+	// If you use VSCode you can also use the GraphQL plugin
+	// Learn more at: https://gatsby.dev/graphql-typegen
+	graphqlTypegen: true,
+	plugins,
+})
 
 module.exports = {
 	BasicSitePluginsStart,
 	BasicSitePluginsEnd,
 	GatsbyTransformerRemarkPlugins,
 
-	MakeManifestPlugin,
-	CustomizeDefaultPlugins,
-	MergePlugins,
-	MakeLayoutPlugin,
+	makeManifestPlugin,
+	customizeDefaultPlugins,
+	mergePlugins,
+	makeLayoutPlugin,
+	makeConfig,
 }
