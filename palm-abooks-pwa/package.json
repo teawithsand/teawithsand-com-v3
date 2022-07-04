@@ -42,7 +42,8 @@
 		"react-redux": "^8.0.2",
 		"sass": "^1.52.2",
 		"styled-components": "^5.3.5",
-		"tws-common": "file:.yalc/tws-common"
+		"tws-common": "file:.yalc/tws-common",
+		"tws-gatsby-plugin": "file:.yalc/tws-gatsby-plugin"
 	},
 	"devDependencies": {
 		"@svgr/webpack": "^6.2.1",
