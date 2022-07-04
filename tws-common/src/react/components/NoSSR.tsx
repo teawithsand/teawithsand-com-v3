@@ -11,4 +11,10 @@ const NoSSR = (props: { children?: ReactNode }) => {
 	}
 }
 
+export const wrapNoSSR =
+	<P,>(component: React.FC<P>): React.FC<P> =>
+	// eslint-disable-next-line react/display-name
+	(props: P) =>
+		<NoSSR>{component(props)}</NoSSR>
+
 export default NoSSR
