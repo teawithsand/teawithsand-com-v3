@@ -247,4 +247,12 @@ export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] = ({
 	} else {
 		actions.replaceWebpackConfig(config)
 	}
+
+	if (stage === "build-javascript") {
+		config.output = {
+			filename: "[contenthash].js",
+			chunkFilename: "[contenthash].js",
+		}
+		actions.replaceWebpackConfig(config)
+	}
 }
