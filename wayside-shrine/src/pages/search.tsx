@@ -25,7 +25,9 @@ const ShrineCardGrid = styled.div`
 const SerachPage = (props: { data: Queries.WaysideShrineSearchQuery }) => {
 	const { data } = props
 
-	const isSmall = useBreakpointIndex() <= breakpointIndex(BREAKPOINT_MD)
+	const isSmall =
+		useBreakpointIndex(breakpointIndex(BREAKPOINT_MD)) <=
+		breakpointIndex(BREAKPOINT_MD)
 
 	return (
 		<PageContainer>
