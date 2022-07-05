@@ -6,11 +6,8 @@ import {
 import { useSelector } from "react-redux"
 
 import { MBFRState } from "@app/domain/bfr/state"
-import { displayInfoReducer } from "@app/domain/displayInfo/reducer"
-import { DisplayInfoState } from "@app/domain/displayInfo/state"
 import { playerUiReducer, PlayerUIState } from "@app/domain/redux/playerUi"
 import {
-	bfrMetadataStateSynchronizer,
 	whatToPlayStateSynchronizer,
 } from "@app/domain/redux/synchronizers"
 import { whatToPlayReducer } from "@app/domain/wtp/reducer"
@@ -25,7 +22,6 @@ import { toastReducer, ToastState } from "tws-common/ui/toast"
 export type State = {
 	whatToPlayState: WTPState
 	bfrState: MBFRState
-	displayInfoState: DisplayInfoState
 	syncedIdStore: SyncedIdStore
 	playerUi: PlayerUIState
 	toasts: ToastState
@@ -43,7 +39,6 @@ const innerReducer = combineReducers<State>({
 	playerUi: playerUiReducer,
 	toasts: toastReducer,
 	flashes: flashMessageReducer,
-	displayInfoState: displayInfoReducer,
 })
 
 const finalReducer = wrapReducerForSync(
@@ -52,7 +47,7 @@ const finalReducer = wrapReducerForSync(
 		getSyncedIdStore: (s: State) => s.syncedIdStore,
 		setSyncedIdStore: (s: State, st) => ({ ...s, syncedIdStore: st }),
 	},
-	[whatToPlayStateSynchronizer, bfrMetadataStateSynchronizer],
+	[whatToPlayStateSynchronizer],
 )
 
 export const createStore = () =>
