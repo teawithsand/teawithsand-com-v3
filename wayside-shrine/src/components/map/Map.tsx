@@ -1,11 +1,9 @@
 import { Tile as TileLayer } from "ol/layer"
-import Map from "ol/Map"
+import OLMap from "ol/Map"
 import { OSM } from "ol/source"
 import View from "ol/View"
 import React, { useEffect } from "react"
 import styled from "styled-components"
-
-import PageContainer from "@app/components/layout/PageContainer"
 
 import useUniqueId from "tws-common/react/hook/useUniqueId"
 
@@ -14,10 +12,11 @@ const MapContainer = styled.div`
 	height: 75vh;
 `
 
-const MapPage = () => {
+const Map = (props: { center: [number, number] }) => {
+	const { center } = props
 	const id = useUniqueId()
 	useEffect(() => {
-		const map = new Map({
+		const map = new OLMap({
 			layers: [
 				new TileLayer({
 					source: new OSM(),
@@ -25,7 +24,7 @@ const MapPage = () => {
 			],
 			target: id,
 			view: new View({
-				center: [0, 0],
+				center,
 				zoom: 2,
 			}),
 		})
@@ -33,14 +32,7 @@ const MapPage = () => {
 		return () => {
 			map.dispose()
 		}
-	}, [])
-	return (
-		<PageContainer>
-			<main>
-				<MapContainer id={id}></MapContainer>
-			</main>
-		</PageContainer>
-	)
+	}, [center])
+	return <MapContainer id={id}></MapContainer>
 }
-
-export default MapPage
+export default Map
