@@ -8,6 +8,18 @@ import Translator, {
 
 export default interface AppTranslation {
 	appName: string
+	shrine: {
+		view: {
+			navigation: {
+				images: string
+				comments: string
+				map: string
+			}
+			galleryHeader: string
+			mapHeader: string
+			commentsHeader: string
+		}
+	}
 }
 
 const translations = new Map<string, AppTranslation>()

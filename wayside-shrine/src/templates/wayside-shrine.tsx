@@ -1,10 +1,36 @@
 import * as React from "react"
 import { graphql } from "gatsby"
 
+import PageContainer from "@app/components/layout/PageContainer"
+import ShrineView from "@app/components/shrine/view/ShrineView"
+
 const WaysideShrineTemplate = (props: {
 	data: Queries.WaysideShrineShowQuery
 }) => {
-	return <>{JSON.stringify(props.data)}</>
+	const u = props.data.current.childMarkdownRemark
+
+	return (
+		<PageContainer>
+			<main>
+				<ShrineView
+					data={{
+						title: u.frontmatter.title,
+						createdDate: u.frontmatter.date,
+						excerpt: u.excerpt,
+						lastEditedDate: null,
+						coordinates: u.frontmatter.coordinates as [
+							number,
+							number,
+						],
+						path: u.fields.path,
+						tags: [...u.frontmatter.tags],
+						html: u.html,
+						images: u.frontmatter.galleryImages ?? [],
+					}}
+				/>
+			</main>
+		</PageContainer>
+	)
 }
 
 export default WaysideShrineTemplate
@@ -15,15 +41,35 @@ export const pageQuery = graphql`
 		$previousShrineId: String
 		$nextShrineId: String
 	) {
-		file(id: { eq: $id }) {
+		current: file(id: { eq: $id }) {
 			childMarkdownRemark {
-				id
-				html
 				frontmatter {
 					title
-					date(formatString: "MMMM DD, YYYY")
+					date(formatString: "YYYY-MM-DD")
+					coordinates
 					tags
+					featuredImage {
+						childImageSharp {
+							gatsbyImageData(
+								layout: CONSTRAINED
+								width: 420
+								placeholder: BLURRED
+							)
+						}
+					}
+					galleryImages {
+						childImageSharp {
+							gatsbyImageData(
+								layout: CONSTRAINED
+								placeholder: BLURRED
+							)
+						}
+					}
 				}
+				fields {
+					path
+				}
+				html
 			}
 		}
 		previous: file(id: { eq: $previousShrineId }) {
