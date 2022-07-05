@@ -8,6 +8,7 @@ import {
 	onNewPlayerState,
 	onSourcePlaybackEnded,
 	setAllowExternalSetIsPlayingWhenReady,
+	setCurrentSourceIndex,
 	setFilters,
 	setIsPlayingWhenReady,
 	setMetadataLoadingResults,
@@ -137,6 +138,16 @@ export const createBFRReducer = <PM, PS>() =>
 					state.playerConfig.seekData = makeSyncRoot({
 						position: action.payload,
 					})
+				})
+				.addCase(setCurrentSourceIndex, (state, action) => {
+					let index = action.payload
+					const playlistLength =
+						state.playerConfig.playlist.data?.sources.length ?? 0
+					if (index > playlistLength) {
+						index = playlistLength
+					}
+					if (index < 0) index = 0
+					state.playerConfig.currentSourceIndex = index
 				})
 				.addCase(
 					setAllowExternalSetIsPlayingWhenReady,
