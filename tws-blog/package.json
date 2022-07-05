@@ -58,6 +58,7 @@
     "service-worker-loader": "^4.0.2",
     "styled-components": "^5.3.5",
     "tws-common": "file:.yalc/tws-common",
+    "tws-gatsby-plugin": "file:.yalc/tws-gatsby-plugin",
     "typeface-merriweather": "0.0.72",
     "typeface-montserrat": "0.0.75"
   },

@@ -1,2 +1,25 @@
 #!/bin/bash
-yarn global add gatsby nodemon ts-node
+# Do not use yarn here, it for some reason does not add installed scripts to $PATH
+cd $(realpath $(dirname "$0"))
+npm i -g gatsby nodemon ts-node yalc
+
+build_local() (
+    cd $1 && yarn && yarn build
+)
+
+init_yalc () (
+    cd $1 && \
+    yalc add tws-common && \
+    yalc add tws-gatsby-plugin && \
+    yarn
+)
+
+build_local tws-common
+build_local tws-gatsby-plugin
+
+init_yalc wayside-shrine
+init_yalc palm-abooks-pwa
+init_yalc tws-blog
+
+build_local tws-common
+build_local tws-gatsby-plugin
