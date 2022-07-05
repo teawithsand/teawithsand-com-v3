@@ -22,7 +22,7 @@ const ShrineCardGrid = styled.div<{ $smallDisplay: boolean }>`
 	gap: 1rem;
 `
 
-const SerachPage = (props: { data: Queries.WaysideShrineSearchQuery }) => {
+const SearchPage = (props: { data: Queries.WaysideShrineSearchQuery }) => {
 	const { data } = props
 
 	const isSmall =
@@ -63,7 +63,7 @@ const SerachPage = (props: { data: Queries.WaysideShrineSearchQuery }) => {
 	)
 }
 
-export default SerachPage
+export default SearchPage
 
 export const pageQuery = graphql`
 	query WaysideShrineSearch {
