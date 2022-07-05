@@ -11,8 +11,8 @@ const NoTags = styled.span`
 
 const Tags = styled.ul`
 	list-style: none;
-	margin-left: 0;
-	padding-left: 0;
+	margin: 0;
+	padding: 0;
 
 	display: flex;
 	flex-direction: row;
@@ -24,7 +24,6 @@ const Tags = styled.ul`
 const TagListEntry = styled.li`
 	display: inline;
 	font-size: 0.9rem;
-	padding: 0.2rem 0.3rem;
 `
 
 const TagButton = styled(Button)``
