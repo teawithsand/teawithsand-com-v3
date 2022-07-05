@@ -28,6 +28,7 @@
 		"fish": "latest",
 		"node": "lts",
 		"golang": "latest",
-		"rust": "latest"
+		"rust": "latest",
+		"git-lfs": "3.1.4"
 	}
 }
