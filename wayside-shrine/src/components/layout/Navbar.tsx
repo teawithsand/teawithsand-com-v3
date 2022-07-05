@@ -1,9 +1,9 @@
 import React from "react"
 
+import { homePath } from "@app/paths"
+
 import { Container, Nav, Navbar } from "tws-common/ui"
 import LinkContainer from "tws-common/ui/LinkContainer"
-
-import { homePath } from "@app/paths"
 
 const AppNavbar = () => {
 	return (

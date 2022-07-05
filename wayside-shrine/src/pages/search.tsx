@@ -1,18 +1,19 @@
-import PageContainer from "@app/components/layout/PageContainer"
-import ShrineCard from "@app/components/shrine/ShrineCard"
 import { graphql } from "gatsby"
 import React from "react"
 import styled from "styled-components"
+
+import PageContainer from "@app/components/layout/PageContainer"
+import ShrineCard from "@app/components/shrine/ShrineCard"
+
+import {
+	BREAKPOINT_MD,
+	breakpointIndex,
+	useBreakpointIndex,
+} from "tws-common/react/hook/dimensions/useBreakpoint"
 import {
 	asRequiredRecursively,
 	RecursiveRequired,
 } from "tws-common/typing/required"
-
-import {
-	useBreakpointIndex,
-	breakpointIndex,
-	BREAKPOINT_MD,
-} from "tws-common/react/hook/dimensions/useBreakpoint"
 
 const ShrineCardGrid = styled.div<{ $smallDisplay: boolean }>`
 	display: grid;
@@ -50,9 +51,9 @@ const SearchPage = (props: { data: Queries.WaysideShrineSearchQuery }) => {
 											.coordinates as [number, number],
 										path: u.fields.path,
 										tags: [...u.frontmatter.tags],
-										featuredImage:
-											u.frontmatter.featuredImage
-												.childImageSharp as any,
+										featuredImage: u.frontmatter
+											.featuredImage
+											.childImageSharp as any,
 									}}
 								/>
 							)

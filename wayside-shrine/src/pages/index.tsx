@@ -1,6 +1,7 @@
+import React from "react"
+
 import AboutProject from "@app/components/autonomous/AboutProject"
 import PageContainer from "@app/components/layout/PageContainer"
-import React from "react"
 
 const IndexPage = () => {
 	return (
