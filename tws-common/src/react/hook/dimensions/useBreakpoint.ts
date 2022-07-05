@@ -1,10 +1,7 @@
-import { useIsSSR } from "tws-common/react/hook/isSSR";
-import { isSSR, requireNoSSR } from "tws-common/ssr";
+import { useIsSSR } from "tws-common/react/hook/isSSR"
+import { isSSR, requireNoSSR } from "tws-common/ssr"
 
-
-
-import useWindowDimensions from "./useWindowDimensions";
-
+import useWindowDimensions from "./useWindowDimensions"
 
 // TODO(teawithsand): move breakpoint definitions and boundaries to
 
@@ -54,21 +51,24 @@ const resolveBreakpointIndex = (width: number): number => {
 	}
 }
 
+// Note: static SSR checks are required here
+// 	since dynamic one does first render with isSSR = true, which causes
+//  some hooks not to be registered(ones, which do not work on SSR)
+//  and react does not like that
 export const useBreakpoint = (onSSR?: Breakpoint): Breakpoint => {
-	if (!onSSR) requireNoSSR()
+	if (typeof onSSR === "undefined") requireNoSSR()
 
-	const isSSR = useIsSSR()
-	if (isSSR && onSSR) return onSSR
+	if (isSSR() && typeof onSSR !== "undefined") return onSSR
 
 	const { width } = useWindowDimensions()
 	return BREAKPOINTS[resolveBreakpointIndex(width)]
 }
 
 export const useBreakpointIndex = (onSSR?: number): number => {
-	if (!onSSR) requireNoSSR()
+	if (typeof onSSR === "undefined") requireNoSSR()
 
-	const isSSR = useIsSSR()
-	if (isSSR && onSSR) return onSSR
+	console.error("isSSR", isSSR())
+	if (isSSR() && typeof onSSR !== "undefined") return onSSR
 
 	const { width } = useWindowDimensions()
 	return resolveBreakpointIndex(width)
