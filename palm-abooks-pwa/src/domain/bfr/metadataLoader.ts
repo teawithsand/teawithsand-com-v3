@@ -6,7 +6,10 @@ import {
 	MPlayerPlaylistMetadata,
 	MPlayerPlaylistMetadataType,
 } from "@app/domain/bfr/playlist"
-import { MPlayerSource } from "@app/domain/bfr/source"
+import {
+	MPlayerSource,
+	MPlayerSourceMetadataType,
+} from "@app/domain/bfr/source"
 import { WTPSourceType } from "@app/domain/wtp/source"
 
 import {
@@ -43,9 +46,14 @@ export class MBFRMetadataLoaderAdapter
 	): Promise<void> => {
 		const source = playlist.sources[i]
 
-		if (source.preloadedMetadata !== null) {
-			results[i] = source.preloadedMetadata
-			return
+		if (source.metadata.type === MPlayerSourceMetadataType.ABOOK_FILE) {
+			if (
+				source.metadata.abookFileMetadata.metadataLoadingResult !== null
+			) {
+				results[i] =
+					source.metadata.abookFileMetadata.metadataLoadingResult
+				return
+			}
 		}
 
 		try {
@@ -94,7 +102,10 @@ export class MBFRMetadataLoaderAdapter
 						return
 					}
 
-					if (metadata.type === ABookFileMetadataType.PLAYABLE_FILE || metadata.type === ABookFileMetadataType.PLAYABLE_URL) {
+					if (
+						metadata.type === ABookFileMetadataType.PLAYABLE_FILE ||
+						metadata.type === ABookFileMetadataType.PLAYABLE_URL
+					) {
 						const newMetadata: ABookFileMetadata = {
 							...metadata,
 							metadataLoadingResult: r,

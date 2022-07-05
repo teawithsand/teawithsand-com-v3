@@ -1,8 +1,5 @@
 import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
-import {
-	ABookFileMetadata,
-	ABookFileMetadataType,
-} from "@app/domain/abook/typedef"
+import { ABookFileMetadataType } from "@app/domain/abook/typedef"
 import {
 	MPlayerPlaylistMetadata,
 	MPlayerPlaylistMetadataType,
@@ -72,7 +69,10 @@ export class WTPPlaylistResolver {
 				)
 				if (!metadata) continue // log it?
 
-				if (metadata.type === ABookFileMetadataType.PLAYABLE_FILE || metadata.type === ABookFileMetadataType.PLAYABLE_URL) {
+				if (
+					metadata.type === ABookFileMetadataType.PLAYABLE_FILE ||
+					metadata.type === ABookFileMetadataType.PLAYABLE_URL
+				) {
 					files.push({
 						ordinalNumber: metadata.ordinalNumber,
 						id: sourceId,

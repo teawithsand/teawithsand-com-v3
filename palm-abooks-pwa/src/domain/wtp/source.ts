@@ -1,6 +1,10 @@
 import { ABookID, ABookStore } from "@app/domain/abook/ABookStore"
 import { ABookFileMetadataType } from "@app/domain/abook/typedef"
-import { MPlayerSource, MPlayerSourceType } from "@app/domain/bfr/source"
+import {
+	MPlayerSource,
+	MPlayerSourceMetadataType,
+	MPlayerSourceType,
+} from "@app/domain/bfr/source"
 import { WTPError } from "@app/domain/wtp/WTPError"
 
 import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
@@ -47,7 +51,11 @@ export class WTPSourceResolver {
 			return {
 				type: MPlayerSourceType.URL,
 				id: source.id,
-				preloadedMetadata: source.preloadedMetadata,
+				metadata: {
+					type: MPlayerSourceMetadataType.URL,
+					url: source.url,
+					preloadedMetadata: source.preloadedMetadata,
+				},
 				url: source.url,
 				whatToPlaySource: source,
 			}
@@ -58,18 +66,19 @@ export class WTPSourceResolver {
 					`ABook with id "${source.abookId}" does not exist(requested by source with id "${source.id}")`,
 				)
 
-			const meta = await abookActiveRecord.files.getMetadata(
+			const abookFileMetadata = await abookActiveRecord.files.getMetadata(
 				source.sourceId,
 			)
-			if (!meta) {
+			if (!abookFileMetadata) {
 				throw new WTPSourceResolverError(
 					`ABook with id "${source.abookId}" does not have source with id "${source.sourceId}" (requested by source with id "${source.id}")`,
 				)
 			}
 
 			if (
-				meta.type !== ABookFileMetadataType.PLAYABLE_FILE &&
-				meta.type !== ABookFileMetadataType.PLAYABLE_URL
+				abookFileMetadata.type !==
+					ABookFileMetadataType.PLAYABLE_FILE &&
+				abookFileMetadata.type !== ABookFileMetadataType.PLAYABLE_URL
 			) {
 				throw new WTPSourceResolverError(
 					`ABook with id "${source.abookId}" has source with id "${source.sourceId}" but it's not playable file (requested by source with id "${source.id}")`,
@@ -77,12 +86,15 @@ export class WTPSourceResolver {
 			}
 
 			// TODO(teawithsand): better resolving strategy, which uses cached file if one is available
-			if (meta.type === ABookFileMetadataType.PLAYABLE_URL) {
+			if (abookFileMetadata.type === ABookFileMetadataType.PLAYABLE_URL) {
 				return {
 					type: MPlayerSourceType.URL,
 					id: source.id,
-					preloadedMetadata: meta.metadataLoadingResult,
-					url: meta.url,
+					metadata: {
+						type: MPlayerSourceMetadataType.ABOOK_FILE,
+						abookFileMetadata,
+					},
+					url: abookFileMetadata.url,
 					whatToPlaySource: source,
 				}
 			}
@@ -90,7 +102,10 @@ export class WTPSourceResolver {
 			return {
 				type: MPlayerSourceType.LOADER,
 				id: source.id,
-				preloadedMetadata: meta.metadataLoadingResult,
+				metadata: {
+					type: MPlayerSourceMetadataType.ABOOK_FILE,
+					abookFileMetadata: abookFileMetadata,
+				},
 				sourceLoader: async () => {
 					const res = await abookActiveRecord.files.getFile(
 						source.sourceId,
@@ -106,10 +121,17 @@ export class WTPSourceResolver {
 				whatToPlaySource: source,
 			}
 		} else if (source.type === WTPSourceType.BLOB_SOURCE) {
+			const fileName = source.blob instanceof File ? source.blob.name : ""
+
 			return {
 				type: MPlayerSourceType.LOADER,
 				id: source.id,
-				preloadedMetadata: source.preloadedMetadata,
+				metadata: {
+					type: MPlayerSourceMetadataType.EXTERNAL_FILE,
+					fileName,
+					mimeType: source.blob.type,
+					preloadedMetadata: source.preloadedMetadata,
+				},
 				sourceLoader: async () => source.blob,
 				whatToPlaySource: source,
 			}

@@ -10,7 +10,7 @@ import { displayInfoReducer } from "@app/domain/displayInfo/reducer"
 import { DisplayInfoState } from "@app/domain/displayInfo/state"
 import { playerUiReducer, PlayerUIState } from "@app/domain/redux/playerUi"
 import {
-	whatToPlayPlaylistSynchronizer,
+	bfrMetadataStateSynchronizer,
 	whatToPlayStateSynchronizer,
 } from "@app/domain/redux/synchronizers"
 import { whatToPlayReducer } from "@app/domain/wtp/reducer"
@@ -52,7 +52,7 @@ const finalReducer = wrapReducerForSync(
 		getSyncedIdStore: (s: State) => s.syncedIdStore,
 		setSyncedIdStore: (s: State, st) => ({ ...s, syncedIdStore: st }),
 	},
-	[whatToPlayStateSynchronizer, whatToPlayPlaylistSynchronizer],
+	[whatToPlayStateSynchronizer, bfrMetadataStateSynchronizer],
 )
 
 export const createStore = () =>
