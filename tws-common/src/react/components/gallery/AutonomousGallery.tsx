@@ -7,14 +7,17 @@ import Gallery, {
 
 export type AutonomousGalleryProps = {
 	entries: GalleryEntry[]
+	size?: GallerySize // defaults to large for historic reasons
 	enableKeyboardControls?: boolean
 }
 
 export const AutonomousGallery = (props: AutonomousGalleryProps) => {
 	const { entries, enableKeyboardControls } = props
 
+	const preferredSize = props.size ?? "large"
+
 	const [mode, setMode] = useState<GalleryMode>("normal")
-	const [size, setSize] = useState<GallerySize>("large")
+	const [realSize, setRealSize] = useState<GallerySize>(preferredSize)
 	const [elementIndex, setElementIndex] = useState(0)
 
 	const effectiveElementIndex =
@@ -26,30 +29,30 @@ export const AutonomousGallery = (props: AutonomousGalleryProps) => {
 			entries={entries}
 			currentEntryIndex={effectiveElementIndex}
 			mode={mode}
-			size={size}
+			size={realSize}
 			enableKeyboardControls={
-				(enableKeyboardControls ?? false) || size === "fullscreen"
+				(enableKeyboardControls ?? false) || realSize === "fullscreen"
 			}
 			onCurrentEntryTap={() => {
-				if (size === "large") {
-					setSize("fullscreen")
-				} else if (size === "fullscreen" && mode === "normal") {
+				if (realSize === preferredSize) {
+					setRealSize("fullscreen")
+				} else if (realSize === "fullscreen" && mode === "normal") {
 					setMode("image-only")
 				} else {
-					setSize("large")
+					setRealSize(preferredSize)
 					setMode("normal")
 				}
 			}}
 			onFullscreenToggleRequested={() => {
-				if (size !== "fullscreen") {
-					setSize("fullscreen")
+				if (realSize !== "fullscreen") {
+					setRealSize("fullscreen")
 				} else {
-					setSize("large")
+					setRealSize(preferredSize)
 					setMode("normal")
 				}
 			}}
 			onFullscreenExit={() => {
-				setSize("large")
+				setRealSize(preferredSize)
 				setMode("normal")
 			}}
 			onSwipeRight={() => {

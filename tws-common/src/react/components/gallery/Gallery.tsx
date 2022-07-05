@@ -57,7 +57,7 @@ const GalleryContainer = styled.div.attrs(
 	}
 `
 
-export type GallerySize = "large" | "fullscreen"
+export type GallerySize = "large" | "medium" | "fullscreen"
 export type GalleryMode = "normal" | "image-only"
 
 export type GalleryEntry = {
@@ -124,6 +124,8 @@ export const Gallery = (props: GalleryProps) => {
 			return "100vh"
 		} else if (size === "large") {
 			return "80vh"
+		} else if(size === "medium") {
+			return "60vh"
 		} else {
 			throw new Error("unreachable code")
 		}
