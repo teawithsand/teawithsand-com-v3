@@ -14,7 +14,7 @@ import {
 	BREAKPOINT_MD,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
 
-const ShrineCardGrid = styled.div`
+const ShrineCardGrid = styled.div<{ $smallDisplay: boolean }>`
 	display: grid;
 	grid-template-columns: ${({ $smallDisplay }) =>
 		$smallDisplay ? "1fr" : "repeat(3, 1fr)"};
@@ -52,7 +52,7 @@ const SerachPage = (props: { data: Queries.WaysideShrineSearchQuery }) => {
 										tags: [...u.frontmatter.tags],
 										featuredImage:
 											u.frontmatter.featuredImage
-												.childImageSharp,
+												.childImageSharp as any,
 									}}
 								/>
 							)
@@ -87,8 +87,7 @@ export const pageQuery = graphql`
 								gatsbyImageData(
 									layout: CONSTRAINED
 									width: 420
-									placeholder: BLURRED,
-									formats: [AUTO, WEBP, AVIF]
+									placeholder: BLURRED
 								)
 							}
 						}
