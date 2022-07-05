@@ -5,10 +5,7 @@ import {
 	displayInfoSetPlaylist,
 	displayInfoSetStateResolved,
 } from "@app/domain/displayInfo/actions"
-import {
-	DisplayInfoState,
-	DisplayInfoStateState,
-} from "@app/domain/displayInfo/state"
+import { DisplayInfoState } from "@app/domain/displayInfo/state"
 
 import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
@@ -34,10 +31,18 @@ export const displayInfoReducer = createReducer<DisplayInfoState>(
 				const { payload } = action
 				state.sync.playlist = makeSyncRoot(payload)
 				state.resolved = null
+
+				LOG.info(LOG_TAG, "Got playlist", state.sync.playlist.data)
 			})
 			.addCase(displayInfoSetMetadataBag, (state, action) => {
 				const { payload } = action
 				state.sync.metadataBag = makeSyncRoot(payload)
+
+				LOG.info(
+					LOG_TAG,
+					"Got metadata bag",
+					state.sync.metadataBag.data,
+				)
 				// TODO(teawithsand): notify reducer that update is pending now
 				//   and unset that pending flag in setResolved call
 			})

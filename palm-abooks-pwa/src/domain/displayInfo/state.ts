@@ -1,15 +1,18 @@
-import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist"
-import { MPlayerSource } from "@app/domain/bfr/source"
-import { DisplayInfoError } from "@app/domain/displayInfo/error"
-import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist"
-import { WTPSource } from "@app/domain/wtp/source"
-import { WTPError } from "@app/domain/wtp/WTPError"
+import { MPlayerPlaylistMetadata } from "@app/domain/bfr/playlist";
+import { MPlayerSource } from "@app/domain/bfr/source";
+import { DisplayInfoError } from "@app/domain/displayInfo/error";
+import { WTPPlaylistMetadata } from "@app/domain/wtp/playlist";
+import { WTPSource } from "@app/domain/wtp/source";
+import { WTPError } from "@app/domain/wtp/WTPError";
 
-import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager"
-import { BFRPlaylist } from "tws-common/player/bfr/state"
-import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata"
-import MetadataBag from "tws-common/player/metadata/MetadataBag"
-import { NamedSyncRoot } from "tws-common/redux/sync/root"
+
+
+import { claimId, NS_SYNC_ROOT } from "tws-common/misc/GlobalIDManager";
+import { BFRPlaylist } from "tws-common/player/bfr/state";
+import { MetadataLoadingResult } from "tws-common/player/metadata/Metadata";
+import MetadataBag from "tws-common/player/metadata/MetadataBag";
+import { NamedSyncRoot } from "tws-common/redux/sync/root";
+
 
 export const displayInfoPlaylistSyncRootName = claimId(
 	NS_SYNC_ROOT,
@@ -53,7 +56,7 @@ export type CurrentDisplayInfo = {
  */
 export type DisplayInfo = {
 	playbackTitle: string
-	sources: DisplayInfo[]
+	sources: DisplaySource[]
 	currentInfo: CurrentDisplayInfo | null
 }
 
@@ -95,7 +98,7 @@ export type DisplayInfoPlaylist =
 export type DisplayInfoStateResolved =
 	| {
 			type: "resolved"
-			// TODO(teawithsand): any data here, like ABook metadata or sth
+			info: DisplayInfo
 	  }
 	| {
 			type: "error"
