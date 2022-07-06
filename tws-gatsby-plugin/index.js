@@ -28,7 +28,7 @@ const BasicSitePluginsStart = [
 		options: {
 			defaults: {
 				formats: ["jpg", "webp", "avif"],
-				placeholder: `dominantColor`,
+				placeholder: "blurred",
 				quality: 50,
 				breakpoints: [350, 750, 1080, 1366, 1920],
 				backgroundColor: `transparent`,
