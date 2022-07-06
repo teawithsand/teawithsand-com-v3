@@ -11,6 +11,7 @@ export default interface AppTranslation {
 	layout: {
 		navbar: {
 			search: string
+			publishing: string
 			homePage: string
 			brandName: string
 		}

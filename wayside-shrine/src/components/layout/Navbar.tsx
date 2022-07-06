@@ -1,6 +1,6 @@
 import React from "react"
 
-import { homePath, searchPath } from "@app/paths"
+import { homePath, publishingPath, searchPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { Container, Nav, Navbar } from "tws-common/ui"
@@ -22,6 +22,9 @@ const AppNavbar = () => {
 						</LinkContainer>
 						<LinkContainer to={searchPath}>
 							<Nav.Link href="#">{trans.search}</Nav.Link>
+						</LinkContainer>
+						<LinkContainer to={publishingPath}>
+							<Nav.Link href="#">{trans.publishing}</Nav.Link>
 						</LinkContainer>
 					</Nav>
 				</Navbar.Collapse>

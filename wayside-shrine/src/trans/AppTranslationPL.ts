@@ -5,8 +5,9 @@ const AppTranslationPL: AppTranslation = {
 	layout: {
 		navbar: {
 			homePage: "Strona główna",
-			search: "Wyszukiwanie kapliczek",
-			brandName: "SzlakiemKapliczek"
+			search: "Wyszukiwanie",
+			publishing: "Jak dodać obiekt?",
+			brandName: "SzlakiemKapliczek",
 		},
 	},
 	shrine: {
