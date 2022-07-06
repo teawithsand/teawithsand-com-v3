@@ -52,6 +52,7 @@ const config = makeConfig(
 	{
 		title: `wayside-shrine`,
 		siteUrl: `https://szlakiemkapliczek.pl`,
+		submissionsEmail: "submissions@szlakiemkapliczek.pl",
 	},
 	plugins,
 )

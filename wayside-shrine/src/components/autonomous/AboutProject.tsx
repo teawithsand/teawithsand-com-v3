@@ -11,6 +11,9 @@ const AboutProject = () => {
 				obiektów(ale głównie kapliczek) w Polsce. Dane są zbierane od
 				użytkowników.
 			</p>
+			<p>
+				Jeśli chcesz się dowiedzieć jak dodać obiekt to wejdź tutaj.
+			</p>
 			<footer></footer>
 		</section>
 	)
