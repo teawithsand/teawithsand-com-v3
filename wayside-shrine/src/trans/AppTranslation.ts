@@ -8,6 +8,13 @@ import Translator, { createTranslatorContext, useTranslator } from "tws-common/t
 
 export default interface AppTranslation {
 	appName: string
+	layout: {
+		navbar: {
+			search: string
+			homePage: string
+			brandName: string
+		}
+	}
 	shrine: {
 		view: {
 			navigation: {

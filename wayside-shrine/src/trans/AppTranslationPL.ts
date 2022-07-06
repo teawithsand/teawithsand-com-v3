@@ -2,6 +2,13 @@ import AppTranslation from "@app/trans/AppTranslation"
 
 const AppTranslationPL: AppTranslation = {
 	appName: "SzlakiemKapliczek",
+	layout: {
+		navbar: {
+			homePage: "Strona główna",
+			search: "Wyszukiwanie kapliczek",
+			brandName: "SzlakiemKapliczek"
+		},
+	},
 	shrine: {
 		view: {
 			galleryHeader: "Galeria",
