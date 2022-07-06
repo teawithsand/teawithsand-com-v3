@@ -144,6 +144,8 @@ const GalleryBottomBar = (props: {
 
 	const newTargetScroll = useRef(0)
 
+	const isContainerVisibleRef = useRef(false)
+
 	useEffect(() => {
 		const { current } = containerRef
 		if (current) {
@@ -180,9 +182,34 @@ const GalleryBottomBar = (props: {
 		}
 	}, [containerRef, containerRef.current])
 
+	// TODO(teawithsand): this is not perfect, we would like to scroll to current element if we didn't do so
+	//  *once* we make it visible, but not when we already did so and user has scrolled away the bar
+	//  this requires special consideration when auto moving gallery elements is implemented
+	useEffect(() => {
+		const { current } = containerRef
+		isContainerVisibleRef.current = false
+		if (current) {
+			const observer = new IntersectionObserver(
+				entries => {
+					isContainerVisibleRef.current = entries[0].isIntersecting
+				},
+				{
+					threshold: [1],
+				},
+			)
+
+			observer.observe(current)
+
+			return () => {
+				isContainerVisibleRef.current = false
+				observer.unobserve(current)
+			}
+		}
+	}, [containerRef, containerRef.current])
+
 	useLayoutEffect(() => {
 		const { current } = containerRef
-		if (current) {
+		if (current && isContainerVisibleRef.current) {
 			const res = current.querySelector(
 				`*[data-index="${currentEntryIndex}"]`,
 			)
