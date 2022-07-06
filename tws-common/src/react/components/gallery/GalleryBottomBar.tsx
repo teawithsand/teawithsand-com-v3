@@ -1,11 +1,6 @@
-import React, {
-	ReactNode,
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState,
-} from "react"
-import styled from "styled-components"
+import React, { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import styled from "styled-components";
+
 
 const InnerGalleryBottomBar = styled.div.attrs(
 	({
@@ -216,13 +211,14 @@ const GalleryBottomBar = (props: {
 			if (res) {
 				res.scrollIntoView({
 					behavior: "smooth",
-					block: "end",
+					block: "nearest",
 					inline: "center",
 				})
 			}
 		}
 	}, [currentEntryIndex, containerRef, containerRef.current])
 
+	// TODO(teawithsand): fix truncated border of current image on the container end(either left or right side is just black, rather than showing the border expected)
 	return (
 		<InnerGalleryBottomBar
 			ref={containerRef}
