@@ -67,7 +67,6 @@ export const useBreakpoint = (onSSR?: Breakpoint): Breakpoint => {
 export const useBreakpointIndex = (onSSR?: number): number => {
 	if (typeof onSSR === "undefined") requireNoSSR()
 
-	console.error("isSSR", isSSR())
 	if (isSSR() && typeof onSSR !== "undefined") return onSSR
 
 	const { width } = useWindowDimensions()
