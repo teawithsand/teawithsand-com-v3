@@ -1,10 +1,10 @@
-import AppTranslationPL from "@app/trans/AppTranslationPL"
+import AppTranslationPL from "@app/trans/AppTranslationPL";
 
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
-import Translator, {
-	createTranslatorContext,
-	useTranslator,
-} from "tws-common/trans/Translator"
+
+
+import { DEFAULT_LANGUAGE } from "tws-common/trans/language";
+import Translator, { createTranslatorContext, useTranslator } from "tws-common/trans/Translator";
+
 
 export default interface AppTranslation {
 	appName: string
@@ -15,6 +15,8 @@ export default interface AppTranslation {
 				comments: string
 				map: string
 			}
+			createdAt: (date: Date) => string
+			lastEditedAt: (date: Date) => string
 			galleryHeader: string
 			mapHeader: string
 			commentsHeader: string

@@ -2,18 +2,25 @@ import { ImageDataLike } from "gatsby-plugin-image"
 import React, { useRef } from "react"
 import styled from "styled-components"
 
-import Map from "@app/components/map/Map"
 import ShrineViewArticleSection from "@app/components/shrine/view/ShrineViewArticleSection"
 import ShrineViewCommentsSection from "@app/components/shrine/view/ShrineViewCommentsSection"
+import { ShrineViewContext } from "@app/components/shrine/view/ShrineViewContext"
 import ShrineViewGallerySection from "@app/components/shrine/view/ShrineViewGallerySection"
 import ShrineViewMapSection from "@app/components/shrine/view/ShrineViewMapSection"
+
+import {
+	BREAKPOINT_LG,
+	BREAKPOINT_MD,
+	breakpointIndex,
+	useBreakpointIndex,
+} from "tws-common/react/hook/dimensions/useBreakpoint"
 
 export type ShrineViewData = {
 	title: string
 	path: string
 	excerpt: string
-	createdDate: string
-	lastEditedDate: string | null
+	createdAt: string
+	lastEditedAt: string | null
 	tags: string[]
 	coordinates: [number, number]
 	html: string
@@ -31,32 +38,53 @@ const ParentContainer = styled.article`
 
 const ShrineView = (props: { data: Readonly<ShrineViewData> }) => {
 	const { data } = props
-	const { html, title, tags, images, coordinates } = data
+	const {
+		html,
+		title,
+		tags,
+		images,
+		coordinates,
+		createdAt,
+		lastEditedAt,
+		featuredImage,
+	} = data
 
 	const gallerySectionRef = useRef<HTMLElement | null>(null)
 	const mapSectionRef = useRef<HTMLElement | null>(null)
 	const commentsSectionRef = useRef<HTMLElement | null>(null)
 
+	const isSmall =
+		useBreakpointIndex(breakpointIndex(BREAKPOINT_LG)) <
+		breakpointIndex(BREAKPOINT_MD)
+
 	return (
-		<ParentContainer>
-			<ShrineViewArticleSection
-				imagesScrollElement={gallerySectionRef}
-				mapScrollElement={mapSectionRef}
-				commentsScrollElement={commentsSectionRef}
-				tags={tags}
-				title={title}
-				contentHTML={html}
-			/>
+		<ShrineViewContext.Provider value={{ isSmall }}>
+			<ParentContainer>
+				<ShrineViewArticleSection
+					heroImage={featuredImage ?? null}
+					imagesScrollElement={gallerySectionRef}
+					mapScrollElement={mapSectionRef}
+					commentsScrollElement={commentsSectionRef}
+					tags={tags}
+					title={title}
+					contentHTML={html}
+					createdAt={new Date(createdAt)}
+					lastEditedAt={lastEditedAt ? new Date(lastEditedAt) : null}
+				/>
 
-			<ShrineViewGallerySection images={images} ref={gallerySectionRef} />
+				<ShrineViewGallerySection
+					images={images}
+					ref={gallerySectionRef}
+				/>
 
-			<ShrineViewMapSection
-				coordinates={coordinates}
-				ref={mapSectionRef}
-			/>
+				<ShrineViewMapSection
+					coordinates={coordinates}
+					ref={mapSectionRef}
+				/>
 
-			<ShrineViewCommentsSection ref={commentsSectionRef} />
-		</ParentContainer>
+				<ShrineViewCommentsSection ref={commentsSectionRef} />
+			</ParentContainer>
+		</ShrineViewContext.Provider>
 	)
 }
 

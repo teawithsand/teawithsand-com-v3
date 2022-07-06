@@ -165,7 +165,8 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
 	type Frontmatter {
 		title: String
 		description: String
-		date: Date @dateformat
+		createdAt: Date @dateformat
+		lastEditedAt: Date @dateformat
 		tags: [String]
 		language: String
 		coordinates: [Float]

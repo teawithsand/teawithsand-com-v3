@@ -1,6 +1,9 @@
-import React from "react"
+import { GatsbyImage, getImage, ImageDataLike } from "gatsby-plugin-image"
+import React, { useContext } from "react"
 import styled, { css } from "styled-components"
 
+import ShrineViewArticleDisplay from "@app/components/shrine/view/ShrineViewArticleDisplay"
+import { ShrineViewContext } from "@app/components/shrine/view/ShrineViewContext"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import {
@@ -16,7 +19,33 @@ type ViewProps = {
 	$isSmall: boolean
 }
 
-const ArticleNavigationEntry = styled(Button)``
+const ArticleSection = styled.section`
+	display: grid;
+	grid-auto-flow: row;
+	grid-auto-rows: minmax(0, auto);
+	gap: 1rem;
+`
+
+const ArticleTitle = styled.h1``
+const ArticleSubtitle = styled.span.attrs<ViewProps>({
+	className: "text-muted",
+})<ViewProps>`
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	row-gap: 0;
+	column-gap: 1rem;
+
+	${({ $isSmall }) =>
+		$isSmall &&
+		css`
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+		`}
+`
+
+const ArticleSubtitleEntry = styled.span``
 
 const ArticleHeader = styled.header<ViewProps>`
 	display: grid;
@@ -33,6 +62,8 @@ const ArticleHeader = styled.header<ViewProps>`
 			text-align: center;
 		`}
 `
+
+const ArticleNavigationEntry = styled(Button)``
 
 const ArticleNavigation = styled.nav<ViewProps>`
 	display: flex;
@@ -59,15 +90,6 @@ const ArticleTagLineContainer = styled.span<ViewProps>`
 		`}
 `
 
-const ArticleContainer = styled.div``
-
-const ArticleSection = styled.section`
-	display: grid;
-	grid-auto-flow: row;
-	grid-auto-rows: minmax(0, auto);
-	gap: 1rem;
-`
-
 // eslint-disable-next-line react/display-name
 const ShrineViewArticleSection = React.forwardRef(
 	(
@@ -75,6 +97,9 @@ const ShrineViewArticleSection = React.forwardRef(
 			title: string
 			tags: string[]
 			contentHTML: string
+			heroImage: ImageDataLike | null
+			createdAt: Date
+			lastEditedAt: Date | null
 			imagesScrollElement: React.RefObject<HTMLElement | null>
 			commentsScrollElement: React.RefObject<HTMLElement | null>
 			mapScrollElement: React.RefObject<HTMLElement | null>
@@ -84,6 +109,9 @@ const ShrineViewArticleSection = React.forwardRef(
 		const {
 			title,
 			tags,
+			heroImage,
+			createdAt,
+			lastEditedAt,
 			imagesScrollElement,
 			commentsScrollElement,
 			mapScrollElement,
@@ -91,10 +119,6 @@ const ShrineViewArticleSection = React.forwardRef(
 		} = props
 
 		const trans = useAppTranslationSelector(s => s.shrine.view)
-
-		const isSmall =
-			useBreakpointIndex(breakpointIndex(BREAKPOINT_LG)) <
-			breakpointIndex(BREAKPOINT_MD)
 
 		const scrollToElement = (e: HTMLElement | null | undefined) => {
 			if (e) {
@@ -105,10 +129,22 @@ const ShrineViewArticleSection = React.forwardRef(
 			}
 		}
 
+		const { isSmall } = useContext(ShrineViewContext)
+
 		return (
 			<ArticleSection ref={ref as any}>
 				<ArticleHeader $isSmall={isSmall}>
-					<h1>{title}</h1>
+					<ArticleTitle>{title}</ArticleTitle>
+					<ArticleSubtitle $isSmall={isSmall}>
+						<ArticleSubtitleEntry>
+							{trans.createdAt(createdAt)}
+						</ArticleSubtitleEntry>
+						{lastEditedAt && (
+							<ArticleSubtitleEntry>
+								{trans.lastEditedAt(lastEditedAt)}
+							</ArticleSubtitleEntry>
+						)}
+					</ArticleSubtitle>
 					<ArticleTagLineContainer $isSmall={isSmall}>
 						<TagLine
 							tags={tags.map(tag => ({
@@ -147,11 +183,10 @@ const ShrineViewArticleSection = React.forwardRef(
 					</ArticleNavigation>
 				</ArticleHeader>
 
-				<ArticleContainer
-					dangerouslySetInnerHTML={{
-						__html: contentHTML,
-					}}
-				></ArticleContainer>
+				<ShrineViewArticleDisplay
+					heroImage={heroImage}
+					html={contentHTML}
+				/>
 			</ArticleSection>
 		)
 	},

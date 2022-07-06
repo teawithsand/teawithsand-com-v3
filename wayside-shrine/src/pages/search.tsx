@@ -80,7 +80,7 @@ export const pageQuery = graphql`
 					id
 					frontmatter {
 						title
-						date(formatString: "YYYY-MM-DD")
+						createdAt
 						coordinates
 						tags
 						featuredImage {

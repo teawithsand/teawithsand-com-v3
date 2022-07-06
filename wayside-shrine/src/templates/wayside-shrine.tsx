@@ -15,9 +15,9 @@ const WaysideShrineTemplate = (props: {
 				<ShrineView
 					data={{
 						title: u.frontmatter.title,
-						createdDate: u.frontmatter.date,
+						createdAt: u.frontmatter.createdAt,
 						excerpt: u.excerpt,
-						lastEditedDate: null,
+						lastEditedAt: u.frontmatter.lastEditedAt || null,
 						coordinates: u.frontmatter.coordinates as [
 							number,
 							number,
@@ -25,6 +25,7 @@ const WaysideShrineTemplate = (props: {
 						path: u.fields.path,
 						tags: [...u.frontmatter.tags],
 						html: u.html,
+						featuredImage: u.frontmatter.featuredImage,
 						images: u.frontmatter.galleryImages ?? [],
 					}}
 				/>
@@ -45,24 +46,18 @@ export const pageQuery = graphql`
 			childMarkdownRemark {
 				frontmatter {
 					title
-					date(formatString: "YYYY-MM-DD")
+					createdAt
+					lastEditedAt
 					coordinates
 					tags
 					featuredImage {
 						childImageSharp {
-							gatsbyImageData(
-								layout: CONSTRAINED
-								width: 420
-								placeholder: BLURRED
-							)
+							gatsbyImageData(layout: CONSTRAINED)
 						}
 					}
 					galleryImages {
 						childImageSharp {
-							gatsbyImageData(
-								layout: CONSTRAINED
-								placeholder: BLURRED
-							)
+							gatsbyImageData(layout: CONSTRAINED)
 						}
 					}
 				}
@@ -77,7 +72,7 @@ export const pageQuery = graphql`
 				frontmatter {
 					tags
 					title
-					date(formatString: "MMMM DD, YYYY")
+					createdAt(formatString: "MMMM DD, YYYY")
 				}
 				fields {
 					path
@@ -89,7 +84,7 @@ export const pageQuery = graphql`
 				frontmatter {
 					tags
 					title
-					date(formatString: "MMMM DD, YYYY")
+					createdAt(formatString: "MMMM DD, YYYY")
 				}
 				fields {
 					path

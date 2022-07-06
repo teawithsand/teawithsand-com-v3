@@ -18,6 +18,7 @@ const ShrineViewMapSection = React.forwardRef(
 			<MapSection ref={ref as any}>
 				<MapSectionHeader>
 					<h3>{trans.mapHeader}</h3>
+					<p>{props.coordinates.map(v => v.toString()).join(", ")}</p>
 				</MapSectionHeader>
 
 				<Map initialView={{
