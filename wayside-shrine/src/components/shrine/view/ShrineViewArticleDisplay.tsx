@@ -16,6 +16,7 @@ const HeroImageParent = styled.div<ViewProps>`
 	display: grid;
 	max-height: 80vh;
 	overflow: hidden;
+	border-radius: 15px;
 
 	${({ $isSmall }) =>
 		$isSmall
@@ -27,6 +28,9 @@ const HeroImageParent = styled.div<ViewProps>`
 			: css`
 					max-width: 40%;
 					float: left;
+
+					margin-right: 0.5rem;
+					margin-bottom: 0.1rem;
 			  `}
 `
 
