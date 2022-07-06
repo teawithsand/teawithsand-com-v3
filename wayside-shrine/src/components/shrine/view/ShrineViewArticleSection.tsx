@@ -1,17 +1,11 @@
-import { GatsbyImage, getImage, ImageDataLike } from "gatsby-plugin-image"
-import React, { useContext } from "react"
+import { ImageDataLike } from "gatsby-plugin-image"
+import React, { useContext, useRef } from "react"
 import styled, { css } from "styled-components"
 
 import ShrineViewArticleDisplay from "@app/components/shrine/view/ShrineViewArticleDisplay"
 import { ShrineViewContext } from "@app/components/shrine/view/ShrineViewContext"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
-import {
-	BREAKPOINT_LG,
-	BREAKPOINT_MD,
-	breakpointIndex,
-	useBreakpointIndex,
-} from "tws-common/react/hook/dimensions/useBreakpoint"
 import { Button } from "tws-common/ui"
 import TagLine from "tws-common/ui/TagLine"
 
@@ -120,10 +114,15 @@ const ShrineViewArticleSection = React.forwardRef(
 
 		const trans = useAppTranslationSelector(s => s.shrine.view)
 
-		const scrollToElement = (e: HTMLElement | null | undefined) => {
+		const descriptionScrollElement = useRef<HTMLElement | null>(null)
+
+		const scrollToElement = (
+			e: HTMLElement | null | undefined,
+			location?: "center" | "start",
+		) => {
 			if (e) {
 				e.scrollIntoView({
-					block: "center",
+					block: location ?? "center",
 					behavior: "smooth",
 				})
 			}
@@ -180,10 +179,22 @@ const ShrineViewArticleSection = React.forwardRef(
 						>
 							{trans.navigation.map}
 						</ArticleNavigationEntry>
+						<ArticleNavigationEntry
+							variant="primary"
+							onClick={() =>
+								scrollToElement(
+									descriptionScrollElement.current,
+									"start",
+								)
+							}
+						>
+							Opis
+						</ArticleNavigationEntry>
 					</ArticleNavigation>
 				</ArticleHeader>
 
 				<ShrineViewArticleDisplay
+					ref={descriptionScrollElement}
 					heroImage={heroImage}
 					html={contentHTML}
 				/>
