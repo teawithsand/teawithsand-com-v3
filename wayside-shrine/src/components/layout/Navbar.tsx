@@ -1,6 +1,6 @@
 import React from "react"
 
-import { homePath, publishingPath, searchPath } from "@app/paths"
+import { homePath, locationPath, publishingPath, searchPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { Container, Nav, Navbar } from "tws-common/ui"
@@ -17,14 +17,14 @@ const AppNavbar = () => {
 				<Navbar.Toggle />
 				<Navbar.Collapse>
 					<Nav className="ms-auto">
-						<LinkContainer to={homePath}>
-							<Nav.Link href="#">{trans.homePage}</Nav.Link>
-						</LinkContainer>
 						<LinkContainer to={searchPath}>
 							<Nav.Link href="#">{trans.search}</Nav.Link>
 						</LinkContainer>
 						<LinkContainer to={publishingPath}>
 							<Nav.Link href="#">{trans.publishing}</Nav.Link>
+						</LinkContainer>
+						<LinkContainer to={locationPath}>
+							<Nav.Link href="#">{trans.location}</Nav.Link>
 						</LinkContainer>
 					</Nav>
 				</Navbar.Collapse>

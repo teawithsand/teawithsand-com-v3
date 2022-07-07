@@ -8,6 +8,7 @@ const AppTranslationPL: AppTranslation = {
 			search: "Wyszukiwanie",
 			publishing: "Jak dodać obiekt?",
 			brandName: "SzlakiemKapliczek",
+			location: "Zlokalizuj mnie",
 		},
 	},
 	shrine: {

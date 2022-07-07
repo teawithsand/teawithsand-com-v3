@@ -14,6 +14,7 @@ export default interface AppTranslation {
 			publishing: string
 			homePage: string
 			brandName: string
+			location: string
 		}
 	}
 	shrine: {
