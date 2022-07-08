@@ -1,6 +1,7 @@
 const innerCanUseDom =
 	typeof window !== "undefined" &&
 	window.document &&
+	window.navigator &&
 	window.document.createElement
 
 export const canUseDom = () => innerCanUseDom
