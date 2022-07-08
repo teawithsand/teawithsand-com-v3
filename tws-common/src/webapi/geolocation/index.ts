@@ -40,15 +40,40 @@ const makeGeolocationError = (e: any) => {
 
 // See
 // https://developer.mozilla.org/en-US/docs/Web/API/GeolocationCoordinates
-export type GeolocationPosition = {
+type IGeolocationPosition = {
 	timestamp: number // https://developer.mozilla.org/en-US/docs/Web/API/EpochTimeStamp
-	latitude: number // decimal degrees
-	longitude: number // decimal degrees
-	altitude: number | null // meters relative to sea level
-	accuracy: number // +/- value in meters
-	altitudeAccuracy: number | null // +/- value in meters
-	heading: number | null // degrees from 0 to 359.(9) or NaN
-	speed: number | null // meter per second
+	coordinates: {
+		latitude: number // decimal degrees
+		longitude: number // decimal degrees
+		altitude: number | null // meters relative to sea level
+		accuracy: number // +/- value in meters
+		altitudeAccuracy: number | null // +/- value in meters
+		heading: number | null // degrees from 0 to 359.(9) or NaN
+		speed: number | null // meter per second
+	} | null
+}
+
+const makePosition = (e: GeolocationPosition): IGeolocationPosition => {
+	LOG.debug(LOG_TAG, "received position", e)
+
+	// Note: for some reason spread operator
+	// does not work for GeolocationCoordinates object
+	// so one has to do like that
+	return {
+		timestamp: e.timestamp,
+		coordinates:
+			"latitude" in e.coords && "longitude" in e.coords
+				? {
+						latitude: e.coords.latitude,
+						longitude: e.coords.longitude,
+						accuracy: e.coords.accuracy,
+						altitude: e.coords.altitude,
+						altitudeAccuracy: e.coords.altitudeAccuracy,
+						heading: e.coords.heading,
+						speed: e.coords.speed,
+				  }
+				: null,
+	}
 }
 
 export type GeolocationEvent =
@@ -57,7 +82,7 @@ export type GeolocationEvent =
 	  }
 	| {
 			type: "position"
-			position: GeolocationPosition
+			position: IGeolocationPosition
 	  }
 	| {
 			type: "error"
@@ -108,7 +133,7 @@ class GeolocationHelperImpl {
 
 	readPosition = async (
 		options: Partial<ReadPositionOptions>,
-	): Promise<GeolocationPosition> => {
+	): Promise<IGeolocationPosition> => {
 		if (!this.checkSupport()) {
 			throw new GeolocationError(
 				"Geolocation not supported",
@@ -116,13 +141,10 @@ class GeolocationHelperImpl {
 			)
 		}
 
-		const p = new Promise<GeolocationPosition>((resolve, reject) => {
+		const p = new Promise<IGeolocationPosition>((resolve, reject) => {
 			window.navigator.geolocation.getCurrentPosition(
 				e => {
-					resolve({
-						timestamp: e.timestamp,
-						...e.coords,
-					})
+					resolve(makePosition(e))
 				},
 				reject,
 				{
@@ -178,10 +200,7 @@ class GeolocationHelperImpl {
 					if (!hasError) {
 						bus.emitEvent({
 							type: "position",
-							position: {
-								timestamp: e.timestamp,
-								...e.coords,
-							},
+							position: makePosition(e),
 						})
 					}
 					if (!resolved) {
@@ -223,3 +242,4 @@ class GeolocationHelperImpl {
 }
 
 export const GeolocationHelper = new GeolocationHelperImpl()
+export { IGeolocationPosition as GeolocationPosition }
