@@ -20,6 +20,7 @@ const AppTranslationPL: AppTranslation = {
 			lastUpdateLabel: "Ostatnia aktualizacja pozycji",
 			latitudeLabel: "Szerokość geograficzna",
 			longitudeLabel: "Długość geograficzna",
+			errorLabel: "Błąd",
 			noPosition: lastUpdateTimestamp =>
 				`Brak lokalizacji. Ostatnia aktualizacja: ${new Date(
 					lastUpdateTimestamp,
@@ -27,7 +28,7 @@ const AppTranslationPL: AppTranslation = {
 			lastUpdate: timestamp =>
 				new Date(timestamp).toLocaleString("pl-PL"),
 			accuracyRadius: (meter, isLow) =>
-				`${meter}m ${isLow && "(niska)"}`,
+				`${meter}m ${(isLow && "(niska)") || ""}`,
 			explainGeolocationErrorCode: code => {
 				switch (code) {
 					case GeolocationErrorCode.NOT_SUPPORTED:

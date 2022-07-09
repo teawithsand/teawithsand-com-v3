@@ -1,17 +1,21 @@
-import { Collection, Feature } from "ol"
-import { Control, defaults as defaultControls, ZoomToExtent } from "ol/control"
-import { boundingExtent } from "ol/extent"
-import { Point } from "ol/geom"
-import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer"
-import OLMap from "ol/Map"
-import { fromLonLat as innerFromLonLat } from "ol/proj"
+import { Collection, Feature } from "ol";
+import { Control, defaults as defaultControls, ZoomToExtent } from "ol/control";
+import { boundingExtent } from "ol/extent";
+import { Point } from "ol/geom";
+import Circle from 'ol/geom/Circle';
+import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
+import OLMap from "ol/Map";
+import { fromLonLat as innerFromLonLat } from "ol/proj";
 import { OSM, Vector as VectorSource } from "ol/source"
-import { Icon, Style } from "ol/style"
-import View from "ol/View"
-import React, { useEffect, useMemo, useRef, useState } from "react"
-import styled from "styled-components"
+import { Circle as CircleStyle, Icon as IconStyle, Stroke as StrokeStyle, Style } from "ol/style";
+import View from "ol/View";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import styled from "styled-components";
 
-import useUniqueId from "tws-common/react/hook/useUniqueId"
+
+
+import useUniqueId from "tws-common/react/hook/useUniqueId";
+
 
 /**
  * Format is: longitude first, then latitude
@@ -101,22 +105,37 @@ const Map = (props: {
 
 	const [map, setMap] = useState<OLMap | null>(null)
 
-	const iconsLayers = useMemo(
-		() =>
-			icons.map(icon => {
+	const iconsLayers = useMemo(() => {
+		return [
+			...icons.map(icon => {
 				return new VectorLayer({
 					source: new VectorSource({
 						features: icon.features,
 					}),
 					style: new Style({
-						image: new Icon({
+						image: new IconStyle({
 							...icon.display,
 						}),
 					}),
 				})
 			}),
-		[icons],
-	)
+			new VectorLayer({
+				source: new VectorSource({
+					features: [
+						new Feature(
+							new Circle([5e6, 7e6], 1e6),
+						),
+					],
+				}),
+				style: new Style({
+					image: new CircleStyle({
+						radius: 5,
+						stroke: new StrokeStyle({ color: "red", width: 1 }),
+					}),
+				}),
+			}),
+		]
+	}, [icons])
 
 	const currentIconsLayer = useRef<VectorLayer<VectorSource>[]>([])
 

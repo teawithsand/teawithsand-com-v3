@@ -26,6 +26,7 @@ export default interface AppTranslation {
 			coordinatesLabel: string
 			accuracyLabel: string
 			lastUpdateLabel: string
+			errorLabel: string
 
 			lastUpdate: (timestamp: TimestampMs) => string
 			accuracyRadius: (meters: number, isLow: boolean) => string

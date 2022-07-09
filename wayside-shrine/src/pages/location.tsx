@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 
 import PageContainer from "@app/components/layout/PageContainer"
-import LocationDisplay from "@app/components/location/LocationDisplay"
+import LocationCurrentDisplay from "@app/components/location/LocationCurrentDisplay"
 
 import { getNowTimestamp, TimestampMs } from "tws-common/lang/time/Timestamp"
 import {
@@ -19,7 +19,7 @@ const LocationPage = () => {
 		const claim = GeolocationHelper.createReadClaim({
 			enableHighAccuracy: true,
 			maximumAge: Infinity,
-			timeout: 10 * 1000,
+			timeout: 60 * 1000,
 		})
 
 		claim.bus.addSubscriber(e => {
@@ -40,7 +40,7 @@ const LocationPage = () => {
 	return (
 		<PageContainer>
 			<main>
-				<LocationDisplay
+				<LocationCurrentDisplay
 					lastUpdate={
 						position
 							? (position.timestamp as TimestampMs)
