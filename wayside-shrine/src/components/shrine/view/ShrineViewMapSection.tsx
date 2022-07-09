@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useMemo } from "react"
 import styled from "styled-components"
 
-import Map, { fromLonLat } from "@app/components/map/Map"
+import Map, { fromLonLat, MapIcon, MapView } from "@app/components/map/Map"
 import { ShrineViewSectionHeader } from "@app/components/shrine/view/ShrineViewSection"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
@@ -19,6 +19,35 @@ const ShrineViewMapSection = React.forwardRef(
 	(props: { coordinates: [number, number] }, ref) => {
 		const { coordinates } = props
 		const trans = useAppTranslationSelector(s => s.shrine.view)
+
+		const initialView: MapView = useMemo(
+			() => ({
+				type: "point",
+				zoom: 10,
+				coordinates: fromLonLat(coordinates),
+			}),
+			[coordinates],
+		)
+
+		const icons: MapIcon[] = useMemo(
+			() => [
+				{
+					display: {
+						src: "https://openlayers.org/en/latest/examples/data/icon.png",
+						anchor: [0.5, 46],
+						anchorXUnits: "fraction",
+						anchorYUnits: "pixels",
+					},
+					locations: [
+						{
+							name: "Object",
+							coordinates: fromLonLat(coordinates),
+						},
+					],
+				},
+			],
+			[coordinates],
+		)
 
 		return (
 			<MapSection ref={ref as any}>
@@ -48,29 +77,7 @@ const ShrineViewMapSection = React.forwardRef(
 					</OptionsButtonGroup>
 				</MapSectionHeader>
 
-				<Map
-					initialView={{
-						type: "point",
-						zoom: 10,
-						coordinates: fromLonLat(coordinates),
-					}}
-					icons={[
-						{
-							display: {
-								src: "https://openlayers.org/en/latest/examples/data/icon.png",
-								anchor: [0.5, 46],
-								anchorXUnits: "fraction",
-								anchorYUnits: "pixels",
-							},
-							locations: [
-								{
-									name: "Object",
-									coordinates: fromLonLat(coordinates),
-								},
-							],
-						},
-					]}
-				/>
+				<Map initialView={initialView} icons={icons} />
 			</MapSection>
 		)
 	},
