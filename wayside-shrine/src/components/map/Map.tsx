@@ -1,20 +1,17 @@
-import { Collection, Feature } from "ol";
-import { Control, defaults as defaultControls, ZoomToExtent } from "ol/control";
-import { boundingExtent } from "ol/extent";
-import { Point } from "ol/geom";
-import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
-import OLMap from "ol/Map";
-import { fromLonLat as innerFromLonLat } from "ol/proj";
-import { OSM, Vector as VectorSource } from "ol/source";
-import { Icon, Style } from "ol/style";
-import View from "ol/View";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import styled from "styled-components";
+import { Collection, Feature } from "ol"
+import { Control, defaults as defaultControls, ZoomToExtent } from "ol/control"
+import { boundingExtent } from "ol/extent"
+import { Point } from "ol/geom"
+import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer"
+import OLMap from "ol/Map"
+import { fromLonLat as innerFromLonLat } from "ol/proj"
+import { OSM, Vector as VectorSource } from "ol/source"
+import { Icon, Style } from "ol/style"
+import View from "ol/View"
+import React, { useEffect, useMemo, useRef, useState } from "react"
+import styled from "styled-components"
 
-
-
-import useUniqueId from "tws-common/react/hook/useUniqueId";
-
+import useUniqueId from "tws-common/react/hook/useUniqueId"
 
 /**
  * Format is: longitude first, then latitude
@@ -77,6 +74,8 @@ const Map = (props: {
 	initialView?: MapView
 	zoomToExtentButton?: Extent
 	icons?: MapIcon[]
+	style?: React.CSSProperties
+	className?: string
 }) => {
 	const center = props.initialView ?? {
 		type: "point",
@@ -213,6 +212,12 @@ const Map = (props: {
 		}
 	}, [map, extentToZoom])
 
-	return <MapContainer id={id}></MapContainer>
+	return (
+		<MapContainer
+			id={id}
+			className={props.className}
+			style={props.style}
+		></MapContainer>
+	)
 }
 export default Map
