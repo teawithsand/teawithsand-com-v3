@@ -197,12 +197,12 @@ class GeolocationHelperImpl {
 		new Promise<void>((resolve, reject) => {
 			handle = window.navigator.geolocation.watchPosition(
 				e => {
-					if (!hasError) {
-						bus.emitEvent({
-							type: "position",
-							position: makePosition(e),
-						})
-					}
+					// if (!hasError) {
+					bus.emitEvent({
+						type: "position",
+						position: makePosition(e),
+					})
+					//}
 					if (!resolved) {
 						resolved = true
 
@@ -223,7 +223,7 @@ class GeolocationHelperImpl {
 						error: explained,
 					})
 
-					cleanup()
+					// cleanup()
 				},
 				options,
 			)
