@@ -1,10 +1,12 @@
-import AppTranslationPL from "@app/trans/AppTranslationPL";
+import AppTranslationPL from "@app/trans/AppTranslationPL"
 
-
-
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language";
-import Translator, { createTranslatorContext, useTranslator } from "tws-common/trans/Translator";
-
+import { TimestampMs } from "tws-common/lang/time/Timestamp"
+import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
+import Translator, {
+	createTranslatorContext,
+	useTranslator,
+} from "tws-common/trans/Translator"
+import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
 
 export default interface AppTranslation {
 	appName: string
@@ -15,6 +17,23 @@ export default interface AppTranslation {
 			homePage: string
 			brandName: string
 			location: string
+		}
+	}
+	location: {
+		display: {
+			latitudeLabel: string
+			longitudeLabel: string
+			coordinatesLabel: string
+			accuracyLabel: string
+			lastUpdateLabel: string
+
+			lastUpdate: (timestamp: TimestampMs) => string
+			accuracyRadius: (meters: number, isLow: boolean) => string
+			noPosition: (
+				lastUpdate: TimestampMs,
+				deltaTimeSeconds: number,
+			) => string
+			explainGeolocationErrorCode: (code: GeolocationErrorCode) => string
 		}
 	}
 	shrine: {
