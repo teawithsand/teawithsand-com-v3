@@ -195,38 +195,57 @@ class GeolocationHelperImpl {
 		}
 
 		new Promise<void>((resolve, reject) => {
-			handle = window.navigator.geolocation.watchPosition(
-				e => {
-					// if (!hasError) {
-					bus.emitEvent({
-						type: "position",
-						position: makePosition(e),
-					})
-					//}
-					if (!resolved) {
-						resolved = true
+			try {
+				handle = window.navigator.geolocation.watchPosition(
+					e => {
+						// if (!hasError) {
+						bus.emitEvent({
+							type: "position",
+							position: makePosition(e),
+						})
+						//}
+						if (!resolved) {
+							resolved = true
 
-						resolve()
-					}
-				},
-				e => {
-					const explained = makeGeolocationError(e)
-					LOG.debug(LOG_TAG, "Geolocation error received", explained)
+							resolve()
+						}
+					},
+					e => {
+						const explained = makeGeolocationError(e)
+						LOG.debug(
+							LOG_TAG,
+							"Geolocation error received",
+							explained,
+						)
 
-					hasError = true
-					if (!resolved) {
-						resolved = true
-						reject(e)
-					}
-					bus.emitEvent({
-						type: "error",
-						error: explained,
-					})
+						hasError = true
+						if (!resolved) {
+							resolved = true
+							reject(e)
+						}
+						bus.emitEvent({
+							type: "error",
+							error: explained,
+						})
 
-					// cleanup()
-				},
-				options,
-			)
+						// cleanup()
+					},
+					options,
+				)
+			} catch (e) {
+				const explained = makeGeolocationError(e)
+				bus.emitEvent({
+					type: "error",
+					error: explained,
+				})
+				if (!resolved) {
+					resolved = true
+					reject(e)
+				}
+				cleanup()
+			}
+		}).catch(() => {
+			// noop
 		})
 
 		return {
