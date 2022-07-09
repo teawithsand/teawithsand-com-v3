@@ -8,11 +8,11 @@ import { isSSR } from "tws-common/ssr"
 const LOG_TAG = claimId(NS_LOG_TAG, "tws-common/Geolocation")
 
 export enum GeolocationErrorCode {
-	PERMISSION_DENIED = 1,
-	POSITION_UNAVAILABLE = 2,
-	TIMEOUT = 3,
-	NOT_SUPPORTED = 4,
-	UNKNOWN = 1234,
+	PERMISSION_DENIED = "permissionDenied",
+	POSITION_UNAVAILABLE = "positionUnavailable",
+	TIMEOUT = "timeout",
+	NOT_SUPPORTED = "notSupported",
+	UNKNOWN = "unknown",
 }
 
 export class GeolocationError extends BaseError {
