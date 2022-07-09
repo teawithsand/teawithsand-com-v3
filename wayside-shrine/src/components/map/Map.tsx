@@ -146,7 +146,7 @@ const Map = (props: {
 
 		{
 			const button = document.createElement("button")
-			button.innerText = "📌" // the best unicode icon i was able to find
+			button.innerText = "📌" // the best unicode icon I was able to find
 
 			button.addEventListener("click", centerMap, false)
 

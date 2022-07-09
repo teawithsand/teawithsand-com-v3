@@ -15,7 +15,7 @@ const AppTranslationPL: AppTranslation = {
 	},
 	location: {
 		display: {
-			accuracyLabel: "Dokładność",
+			accuracyLabel: "Dokładność - promień",
 			coordinatesLabel: "Koordynaty",
 			lastUpdateLabel: "Ostatnia aktualizacja pozycji",
 			latitudeLabel: "Szerokość geograficzna",
@@ -27,7 +27,7 @@ const AppTranslationPL: AppTranslation = {
 			lastUpdate: timestamp =>
 				new Date(timestamp).toLocaleString("pl-PL"),
 			accuracyRadius: (meter, isLow) =>
-				`Dokładność(promień) ${meter}m ${isLow && "(niska)"}`,
+				`${meter}m ${isLow && "(niska)"}`,
 			explainGeolocationErrorCode: code => {
 				switch (code) {
 					case GeolocationErrorCode.NOT_SUPPORTED:
@@ -37,7 +37,7 @@ const AppTranslationPL: AppTranslation = {
 					case GeolocationErrorCode.POSITION_UNAVAILABLE:
 						return "Pozycja nie jest dostępna"
 					case GeolocationErrorCode.TIMEOUT:
-						return "Czas na dostęp do lokalizacji upłyną"
+						return "Czas na uzyskanie lokalizacji upłynął"
 					default:
 					case GeolocationErrorCode.UNKNOWN:
 						return "Nieznany błąd dostępu do lokalizacji"
