@@ -1,5 +1,6 @@
 import { Feature } from "ol"
-import { defaults as defaultControls, ZoomToExtent } from "ol/control"
+import { Control, defaults as defaultControls, ZoomToExtent } from "ol/control"
+import { boundingExtent } from "ol/extent"
 import { Point } from "ol/geom"
 import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer"
 import OLMap from "ol/Map"
@@ -11,7 +12,6 @@ import React, { useEffect, useMemo } from "react"
 import styled from "styled-components"
 
 import useUniqueId from "tws-common/react/hook/useUniqueId"
-
 
 /**
  * Format is: longitude first, then latitude
@@ -54,7 +54,10 @@ export type MapInitialView =
 	| {
 			type: "extent"
 			extent: Extent
+			zoom?: number
 	  }
+
+const DEFAULT_ZOOM = 2
 
 const Map = (props: {
 	initialView?: MapInitialView
@@ -64,7 +67,7 @@ const Map = (props: {
 	const center = props.initialView ?? {
 		type: "point",
 		coordinates: [0, 0],
-		zoom: 2,
+		zoom: DEFAULT_ZOOM,
 	}
 	const extent = props.zoomToExtent ?? null
 
@@ -89,11 +92,11 @@ const Map = (props: {
 			center.type === "point"
 				? {
 						center: center.coordinates,
-						zoom: center.zoom ?? 2,
+						zoom: center.zoom ?? DEFAULT_ZOOM,
 				  }
 				: {
 						center: [0, 0],
-						zoom: 2,
+						zoom: DEFAULT_ZOOM,
 				  }
 
 		const map = new OLMap({
@@ -130,9 +133,36 @@ const Map = (props: {
 			view: new View(view),
 		})
 
-		if (center.type === "extent") {
-			map.getView().fit(center.extent)
+		const centerMap = () => {
+			if (center.type === "point") {
+				map.getView().fit(boundingExtent([center.coordinates]))
+				map.getView().setZoom(center.zoom ?? DEFAULT_ZOOM)
+			} else if (center.type === "extent") {
+				map.getView().fit(center.extent)
+			} else {
+				throw new Error("unreachable code")
+			}
 		}
+
+		{
+			const button = document.createElement("button")
+			button.innerText = "📌" // the best unicode icon i was able to find
+
+			button.addEventListener("click", centerMap, false)
+
+			const element = document.createElement("div")
+			element.style.top = "calc(5.5em)"
+			element.style.left = ".5em"
+			element.className = "rotate-north ol-unselectable ol-control"
+			element.appendChild(button)
+
+			const CenterMapControl = new Control({
+				element: element,
+			})
+			map.addControl(CenterMapControl)
+		}
+
+		centerMap()
 
 		return () => {
 			map.dispose()
