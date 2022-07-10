@@ -27,6 +27,32 @@ export class ErrorExplainerBuilder<R> {
 		})
 	}
 
+	addMatcherExplainer = <T>(
+		matches: (e: T) => boolean,
+		explainer: (e: T) => R,
+	) => {
+		this.entries.push(e => {
+			if (matches(e)) {
+				return {
+					result: explainer(e),
+				}
+			} else {
+				return null
+			}
+		})
+	}
+
+	addNonNullExplainer = (explainer: (e: any) => R | null | undefined) => {
+		this.entries.push(e => {
+			const result = explainer(e)
+			if (result !== undefined && result !== null) {
+				return { result }
+			} else {
+				return null
+			}
+		})
+	}
+
 	build = (): ErrorExplainer<R> => {
 		const entries = [...this.entries]
 		const fallback = this.fallback
