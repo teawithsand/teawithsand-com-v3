@@ -23,6 +23,9 @@ export interface RWLockAdapter {
 export class RWLock {
 	constructor(public readonly adapter: RWLockAdapter) {}
 
+	public readonly readLock = new Lock(this.adapter.read)
+	public readonly writeLock = new Lock(this.adapter.write)
+
 	lockRead = () => this.adapter.read.lock()
 	withLockRead = async <T>(cb: () => Promise<T>): Promise<T> => {
 		const unlock = await this.lockRead()
