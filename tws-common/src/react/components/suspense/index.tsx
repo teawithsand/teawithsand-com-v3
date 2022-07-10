@@ -1,8 +1,8 @@
 import React, { FC, ReactNode, useMemo, useState } from "react"
-import { SuspenseContext } from "tws-common/react/components/suspense/context"
-import { SuspenseManager } from "tws-common/react/components/suspense/SuspenseManager"
+import { SimpleSuspenseContext } from "tws-common/react/components/suspense/context"
+import { SuspenseManager } from "tws-common/react/components/suspense/manager"
 
-export * from "./SuspenseManager"
+export * from "./manager"
 export * from "./context"
 
 /**
@@ -20,8 +20,8 @@ export const SimpleSuspense = (props: {
 	const manager = useMemo(() => new SuspenseManager(setCtr), [])
 
 	return (
-		<SuspenseContext.Provider value={manager}>
+		<SimpleSuspenseContext.Provider value={manager}>
 			{ctr === 0 ? children : <Fallback />}
-		</SuspenseContext.Provider>
+		</SimpleSuspenseContext.Provider>
 	)
 }

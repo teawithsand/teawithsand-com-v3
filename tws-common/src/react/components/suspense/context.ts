@@ -1,17 +1,18 @@
-import { createContext, useContext } from "react"
-import { SuspenseManager } from "tws-common/react/components/suspense/SuspenseManager"
+import { createContext, useContext } from "react";
+import { SuspenseManager } from "tws-common/react/components/suspense/manager";
+
 
 /**
- * SuspenseContext is to be used internally by suspense.
+ * SimpleSuspenseContext is to be used internally by suspense.
  * It's adviset that it should not be used by user manually.
  */
-export const SuspenseContext = createContext<SuspenseManager | null>(null)
+export const SimpleSuspenseContext = createContext<SuspenseManager | null>(null)
 
 /**
  * Returns function, which creates suspense claim.
  */
 export const useSimpleSuspenseManager = () => {
-	const ctx = useContext(SuspenseContext)
+	const ctx = useContext(SimpleSuspenseContext)
 	if (!ctx)
 		throw new Error(
 			"SimpleSuspense component is required as one of parents",
@@ -23,6 +24,6 @@ export const useSimpleSuspenseManager = () => {
  * Returns function, which creates suspense claim.
  */
 export const useOptionalSimpleSuspenseManager = (): SuspenseManager | null => {
-	const ctx = useContext(SuspenseContext)
+	const ctx = useContext(SimpleSuspenseContext)
 	return ctx
 }
