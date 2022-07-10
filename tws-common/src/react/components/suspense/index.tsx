@@ -1,5 +1,6 @@
 import React, { FC, ReactNode, useMemo, useState } from "react"
 import {
+	DefaultSimpleSuspenseContext,
 	SimpleSuspenseContext,
 	useOptionalSimpleSuspenseManager,
 } from "tws-common/react/components/suspense/context"
@@ -14,11 +15,14 @@ export * from "./context"
  */
 export const SimpleSuspense = (props: {
 	fallback: FC<{}>
+	context?: SimpleSuspenseContext
 	children?: ReactNode
 }) => {
 	const { fallback: Fallback, children } = props
 
-	const parentManager = useOptionalSimpleSuspenseManager()
+	const Context = props.context ?? DefaultSimpleSuspenseContext
+
+	const parentManager = useOptionalSimpleSuspenseManager(Context)
 
 	const [ctr, setCtr] = useState(0)
 
@@ -28,8 +32,8 @@ export const SimpleSuspense = (props: {
 	)
 
 	return (
-		<SimpleSuspenseContext.Provider value={manager}>
+		<Context.Provider value={manager}>
 			{ctr === 0 ? children : <Fallback />}
-		</SimpleSuspenseContext.Provider>
+		</Context.Provider>
 	)
 }

@@ -1,5 +1,6 @@
 import React, { FC, ReactNode, useMemo, useState } from "react"
 import {
+	DefaultErrorWallContext,
 	ErrorWallContext,
 	useOptionalErrorWallManager,
 } from "tws-common/react/components/error-wall/context"
@@ -15,11 +16,14 @@ export const ErrorWall = (props: {
 	errorRenderer: FC<{
 		errors: any[]
 	}>
+	context?: ErrorWallContext
 	children?: ReactNode
 }) => {
 	const { errorRenderer: ErrorRenderer, children } = props
 
-	const parentManager = useOptionalErrorWallManager()
+	const Context = props.context ?? DefaultErrorWallContext
+
+	const parentManager = useOptionalErrorWallManager(Context)
 
 	const [errors, setErrors] = useState<any[]>([])
 
@@ -29,9 +33,9 @@ export const ErrorWall = (props: {
 	)
 
 	return (
-		<ErrorWallContext.Provider value={manager}>
+		<Context.Provider value={manager}>
 			<ErrorRenderer errors={errors} />
 			{children}
-		</ErrorWallContext.Provider>
+		</Context.Provider>
 	)
 }
