@@ -76,6 +76,9 @@ const AppTranslationPL: AppTranslation = {
 			},
 		},
 	},
+	error: {
+		unknown: "Wystąpił nieznany błąd",
+	},
 	shrine: {
 		view: {
 			galleryHeader: "Galeria",

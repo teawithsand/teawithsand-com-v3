@@ -66,6 +66,9 @@ export default interface AppTranslation {
 			featureDescription: string
 		}
 	}
+	error: {
+		unknown: string
+	}
 	shrine: {
 		view: {
 			navigation: {
