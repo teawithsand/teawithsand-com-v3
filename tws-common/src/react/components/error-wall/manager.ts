@@ -1,5 +1,8 @@
 export class ErrorWallManager {
-	constructor(private readonly onErrorsChanged: (errors: any[]) => void) {}
+	constructor(
+		public readonly parent: ErrorWallManager | null,
+		private readonly onErrorsChanged: (errors: any[]) => void,
+	) {}
 
 	private errors: any[] = []
 

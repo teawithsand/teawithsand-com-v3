@@ -1,11 +1,12 @@
 import React, { FC, ReactNode, useMemo, useState } from "react"
-import { SimpleSuspenseContext } from "tws-common/react/components/suspense/context"
+import {
+	SimpleSuspenseContext,
+	useOptionalSimpleSuspenseManager,
+} from "tws-common/react/components/suspense/context"
 import { SuspenseManager } from "tws-common/react/components/suspense/manager"
 
 export * from "./manager"
 export * from "./context"
-
-// TODO(teawithsand): add ability to make parent level suspense into "pending" state
 
 /**
  * Suspense, which yields fallback if any of children has claimed that it's loading.
@@ -17,9 +18,14 @@ export const SimpleSuspense = (props: {
 }) => {
 	const { fallback: Fallback, children } = props
 
+	const parentManager = useOptionalSimpleSuspenseManager()
+
 	const [ctr, setCtr] = useState(0)
 
-	const manager = useMemo(() => new SuspenseManager(setCtr), [])
+	const manager = useMemo(
+		() => new SuspenseManager(parentManager, setCtr),
+		[parentManager, setCtr],
+	)
 
 	return (
 		<SimpleSuspenseContext.Provider value={manager}>

@@ -1,5 +1,8 @@
 export class SuspenseManager {
-	constructor(private readonly onCounterChanged: (ctr: number) => void) {}
+	constructor(
+		public readonly parentManager: SuspenseManager | null,
+		private readonly onCounterChanged: (ctr: number) => void,
+	) {}
 
 	private counter = 0
 
