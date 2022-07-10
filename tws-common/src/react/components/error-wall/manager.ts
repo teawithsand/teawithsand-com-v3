@@ -1,26 +1,32 @@
-export class ErrorWallManager {
-	constructor(
-		public readonly parent: ErrorWallManager | null,
-		private readonly onErrorsChanged: (errors: any[]) => void,
-	) {}
+import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
+import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
 
-	private errors: any[] = []
+export class ErrorWallManager {
+	constructor(public readonly parent: ErrorWallManager | null) {}
+
+	private readonly innerErrorsBus = new DefaultStickyEventBus<any[]>([])
+
+	get errorsBus(): StickySubscribable<any[]> {
+		return this.innerErrorsBus
+	}
 
 	clear = () => {
-		this.errors = []
-		this.onErrorsChanged(this.errors)
+		this.innerErrorsBus.emitEvent([])
 	}
 
 	removeError = (error: any) => {
-		this.errors = this.errors.filter(e => e !== error)
+		this.innerErrorsBus.emitEvent(
+			this.errorsBus.lastEvent.filter(e => e !== error),
+		)
 	}
 
 	addError = (error: any) => {
-		this.errors = [...this.errors, error]
-		this.onErrorsChanged(this.errors)
+		this.innerErrorsBus.emitEvent([...this.errorsBus.lastEvent, error])
 
 		return () => {
-			this.errors = this.errors.filter(e => error !== e)
+			this.innerErrorsBus.emitEvent(
+				this.errorsBus.lastEvent.filter(e => e !== error),
+			)
 		}
 	}
 

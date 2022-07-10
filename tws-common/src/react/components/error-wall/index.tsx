@@ -1,10 +1,11 @@
-import React, { FC, ReactNode, useMemo, useState } from "react"
+import React, { FC, ReactNode, useMemo } from "react"
 import {
 	DefaultErrorWallContext,
 	ErrorWallContext,
 	useOptionalErrorWallManager,
 } from "tws-common/react/components/error-wall/context"
 import { ErrorWallManager } from "tws-common/react/components/error-wall/manager"
+import useStickySubscribable from "tws-common/react/hook/useStickySubscribable"
 
 export * from "./context"
 export * from "./manager"
@@ -18,19 +19,23 @@ export const ErrorWall = (props: {
 	}>
 	context?: ErrorWallContext
 	children?: ReactNode
+	manager?: ErrorWallManager
 }) => {
-	const { errorRenderer: ErrorRenderer, children } = props
+	const {
+		errorRenderer: ErrorRenderer,
+		children,
+		manager: propsedManager,
+	} = props
 
 	const Context = props.context ?? DefaultErrorWallContext
 
 	const parentManager = useOptionalErrorWallManager(Context)
-
-	const [errors, setErrors] = useState<any[]>([])
-
 	const manager = useMemo(
-		() => new ErrorWallManager(parentManager, setErrors),
-		[parentManager, setErrors],
+		() => propsedManager ?? new ErrorWallManager(parentManager),
+		[parentManager, propsedManager],
 	)
+
+	const errors = useStickySubscribable(manager.errorsBus)
 
 	return (
 		<Context.Provider value={manager}>
