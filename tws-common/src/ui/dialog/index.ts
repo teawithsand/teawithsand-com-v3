@@ -2,14 +2,22 @@ import { Context, createContext, ReactNode, useContext, useState } from "react"
 import { latePromise } from "tws-common/lang/latePromise"
 
 export type DialogRenderProps<T> = {
+	show: boolean
 	resolve: (data: T) => void
 	reject: (e: any) => void
 }
 
 export type DialogRender<T> = (renderProps: DialogRenderProps<T>) => ReactNode
 
+export type ShowDialogOptions = {
+	hideTimeout: number
+}
+
 export type DialogManager = {
-	showDialog<T>(render: DialogRender<T>): Promise<T>
+	showDialog<T>(
+		render: DialogRender<T>,
+		options?: ShowDialogOptions,
+	): Promise<T>
 }
 
 export type DialogManagerContext = Context<DialogManager>
@@ -47,6 +55,7 @@ export const useProvideDialogManager = (): [
 					...finalRenderStack,
 					() =>
 						innerRender({
+							show: true,
 							reject: e => {
 								if (!resolved) {
 									// displayed one (AKA the one, which can be resolved is always first one)
