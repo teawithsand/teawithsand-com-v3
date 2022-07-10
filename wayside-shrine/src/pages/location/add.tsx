@@ -3,7 +3,7 @@ import React, { useEffect } from "react"
 import PageContainer from "@app/components/layout/PageContainer"
 
 import { Button, Modal } from "tws-common/ui"
-import { useDialogManager } from "tws-common/ui/dialog"
+import { useDialogManager } from "tws-common/react/components/dialog"
 
 const LocationAddPage = () => {
 	const dm = useDialogManager()
