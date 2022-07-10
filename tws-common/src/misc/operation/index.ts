@@ -1,6 +1,6 @@
 import { MutationKey, useMutation } from "react-query"
 import { GTaskRunner } from "tws-common/misc/gtask/impl"
-import { Operation } from "tws-common/misc/gtask/operation/action"
+import { Operation } from "tws-common/misc/operation/action"
 
 export * from "./action"
 export * from "./external"

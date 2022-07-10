@@ -1,4 +1,4 @@
-import { Operation } from "tws-common/misc/gtask/operation/action"
+import { Operation } from "tws-common/misc/operation/action"
 import { useErrorWallManger } from "tws-common/react/components/error-wall"
 import { useSimpleSuspenseManager } from "tws-common/react/components/suspense"
 
