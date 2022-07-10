@@ -44,8 +44,8 @@ export interface GTaskRunner<M> {
 /**
  * Simplest possible task runner, which does nothing but runs task.
  */
-export const SimpleTaskRunner: GTaskRunner<any> = {
-	putTask: <T>(data: GTaskData<any, T>): GTaskHandle<any, T> => {
+export const SimpleTaskRunner: GTaskRunner<void> = {
+	putTask: <T>(data: GTaskData<void, T>): GTaskHandle<void, T> => {
 		const atom = new DefaultTaskAtom()
 		let state = GTaskState.RUNNING
 		const promise = (async () => {
@@ -74,9 +74,11 @@ export const SimpleTaskRunner: GTaskRunner<any> = {
 	},
 }
 
-export class MWGTaskRunner<M> implements GTaskRunner<M> {
+export class MWGTaskRunner<M, I extends GTaskRunner<M>>
+	implements GTaskRunner<M>
+{
 	constructor(
-		private readonly inner: GTaskRunner<M>,
+		public readonly inner: I,
 		private readonly wrapTask?: <T>(data: GTaskData<M, T>) => GTask<T>,
 	) {}
 
@@ -194,8 +196,8 @@ export class GroupRoutingGTaskRunner<
 > implements GTaskRunner<M>
 {
 	constructor(
-		private readonly runners: Map<string, GTaskRunner<M>>,
-		private readonly fallbackRunner: GTaskRunner<M>,
+		public readonly runners: Readonly<Map<string, GTaskRunner<M>>>,
+		public readonly fallbackRunner: GTaskRunner<M>,
 	) {}
 
 	putTask = <T>(data: GTaskData<M, T>): GTaskHandle<M, T> => {
