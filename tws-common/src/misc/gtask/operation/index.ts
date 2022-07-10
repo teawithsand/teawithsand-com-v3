@@ -1,9 +1,9 @@
-import { useMemo } from "react"
 import { MutationKey, useMutation } from "react-query"
 import { GTaskRunner } from "tws-common/misc/gtask/impl"
 import { Operation } from "tws-common/misc/gtask/operation/action"
 
 export * from "./action"
+export * from "./external"
 
 const extendMutationKey = (mk: MutationKey, elem: unknown) => {
 	if (typeof mk === "string") {
