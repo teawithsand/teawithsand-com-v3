@@ -5,6 +5,8 @@ import { SuspenseManager } from "tws-common/react/components/suspense/manager"
 export * from "./manager"
 export * from "./context"
 
+// TODO(teawithsand): add ability to make parent level suspense into "pending" state
+
 /**
  * Suspense, which yields fallback if any of children has claimed that it's loading.
  * Otherwise, renders children.
