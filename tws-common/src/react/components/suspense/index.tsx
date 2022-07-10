@@ -16,6 +16,9 @@ export interface OpinionatedSimpleSupenseProps {
 	}>
 	context?: SimpleSuspenseContext
 	children?: ReactNode
+
+	// FIXME(teaiwthsand): fix no parent manager issue when there is a proposed manager...
+	manager?: SimpleSuspenseManager
 }
 
 export interface SimpleSuspenseProps extends OpinionatedSimpleSupenseProps {
@@ -71,7 +74,12 @@ export const SimpleSuspenseDiv = (props: OpinionatedSimpleSupenseProps) => {
  * It may, but does not have to unmount innner components.
  */
 export const SimpleSuspenseDisplay = (props: SimpleSuspenseProps) => {
-	const { fallback: Fallback, display: Display, children } = props
+	const {
+		fallback: Fallback,
+		display: Display,
+		children,
+		manager: proposedManager,
+	} = props
 
 	const Context = props.context ?? DefaultSimpleSuspenseContext
 
@@ -80,8 +88,9 @@ export const SimpleSuspenseDisplay = (props: SimpleSuspenseProps) => {
 	const [ctr, setCtr] = useState(0)
 
 	const manager = useMemo(
-		() => new SimpleSuspenseManager(parentManager, setCtr),
-		[parentManager, setCtr],
+		() =>
+			proposedManager ?? new SimpleSuspenseManager(parentManager, setCtr),
+		[parentManager, setCtr, proposedManager],
 	)
 
 	return (
