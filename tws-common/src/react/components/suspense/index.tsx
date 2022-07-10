@@ -10,16 +10,25 @@ import { SuspenseManager } from "tws-common/react/components/suspense/manager"
 export * from "./manager"
 export * from "./context"
 
-/**
- * Suspense, which unmounts children until SimpleSuspenseManager is in idle state.
- */
-export const SimpleSuspense = (props: {
+export interface OpinionatedSimpleSupenseProps {
 	fallback: FC<{
 		children?: ReactNode
 	}>
 	context?: SimpleSuspenseContext
 	children?: ReactNode
-}) => {
+}
+
+export interface SimpleSuspenseProps extends OpinionatedSimpleSupenseProps {
+	display: FC<{
+		isFallbackActive: boolean
+		children?: ReactNode
+	}>
+}
+
+/**
+ * Suspense, which unmounts children until SimpleSuspenseManager is in idle state.
+ */
+export const SimpleSuspense = (props: OpinionatedSimpleSupenseProps) => {
 	return (
 		<SimpleSuspenseDisplay
 			{...props}
@@ -31,26 +40,20 @@ export const SimpleSuspense = (props: {
 	)
 }
 
-type IProps = {
+type SuspendParentProps = {
 	$isFallbackActive: boolean
 }
 
-const SuspendParent = styled.div.attrs<IProps>(props => ({
+const SuspendParent = styled.div.attrs<SuspendParentProps>(props => ({
 	style: {
 		display: props.$isFallbackActive ? "none" : "block",
 	},
-}))<IProps>``
+}))<SuspendParentProps>``
 
 /**
  * SimpleSuspense, which uses div with display: none for loading.
  */
-export const SimpleSuspenseDiv = (props: {
-	fallback: FC<{
-		children?: ReactNode
-	}>
-	context?: SimpleSuspenseContext
-	children?: ReactNode
-}) => {
+export const SimpleSuspenseDiv = (props: OpinionatedSimpleSupenseProps) => {
 	return (
 		<SimpleSuspenseDisplay
 			{...props}
@@ -67,17 +70,7 @@ export const SimpleSuspenseDiv = (props: {
  * Suspense, which allows for customizations on how to hide inner children.
  * It may, but does not have to unmount innner components.
  */
-export const SimpleSuspenseDisplay = (props: {
-	fallback: FC<{
-		children?: ReactNode
-	}>
-	context?: SimpleSuspenseContext
-	display: FC<{
-		isFallbackActive: boolean
-		children?: ReactNode
-	}>
-	children?: ReactNode
-}) => {
+export const SimpleSuspenseDisplay = (props: SimpleSuspenseProps) => {
 	const { fallback: Fallback, display: Display, children } = props
 
 	const Context = props.context ?? DefaultSimpleSuspenseContext
@@ -98,54 +91,3 @@ export const SimpleSuspenseDisplay = (props: {
 		</Context.Provider>
 	)
 }
-
-/*import React, { ReactElement, ReactFragment, ReactNode } from "react"
-import styled from "styled-components"
-
-import AppNavbar from "@app/components/layout/Navbar"
-
-import { GlobalIdManager } from "tws-common/misc/GlobalIDManager"
-import { DialogBoundary } from "tws-common/react/components/dialog"
-import { SimpleSuspenseDisplay } from "tws-common/react/components/suspense"
-import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
-import LoadingSpinner from "tws-common/ui/LoadingSpinner"
-
-const queryClient = new QueryClient()
-
-GlobalIdManager.disable()
-
-type IProps = {
-	$isFallbackActive: boolean
-}
-
-const SuspendParent = styled.div.attrs<IProps>(props => ({
-	style: {
-		display: props.$isFallbackActive ? "none" : "block",
-	},
-}))<IProps>``
-
-const Layout = (props: {
-	children: ReactElement | ReactNode | ReactFragment | null | undefined
-}) => {
-	return (
-		<>
-			<QueryClientProvider client={queryClient}>
-				<AppNavbar />
-				<SimpleSuspenseDisplay
-					fallback={() => <LoadingSpinner />}
-					display={({ isFallbackActive, children }) => (
-						<SuspendParent $isFallbackActive={isFallbackActive}>
-							{children}
-						</SuspendParent>
-					)}
-				>
-					<DialogBoundary>{props.children}</DialogBoundary>
-				</SimpleSuspenseDisplay>
-			</QueryClientProvider>
-		</>
-	)
-}
-
-export default Layout
-
-*/
