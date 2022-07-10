@@ -1,8 +1,17 @@
+import { useMemo } from "react"
 import { MutationKey, useMutation } from "react-query"
 import { GTaskRunner } from "tws-common/misc/gtask/impl"
 import { Operation } from "tws-common/misc/gtask/operation/action"
 
 export * from "./action"
+
+const extendMutationKey = (mk: MutationKey, elem: unknown) => {
+	if (typeof mk === "string") {
+		return [mk, elem]
+	} else {
+		return [...mk, elem]
+	}
+}
 
 /**
  * Creates executor from operation.
@@ -24,7 +33,10 @@ export const useOperation = <C, D, R>(
 ) => {
 	const executor = operation(config)
 
-	const mutation = useMutation(key, async (data: D) => await executor(data))
+	const mutation = useMutation(
+		extendMutationKey(key, executor),
+		async (data: D) => await executor(data),
+	)
 
 	return {
 		run: mutation.mutateAsync,
@@ -47,16 +59,19 @@ export const useOperationOnGTaskWithMetadata = <
 ) => {
 	const executor = useOperationExecutor(config, operation)
 
-	const mutation = useMutation(key, async (data: D) => {
-		const handle = runner.putTask({
-			metadata: metadata,
-			task: async () => {
-				return await executor(data)
-			},
-		})
+	const mutation = useMutation(
+		extendMutationKey(key, executor),
+		async (data: D) => {
+			const handle = runner.putTask({
+				metadata: metadata,
+				task: async () => {
+					return await executor(data)
+				},
+			})
 
-		await handle.promise
-	})
+			await handle.promise
+		},
+	)
 
 	return {
 		run: mutation.mutateAsync,
@@ -72,17 +87,20 @@ export const useOperationOnGTask = <C, D, R, T extends GTaskRunner<M>, M>(
 ) => {
 	const executor = useOperationExecutor(config, operation)
 
-	const mutation = useMutation(key, async (arg: { metadata: M; data: D }) => {
-		const { metadata, data } = arg
-		const handle = runner.putTask({
-			metadata: metadata,
-			task: async () => {
-				return await executor(data)
-			},
-		})
+	const mutation = useMutation(
+		extendMutationKey(key, executor),
+		async (arg: { metadata: M; data: D }) => {
+			const { metadata, data } = arg
+			const handle = runner.putTask({
+				metadata: metadata,
+				task: async () => {
+					return await executor(data)
+				},
+			})
 
-		await handle.promise
-	})
+			await handle.promise
+		},
+	)
 
 	return {
 		run: mutation.mutateAsync,
