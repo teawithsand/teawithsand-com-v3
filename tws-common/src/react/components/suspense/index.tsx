@@ -1,4 +1,5 @@
 import React, { FC, ReactNode, useMemo, useState } from "react"
+import styled from "styled-components"
 import {
 	DefaultSimpleSuspenseContext,
 	SimpleSuspenseContext,
@@ -26,6 +27,38 @@ export const SimpleSuspense = (props: {
 				const { isFallbackActive, children } = props
 				return <>{isFallbackActive ? null : children}</>
 			}}
+		/>
+	)
+}
+
+type IProps = {
+	$isFallbackActive: boolean
+}
+
+const SuspendParent = styled.div.attrs<IProps>(props => ({
+	style: {
+		display: props.$isFallbackActive ? "none" : "block",
+	},
+}))<IProps>``
+
+/**
+ * SimpleSuspense, which uses div with display: none for loading.
+ */
+export const SimpleSuspenseDiv = (props: {
+	fallback: FC<{
+		children?: ReactNode
+	}>
+	context?: SimpleSuspenseContext
+	children?: ReactNode
+}) => {
+	return (
+		<SimpleSuspenseDisplay
+			{...props}
+			display={({ isFallbackActive, children }) => (
+				<SuspendParent $isFallbackActive={isFallbackActive}>
+					{children}
+				</SuspendParent>
+			)}
 		/>
 	)
 }
@@ -65,3 +98,54 @@ export const SimpleSuspenseDisplay = (props: {
 		</Context.Provider>
 	)
 }
+
+/*import React, { ReactElement, ReactFragment, ReactNode } from "react"
+import styled from "styled-components"
+
+import AppNavbar from "@app/components/layout/Navbar"
+
+import { GlobalIdManager } from "tws-common/misc/GlobalIDManager"
+import { DialogBoundary } from "tws-common/react/components/dialog"
+import { SimpleSuspenseDisplay } from "tws-common/react/components/suspense"
+import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
+import LoadingSpinner from "tws-common/ui/LoadingSpinner"
+
+const queryClient = new QueryClient()
+
+GlobalIdManager.disable()
+
+type IProps = {
+	$isFallbackActive: boolean
+}
+
+const SuspendParent = styled.div.attrs<IProps>(props => ({
+	style: {
+		display: props.$isFallbackActive ? "none" : "block",
+	},
+}))<IProps>``
+
+const Layout = (props: {
+	children: ReactElement | ReactNode | ReactFragment | null | undefined
+}) => {
+	return (
+		<>
+			<QueryClientProvider client={queryClient}>
+				<AppNavbar />
+				<SimpleSuspenseDisplay
+					fallback={() => <LoadingSpinner />}
+					display={({ isFallbackActive, children }) => (
+						<SuspendParent $isFallbackActive={isFallbackActive}>
+							{children}
+						</SuspendParent>
+					)}
+				>
+					<DialogBoundary>{props.children}</DialogBoundary>
+				</SimpleSuspenseDisplay>
+			</QueryClientProvider>
+		</>
+	)
+}
+
+export default Layout
+
+*/
