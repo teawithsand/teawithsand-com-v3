@@ -16,11 +16,11 @@ export const ErrorBar = <T extends ReactNode>(props: {
 		if (error) {
 			return explainer(error)
 		}
-		return null
+		return <></>
 	}, [error])
 
 	if (!error) {
-		return null
+		return <></>
 	}
 
 	return <Alert variant="danger">{explained}</Alert>
