@@ -10,7 +10,7 @@ import {
 	GeolocationPosition,
 } from "tws-common/webapi/geolocation"
 
-const LocationPage = () => {
+const LocationLocatePage = () => {
 	const [lastUpdate, setLastUpdate] = useState<TimestampMs>(getNowTimestamp())
 	const [position, setPosition] = useState<GeolocationPosition | null>(null)
 	const [error, setError] = useState<GeolocationError | null>(null)
@@ -54,4 +54,4 @@ const LocationPage = () => {
 	)
 }
 
-export default LocationPage
+export default LocationLocatePage

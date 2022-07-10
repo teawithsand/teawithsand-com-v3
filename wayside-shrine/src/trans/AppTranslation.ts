@@ -1,12 +1,12 @@
-import AppTranslationPL from "@app/trans/AppTranslationPL"
+import AppTranslationPL from "@app/trans/AppTranslationPL";
 
-import { TimestampMs } from "tws-common/lang/time/Timestamp"
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
-import Translator, {
-	createTranslatorContext,
-	useTranslator,
-} from "tws-common/trans/Translator"
-import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
+
+
+import { TimestampMs } from "tws-common/lang/time/Timestamp";
+import { DEFAULT_LANGUAGE } from "tws-common/trans/language";
+import Translator, { createTranslatorContext, useTranslator } from "tws-common/trans/Translator";
+import { GeolocationErrorCode } from "tws-common/webapi/geolocation";
+
 
 export default interface AppTranslation {
 	appName: string
@@ -16,11 +16,17 @@ export default interface AppTranslation {
 			publishing: string
 			homePage: string
 			brandName: string
-			location: string
+			location: {
+				title: string
+				menu: string
+				locateMe: string
+				addLocation: string
+				showLocations: string
+			}
 		}
 	}
 	location: {
-		display: {
+		locate: {
 			latitudeLabel: string
 			longitudeLabel: string
 			coordinatesLabel: string
@@ -35,6 +41,27 @@ export default interface AppTranslation {
 				deltaTimeSeconds: number,
 			) => string
 			explainGeolocationErrorCode: (code: GeolocationErrorCode) => string
+		}
+		list: {
+			noLocationsTitle: string
+			noLocationsGoToMenu: string
+			ordinalNumber: string
+			name: string
+			description: string
+			date: string
+			coordinates: string
+			actions: {
+				label: string
+				view: string
+				delete: string
+			}
+		}
+		menu: {
+			title: string
+			locateMe: string
+			addLocation: string
+			showLocations: string
+			featureDescription: string
 		}
 	}
 	shrine: {

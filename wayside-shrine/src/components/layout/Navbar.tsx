@@ -1,9 +1,16 @@
 import React from "react"
 
-import { homePath, locationPath, publishingPath, searchPath } from "@app/paths"
+import {
+	homePath,
+	locationListPath,
+	locationLocatePath,
+	locationMenuPath,
+	publishingPath,
+	searchPath,
+} from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
-import { Container, Nav, Navbar } from "tws-common/ui"
+import { Container, Nav, Navbar, NavDropdown } from "tws-common/ui"
 import LinkContainer from "tws-common/ui/LinkContainer"
 
 const AppNavbar = () => {
@@ -23,9 +30,29 @@ const AppNavbar = () => {
 						<LinkContainer to={publishingPath}>
 							<Nav.Link href="#">{trans.publishing}</Nav.Link>
 						</LinkContainer>
-						<LinkContainer to={locationPath}>
-							<Nav.Link href="#">{trans.location}</Nav.Link>
-						</LinkContainer>
+						<NavDropdown title={trans.location.title} align={"end"}>
+							<LinkContainer to={locationMenuPath}>
+								<NavDropdown.Item>
+									{trans.location.menu}
+								</NavDropdown.Item>
+							</LinkContainer>
+							<NavDropdown.Divider />
+							<LinkContainer to={locationLocatePath}>
+								<NavDropdown.Item>
+									{trans.location.locateMe}
+								</NavDropdown.Item>
+							</LinkContainer>
+							<LinkContainer to={locationLocatePath}>
+								<NavDropdown.Item>
+									{trans.location.addLocation}
+								</NavDropdown.Item>
+							</LinkContainer>
+							<LinkContainer to={locationListPath}>
+								<NavDropdown.Item>
+									{trans.location.showLocations}
+								</NavDropdown.Item>
+							</LinkContainer>
+						</NavDropdown>
 					</Nav>
 				</Navbar.Collapse>
 			</Container>

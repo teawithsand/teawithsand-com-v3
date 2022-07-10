@@ -39,7 +39,7 @@ const LocationCurrentDisplay = (props: {
 		}
 	}, [])
 
-	const trans = useAppTranslationSelector(s => s.location.display)
+	const trans = useAppTranslationSelector(s => s.location.locate)
 
 	const ago = Math.max(0, Math.round((nowTs - lastUpdate) / 1000))
 	if (!position) {

@@ -10,11 +10,17 @@ const AppTranslationPL: AppTranslation = {
 			search: "Wyszukiwanie",
 			publishing: "Jak dodać obiekt?",
 			brandName: "SzlakiemKapliczek",
-			location: "Zlokalizuj mnie",
+			location: {
+				title: "Lokalizacje",
+				menu: "Menu lokalizacji",
+				addLocation: "Dodaj lokalizację ręcznie",
+				locateMe: "Zlokalizuj mnie przy użyciu GPS",
+				showLocations: "Lista zapisanych lokalizacji",
+			},
 		},
 	},
 	location: {
-		display: {
+		locate: {
 			accuracyLabel: "Dokładność - promień",
 			coordinatesLabel: "Koordynaty",
 			lastUpdateLabel: "Ostatnia aktualizacja pozycji",
@@ -43,6 +49,28 @@ const AppTranslationPL: AppTranslation = {
 					case GeolocationErrorCode.UNKNOWN:
 						return "Nieznany błąd dostępu do lokalizacji"
 				}
+			},
+		},
+		menu: {
+			title: "Lokalizacja",
+			addLocation: "Dodaj lokalizację ręcznie",
+			locateMe: "Zlokalizuj mine",
+			showLocations: "Lista zapisanych lokalizacji",
+			featureDescription: `Lokalizator pozwala na pobranie lokalizacji z urządzenia i zapisanie jej w pamięci strony internetowej.
+				Ułatwia to zapisanie lokalizacji objektu, który zostanie zgłoszony. Zapisane lokalizacje można wyeksportować do pliku.`,
+		},
+		list: {
+			noLocationsTitle: "Nie masz żadnych zapisanych lokalizacji",
+			noLocationsGoToMenu: "Idź do menu lokalizacji",
+			name: "Lista lokalizacji",
+			date: "Data",
+			ordinalNumber: "Lp.",
+			coordinates: "Współrzędne",
+			description: "Opis",
+			actions: {
+				label: "Akcje",
+				delete: "Usuń",
+				view: "Podgląd",
 			},
 		},
 	},
