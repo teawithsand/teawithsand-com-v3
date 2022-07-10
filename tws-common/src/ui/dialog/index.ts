@@ -1,6 +1,8 @@
 import { Context, createContext, ReactNode, useContext, useState } from "react"
 import { latePromise } from "tws-common/lang/latePromise"
 
+export * from "./DialogBoundary"
+
 export type DialogRenderProps<T> = {
 	show: boolean
 	resolve: (data: T) => void
