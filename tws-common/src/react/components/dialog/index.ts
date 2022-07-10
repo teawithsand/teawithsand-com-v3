@@ -46,6 +46,8 @@ export const useProvideDialogManager = (): [
 		(() => ReactNode)[]
 	>([])
 
+	// TODO(teawithsand): make this more bugproof by making innerRender's parameters static with help of useRef
+	//  since now using outdated functions will cause wild and hard to find bugs
 	return [
 		{
 			showDialog: <T>(innerRender: DialogRender<T>) => {
