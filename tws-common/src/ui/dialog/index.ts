@@ -1,4 +1,4 @@
-import { Context, ReactNode, useContext, useState } from "react"
+import { Context, createContext, ReactNode, useContext, useState } from "react"
 import { latePromise } from "tws-common/lang/latePromise"
 
 export type DialogRenderProps<T> = {
@@ -14,8 +14,19 @@ export type DialogManager = {
 
 export type DialogManagerContext = Context<DialogManager>
 
-export const useDialogManager = (ctx: DialogManagerContext): DialogManager =>
-	useContext(ctx)
+export const DefaultDialogContext = createContext(
+	// obviously it's not correct. It's user responsibility to supply DM
+	// but it makes TS happy
+	null as unknown as DialogManager,
+)
+
+export const useDialogManager = (
+	ctx: DialogManagerContext = DefaultDialogContext,
+): DialogManager => {
+	const v = useContext(ctx)
+	if (!v) throw new Error("DialogManager was not supplied for given context")
+	return v
+}
 
 export const useProvideDialogManager = (): [
 	DialogManager,
