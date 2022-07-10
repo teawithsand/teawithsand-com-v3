@@ -2,6 +2,7 @@ import React from "react"
 
 import {
 	homePath,
+	locationAddPath,
 	locationListPath,
 	locationLocatePath,
 	locationMenuPath,
@@ -42,7 +43,7 @@ const AppNavbar = () => {
 									{trans.location.locateMe}
 								</NavDropdown.Item>
 							</LinkContainer>
-							<LinkContainer to={locationLocatePath}>
+							<LinkContainer to={locationAddPath}>
 								<NavDropdown.Item>
 									{trans.location.addLocation}
 								</NavDropdown.Item>
