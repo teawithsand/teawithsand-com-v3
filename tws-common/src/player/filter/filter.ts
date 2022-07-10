@@ -10,7 +10,7 @@ export type AudioFilter =
 	  }
 	| {
 			type: "dynamic-compressor"
-            
+
 			threshold: number
 			knee: number
 			ratio: number

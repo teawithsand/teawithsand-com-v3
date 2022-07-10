@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { requireNoSSR } from "tws-common/ssr";
-
+import { useEffect, useState } from "react"
+import { requireNoSSR } from "tws-common/ssr"
 
 export type Orientation = "vertical" | "horizontal" | "square"
 export type WindowDimensions = {

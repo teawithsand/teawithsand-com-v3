@@ -37,7 +37,7 @@ const TopBarEntryRightTopButtonsElement = styled.div`
 const GalleryTopBar = (props: {
 	visible?: boolean
 	currentEntryIndex: number
-	entryCount: number,
+	entryCount: number
 	onToggleFullscreen: () => void
 }) => {
 	const {

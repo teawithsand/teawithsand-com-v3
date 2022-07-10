@@ -126,7 +126,7 @@ export class BFRSleep<T> {
 			this.releaseReduxStore()
 			this.releaseSleepTask()
 			this.atom.invalidate()
-			
+
 			this.releaseReduxStore = null
 		}
 	}

@@ -1,7 +1,6 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
-import { WritableDraft } from "immer/dist/internal";
-import { FlashMessage, FlashMessageId } from "tws-common/ui/flash/flash";
-
+import { createAction, createReducer } from "@reduxjs/toolkit"
+import { WritableDraft } from "immer/dist/internal"
+import { FlashMessage, FlashMessageId } from "tws-common/ui/flash/flash"
 
 export type FlashMessagesState = {
 	flashMessages: FlashMessage[]
@@ -10,7 +9,9 @@ export type FlashMessagesState = {
 const prefix = "tws-common/flash-messages"
 
 export const addFlashMessage = createAction<FlashMessage>(`${prefix}/addFlash`)
-export const removeFlashMessage = createAction<FlashMessageId>(`${prefix}/removeFlash`)
+export const removeFlashMessage = createAction<FlashMessageId>(
+	`${prefix}/removeFlash`,
+)
 
 export const flashMessageReducer = createReducer<FlashMessagesState>(
 	{

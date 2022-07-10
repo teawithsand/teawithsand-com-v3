@@ -124,7 +124,7 @@ export const Gallery = (props: GalleryProps) => {
 			return "100vh"
 		} else if (size === "large") {
 			return "80vh"
-		} else if(size === "medium") {
+		} else if (size === "medium") {
 			return "60vh"
 		} else {
 			throw new Error("unreachable code")

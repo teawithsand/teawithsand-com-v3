@@ -30,7 +30,9 @@ export const setFilters = createAction<AudioFilter[]>(`${prefix}/setFilters`)
 export const setVolume = createAction<number>(`${prefix}/setVolume`)
 
 export const doSeek = createAction<number>(`${prefix}/doSeek`)
-export const setCurrentSourceIndex = createAction<number>(`${prefix}/setCurrentSourceIndex`)
+export const setCurrentSourceIndex = createAction<number>(
+	`${prefix}/setCurrentSourceIndex`,
+)
 
 export const setAllowExternalSetIsPlayingWhenReady = createAction<boolean>(
 	`${prefix}/setAllowExternalSetIsPlayingWhenReady`,

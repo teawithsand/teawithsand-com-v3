@@ -47,7 +47,7 @@ const doTest = (
 
 			await testLockAdapter(adapter)
 		})
-        // TODO(teawithsand): add more tests here
+		// TODO(teawithsand): add more tests here
 	})
 }
 

@@ -1,6 +1,5 @@
-import { createContext, useContext } from "react";
-import { SuspenseManager } from "tws-common/react/components/suspense/manager";
-
+import { createContext, useContext } from "react"
+import { SuspenseManager } from "tws-common/react/components/suspense/manager"
 
 /**
  * SimpleSuspenseContext is to be used internally by suspense.

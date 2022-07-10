@@ -1,7 +1,7 @@
+import { useGesture } from "@use-gesture/react"
 import React, { ReactNode, useEffect, useRef, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
-import { useGesture } from "@use-gesture/react"
 
 const transitionName = "dissolve"
 const transitionDuration = 300

@@ -1,7 +1,9 @@
-import React, { FC, ReactNode, useMemo, useState } from "react";
-import { ErrorWallContext, useOptionalErrorWallManager } from "tws-common/react/components/error-wall/context";
-import { ErrorWallManager } from "tws-common/react/components/error-wall/manager";
-
+import React, { FC, ReactNode, useMemo, useState } from "react"
+import {
+	ErrorWallContext,
+	useOptionalErrorWallManager,
+} from "tws-common/react/components/error-wall/context"
+import { ErrorWallManager } from "tws-common/react/components/error-wall/manager"
 
 export * from "./context"
 export * from "./manager"

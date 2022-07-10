@@ -1,6 +1,11 @@
-import React, { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
-import styled from "styled-components";
-
+import React, {
+	ReactNode,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from "react"
+import styled from "styled-components"
 
 const InnerGalleryBottomBar = styled.div.attrs(
 	({

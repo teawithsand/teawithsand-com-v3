@@ -1,6 +1,5 @@
-import { PlayerSource } from "tws-common/player/source/PlayerSource";
+import { PlayerSource } from "tws-common/player/source/PlayerSource"
 import { SourcePlayerError } from "tws-common/player/source/SourcePlayerError"
-
 
 export type PlayerSourceResolver<T extends PlayerSource> = {
 	/**

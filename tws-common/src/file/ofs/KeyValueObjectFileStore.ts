@@ -206,7 +206,6 @@ export default class KeyValueObjectFileStore<M extends {}>
 			await this.metadataStore.set(key, metadata)
 		})
 
-
 	keys = (): AsyncIterable<string> => {
 		const { metadataStore, runWithLock } = this
 
