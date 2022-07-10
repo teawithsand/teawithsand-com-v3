@@ -1,3 +1,4 @@
+import { Lock, RWLock } from "tws-common/lang/lock/Lock"
 import { Operation } from "tws-common/misc/operation/action"
 import { useErrorWallManger } from "tws-common/react/components/error-wall"
 import { useSimpleSuspenseManager } from "tws-common/react/components/suspense"
@@ -31,5 +32,17 @@ export const wrapOperationToSimpleSuspense = <C, D, R>(
 		return async (data: D): Promise<R> => {
 			return manager.claimPromise(executor(data))
 		}
+	}
+}
+
+export const wrapOperationWithLock = <C, D, R>(
+	op: Operation<C, D, R>,
+	lock: Lock,
+): Operation<C, D, R> => {
+	return (config: C) => {
+		const executor = op(config)
+
+		return async (data: D): Promise<R> =>
+			await lock.withLock(async () => await executor(data))
 	}
 }
