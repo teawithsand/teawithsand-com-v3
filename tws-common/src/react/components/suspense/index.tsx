@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useMemo, useState } from "react"
+import React, { FC, ReactNode, useMemo } from "react"
 import styled from "styled-components"
 import {
 	DefaultSimpleSuspenseContext,
@@ -6,9 +6,10 @@ import {
 	useOptionalSimpleSuspenseManager,
 } from "tws-common/react/components/suspense/context"
 import { SimpleSuspenseManager } from "tws-common/react/components/suspense/manager"
+import useStickySubscribable from "tws-common/react/hook/useStickySubscribable"
 
-export * from "./manager"
 export * from "./context"
+export * from "./manager"
 
 export interface OpinionatedSimpleSupenseProps {
 	fallback: FC<{
@@ -85,18 +86,17 @@ export const SimpleSuspenseDisplay = (props: SimpleSuspenseProps) => {
 
 	const parentManager = useOptionalSimpleSuspenseManager(Context)
 
-	const [ctr, setCtr] = useState(0)
-
 	const manager = useMemo(
-		() =>
-			proposedManager ?? new SimpleSuspenseManager(parentManager, setCtr),
-		[parentManager, setCtr, proposedManager],
+		() => proposedManager ?? new SimpleSuspenseManager(parentManager),
+		[parentManager, proposedManager],
 	)
+
+	const isClaimed = useStickySubscribable(manager.claimCountBus) > 0
 
 	return (
 		<Context.Provider value={manager}>
-			{ctr !== 0 ? <Fallback>{children}</Fallback> : null}
-			<Display isFallbackActive={ctr !== 0}>{children}</Display>
+			{isClaimed ? <Fallback>{children}</Fallback> : null}
+			<Display isFallbackActive={isClaimed}>{children}</Display>
 		</Context.Provider>
 	)
 }

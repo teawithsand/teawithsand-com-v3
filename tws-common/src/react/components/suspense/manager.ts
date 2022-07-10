@@ -1,24 +1,26 @@
-export class SimpleSuspenseManager {
-	constructor(
-		public readonly parentManager: SimpleSuspenseManager | null,
-		private readonly onCounterChanged: (ctr: number) => void,
-	) {}
+import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
+import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
 
-	private counter = 0
+export class SimpleSuspenseManager {
+	constructor(public readonly parentManager: SimpleSuspenseManager | null) {}
+
+	private readonly innerBus = new DefaultStickyEventBus(0)
+
+	get claimCountBus(): StickySubscribable<number> {
+		return this.innerBus
+	}
 
 	claim = () => {
-		this.counter++
-		this.onCounterChanged(this.counter)
+		this.innerBus.emitEvent(this.innerBus.lastEvent + 1)
 
 		let isClosed = false
 		return () => {
 			if (isClosed) {
 				return
 			}
-			this.counter--
 			isClosed = true
 
-			this.onCounterChanged(this.counter)
+			this.innerBus.emitEvent(this.innerBus.lastEvent - 1)
 		}
 	}
 
