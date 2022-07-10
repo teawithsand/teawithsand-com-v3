@@ -5,7 +5,7 @@ import {
 	SimpleSuspenseContext,
 	useOptionalSimpleSuspenseManager,
 } from "tws-common/react/components/suspense/context"
-import { SuspenseManager } from "tws-common/react/components/suspense/manager"
+import { SimpleSuspenseManager } from "tws-common/react/components/suspense/manager"
 
 export * from "./manager"
 export * from "./context"
@@ -80,7 +80,7 @@ export const SimpleSuspenseDisplay = (props: SimpleSuspenseProps) => {
 	const [ctr, setCtr] = useState(0)
 
 	const manager = useMemo(
-		() => new SuspenseManager(parentManager, setCtr),
+		() => new SimpleSuspenseManager(parentManager, setCtr),
 		[parentManager, setCtr],
 	)
 

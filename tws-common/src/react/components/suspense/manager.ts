@@ -1,6 +1,6 @@
-export class SuspenseManager {
+export class SimpleSuspenseManager {
 	constructor(
-		public readonly parentManager: SuspenseManager | null,
+		public readonly parentManager: SimpleSuspenseManager | null,
 		private readonly onCounterChanged: (ctr: number) => void,
 	) {}
 
