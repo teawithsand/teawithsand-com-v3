@@ -10,15 +10,42 @@ export * from "./manager"
 export * from "./context"
 
 /**
- * Suspense, which yields fallback if any of children has claimed that it's loading.
- * Otherwise, renders children.
+ * Suspense, which unmounts children until SimpleSuspenseManager is in idle state.
  */
 export const SimpleSuspense = (props: {
-	fallback: FC<{}>
+	fallback: FC<{
+		children?: ReactNode
+	}>
 	context?: SimpleSuspenseContext
 	children?: ReactNode
 }) => {
-	const { fallback: Fallback, children } = props
+	return (
+		<SimpleSuspenseDisplay
+			{...props}
+			display={props => {
+				const { isFallbackActive, children } = props
+				return <>{isFallbackActive ? null : children}</>
+			}}
+		/>
+	)
+}
+
+/**
+ * Suspense, which allows for customizations on how to hide inner children.
+ * It may, but does not have to unmount innner components.
+ */
+export const SimpleSuspenseDisplay = (props: {
+	fallback: FC<{
+		children?: ReactNode
+	}>
+	context?: SimpleSuspenseContext
+	display: FC<{
+		isFallbackActive: boolean
+		children?: ReactNode
+	}>
+	children?: ReactNode
+}) => {
+	const { fallback: Fallback, display: Display, children } = props
 
 	const Context = props.context ?? DefaultSimpleSuspenseContext
 
@@ -33,7 +60,8 @@ export const SimpleSuspense = (props: {
 
 	return (
 		<Context.Provider value={manager}>
-			{ctr === 0 ? children : <Fallback />}
+			{ctr !== 0 ? <Fallback>{children}</Fallback> : null}
+			<Display isFallbackActive={ctr !== 0}>{children}</Display>
 		</Context.Provider>
 	)
 }
