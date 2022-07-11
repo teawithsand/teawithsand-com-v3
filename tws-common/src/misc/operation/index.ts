@@ -16,6 +16,8 @@ const extendMutationKey = (mk: MutationKey, elem: unknown) => {
 /**
  * Creates executor from operation.
  * Useful, when action has to be applied to GTR.
+ *
+ * @deprecated use new suspense/error boundary/react-query instead
  */
 export const useOperationExecutor = <C, D, R>(
 	config: C,
@@ -25,6 +27,8 @@ export const useOperationExecutor = <C, D, R>(
 /**
  * Uses action directly, without GTaskRunner.
  * Gives utils for tracking task's state and more.
+ *
+ * @deprecated use new suspense/error boundary/react-query instead
  */
 export const useOperation = <C, D, R>(
 	key: MutationKey,
@@ -44,6 +48,9 @@ export const useOperation = <C, D, R>(
 	}
 }
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export const useOperationOnGTaskWithMetadata = <
 	C,
 	D,
@@ -79,6 +86,9 @@ export const useOperationOnGTaskWithMetadata = <
 	}
 }
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export const useOperationOnGTask = <C, D, R, T extends GTaskRunner<M>, M>(
 	key: MutationKey,
 	runner: T,

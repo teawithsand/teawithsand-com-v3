@@ -1,6 +1,9 @@
 import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
 import { DefaultStickyEventBus } from "tws-common/lang/bus/StickyEventBus"
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export class ErrorWallManager {
 	constructor(public readonly parent: ErrorWallManager | null) {}
 

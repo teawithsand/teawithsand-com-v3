@@ -1,16 +1,22 @@
-import { Context, createContext, useContext } from "react"
-import { ErrorWallManager } from "tws-common/react/components/error-wall/manager"
+import { Context, createContext, useContext } from "react";
+import { ErrorWallManager } from "tws-common/react/components/error-wall/manager";
+
 
 export type ErrorWallContext = Context<ErrorWallManager | null>
 
 /**
  * SimpleSuspenseContext is to be used internally by suspense.
  * It's advised that it should not be used by user manually.
+ * 
+ * @deprecated use new suspense/error boundary/react-query instead
  */
 export const DefaultErrorWallContext = createContext<ErrorWallManager | null>(
 	null,
 )
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export const useErrorWallManger = (
 	context: ErrorWallContext = DefaultErrorWallContext,
 ) => {
@@ -20,6 +26,9 @@ export const useErrorWallManger = (
 	return value
 }
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export const useOptionalErrorWallManager = (
 	context: ErrorWallContext = DefaultErrorWallContext,
 ): ErrorWallManager | null => {

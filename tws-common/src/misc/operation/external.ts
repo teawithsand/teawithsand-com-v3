@@ -3,12 +3,18 @@ import { Operation } from "tws-common/misc/operation/action"
 import { useErrorWallManger } from "tws-common/react/components/error-wall"
 import { useSimpleSuspenseManager } from "tws-common/react/components/simple-suspense"
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export const wrapOperationToErrorWallAndSimpleSuspense = <C, D, R>(
 	op: Operation<C, D, R>,
 ): Operation<C, D, R> => {
 	return wrapOperationToSimpleSuspense(wrapOperationToErrorWall(op))
 }
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export const wrapOperationToErrorWall = <C, D, R>(
 	op: Operation<C, D, R>,
 ): Operation<C, D, R> => {
@@ -22,6 +28,9 @@ export const wrapOperationToErrorWall = <C, D, R>(
 	}
 }
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export const wrapOperationToSimpleSuspense = <C, D, R>(
 	op: Operation<C, D, R>,
 ): Operation<C, D, R> => {
@@ -35,6 +44,9 @@ export const wrapOperationToSimpleSuspense = <C, D, R>(
 	}
 }
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export const wrapOperationWithLock = <C, D, R>(
 	op: Operation<C, D, R>,
 	lock: Lock,

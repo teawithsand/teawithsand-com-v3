@@ -1,16 +1,16 @@
-import React, { FC, ReactNode, useMemo } from "react"
-import styled from "styled-components"
-import {
-	DefaultSimpleSuspenseContext,
-	SimpleSuspenseContext,
-	useOptionalSimpleSuspenseManager,
-} from "tws-common/react/components/simple-suspense/context"
-import { SimpleSuspenseManager } from "tws-common/react/components/simple-suspense/manager"
-import useStickySubscribable from "tws-common/react/hook/useStickySubscribable"
+import React, { FC, ReactNode, useMemo } from "react";
+import styled from "styled-components";
+import { DefaultSimpleSuspenseContext, SimpleSuspenseContext, useOptionalSimpleSuspenseManager } from "tws-common/react/components/simple-suspense/context";
+import { SimpleSuspenseManager } from "tws-common/react/components/simple-suspense/manager";
+import useStickySubscribable from "tws-common/react/hook/useStickySubscribable";
+
 
 export * from "./context"
 export * from "./manager"
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export interface OpinionatedSimpleSupenseProps {
 	fallback: FC<{
 		children?: ReactNode
@@ -22,6 +22,9 @@ export interface OpinionatedSimpleSupenseProps {
 	manager?: SimpleSuspenseManager
 }
 
+/**
+ * @deprecated use new suspense/error boundary/react-query instead
+ */
 export interface SimpleSuspenseProps extends OpinionatedSimpleSupenseProps {
 	display: FC<{
 		isFallbackActive: boolean
@@ -31,6 +34,8 @@ export interface SimpleSuspenseProps extends OpinionatedSimpleSupenseProps {
 
 /**
  * Suspense, which unmounts children until SimpleSuspenseManager is in idle state.
+ * 
+ * @deprecated use new suspense/error boundary/react-query instead
  */
 export const SimpleSuspense = (props: OpinionatedSimpleSupenseProps) => {
 	return (
@@ -56,6 +61,8 @@ const SuspendParent = styled.div.attrs<SuspendParentProps>(props => ({
 
 /**
  * SimpleSuspense, which uses div with display: none for loading.
+ * 
+ * @deprecated use new suspense/error boundary/react-query instead
  */
 export const SimpleSuspenseDiv = (props: OpinionatedSimpleSupenseProps) => {
 	return (
@@ -73,6 +80,8 @@ export const SimpleSuspenseDiv = (props: OpinionatedSimpleSupenseProps) => {
 /**
  * Suspense, which allows for customizations on how to hide inner children.
  * It may, but does not have to unmount innner components.
+ * 
+ * @deprecated use new suspense/error boundary/react-query instead
  */
 export const SimpleSuspenseDisplay = (props: SimpleSuspenseProps) => {
 	const {
