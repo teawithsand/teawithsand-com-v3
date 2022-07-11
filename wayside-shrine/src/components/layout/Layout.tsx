@@ -10,7 +10,17 @@ import { SimpleSuspenseDiv } from "tws-common/react/components/simple-suspense"
 import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
 import LoadingSpinner from "tws-common/ui/LoadingSpinner"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			suspense: true,
+			useErrorBoundary: true,
+		},
+		mutations: {
+			useErrorBoundary: true,
+		},
+	},
+})
 
 GlobalIdManager.disable()
 
