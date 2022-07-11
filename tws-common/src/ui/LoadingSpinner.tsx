@@ -19,7 +19,7 @@ const SpinnerContainer = styled.div`
 const spinnerSize = 150
 const spinnerMargin = (spinnerSize * (Math.sqrt(2) - 1)) / 2
 
-const SpinnerImage = styled.img`
+const SpinnerImage = styled.svg`
 	box-sizing: border-box;
 	width: ${spinnerSize}px;
 	height: ${spinnerSize}px;
@@ -32,19 +32,33 @@ const SpinnerText = styled.div`
 	font-size: 1.5em;
 `
 
-const SVG = `<svg viewBox="0 0 100 100"
-preserveAspectRatio="xMidYMid slice"
-xmlns="http://www.w3.org/2000/svg"
-version="1.1">
-    <circle cx="22" cy="22" r="20" stroke="black" stroke-width="2" fill="none" />
-    <circle cx="78" cy="78" r="20" stroke="black" stroke-width="2" fill="none" />
-</svg>`
-
 const LoadingSpinner = (props: { text?: string }) => {
 	const text = props.text ?? "Loading..."
 	return (
 		<SpinnerContainer>
-			<SpinnerImage src={`data:image/svg+xml;utf8,${SVG}`} alt={text} />
+			<SpinnerImage
+				viewBox="0 0 100 100"
+				preserveAspectRatio="xMidYMid slice"
+				xmlns="http://www.w3.org/2000/svg"
+				version="1.1"
+			>
+				<circle
+					cx="22"
+					cy="22"
+					r="20"
+					stroke="black"
+					strokeWidth="2"
+					fill="none"
+				/>
+				<circle
+					cx="78"
+					cy="78"
+					r="20"
+					stroke="black"
+					strokeWidth="2"
+					fill="none"
+				/>
+			</SpinnerImage>
 			<SpinnerText>{text}</SpinnerText>
 		</SpinnerContainer>
 	)
