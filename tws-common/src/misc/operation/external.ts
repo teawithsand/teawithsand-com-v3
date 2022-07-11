@@ -1,4 +1,4 @@
-import { Lock, RWLock } from "tws-common/lang/lock/Lock"
+import { Lock } from "tws-common/lang/lock/Lock"
 import { Operation } from "tws-common/misc/operation/action"
 import { useErrorWallManger } from "tws-common/react/components/error-wall"
 import { useSimpleSuspenseManager } from "tws-common/react/components/suspense"
