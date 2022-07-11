@@ -36,9 +36,6 @@ export const useLocationList = () => {
 
 				return results
 			}),
-		{
-			suspense: true,
-		},
 	)
 }
 
