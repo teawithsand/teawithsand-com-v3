@@ -4,8 +4,8 @@ import {
 	DefaultSimpleSuspenseContext,
 	SimpleSuspenseContext,
 	useOptionalSimpleSuspenseManager,
-} from "tws-common/react/components/suspense/context"
-import { SimpleSuspenseManager } from "tws-common/react/components/suspense/manager"
+} from "tws-common/react/components/simple-suspense/context"
+import { SimpleSuspenseManager } from "tws-common/react/components/simple-suspense/manager"
 import useStickySubscribable from "tws-common/react/hook/useStickySubscribable"
 
 export * from "./context"

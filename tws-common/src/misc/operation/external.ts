@@ -1,7 +1,7 @@
 import { Lock } from "tws-common/lang/lock/Lock"
 import { Operation } from "tws-common/misc/operation/action"
 import { useErrorWallManger } from "tws-common/react/components/error-wall"
-import { useSimpleSuspenseManager } from "tws-common/react/components/suspense"
+import { useSimpleSuspenseManager } from "tws-common/react/components/simple-suspense"
 
 export const wrapOperationToErrorWallAndSimpleSuspense = <C, D, R>(
 	op: Operation<C, D, R>,

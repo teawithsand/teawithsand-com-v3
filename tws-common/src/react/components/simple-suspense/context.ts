@@ -1,5 +1,5 @@
 import { Context, createContext, useContext } from "react"
-import { SimpleSuspenseManager } from "tws-common/react/components/suspense/manager"
+import { SimpleSuspenseManager } from "tws-common/react/components/simple-suspense/manager"
 
 export type SimpleSuspenseContext = Context<SimpleSuspenseManager | null>
 
