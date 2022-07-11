@@ -3,29 +3,27 @@ import styled from "styled-components"
 
 import { reactAppErrorExplainer } from "@app/domain/error/explainer"
 
+import { Button } from "tws-common/ui"
 import { ErrorBar } from "tws-common/ui/ErrorBar"
 
 const ErrorParent = styled.div`
 	display: grid;
 	grid-auto-flow: row;
-	grid-template-columns: 1fr;
+	grid-gap: 0.8rem;
+	grid-template-columns: auto;
 	grid-auto-rows: auto;
 `
 
-const ErrorRenderer = (props: { errors: any[] }) => {
-	const { errors } = props
-	if (errors.length === 0) {
-		return <></>
-	}
+const ErrorRenderer = (props: {
+	error: any
+	resetErrorBoundary: () => void
+}) => {
+	const { error, resetErrorBoundary } = props
+
 	return (
 		<ErrorParent>
-			{errors.map((e, i) => (
-				<ErrorBar
-					key={i}
-					error={e}
-					explainer={reactAppErrorExplainer}
-				/>
-			))}
+			<ErrorBar error={error} explainer={reactAppErrorExplainer} />
+			<Button onClick={resetErrorBoundary}>Try again</Button>
 		</ErrorParent>
 	)
 }
