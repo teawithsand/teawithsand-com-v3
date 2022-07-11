@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
-import { LocationData } from "@app/domain/location/store"
+import { LoadedLocationData } from "@app/domain/location/store"
 import { locationMenuPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
@@ -18,8 +18,10 @@ const NoLocations = styled.div`
 	gap: 1rem;
 `
 
-const LocationList = (props: { locations: LocationData[] }) => {
+const LocationList = (props: { locations: LoadedLocationData[] }) => {
 	const { locations } = props
+
+	const innerLocations = locations.map(l => l.data)
 
 	const trans = useAppTranslationSelector(s => s.location.list)
 
@@ -47,7 +49,7 @@ const LocationList = (props: { locations: LocationData[] }) => {
 				</tr>
 			</thead>
 			<tbody>
-				{locations.map((l, i) => (
+				{innerLocations.map((l, i) => (
 					<tr key={i}>
 						<td>{i + 1}</td>
 						<td>{l.name}</td>
