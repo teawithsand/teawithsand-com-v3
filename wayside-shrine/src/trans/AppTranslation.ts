@@ -1,7 +1,7 @@
 import AppTranslationPL from "@app/trans/AppTranslationPL"
 
 import { TimestampMs } from "tws-common/lang/time/Timestamp"
-import { CommonTranslation } from "tws-common/src/trans/common"
+import { CommonTranslation } from "tws-common/trans/common"
 import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
 import Translator, {
 	createTranslatorContext,
