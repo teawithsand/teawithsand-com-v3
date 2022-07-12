@@ -1,14 +1,16 @@
-import AppTranslationPL from "@app/trans/AppTranslationPL";
+import AppTranslationPL from "@app/trans/AppTranslationPL"
 
-
-
-import { TimestampMs } from "tws-common/lang/time/Timestamp";
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language";
-import Translator, { createTranslatorContext, useTranslator } from "tws-common/trans/Translator";
-import { GeolocationErrorCode } from "tws-common/webapi/geolocation";
-
+import { TimestampMs } from "tws-common/lang/time/Timestamp"
+import { CommonTranslation } from "tws-common/src/trans/common"
+import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
+import Translator, {
+	createTranslatorContext,
+	useTranslator,
+} from "tws-common/trans/Translator"
+import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
 
 export default interface AppTranslation {
+	common: CommonTranslation
 	appName: string
 	layout: {
 		navbar: {

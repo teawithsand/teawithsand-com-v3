@@ -1,8 +1,10 @@
 import AppTranslation from "@app/trans/AppTranslation"
 
 import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
+import { CommonTranslationPL_PL } from "tws-common/trans/common"
 
 const AppTranslationPL: AppTranslation = {
+	common: CommonTranslationPL_PL,
 	appName: "SzlakiemKapliczek",
 	layout: {
 		navbar: {
