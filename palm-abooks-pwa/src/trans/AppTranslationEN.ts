@@ -1,6 +1,8 @@
 import AppTranslation from "@app/trans/AppTranslation"
+import { CommonTranslationEN_US } from "tws-common/trans/common"
 
-const AppTranslationEN: AppTranslation = {
+const AppTranslationEN_US: AppTranslation = {
+	common: CommonTranslationEN_US,
 	appName: "PalmABooks PWA",
 	generic: {
 		modalClose: "Close",
@@ -48,7 +50,7 @@ const AppTranslationEN: AppTranslation = {
 			homePage: "Home",
 		},
 	},
-	common: {
+	oldCommon: {
 		sureModal: {
 			defaultTitle: `Are you sure?`,
 			defaultDescription: `This operation requires confirmation.`,
@@ -58,4 +60,4 @@ const AppTranslationEN: AppTranslation = {
 	},
 }
 
-export default AppTranslationEN
+export default AppTranslationEN_US

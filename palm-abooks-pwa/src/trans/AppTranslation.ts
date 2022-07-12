@@ -1,5 +1,6 @@
-import AppTranslationEN from "@app/trans/AppTranslationEN"
+import AppTranslationEN_US from "@app/trans/AppTranslationEN"
 
+import { CommonTranslation } from "tws-common/trans/common"
 import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
 import Translator, {
 	createTranslatorContext,
@@ -7,11 +8,12 @@ import Translator, {
 } from "tws-common/trans/Translator"
 
 export default interface AppTranslation {
+	common: CommonTranslation
 	appName: string
 	generic: {
 		modalClose: string
 	}
-	common: {
+	oldCommon: {
 		sureModal: {
 			defaultTitle: string
 			defaultDescription: string
@@ -68,7 +70,7 @@ export default interface AppTranslation {
 
 const translations = new Map<string, AppTranslation>()
 
-translations.set(DEFAULT_LANGUAGE, AppTranslationEN)
+translations.set(DEFAULT_LANGUAGE, AppTranslationEN_US)
 
 export const TranslatorContext = createTranslatorContext<AppTranslation>(
 	new Translator(translations),

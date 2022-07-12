@@ -13,7 +13,7 @@ const AreYouSureModal = (props: {
 }) => {
 	const { title, description, show, onCancel, onConfirm } = props
 
-	const trans = useAppTranslationSelector(t => t.common.sureModal)
+	const trans = useAppTranslationSelector(t => t.oldCommon.sureModal)
 
 	return (
 		<Modal show={show} centered onHide={() => onCancel()}>
