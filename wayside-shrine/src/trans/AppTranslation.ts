@@ -2,7 +2,10 @@ import AppTranslationPL from "@app/trans/AppTranslationPL"
 
 import { TimestampMs } from "tws-common/lang/time/Timestamp"
 import { CommonTranslation } from "tws-common/trans/common"
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
+import {
+	DEFAULT_LANGUAGE,
+	getPreferredUserLanguage,
+} from "tws-common/trans/language"
 import Translator, {
 	createTranslatorContext,
 	useTranslator,
@@ -100,7 +103,9 @@ export const TranslatorContext = createTranslatorContext<AppTranslation>(
 )
 
 export const useAppTranslation = (): AppTranslation =>
-	useTranslator(TranslatorContext).getTranslationForLanguage()
+	useTranslator(TranslatorContext).getTranslationForLanguage(
+		getPreferredUserLanguage(DEFAULT_LANGUAGE),
+	)
 
 export const useAppTranslationSelector = <T>(s: (t: AppTranslation) => T): T =>
 	s(useAppTranslation())
