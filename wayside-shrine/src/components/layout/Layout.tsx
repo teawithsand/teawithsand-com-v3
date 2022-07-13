@@ -5,6 +5,7 @@ import AppNavbar from "@app/components/layout/Navbar"
 import { GlobalIdManager } from "tws-common/misc/GlobalIDManager"
 import { DialogBoundary } from "tws-common/react/components/dialog"
 import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
+import { SSRProvider } from "tws-common/ui"
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -25,10 +26,14 @@ const Layout = (props: {
 }) => {
 	return (
 		<div>
-			<QueryClientProvider client={queryClient}>
-				<AppNavbar />
-				<DialogBoundary>{props.children}</DialogBoundary>
-			</QueryClientProvider>
+			<SSRProvider>
+				<QueryClientProvider client={queryClient}>
+					<>
+						<AppNavbar />
+						<DialogBoundary>{props.children}</DialogBoundary>
+					</>
+				</QueryClientProvider>
+			</SSRProvider>
 		</div>
 	)
 }
