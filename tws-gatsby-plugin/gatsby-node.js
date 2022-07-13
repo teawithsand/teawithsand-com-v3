@@ -1,6 +1,12 @@
 const TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
 
-const onCreateWebpackConfig = ({ actions, getConfig, rules, stage }) => {
+const onCreateWebpackConfig = ({
+	actions,
+	getConfig,
+	rules,
+	stage,
+	loaders,
+}) => {
 	const config = getConfig()
 	const imgsRule = rules.images()
 
@@ -57,6 +63,23 @@ const onCreateWebpackConfig = ({ actions, getConfig, rules, stage }) => {
 		}
 		actions.replaceWebpackConfig(config)
 	} else {
+		actions.replaceWebpackConfig(config)
+	}
+
+	if (
+		stage === "build-html" ||
+		stage === "develop-html" ||
+		stage === "develop"
+	) {
+		config.module = config.module ?? {}
+		config.module.rules = config.module.rules ?? {}
+		config.module.rules = [
+			...config.module.rules,
+			{
+				test: /xterm|xterm-addon-fit/,
+				use: loaders.null(),
+			},
+		]
 		actions.replaceWebpackConfig(config)
 	}
 }
