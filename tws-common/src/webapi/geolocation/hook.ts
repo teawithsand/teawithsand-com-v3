@@ -13,7 +13,13 @@ import {
 	ReadPositionOptions,
 } from "tws-common/webapi/geolocation"
 
-export const useWatchGeolocation = (config: ReadPositionOptions) => {
+export const useWatchGeolocation = (
+	config: ReadPositionOptions,
+	watchOptions?: {
+		suspense?: boolean
+	},
+) => {
+	const suspense = watchOptions?.suspense ?? false
 	const [lastUpdatePerformanceTs, setLastUpdatePerformanceTs] =
 		useState<PerformanceTimestampMs>(getNowPerformanceTimestamp())
 	const [lastUpdateTs, setLastUpdateTs] = useState<TimestampMs>(
@@ -43,6 +49,10 @@ export const useWatchGeolocation = (config: ReadPositionOptions) => {
 			claim.close()
 		}
 	}, [config, runId])
+
+	if (suspense && error) {
+		throw error
+	}
 
 	return {
 		position,
