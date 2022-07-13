@@ -11,9 +11,13 @@ const PageBoundary = (props: { children?: ReactNode }) => {
 
 	return (
 		<ComposedErrorBoundary FallbackComponent={ErrorRenderer}>
-			<Suspense fallback={<LoadingSpinner />}>
-				<DialogBoundary>{children}</DialogBoundary>
-			</Suspense>
+			<>
+				<Suspense fallback={<LoadingSpinner />}>
+					<>
+						<DialogBoundary>{children}</DialogBoundary>
+					</>
+				</Suspense>
+			</>
 		</ComposedErrorBoundary>
 	)
 }
