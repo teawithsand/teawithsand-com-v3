@@ -1,7 +1,7 @@
-import { useIsSSR } from "tws-common/react/hook/isSSR"
+import { useEffect, useState } from "react"
 import { isSSR, requireNoSSR } from "tws-common/ssr"
 
-import useWindowDimensions from "./useWindowDimensions"
+import { getWindowDimensions } from "./useWindowDimensions"
 
 // TODO(teawithsand): move breakpoint definitions and boundaries to
 
@@ -55,20 +55,30 @@ const resolveBreakpointIndex = (width: number): number => {
 // 	since dynamic one does first render with isSSR = true, which causes
 //  some hooks not to be registered(ones, which do not work on SSR)
 //  and react does not like that
-export const useBreakpoint = (onSSR?: Breakpoint): Breakpoint => {
-	if (typeof onSSR === "undefined") requireNoSSR()
-
-	if (isSSR() && typeof onSSR !== "undefined") return onSSR
-
-	const { width } = useWindowDimensions()
-	return BREAKPOINTS[resolveBreakpointIndex(width)]
+export const useBreakpoint = (
+	onSSR: Breakpoint = BREAKPOINT_LG,
+): Breakpoint => {
+	const index = useBreakpointIndex(
+		onSSR ? BREAKPOINTS.indexOf(onSSR) : undefined,
+	)
+	return BREAKPOINTS[index]
 }
 
-export const useBreakpointIndex = (onSSR?: number): number => {
-	if (typeof onSSR === "undefined") requireNoSSR()
+export const useBreakpointIndex = (
+	onSSR: number = breakpointIndex(BREAKPOINT_LG),
+): number => {
+	const [measured, setMeasured] = useState(onSSR)
 
-	if (isSSR() && typeof onSSR !== "undefined") return onSSR
+	useEffect(() => {
+		function handleResize() {
+			setMeasured(resolveBreakpointIndex(getWindowDimensions().width))
+		}
 
-	const { width } = useWindowDimensions()
-	return resolveBreakpointIndex(width)
+		handleResize() // initialize after SSR defaults
+
+		window.addEventListener("resize", handleResize)
+		return () => window.removeEventListener("resize", handleResize)
+	}, [])
+
+	return measured
 }
