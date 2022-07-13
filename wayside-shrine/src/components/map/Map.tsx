@@ -1,21 +1,24 @@
-import { Collection, Feature } from "ol";
-import { Control, defaults as defaultControls, ZoomToExtent } from "ol/control";
-import { boundingExtent } from "ol/extent";
-import { Point } from "ol/geom";
-import Circle from 'ol/geom/Circle';
-import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
-import OLMap from "ol/Map";
-import { fromLonLat as innerFromLonLat } from "ol/proj";
+import { Collection, Feature } from "ol"
+import { Control, defaults as defaultControls, ZoomToExtent } from "ol/control"
+import { boundingExtent } from "ol/extent"
+import { Point } from "ol/geom"
+import Circle from "ol/geom/Circle"
+import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer"
+import OLMap from "ol/Map"
+import { fromLonLat as innerFromLonLat } from "ol/proj"
 import { OSM, Vector as VectorSource } from "ol/source"
-import { Circle as CircleStyle, Icon as IconStyle, Stroke as StrokeStyle, Style } from "ol/style";
-import View from "ol/View";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import styled from "styled-components";
+import {
+	Circle as CircleStyle,
+	Icon as IconStyle,
+	Stroke as StrokeStyle,
+	Style,
+} from "ol/style"
+import View from "ol/View"
+import React, { useEffect, useMemo, useRef, useState } from "react"
+import styled from "styled-components"
 
-
-
-import useUniqueId from "tws-common/react/hook/useUniqueId";
-
+import { wrapNoSSR } from "tws-common/react/components/NoSSR"
+import useUniqueId from "tws-common/react/hook/useUniqueId"
 
 /**
  * Format is: longitude first, then latitude
@@ -121,11 +124,7 @@ const Map = (props: {
 			}),
 			new VectorLayer({
 				source: new VectorSource({
-					features: [
-						new Feature(
-							new Circle([5e6, 7e6], 1e6),
-						),
-					],
+					features: [new Feature(new Circle([5e6, 7e6], 1e6))],
 				}),
 				style: new Style({
 					image: new CircleStyle({
@@ -239,4 +238,4 @@ const Map = (props: {
 		></MapContainer>
 	)
 }
-export default Map
+export default wrapNoSSR(Map)
