@@ -11,6 +11,9 @@ const NoSSR = (props: { children?: ReactNode }) => {
 	}
 }
 
+/**
+ * Note: does not work with ref={...} and React.forwardRef.
+ */
 export const wrapNoSSR =
 	<P,>(component: React.FC<P>): React.FC<P> =>
 	// eslint-disable-next-line react/display-name
