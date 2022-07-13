@@ -14,12 +14,35 @@ export const BREAKPOINT_LG: Breakpoint = "lg"
 export const BREAKPOINT_XL: Breakpoint = "xl"
 export const BREAKPOINT_XXL: Breakpoint = "xxl"
 
+export const breakpointMediaDown = (bp: Breakpoint) => {
+	if (bp === "xxl") return ""
+	return `(max-width: ${BREAKPOINT_BOUNDARIES[bp] - 0.02}px)`
+}
+export const breakpointMediaUp = (bp: Breakpoint) => {
+	const boundaryBreakpointIndex = breakpointIndex(bp) - 1
+	if (boundaryBreakpointIndex < 0) return ""
+	const boundaryBreakpoint = BREAKPOINTS[boundaryBreakpointIndex]
+	if (boundaryBreakpoint === "xxl") throw new Error("unreachable code")
+	return `(min-width: ${BREAKPOINT_BOUNDARIES[boundaryBreakpoint]}px)`
+}
+export const breakpointMediaOnly = (bp: Breakpoint) => {
+	const down = breakpointMediaUp(bp)
+	let up = ""
+
+	const nextBreakpoint = breakpointIndex(bp) + 1
+	if (nextBreakpoint < BREAKPOINTS.length) {
+		up = BREAKPOINTS[nextBreakpoint]
+	}
+
+	return (down + " " + up).trim()
+}
+
 export const BREAKPOINT_BOUNDARIES = {
 	[BREAKPOINT_XS]: 576,
 	[BREAKPOINT_SM]: 768,
 	[BREAKPOINT_MD]: 992,
 	[BREAKPOINT_LG]: 1200,
-	[BREAKPOINT_XL]: 1440,
+	[BREAKPOINT_XL]: 1400, // on newer bootstrap it's 1400 rather than 1444
 	// above is breakpoint_XXL
 }
 
@@ -35,16 +58,29 @@ export const BREAKPOINTS = [
 export const breakpointIndex = (breakpoint: Breakpoint): number =>
 	BREAKPOINTS.indexOf(breakpoint)
 
+// TODO(teawithsand): use this to refactor
 const resolveBreakpointIndex = (width: number): number => {
-	if (width < 576) {
+	if (width < BREAKPOINT_BOUNDARIES[BREAKPOINT_XS]) {
 		return 0
-	} else if (width >= 576 && width < 768) {
+	} else if (
+		width >= BREAKPOINT_BOUNDARIES[BREAKPOINT_XS] &&
+		width < BREAKPOINT_BOUNDARIES[BREAKPOINT_SM]
+	) {
 		return 1
-	} else if (width >= 768 && width < 992) {
+	} else if (
+		width >= BREAKPOINT_BOUNDARIES[BREAKPOINT_SM] &&
+		width < BREAKPOINT_BOUNDARIES[BREAKPOINT_MD]
+	) {
 		return 2
-	} else if (width >= 992 && width < 1200) {
+	} else if (
+		width >= BREAKPOINT_BOUNDARIES[BREAKPOINT_MD] &&
+		width < BREAKPOINT_BOUNDARIES[BREAKPOINT_LG]
+	) {
 		return 3
-	} else if (width >= 1200 && width < 1440) {
+	} else if (
+		width >= BREAKPOINT_BOUNDARIES[BREAKPOINT_LG] &&
+		width < BREAKPOINT_BOUNDARIES[BREAKPOINT_XL]
+	) {
 		return 4
 	} /* if (width >= 1440) */ else {
 		return 5
