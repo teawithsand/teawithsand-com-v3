@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import {
 	getNowPerformanceTimestamp,
+	getNowTimestamp,
 	PerformanceTimestampMs,
+	TimestampMs,
 } from "tws-common/lang/time/Timestamp"
-import { generateUUID } from "tws-common/lang/uuid"
 import { useRunId } from "tws-common/react/hook/useRunId"
 import {
 	GeolocationError,
@@ -13,8 +14,11 @@ import {
 } from "tws-common/webapi/geolocation"
 
 export const useWatchGeolocation = (config: ReadPositionOptions) => {
-	const [lastUpdateTimestamp, setLastUpdateTimestamp] =
+	const [lastUpdatePerformanceTs, setLastUpdatePerformanceTs] =
 		useState<PerformanceTimestampMs>(getNowPerformanceTimestamp())
+	const [lastUpdateTs, setLastUpdateTs] = useState<TimestampMs>(
+		getNowTimestamp(),
+	)
 	const [position, setPosition] = useState<GeolocationPosition | null>(null)
 	const [error, setError] = useState<GeolocationError | null>(null)
 	const [runId, restart] = useRunId()
@@ -32,7 +36,8 @@ export const useWatchGeolocation = (config: ReadPositionOptions) => {
 			}
 		})
 
-		setLastUpdateTimestamp(getNowPerformanceTimestamp())
+		setLastUpdatePerformanceTs(getNowPerformanceTimestamp())
+		setLastUpdateTs(getNowTimestamp())
 
 		return () => {
 			claim.close()
@@ -42,7 +47,8 @@ export const useWatchGeolocation = (config: ReadPositionOptions) => {
 	return {
 		position,
 		error,
-		lastUpdateTimestamp,
+		lastUpdatePerformanceTs,
+		lastUpdateTs,
 		restart,
 	}
 }
