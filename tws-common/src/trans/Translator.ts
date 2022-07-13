@@ -1,8 +1,5 @@
 import React, { useContext } from "react"
-import {
-	DEFAULT_LANGUAGE,
-	getPreferredUserLanguage,
-} from "tws-common/trans/language"
+import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
 
 export type StaticTranslation = () => string
 export type KeyedTranslation = () => string
@@ -24,9 +21,7 @@ export default class Translator<T extends TranslationObject> {
 			)
 	}
 
-	getTranslationForLanguage = (lang?: string): T => {
-		if (!lang) lang = getPreferredUserLanguage()
-
+	getTranslationForLanguage = (lang: string): T => {
 		const res = this.translations.get(lang)
 		if (!res) return this.translations.get(this.fallbackLanguage) as T
 		return res
