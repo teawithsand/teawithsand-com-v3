@@ -24,17 +24,21 @@ export const getClientDimensions = () => {
 	}
 }
 
-export default function useClientDimensions(): ClientDimensions {
-	requireNoSSR()
+export default function useClientDimensions(
+	ssrInitialize?: ClientDimensions,
+): ClientDimensions {
+	if (!ssrInitialize) requireNoSSR()
 
 	const [windowDimensions, setWindowDimensions] = useState(
-		getClientDimensions(),
+		ssrInitialize ?? getClientDimensions(),
 	)
 
 	useEffect(() => {
 		function handleResize() {
 			setWindowDimensions(getClientDimensions())
 		}
+
+		handleResize()
 
 		window.addEventListener("resize", handleResize)
 		return () => window.removeEventListener("resize", handleResize)

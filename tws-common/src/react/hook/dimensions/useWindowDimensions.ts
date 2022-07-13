@@ -23,17 +23,21 @@ export const getWindowDimensions = (): WindowDimensions => {
 	}
 }
 
-export default function useWindowDimensions(): WindowDimensions {
-	requireNoSSR()
+export default function useWindowDimensions(
+	ssrInitialize?: WindowDimensions,
+): WindowDimensions {
+	if(!ssrInitialize) requireNoSSR()
 
 	const [windowDimensions, setWindowDimensions] = useState(
-		getWindowDimensions(),
+		ssrInitialize ?? getWindowDimensions(),
 	)
 
 	useEffect(() => {
 		function handleResize() {
 			setWindowDimensions(getWindowDimensions())
 		}
+
+		handleResize()
 
 		window.addEventListener("resize", handleResize)
 		return () => window.removeEventListener("resize", handleResize)
