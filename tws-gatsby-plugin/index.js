@@ -169,6 +169,9 @@ const customizeDefaultPlugins = (...configs) =>
 	mergePlugins(BasicSitePluginsStart, ...configs, BasicSitePluginsEnd)
 
 const makeConfig = (siteMetadata, plugins) => ({
+	flags: {
+		DEV_SSR: true,
+	},
 	siteMetadata: siteMetadata,
 	// More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
 	// If you use VSCode you can also use the GraphQL plugin
