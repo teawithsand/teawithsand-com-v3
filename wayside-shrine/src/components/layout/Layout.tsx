@@ -24,17 +24,19 @@ GlobalIdManager.disable()
 const Layout = (props: {
 	children: ReactElement | ReactNode | ReactFragment | null | undefined
 }) => {
+	// Looks like top level element has to be the only one
+	// otherwise gatsby SSR_DEV complaints about it
+	//
+	// Also looks like same goes for QueryClientProvider
+	// Also(whats for the best I guess) production build of gatsby
+	// doesn't seem to care about it at all.
 	return (
-		<div>
-			<SSRProvider>
-				<QueryClientProvider client={queryClient}>
-					<>
-						<AppNavbar />
-						<DialogBoundary>{props.children}</DialogBoundary>
-					</>
-				</QueryClientProvider>
-			</SSRProvider>
-		</div>
+		<SSRProvider>
+			<QueryClientProvider client={queryClient}>
+				<AppNavbar />
+				<DialogBoundary>{props.children}</DialogBoundary>
+			</QueryClientProvider>
+		</SSRProvider>
 	)
 }
 
