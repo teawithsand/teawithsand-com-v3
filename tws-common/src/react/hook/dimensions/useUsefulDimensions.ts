@@ -1,13 +1,21 @@
-import { useEffect, useState } from "react"
-import { requireNoSSR } from "tws-common/ssr"
+import { useEffect, useState } from "react";
+import { requireNoSSR } from "tws-common/ssr";
+
 
 export type Orientation = "vertical" | "horizontal" | "square"
+
+/**
+ * @deprecated. It's using document's width and window's height.
+ */
 export type UsefulDimensions = {
 	width: number
 	height: number
 	orientation: Orientation
 }
 
+/**
+ * @deprecated. It's using document's width and window's height.
+ */
 export const getUsefulDimensions = () => {
 	const { clientWidth: width } = document.body
 	const { innerHeight: height } = window
@@ -25,6 +33,9 @@ export const getUsefulDimensions = () => {
 	}
 }
 
+/**
+ * @deprecated. It's using document's width and window's height.
+ */
 export default function useUsefulDimensions(): UsefulDimensions {
 	requireNoSSR()
 
