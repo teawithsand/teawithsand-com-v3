@@ -4,6 +4,7 @@ import {
 	PerformanceTimestampMs,
 } from "tws-common/lang/time/Timestamp"
 import { generateUUID } from "tws-common/lang/uuid"
+import { useRunId } from "tws-common/react/hook/useRunId"
 import {
 	GeolocationError,
 	GeolocationHelper,
@@ -16,9 +17,11 @@ export const useWatchGeolocation = (config: ReadPositionOptions) => {
 		useState<PerformanceTimestampMs>(getNowPerformanceTimestamp())
 	const [position, setPosition] = useState<GeolocationPosition | null>(null)
 	const [error, setError] = useState<GeolocationError | null>(null)
-	const [runId, setRunId] = useState(generateUUID())
+	const [runId, restart] = useRunId()
 
 	useEffect(() => {
+		setPosition(null)
+		setError(null)
 		const claim = GeolocationHelper.createReadClaim(config)
 
 		claim.bus.addSubscriber(e => {
@@ -40,8 +43,6 @@ export const useWatchGeolocation = (config: ReadPositionOptions) => {
 		position,
 		error,
 		lastUpdateTimestamp,
-		restart: () => {
-			setRunId(generateUUID())
-		},
+		restart,
 	}
 }
