@@ -170,7 +170,7 @@ const customizeDefaultPlugins = (...configs) =>
 
 const makeConfig = (siteMetadata, plugins) => ({
 	flags: {
-		DEV_SSR: true,
+		DEV_SSR: !!process.env.GATSBY_DEV_SSR,
 	},
 	siteMetadata: siteMetadata,
 	// More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
