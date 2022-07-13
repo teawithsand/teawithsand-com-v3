@@ -1,7 +1,7 @@
 import AppTranslation from "@app/trans/AppTranslation"
 
-import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
 import { CommonTranslationPL_PL } from "tws-common/trans/common"
+import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
 
 const AppTranslationPL: AppTranslation = {
 	common: CommonTranslationPL_PL,
@@ -22,6 +22,12 @@ const AppTranslationPL: AppTranslation = {
 		},
 	},
 	location: {
+		form: {
+			nameLabel: "Nazwa",
+			descriptionLabel: "Opis",
+			latitudeLabel: "Szerokość geograficzna",
+			longitudeLabel: "Długość geograficzna",
+		},
 		locate: {
 			accuracyLabel: "Dokładność - promień",
 			coordinatesLabel: "Koordynaty",

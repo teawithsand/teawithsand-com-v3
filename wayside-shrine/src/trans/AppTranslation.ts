@@ -28,6 +28,12 @@ export default interface AppTranslation {
 		}
 	}
 	location: {
+		form: {
+			nameLabel: string
+			descriptionLabel: string
+			latitudeLabel: string
+			longitudeLabel: string
+		}
 		locate: {
 			latitudeLabel: string
 			longitudeLabel: string
