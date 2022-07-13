@@ -21,8 +21,8 @@ export default class Translator<T extends TranslationObject> {
 			)
 	}
 
-	getTranslationForLanguage = (lang: string): T => {
-		const res = this.translations.get(lang)
+	getTranslationForLanguage = (lang?: string): T => {
+		const res = this.translations.get(lang ?? this.fallbackLanguage)
 		if (!res) return this.translations.get(this.fallbackLanguage) as T
 		return res
 	}
