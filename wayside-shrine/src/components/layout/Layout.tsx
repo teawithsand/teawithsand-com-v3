@@ -24,10 +24,12 @@ const Layout = (props: {
 	children: ReactElement | ReactNode | ReactFragment | null | undefined
 }) => {
 	return (
-		<QueryClientProvider client={queryClient}>
-			<AppNavbar />
-			<DialogBoundary>{props.children}</DialogBoundary>
-		</QueryClientProvider>
+		<div>
+			<QueryClientProvider client={queryClient}>
+				<AppNavbar />
+				<DialogBoundary>{props.children}</DialogBoundary>
+			</QueryClientProvider>
+		</div>
 	)
 }
 
