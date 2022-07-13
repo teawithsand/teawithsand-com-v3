@@ -7,18 +7,19 @@ import ShrineCard from "@app/components/shrine/ShrineCard"
 
 import {
 	BREAKPOINT_MD,
-	breakpointIndex,
-	useBreakpointIndex,
+	breakpointMediaDown,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
 import {
 	asRequiredRecursively,
 	RecursiveRequired,
 } from "tws-common/typing/required"
 
-const ShrineCardGrid = styled.div<{ $smallDisplay: boolean }>`
+const ShrineCardGrid = styled.div`
 	display: grid;
-	grid-template-columns: ${({ $smallDisplay }) =>
-		$smallDisplay ? "1fr" : "repeat(3, 1fr)"};
+	grid-template-columns: repeat(3, 1fr);
+	@media ${breakpointMediaDown(BREAKPOINT_MD)} {
+		grid-template-columns: 1fr;
+	}
 	grid-auto-flow: row dense;
 	gap: 1rem;
 `
@@ -26,14 +27,10 @@ const ShrineCardGrid = styled.div<{ $smallDisplay: boolean }>`
 const SearchPage = (props: { data: Queries.WaysideShrineSearchQuery }) => {
 	const { data } = props
 
-	const isSmall =
-		useBreakpointIndex(breakpointIndex(BREAKPOINT_MD)) <=
-		breakpointIndex(BREAKPOINT_MD)
-
 	return (
 		<PageContainer>
 			<main>
-				<ShrineCardGrid $smallDisplay={isSmall}>
+				<ShrineCardGrid>
 					{data.allFile.nodes
 						.map(v => asRequiredRecursively(v.childMarkdownRemark))
 						.map(v => {
