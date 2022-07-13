@@ -32,8 +32,13 @@ export interface CommonTranslation {
 			defaultConfirmLabel: string
 			defaultCancelLabel: string
 
-            messageDelete: string
+			messageDelete: string
 		}
+	}
+
+	form: {
+		submitLabel: string
+		resetLabel: string
 	}
 }
 

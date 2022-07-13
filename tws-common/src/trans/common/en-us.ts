@@ -18,4 +18,8 @@ export const CommonTranslationEN_US: CommonTranslation = {
 			messageDelete: "Are you sure you want to delete specified element?",
 		},
 	},
+	form: {
+		resetLabel: "Reset",
+		submitLabel: "Submit",
+	},
 }
