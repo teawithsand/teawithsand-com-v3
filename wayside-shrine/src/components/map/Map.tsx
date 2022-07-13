@@ -18,7 +18,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
 
 import { wrapNoSSR } from "tws-common/react/components/NoSSR"
-import useUniqueId from "tws-common/react/hook/useUniqueId"
+import { isSSR } from "tws-common/ssr"
 
 /**
  * Format is: longitude first, then latitude
@@ -91,24 +91,28 @@ const Map = (props: {
 	}
 	const extentToZoom = props.zoomToExtentButton ?? null
 
-	const icons = useMemo(
-		() =>
-			(props.icons ?? []).map(icon => ({
-				features: icon.locations.map(
-					location =>
-						new Feature({
-							geometry: new Point(location.coordinates),
-							name: location.name,
-						}),
-				),
-				display: icon.display,
-			})),
-		[props.icons],
-	)
+	const icons = useMemo(() => {
+		// This is required, since it looks like react calls useMemo on SSR renders and is not able to cache Feature and stuff
+		if (isSSR()) return []
+
+		return (props.icons ?? []).map(icon => ({
+			features: icon.locations.map(
+				location =>
+					new Feature({
+						geometry: new Point(location.coordinates),
+						name: location.name,
+					}),
+			),
+			display: icon.display,
+		}))
+	}, [props.icons])
 
 	const [map, setMap] = useState<OLMap | null>(null)
 
 	const iconsLayers = useMemo(() => {
+		// This is required, since it looks like react calls useMemo on SSR renders and is not able to cache Feature and stuff
+		if (isSSR()) return []
+
 		return [
 			...icons.map(icon => {
 				return new VectorLayer({
@@ -138,8 +142,10 @@ const Map = (props: {
 
 	const currentIconsLayer = useRef<VectorLayer<VectorSource>[]>([])
 
-	const id = useUniqueId()
+	const [ref, setRef] = useState<HTMLDivElement | null>(null)
 	useEffect(() => {
+		if (!ref) return
+
 		// set some defaults for center here
 		// but we will center programmatically with center function anyway
 		const view =
@@ -160,7 +166,7 @@ const Map = (props: {
 					source: new OSM(),
 				}),
 			],
-			target: id,
+			target: ref,
 			view: new View(view),
 		})
 
@@ -169,7 +175,7 @@ const Map = (props: {
 		return () => {
 			map.dispose()
 		}
-	}, [])
+	}, [ref])
 
 	useEffect(() => {
 		if (map) {
@@ -232,10 +238,11 @@ const Map = (props: {
 
 	return (
 		<MapContainer
-			id={id}
+			ref={setRef}
 			className={props.className}
 			style={props.style}
 		></MapContainer>
 	)
 }
+
 export default wrapNoSSR(Map)
