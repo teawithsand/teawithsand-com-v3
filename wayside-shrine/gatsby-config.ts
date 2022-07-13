@@ -1,12 +1,6 @@
-import * as fs from "fs"
-import {
-	customizeDefaultPlugins,
-	GatsbyTransformerRemarkPlugins,
-	makeConfig,
-	makeLayoutPlugin,
-	makeManifestPlugin,
-	SelfPlugins,
-} from "tws-gatsby-plugin"
+import * as fs from "fs";
+import { customizeDefaultPlugins, GatsbyTransformerRemarkPlugins, makeConfig, makeLayoutPlugin, makeManifestPlugin, SelfPlugins } from "tws-gatsby-plugin";
+
 
 const plugins = customizeDefaultPlugins(
 	[
