@@ -1,10 +1,12 @@
-import React, { ReactNode, useEffect, useMemo } from "react";
-import styled from "styled-components";
-import GalleryBottomBar from "@app/gallery/GalleryBottomBar";
-import GalleryMiddleBar from "@app/gallery/GalleryMiddleBar";
-import GalleryTopBar from "@app/gallery/GalleryTopBar";
-import { useFullscreen } from "tws-common/react/hook/useFullscreen";
+import React, { ReactNode, useEffect, useMemo } from "react"
+import styled from "styled-components"
 
+import { galleryDimensions } from "@app/gallery/dimensions"
+import GalleryBottomBar from "@app/gallery/GalleryBottomBar"
+import GalleryMiddleBar from "@app/gallery/GalleryMiddleBar"
+import GalleryTopBar from "@app/gallery/GalleryTopBar"
+
+import { useFullscreen } from "tws-common/react/hook/useFullscreen"
 
 const GalleryContainer = styled.div.attrs(
 	(props: {
@@ -13,15 +15,13 @@ const GalleryContainer = styled.div.attrs(
 		$isMiddleOnly: boolean
 	}) => ({
 		style: {
-			height: props.$galleryHeight,
-			"--gallery-height": props.$galleryHeight,
+			[galleryDimensions.heightVar]: props.$galleryHeight,
 			...(props.$fullscreen
 				? {
 						position: "fixed",
 						zIndex: 1000,
 						width: "100vw",
 						height: "100vh",
-						"--gallery-height": "100vh",
 						top: 0,
 						left: 0,
 						borderRadius: 0, // otherwise user is able to see background of body in corners
@@ -36,8 +36,12 @@ const GalleryContainer = styled.div.attrs(
 	// so JS measuring code works
 	grid-template-rows: ${({ $isMiddleOnly }: { $isMiddleOnly: boolean }) =>
 		$isMiddleOnly
-			? "minmax(min-content, 0fr)"
-			: "minmax(min-content, 0fr) minmax(100px, 1fr) 100px"};
+			? `${galleryDimensions.topBarHeight}`
+			: `${galleryDimensions.topBarHeight} ${galleryDimensions.middleBarHeight} ${galleryDimensions.bottomBarHeight}}`};
+
+	${galleryDimensions.topBarHeightVar}: ${galleryDimensions.topBarHeight};
+	${galleryDimensions.middleBarHeightVar}: ${galleryDimensions.middleBarHeight};
+	${galleryDimensions.bottomBarHeightVar}: ${galleryDimensions.bottomBarHeight};
 
 	background-color: black;
 	border-radius: 5px;
@@ -60,7 +64,7 @@ const GalleryContainer = styled.div.attrs(
 	}
 `
 
-export type GallerySize = "large" | "medium" | "fullscreen"
+export type GallerySize = "large" | "medium" | "fullscreen" | string
 export type GalleryMode = "normal" | "image-only"
 
 export type GalleryEntry = {
@@ -130,7 +134,7 @@ export const Gallery = (props: GalleryProps) => {
 		} else if (size === "medium") {
 			return "60vh"
 		} else {
-			throw new Error("unreachable code")
+			return size
 		}
 	}
 

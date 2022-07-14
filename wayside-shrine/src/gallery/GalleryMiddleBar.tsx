@@ -3,6 +3,8 @@ import React, { ReactNode, useRef } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
+import { galleryDimensions } from "@app/gallery/dimensions"
+
 const transitionName = "dissolve"
 const transitionDuration = 300
 
@@ -16,14 +18,14 @@ const GalleryMiddleBarItemContainer = styled.div`
 	padding: 0; // this is required for proper usage of $itemHeight
 	box-sizing: border-box;
 
-	max-height: 100%;
+	max-height: var(${galleryDimensions.middleBarHeightVar});
 	max-width: 100%;
 
 	text-align: center;
 
 	& > * {
 		box-sizing: border-box;
-		max-height: var(--gallery-item-height);
+		max-height: inherit;
 	}
 
 	.${transitionName}-enter {

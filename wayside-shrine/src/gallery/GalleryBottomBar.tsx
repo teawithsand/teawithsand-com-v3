@@ -7,16 +7,11 @@ import React, {
 } from "react"
 import styled from "styled-components"
 
+import { galleryDimensions } from "@app/gallery/dimensions"
+
 const InnerGalleryBottomBar = styled.div.attrs(
-	({
-		$visible,
-		$itemHeight,
-	}: {
-		$itemHeight: number | null
-		$visible: boolean
-	}) => ({
+	({ $visible }: { $visible: boolean }) => ({
 		style: {
-			"--gallery-item-height": $itemHeight ? `${$itemHeight}px` : "0px",
 			...(!$visible ? { display: "none" } : {}),
 		},
 	}),
@@ -102,7 +97,7 @@ const GalleryBottomBarItemContainer = styled.div.attrs(
 
 	& > * {
 		box-sizing: border-box;
-		max-height: var(--gallery-item-height);
+		max-height: var(${galleryDimensions.bottomBarHeightVar});
 	}
 `
 
