@@ -42,7 +42,6 @@ const LocationList = (props: { locations: LoadedLocationData[] }) => {
 				<tr>
 					<td>{trans.ordinalNumber}</td>
 					<td>{trans.name}</td>
-					<td>{trans.description}</td>
 					<td>{trans.date}</td>
 					<td>{trans.coordinates}</td>
 					<td>{trans.actions.label}</td>
@@ -53,14 +52,6 @@ const LocationList = (props: { locations: LoadedLocationData[] }) => {
 					<tr key={i}>
 						<td>{i + 1}</td>
 						<td>{l.name}</td>
-						<td
-							style={{
-								wordWrap: "break-word",
-								wordBreak: "break-all",
-							}}
-						>
-							{l.description}
-						</td>
 						<td>{new Date(l.timestamp).toLocaleString("pl-PL")}</td>
 						<td>
 							{l.coordinates.latitude}
