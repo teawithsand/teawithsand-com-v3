@@ -10,7 +10,7 @@
 	"dependencies": {
 		"@svgr/webpack": "^6.2.1",
 		"tsconfig-paths-webpack-plugin": "^3.5.2",
-		"gatsby": "^4.17.2",
+		"gatsby": "^4.18.2",
 		"gatsby-plugin-image": "^2.17.0",
 		"gatsby-plugin-layout": "^3.17.0",
 		"gatsby-plugin-manifest": "^4.17.0",
