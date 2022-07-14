@@ -13,16 +13,13 @@ const InnerGalleryBottomBar = styled.div.attrs(
 	grid-row: 3;
 	grid-column: 1;
 
-	padding-top: 0.8rem;
-	padding-bottom: 0.8rem;
-
 	overflow-x: visible;
 	overflow-y: hidden;
 
 	display: grid;
 	grid-auto-flow: column;
 	grid-auto-columns: minmax(100px, 1fr);
-	gap: 0.8rem;
+	column-gap: 0.8rem;
 
 	& *:first-child {
 		margin-left: 10px;
@@ -85,20 +82,22 @@ const GalleryBottomBarItemContainer = styled.div.attrs(
 		},
 	}),
 )`
-	margin: auto;
-	padding: 0; // this is required for proper usage of $itemHeight
+	margin: 0;
+	padding: 0;
+	margin-left: auto;
+	margin-right: auto;
 	box-sizing: content-box;
-
-	max-height: 100%;
-	max-width: 100%;
 
 	text-align: center;
 
 	overflow: hidden; // just for safety, in case something goes wrong or image decides to ignore our max height
 
+	margin-top: 0.6rem;
+	margin-bottom: 0.6rem;
+
 	& > * {
 		box-sizing: border-box;
-		height: var(${galleryDimensions.bottomBarHeightVar});
+		height: calc(var(${galleryDimensions.bottomBarHeightVar}) - 1.2rem);
 	}
 `
 
