@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react"
-import { requireNoSSR } from "tws-common/ssr"
+import { isSSR } from "tws-common/ssr"
+
+const fullscreenClassName = "use-is-fullscreen"
 
 // TODO(teawithsand): hide overflow of html/body when this is active
 export const useFullscreen = ({
@@ -37,6 +39,7 @@ export const useFullscreen = ({
 		isFullscreenRequestedRef.current = true
 		;(document.documentElement.requestFullscreen() || Promise.resolve())
 			.then(() => {
+				if (!isSSR()) document.body.classList.add(fullscreenClassName)
 				setIsFullscreen(true)
 			})
 			.catch(e => {
@@ -48,6 +51,8 @@ export const useFullscreen = ({
 	const exit = () => {
 		innerExitFullscreen()
 			.then(() => {
+				if (!isSSR())
+					document.body.classList.remove(fullscreenClassName)
 				setIsFullscreen(false)
 			})
 			.catch(e => {
