@@ -1,13 +1,7 @@
-import React, {
-	ReactNode,
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState,
-} from "react"
-import styled from "styled-components"
+import React, { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import { galleryDimensions } from "tws-common/react/components/gallery/dimensions";
 
-import { galleryDimensions } from "tws-common/react/components/gallery/dimensions"
 
 const InnerGalleryBottomBar = styled.div.attrs(
 	({ $visible }: { $visible: boolean }) => ({
@@ -29,6 +23,13 @@ const InnerGalleryBottomBar = styled.div.attrs(
 	grid-auto-flow: column;
 	grid-auto-columns: minmax(100px, 1fr);
 	gap: 0.8rem;
+
+	& *:first-child {
+		margin-left: 10px;
+	}
+	& *:last-child {
+		margin-right: 10px;
+	}
 
 	// Make items non selectable and prevent fancy stuff with touch-action: none
 	& * {
@@ -97,7 +98,7 @@ const GalleryBottomBarItemContainer = styled.div.attrs(
 
 	& > * {
 		box-sizing: border-box;
-		max-height: var(${galleryDimensions.bottomBarHeightVar});
+		height: var(${galleryDimensions.bottomBarHeightVar});
 	}
 `
 
@@ -142,7 +143,6 @@ const GalleryBottomBar = (props: {
 
 	const [container, setContainer] = useState<HTMLDivElement | null>(null)
 
-	// TODO(teawithsand): fix this invalid way of using container reference in use effect
 	useEffect(() => {
 		const current = container
 		if (current) {
@@ -218,7 +218,6 @@ const GalleryBottomBar = (props: {
 		}
 	}, [currentEntryIndex, container])
 
-	// TODO(teawithsand): fix truncated border of current image on the container end(either left or right side is just black, rather than showing the border expected)
 	return (
 		<InnerGalleryBottomBar
 			ref={setContainer}
