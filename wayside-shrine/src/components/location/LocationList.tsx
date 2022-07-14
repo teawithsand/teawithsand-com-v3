@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 
 import { LoadedLocationData } from "@app/domain/location/store"
-import { locationMenuPath } from "@app/paths"
+import { locationMenuPath, locationShowPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { Button, ButtonGroup, Table } from "tws-common/ui"
@@ -21,7 +21,10 @@ const NoLocations = styled.div`
 const LocationList = (props: { locations: LoadedLocationData[] }) => {
 	const { locations } = props
 
-	const innerLocations = locations.map(l => l.data)
+	const innerLocations = locations.map(l => ({
+		...l.data,
+		id: l.id,
+	}))
 
 	const trans = useAppTranslationSelector(s => s.location.list)
 
@@ -60,7 +63,7 @@ const LocationList = (props: { locations: LoadedLocationData[] }) => {
 						</td>
 						<td>
 							<ButtonGroup>
-								<LinkContainer to="/">
+								<LinkContainer to={locationShowPath(l.id)}>
 									<Button href="#">
 										{trans.actions.view}
 									</Button>
