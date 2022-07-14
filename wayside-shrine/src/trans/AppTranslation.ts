@@ -36,6 +36,19 @@ export default interface AppTranslation {
 			descriptionLabel: string
 			latitudeLabel: string
 			longitudeLabel: string
+			validation: {
+				name: {
+					notEmpty: string
+				},
+				longitude: {
+					notEmpty: string
+					invalid: string
+				},
+				latitude: {
+					notEmpty: string
+					invalid: string
+				}
+			}
 		}
 		locate: {
 			latitudeLabel: string

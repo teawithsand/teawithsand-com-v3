@@ -27,6 +27,21 @@ const AppTranslationPL: AppTranslation = {
 			descriptionLabel: "Opis",
 			latitudeLabel: "Szerokość geograficzna",
 			longitudeLabel: "Długość geograficzna",
+			validation: {
+				name: {
+					notEmpty: "Nazwa nie może być pusta",
+				},
+				latitude: {
+					notEmpty: "Szerokość geograficzna nie może być pusta",
+					invalid:
+						"Szerokość geograficzna musi być liczbą z zakresu od -90 do 90",
+				},
+				longitude: {
+					invalid:
+						"Długość geograficzna musi być liczbą z zakresu od -180 do 180",
+					notEmpty: "Długość geograficzna nie może być pusta",
+				},
+			},
 		},
 		locate: {
 			accuracyLabel: "Dokładność - promień",

@@ -16,7 +16,7 @@ export type LocationFormData = {
 const step = 0.000000000000001
 
 export const LocationForm = (props: {
-	initialValues: LocationFormData
+	initialValues?: LocationFormData
 	onSubmit: (data: LocationFormData) => Promise<void>
 }) => {
 	const commonTrans = useAppTranslationSelector(s => s.common.form)
@@ -36,9 +36,27 @@ export const LocationForm = (props: {
 					<Form.Group className="mb-3">
 						<Form.Label>{trans.nameLabel}</Form.Label>
 
-						<FinalField name="name">
-							{({ input }) => (
-								<Form.Control type="text" {...input} />
+						<FinalField
+							name="name"
+							validate={name => {
+								if ((name || "").trim().length === 0) {
+									return trans.validation.name.notEmpty
+								}
+							}}
+						>
+							{({ input, meta }) => (
+								<>
+									<Form.Control
+										type="text"
+										{...input}
+										isInvalid={!!meta.error}
+									/>
+									{(meta.error ?? null) && (
+										<Form.Control.Feedback type="invalid">
+											{meta.error}
+										</Form.Control.Feedback>
+									)}
+								</>
 							)}
 						</FinalField>
 					</Form.Group>
@@ -56,15 +74,39 @@ export const LocationForm = (props: {
 					<Form.Group className="mb-3">
 						<Form.Label>{trans.latitudeLabel}</Form.Label>
 
-						<FinalField name="latitude">
-							{({ input }) => (
-								<Form.Control
-									max={180}
-									min={-180}
-									step={step}
-									type="number"
-									{...input}
-								/>
+						<FinalField
+							name="latitude"
+							validate={latitude => {
+								if (latitude === undefined || latitude === "") {
+									return trans.validation.latitude.notEmpty
+								}
+								const v = parseFloat(latitude)
+								if (
+									v > 90 ||
+									v < -90 ||
+									isNaN(v) ||
+									!isFinite(v)
+								) {
+									return trans.validation.latitude.invalid
+								}
+							}}
+						>
+							{({ input, meta }) => (
+								<>
+									<Form.Control
+										max={90}
+										min={-90}
+										step={step}
+										type="number"
+										{...input}
+										isInvalid={!!meta.error}
+									/>
+									{(meta.error ?? null) && (
+										<Form.Control.Feedback type="invalid">
+											{meta.error}
+										</Form.Control.Feedback>
+									)}
+								</>
 							)}
 						</FinalField>
 					</Form.Group>
@@ -72,15 +114,42 @@ export const LocationForm = (props: {
 					<Form.Group className="mb-3">
 						<Form.Label>{trans.longitudeLabel}</Form.Label>
 
-						<FinalField name="longitude">
-							{({ input }) => (
-								<Form.Control
-									max={90}
-									min={-90}
-									step={step}
-									type="number"
-									{...input}
-								/>
+						<FinalField
+							name="longitude"
+							validate={longitude => {
+								if (
+									longitude === undefined ||
+									longitude === ""
+								) {
+									return trans.validation.longitude.notEmpty
+								}
+								const v = parseFloat(longitude)
+								if (
+									v > 180 ||
+									v < -180 ||
+									isNaN(v) ||
+									!isFinite(v)
+								) {
+									return trans.validation.longitude.invalid
+								}
+							}}
+						>
+							{({ input, meta }) => (
+								<>
+									<Form.Control
+										max={180}
+										min={-180}
+										step={step}
+										type="number"
+										{...input}
+										isInvalid={!!meta.error}
+									/>
+									{(meta.error ?? null) && (
+										<Form.Control.Feedback type="invalid">
+											{meta.error}
+										</Form.Control.Feedback>
+									)}
+								</>
 							)}
 						</FinalField>
 					</Form.Group>
