@@ -7,16 +7,11 @@ import React, {
 } from "react"
 import styled from "styled-components"
 
+import { galleryDimensions } from "tws-common/react/components/gallery/dimensions"
+
 const InnerGalleryBottomBar = styled.div.attrs(
-	({
-		$visible,
-		$itemHeight,
-	}: {
-		$itemHeight: number | null
-		$visible: boolean
-	}) => ({
+	({ $visible }: { $visible: boolean }) => ({
 		style: {
-			"--gallery-item-height": $itemHeight ? `${$itemHeight}px` : "0px",
 			...(!$visible ? { display: "none" } : {}),
 		},
 	}),
@@ -102,7 +97,7 @@ const GalleryBottomBarItemContainer = styled.div.attrs(
 
 	& > * {
 		box-sizing: border-box;
-		max-height: var(--gallery-item-height);
+		max-height: var(${galleryDimensions.bottomBarHeightVar});
 	}
 `
 
@@ -139,15 +134,17 @@ const GalleryBottomBar = (props: {
 	visible?: boolean // defaults to true
 }) => {
 	const { entries, onElementClick, visible, currentEntryIndex } = props
-	const containerRef = useRef<HTMLDivElement | null>(null)
 	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
 
 	const newTargetScroll = useRef(0)
 
 	const isContainerVisibleRef = useRef(false)
 
+	const [container, setContainer] = useState<HTMLDivElement | null>(null)
+
+	// TODO(teawithsand): fix this invalid way of using container reference in use effect
 	useEffect(() => {
-		const { current } = containerRef
+		const current = container
 		if (current) {
 			const observer = new ResizeObserver(() => {
 				const width = current.clientWidth
@@ -180,13 +177,10 @@ const GalleryBottomBar = (props: {
 				observer.unobserve(current)
 			}
 		}
-	}, [containerRef, containerRef.current])
+	}, [container])
 
-	// TODO(teawithsand): this is not perfect, we would like to scroll to current element if we didn't do so
-	//  *once* we make it visible, but not when we already did so and user has scrolled away the bar
-	//  this requires special consideration when auto moving gallery elements is implemented
 	useEffect(() => {
-		const { current } = containerRef
+		const current = container
 		isContainerVisibleRef.current = false
 		if (current) {
 			const observer = new IntersectionObserver(
@@ -205,14 +199,15 @@ const GalleryBottomBar = (props: {
 				observer.unobserve(current)
 			}
 		}
-	}, [containerRef, containerRef.current])
+	}, [container])
 
 	useLayoutEffect(() => {
-		const { current } = containerRef
+		const current = container
 		if (current && isContainerVisibleRef.current) {
 			const res = current.querySelector(
 				`*[data-index="${currentEntryIndex}"]`,
 			)
+			console.error("Scrolling into view")
 			if (res) {
 				res.scrollIntoView({
 					behavior: "smooth",
@@ -221,12 +216,12 @@ const GalleryBottomBar = (props: {
 				})
 			}
 		}
-	}, [currentEntryIndex, containerRef, containerRef.current])
+	}, [currentEntryIndex, container])
 
 	// TODO(teawithsand): fix truncated border of current image on the container end(either left or right side is just black, rather than showing the border expected)
 	return (
 		<InnerGalleryBottomBar
-			ref={containerRef}
+			ref={setContainer}
 			{...({
 				$itemHeight: dimensions ? dimensions[1] : null,
 				$visible: visible ?? true,

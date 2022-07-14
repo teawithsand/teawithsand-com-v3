@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useMemo } from "react"
 import styled from "styled-components"
+import { galleryDimensions } from "tws-common/react/components/gallery/dimensions"
 import GalleryBottomBar from "tws-common/react/components/gallery/GalleryBottomBar"
 import GalleryMiddleBar from "tws-common/react/components/gallery/GalleryMiddleBar"
 import GalleryTopBar from "tws-common/react/components/gallery/GalleryTopBar"
@@ -12,7 +13,7 @@ const GalleryContainer = styled.div.attrs(
 		$isMiddleOnly: boolean
 	}) => ({
 		style: {
-			height: props.$galleryHeight,
+			[galleryDimensions.heightVar]: props.$galleryHeight,
 			...(props.$fullscreen
 				? {
 						position: "fixed",
@@ -33,8 +34,12 @@ const GalleryContainer = styled.div.attrs(
 	// so JS measuring code works
 	grid-template-rows: ${({ $isMiddleOnly }: { $isMiddleOnly: boolean }) =>
 		$isMiddleOnly
-			? "minmax(min-content, 0fr)"
-			: "minmax(min-content, 0fr) minmax(100px, 1fr) 100px"};
+			? `${galleryDimensions.topBarHeight}`
+			: `${galleryDimensions.topBarHeight} ${galleryDimensions.middleBarHeight} ${galleryDimensions.bottomBarHeight}}`};
+
+	${galleryDimensions.topBarHeightVar}: ${galleryDimensions.topBarHeight};
+	${galleryDimensions.middleBarHeightVar}: ${galleryDimensions.middleBarHeight};
+	${galleryDimensions.bottomBarHeightVar}: ${galleryDimensions.bottomBarHeight};
 
 	background-color: black;
 	border-radius: 5px;
@@ -57,7 +62,7 @@ const GalleryContainer = styled.div.attrs(
 	}
 `
 
-export type GallerySize = "large" | "medium" | "fullscreen"
+export type GallerySize = "large" | "medium" | "fullscreen" | string
 export type GalleryMode = "normal" | "image-only"
 
 export type GalleryEntry = {
@@ -127,7 +132,7 @@ export const Gallery = (props: GalleryProps) => {
 		} else if (size === "medium") {
 			return "60vh"
 		} else {
-			throw new Error("unreachable code")
+			return size
 		}
 	}
 

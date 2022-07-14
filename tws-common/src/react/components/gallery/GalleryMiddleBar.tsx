@@ -1,7 +1,9 @@
 import { useGesture } from "@use-gesture/react"
-import React, { ReactNode, useEffect, useRef, useState } from "react"
+import React, { ReactNode, useRef } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
+
+import { galleryDimensions } from "tws-common/react/components/gallery/dimensions"
 
 const transitionName = "dissolve"
 const transitionDuration = 300
@@ -16,14 +18,14 @@ const GalleryMiddleBarItemContainer = styled.div`
 	padding: 0; // this is required for proper usage of $itemHeight
 	box-sizing: border-box;
 
-	max-height: 100%;
+	max-height: var(${galleryDimensions.middleBarHeightVar});
 	max-width: 100%;
 
 	text-align: center;
 
 	& > * {
 		box-sizing: border-box;
-		max-height: var(--gallery-item-height);
+		max-height: inherit;
 	}
 
 	.${transitionName}-enter {
@@ -112,15 +114,8 @@ const GoToNextElement = styled.div`
 `
 
 const InnerGalleryMiddleBar = styled.div.attrs(
-	({
-		$itemHeight,
-		$visible,
-	}: {
-		$itemHeight: number | null
-		$visible: boolean
-	}) => ({
+	({ $visible }: { $visible: boolean }) => ({
 		style: {
-			"--gallery-item-height": $itemHeight ? `${$itemHeight}px` : "0px",
 			...(!$visible ? { display: "none" } : {}),
 		},
 	}),
@@ -180,23 +175,6 @@ const GalleryMiddleBar = (props: {
 }) => {
 	const { currentItemIndex, entries, onSwipe, onTap, visible } = props
 	const ref = useRef<HTMLDivElement | null>(null)
-	const [dimensions, setDimensions] = useState<[number, number] | null>(null)
-
-	useEffect(() => {
-		const { current } = ref
-		if (current) {
-			const observer = new ResizeObserver(() => {
-				const width = current.clientWidth
-				const height = current.clientHeight
-				setDimensions([width, height])
-			})
-			observer.observe(current)
-			return () => {
-				observer.unobserve(current)
-			}
-		}
-	}, [ref, ref.current])
-
 	const bind = useGesture(
 		{
 			onDrag: data => {
@@ -248,7 +226,6 @@ const GalleryMiddleBar = (props: {
 				// despite the fact that any cast is needed
 				ref={ref as any}
 				{...({
-					$itemHeight: dimensions ? dimensions[1] : null,
 					$visible: visible ?? true,
 				} as any)}
 				{...bind()}

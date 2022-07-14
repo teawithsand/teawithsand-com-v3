@@ -1,9 +1,10 @@
 import React, { useState } from "react"
-import Gallery, {
+import {
+	Gallery,
 	GalleryEntry,
 	GalleryMode,
 	GallerySize,
-} from "tws-common/react/components/gallery/Gallery"
+} from "tws-common/react/components/gallery"
 
 export type AutonomousGalleryProps = {
 	entries: GalleryEntry[]

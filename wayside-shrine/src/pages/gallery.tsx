@@ -2,7 +2,7 @@ import { StaticImage } from "gatsby-plugin-image"
 import React, { useMemo } from "react"
 
 import PageContainer from "@app/components/layout/PageContainer"
-import { AutonomousGallery } from "@app/gallery"
+import { AutonomousGallery } from "tws-common/react/components/gallery"
 
 import { wrapNoSSR } from "tws-common/react/components/NoSSR"
 
@@ -56,7 +56,7 @@ const Page = () => {
 
 	return (
 		<PageContainer>
-			<AutonomousGallery entries={memoed} />
+			<AutonomousGallery entries={memoed} enableKeyboardControls={true} />
 		</PageContainer>
 	)
 }
