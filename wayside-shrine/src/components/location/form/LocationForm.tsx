@@ -13,6 +13,13 @@ export type LocationFormData = {
 	longitude: number
 }
 
+type InnerFormData = {
+	name: string
+	description: string
+	latitude: string
+	longitude: string
+}
+
 const step = 0.000000000000001
 
 export const LocationForm = (props: {
@@ -25,12 +32,28 @@ export const LocationForm = (props: {
 	const { initialValues, onSubmit } = props
 
 	return (
-		<FinalForm<LocationFormData>
-			onSubmit={async values => await onSubmit({ ...values })}
+		<FinalForm<InnerFormData>
+			onSubmit={async values =>
+				await onSubmit({
+					name: values.name,
+					description: values.description,
+					latitude: parseFloat(values.latitude),
+					longitude: parseFloat(values.longitude),
+				})
+			}
 			mutators={{
 				...arrayMutators,
 			}}
-			initialValues={initialValues}
+			initialValues={
+				initialValues
+					? {
+							name: initialValues.name,
+							description: initialValues.description,
+							latitude: initialValues.latitude.toString(),
+							longitude: initialValues.longitude.toString(),
+					  }
+					: undefined
+			}
 			render={({ handleSubmit, submitting, pristine }) => (
 				<Form onSubmit={handleSubmit}>
 					<Form.Group className="mb-3">
