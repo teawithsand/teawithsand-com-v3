@@ -5,6 +5,7 @@ import { LoadedLocationData } from "@app/domain/location/store"
 import { locationMenuPath, locationShowPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
+import { useSortHelper } from "tws-common/react/hook/useSortHelper"
 import { Button, ButtonGroup, Table } from "tws-common/ui"
 import LinkContainer from "tws-common/ui/LinkContainer"
 
@@ -18,13 +19,29 @@ const NoLocations = styled.div`
 	gap: 1rem;
 `
 
+type LocationSortField = "name" | "date"
+
 const LocationList = (props: { locations: LoadedLocationData[] }) => {
 	const { locations } = props
+
+	const { sortField, sortAsc, sortCallback, sortIcon } = useSortHelper<LocationSortField>("date")
 
 	const innerLocations = locations.map(l => ({
 		...l.data,
 		id: l.id,
 	}))
+
+	if (sortField === "name") {
+		innerLocations.sort((a, b) =>
+			sortAsc
+				? a.name.localeCompare(b.name)
+				: -a.name.localeCompare(b.name),
+		)
+	} else if (sortField === "date") {
+		innerLocations.sort((a, b) =>
+			sortAsc ? a.timestamp - b.timestamp : b.timestamp - a.timestamp,
+		)
+	}
 
 	const trans = useAppTranslationSelector(s => s.location.list)
 
@@ -44,8 +61,8 @@ const LocationList = (props: { locations: LoadedLocationData[] }) => {
 			<thead>
 				<tr>
 					<td>{trans.ordinalNumber}</td>
-					<td>{trans.name}</td>
-					<td>{trans.date}</td>
+					<td onClick={() => sortCallback("name")}>{trans.name} {sortIcon("name")}</td>
+					<td onClick={() => sortCallback("date")}>{trans.date} {sortIcon("date")}</td>
 					<td>{trans.coordinates}</td>
 					<td>{trans.actions.label}</td>
 				</tr>
