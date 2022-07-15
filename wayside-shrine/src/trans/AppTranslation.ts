@@ -58,6 +58,8 @@ export default interface AppTranslation {
 			lastUpdateLabel: string
 			errorLabel: string
 
+			tryAgain: string
+
 			lastUpdate: (timestamp: TimestampMs) => string
 			accuracyRadius: (meters: number, isLow: boolean) => string
 			noPosition: (

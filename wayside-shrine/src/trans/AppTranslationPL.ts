@@ -73,6 +73,7 @@ const AppTranslationPL: AppTranslation = {
 						return "Nieznany błąd dostępu do lokalizacji"
 				}
 			},
+			tryAgain: "Spróbuj ponownie",
 		},
 		menu: {
 			title: "Lokalizacja",
