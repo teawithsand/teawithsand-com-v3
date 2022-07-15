@@ -10,6 +10,7 @@ import { SSRProvider } from "tws-common/ui"
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
+			cacheTime: 0,
 			suspense: true,
 			useErrorBoundary: true,
 		},
