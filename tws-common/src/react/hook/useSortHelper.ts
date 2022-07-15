@@ -1,14 +1,29 @@
 import { useState } from "react"
+import {
+	compareBigInt,
+	compareNumbers,
+	compareStrings,
+} from "tws-common/lang/sort"
 import { arrowDown, arrowUp } from "tws-common/text/unicode"
 
 /**
  * Small hook, which simplifies sorting things in react component.
  */
-export const useSortHelper = <T extends string>(defaultSortField?: T) => {
+export const useSortHelper = <T extends string>(initOptions?: {
+	sortField?: T
+	sortAsc?: boolean
+}) => {
 	const [sortField, setSortField] = useState<T | null>(
-		defaultSortField ?? null,
+		initOptions?.sortField ?? null,
 	)
-	const [sortAsc, setSortAsc] = useState<boolean>(true)
+	const [sortAsc, setSortAsc] = useState<boolean>(
+		initOptions?.sortAsc ?? true,
+	)
+
+	const reverseIfRequired = (a: number) => {
+		if (!sortAsc) return -a
+		return a
+	}
 
 	const sortObjectsArrayByCurrentField = <
 		V extends string | number | bigint,
@@ -31,14 +46,11 @@ export const useSortHelper = <T extends string>(defaultSortField?: T) => {
 			}
 
 			if (typeof va === "string" && typeof vb === "string") {
-				return va.localeCompare(vb)
+				return reverseIfRequired(compareStrings(va, vb))
 			} else if (typeof va === "number" && typeof vb === "number") {
-				return va - vb
+				return reverseIfRequired(compareNumbers(va, vb))
 			} else if (typeof va === "bigint" && typeof vb === "bigint") {
-				const v = va - vb
-				if (v == BigInt(0)) return 0
-				else if (v > BigInt(0)) return 1
-				else return -1
+				return reverseIfRequired(compareBigInt(va, vb))
 			} else {
 				throw new Error("unreachable code")
 			}
@@ -49,6 +61,8 @@ export const useSortHelper = <T extends string>(defaultSortField?: T) => {
 		sortField,
 		sortAsc,
 		setSortField,
+
+		cacheKey: [sortField, sortAsc],
 
 		reset: () => {
 			setSortField(null)
