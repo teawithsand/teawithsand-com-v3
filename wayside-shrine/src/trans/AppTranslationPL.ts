@@ -80,12 +80,12 @@ const AppTranslationPL: AppTranslation = {
 			locateMe: "Zlokalizuj mine",
 			showLocations: "Lista zapisanych lokalizacji",
 			featureDescription: `Lokalizator pozwala na pobranie lokalizacji z urządzenia i zapisanie jej w pamięci strony internetowej.
-				Ułatwia to zapisanie lokalizacji objektu, który zostanie zgłoszony. Zapisane lokalizacje można wyeksportować do pliku.`,
+				Ułatwia to zapisanie lokalizacji obiektu, który zostanie zgłoszony. Zapisane lokalizacje można wyeksportować do pliku.`,
 		},
 		list: {
 			noLocationsTitle: "Nie masz żadnych zapisanych lokalizacji",
 			noLocationsGoToMenu: "Idź do menu lokalizacji",
-			name: "Lista lokalizacji",
+			name: "Nazwa lokalizacji",
 			date: "Data",
 			ordinalNumber: "Lp.",
 			coordinates: "Współrzędne",
