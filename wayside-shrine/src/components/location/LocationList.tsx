@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import styled from "styled-components"
 
 import { LoadedLocationData } from "@app/domain/location/store"
@@ -22,30 +22,42 @@ const NoLocations = styled.div`
 type LocationSortField = "name" | "date"
 
 const LocationList = (props: { locations: LoadedLocationData[] }) => {
-	const { locations } = props
+	const { locations: inputLocations } = props
 
-	const { sortField, sortAsc, sortCallback, sortIcon } = useSortHelper<LocationSortField>("date")
+	const { sortField, sortAsc, sortCallback, sortIcon, cacheKey } =
+		useSortHelper<LocationSortField>({
+			sortField: "date",
+			sortAsc: true,
+		})
 
-	const innerLocations = locations.map(l => ({
-		...l.data,
-		id: l.id,
-	}))
+	const rawLocations = useMemo(
+		() =>
+			inputLocations.map(l => ({
+				...l.data,
+				id: l.id,
+			})),
+		[inputLocations],
+	)
 
-	if (sortField === "name") {
-		innerLocations.sort((a, b) =>
-			sortAsc
-				? a.name.localeCompare(b.name)
-				: -a.name.localeCompare(b.name),
-		)
-	} else if (sortField === "date") {
-		innerLocations.sort((a, b) =>
-			sortAsc ? a.timestamp - b.timestamp : b.timestamp - a.timestamp,
-		)
-	}
+	const locations = useMemo(() => {
+		if (sortField === "name") {
+			return [...rawLocations].sort((a, b) =>
+				sortAsc
+					? a.name.localeCompare(b.name)
+					: -a.name.localeCompare(b.name),
+			)
+		} else if (sortField === "date") {
+			return [...rawLocations].sort((a, b) =>
+				sortAsc ? a.timestamp - b.timestamp : b.timestamp - a.timestamp,
+			)
+		} else {
+			throw new Error("unreachable code")
+		}
+	}, cacheKey)
 
 	const trans = useAppTranslationSelector(s => s.location.list)
 
-	if (locations.length === 0) {
+	if (inputLocations.length === 0) {
 		return (
 			<NoLocations>
 				<h1>{trans.noLocationsTitle}</h1>
@@ -61,14 +73,18 @@ const LocationList = (props: { locations: LoadedLocationData[] }) => {
 			<thead>
 				<tr>
 					<td>{trans.ordinalNumber}</td>
-					<td onClick={() => sortCallback("name")}>{trans.name} {sortIcon("name")}</td>
-					<td onClick={() => sortCallback("date")}>{trans.date} {sortIcon("date")}</td>
+					<td onClick={() => sortCallback("name")}>
+						{trans.name} {sortIcon("name")}
+					</td>
+					<td onClick={() => sortCallback("date")}>
+						{trans.date} {sortIcon("date")}
+					</td>
 					<td>{trans.coordinates}</td>
 					<td>{trans.actions.label}</td>
 				</tr>
 			</thead>
 			<tbody>
-				{innerLocations.map((l, i) => (
+				{locations.map((l, i) => (
 					<tr key={i}>
 						<td>{i + 1}</td>
 						<td>{l.name}</td>
