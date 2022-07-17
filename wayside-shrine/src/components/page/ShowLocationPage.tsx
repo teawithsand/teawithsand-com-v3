@@ -16,7 +16,7 @@ const InnerPage = () => {
 			"Location not found TODO(teawithsand): make this error typed",
 		)
 	}
-	return <LocationView location={data} />
+	return <LocationView location={data} id={id} />
 }
 
 const LocationListPage = () => {

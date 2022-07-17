@@ -7,3 +7,6 @@ export const locationLocatePath = "/location/locate"
 export const locationAddPath = "/location/add"
 export const locationShowPath = (id: string) =>
 	`/location/show?id=${encodeURIComponent(id)}`
+
+export const locationEditPath = (id: string) =>
+	`/location/edit?id=${encodeURIComponent(id)}`

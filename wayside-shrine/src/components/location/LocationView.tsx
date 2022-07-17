@@ -8,9 +8,11 @@ import Map, {
 	MapView,
 } from "@app/components/map/Map"
 import { LocationData } from "@app/domain/location/store"
+import { locationEditPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { Button, ButtonGroup } from "tws-common/ui"
+import LinkContainer from "tws-common/ui/LinkContainer"
 
 const DisplayedMap = styled(Map)`
 	max-height: 80vh;
@@ -23,8 +25,9 @@ const PageContainer = styled.div`
 	gap: 1rem;
 `
 
-const LocationView = (props: { location: LocationData }) => {
+const LocationView = (props: { location: LocationData; id?: string }) => {
 	const { location } = props
+	const id = props.id ?? null
 
 	const initialView: MapView = useMemo(
 		() => ({
@@ -89,27 +92,25 @@ const LocationView = (props: { location: LocationData }) => {
 					])}
 				</p>
 			</div>
-			<ButtonGroup
-				style={{
-					width: "fit-content",
-				}}
-			>
-				<Button
-					onClick={() => {
-						// noop for now
+			{id ? (
+				<ButtonGroup
+					style={{
+						width: "fit-content",
 					}}
 				>
-					{trans.editLabel}
-				</Button>
-				<Button
-					variant="danger"
-					onClick={() => {
-						// noop for now
-					}}
-				>
-					{trans.deleteLabel}
-				</Button>
-			</ButtonGroup>
+					<LinkContainer to={locationEditPath(id)}>
+						<Button href="#">{trans.editLabel}</Button>
+					</LinkContainer>
+					<Button
+						variant="danger"
+						onClick={() => {
+							// noop for now
+						}}
+					>
+						{trans.deleteLabel}
+					</Button>
+				</ButtonGroup>
+			) : null}
 			<DisplayedMap initialView={initialView} icons={icons} />
 		</PageContainer>
 	)
