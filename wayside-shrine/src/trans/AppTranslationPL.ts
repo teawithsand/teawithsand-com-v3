@@ -22,6 +22,14 @@ const AppTranslationPL: AppTranslation = {
 		},
 	},
 	location: {
+		display: {
+			latitude: v => `Szerokość geograficzna ${v}`,
+			longitude: v => `Długość geograficzna ${v}`,
+			noDescription: "Brak opisu",
+			noName: "Brak nazwy",
+			deleteLabel: "Usuń",
+			editLabel: "Edytuj",
+		},
 		form: {
 			nameLabel: "Nazwa",
 			descriptionLabel: "Opis",

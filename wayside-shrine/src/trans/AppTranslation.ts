@@ -31,6 +31,14 @@ export default interface AppTranslation {
 		}
 	}
 	location: {
+		display: {
+			noDescription: string
+			noName: string
+			latitude: (v: number) => string,
+			longitude: (v: number) => string,
+			editLabel: string
+			deleteLabel: string
+		}
 		form: {
 			nameLabel: string
 			descriptionLabel: string
