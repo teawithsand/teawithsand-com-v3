@@ -1,6 +1,8 @@
 import React from "react"
-const Layout = ({ children }) => {
-	return <>{children}</>
+import Layout from "./components/layout/Layout"
+
+const OuterLayout = ({ children }) => {
+	return <Layout>{children}</Layout>
 }
 
-export default Layout
+export default OuterLayout
