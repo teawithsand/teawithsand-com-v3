@@ -3,17 +3,22 @@ import React, { ReactNode, useEffect, useRef, useState } from "react"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { simpleSleep } from "tws-common/lang/sleep"
+import { DialogManager } from "tws-common/react/components/dialog"
 import { Button, Modal } from "tws-common/ui"
 
-export const AreYouSureModal = (props: {
+export type AreYouSureModalOptions = {
 	title?: string
 	message?: string | (ReactNode & {})
 	confirmLabel?: string
 	cancelLabel?: string
+}
 
-	onConfirm: () => void
-	onExit: () => void
-}) => {
+export const AreYouSureModal = (
+	props: {
+		onConfirm: () => void
+		onExit: () => void
+	} & AreYouSureModalOptions,
+) => {
 	const { onConfirm, onExit } = props
 	const [show, setShow] = useState(true)
 
@@ -69,4 +74,19 @@ export const AreYouSureModal = (props: {
 			</Modal.Footer>
 		</Modal>
 	)
+}
+
+export const showAreYouSureModal = (
+	dm: DialogManager,
+	options?: {
+		displayOptions?: AreYouSureModalOptions
+	},
+) => {
+	return dm.showDialog<boolean>(({ resolve }) => (
+		<AreYouSureModal
+			{...(options?.displayOptions ?? {})}
+			onConfirm={() => resolve(true)}
+			onExit={() => resolve(false)}
+		/>
+	))
 }

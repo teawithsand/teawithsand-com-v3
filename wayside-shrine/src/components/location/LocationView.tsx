@@ -1,3 +1,4 @@
+import { navigate } from "gatsby"
 import React, { useMemo } from "react"
 import styled from "styled-components"
 
@@ -7,10 +8,13 @@ import Map, {
 	MapIcon,
 	MapView,
 } from "@app/components/map/Map"
+import { showAreYouSureModal } from "@app/components/modal/areYouSure"
+import { useDeleteLocation } from "@app/domain/location/operation"
 import { LocationData } from "@app/domain/location/store"
-import { locationEditPath } from "@app/paths"
+import { locationEditPath, locationListPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
+import { useDialogManager } from "tws-common/react/components/dialog"
 import { Button, ButtonGroup } from "tws-common/ui"
 import LinkContainer from "tws-common/ui/LinkContainer"
 
@@ -63,7 +67,11 @@ const LocationView = (props: { location: LocationData; id?: string }) => {
 		]
 	}, [location])
 
+	const dm = useDialogManager()
+
 	const trans = useAppTranslationSelector(s => s.location.display)
+
+	const deleteMutation = useDeleteLocation()
 
 	return (
 		<PageContainer>
@@ -103,8 +111,12 @@ const LocationView = (props: { location: LocationData; id?: string }) => {
 					</LinkContainer>
 					<Button
 						variant="danger"
-						onClick={() => {
-							// noop for now
+						onClick={async () => {
+							const result = await showAreYouSureModal(dm)
+							if (!result) return
+
+							await deleteMutation.mutateAsync(id)
+							navigate(locationListPath)
 						}}
 					>
 						{trans.deleteLabel}

@@ -5,6 +5,7 @@ import { LoadedLocationData } from "@app/domain/location/store"
 import { locationMenuPath, locationShowPath } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
+import { useDialogManager } from "tws-common/react/components/dialog"
 import { useSortHelper } from "tws-common/react/hook/useSortHelper"
 import { Button, ButtonGroup, Table } from "tws-common/ui"
 import LinkContainer from "tws-common/ui/LinkContainer"
@@ -55,6 +56,8 @@ const LocationList = (props: { locations: LoadedLocationData[] }) => {
 		}
 	}, cacheKey)
 
+	const dm = useDialogManager()
+
 	const trans = useAppTranslationSelector(s => s.location.list)
 
 	if (inputLocations.length === 0) {
@@ -101,14 +104,6 @@ const LocationList = (props: { locations: LoadedLocationData[] }) => {
 										{trans.actions.view}
 									</Button>
 								</LinkContainer>
-								<Button
-									onClick={() => {
-										// noop for now
-									}}
-									variant="danger"
-								>
-									{trans.actions.delete}
-								</Button>
 							</ButtonGroup>
 						</td>
 					</tr>
