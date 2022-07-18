@@ -25,3 +25,6 @@ build_local tws-common
 build_local tws-gatsby-plugin
 
 echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
+# Test dependency list used in projects:
+# jest @types/jest ts-jest jest-environment-jsdom fake-indexeddb @trust/webcrypto web-streams-polyfill @testing-library/jest-dom
