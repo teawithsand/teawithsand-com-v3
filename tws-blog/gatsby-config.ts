@@ -45,6 +45,7 @@ const config = makeConfig(
 	{
 		title: `Teawithsand's blog`,
 		siteUrl: `https://teawithsand.com`,
+		twitter: "https://twitter.com/teawithsand",
 	},
 	plugins,
 )

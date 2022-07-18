@@ -13,6 +13,18 @@ import Translator, {
 export default interface AppTranslation {
 	common: CommonTranslation
 	appName: string
+	layout: {
+		navbar: {
+			brandName: string
+			blogPostList: string
+			appList: string
+			tagList: string
+			twitter: string
+			facebook: string
+			linkedin: string
+			github: string
+		}
+	}
 }
 
 const translations = new Map<string, AppTranslation>()
