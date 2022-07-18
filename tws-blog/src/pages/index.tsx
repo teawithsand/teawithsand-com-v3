@@ -1,11 +1,11 @@
 import * as React from "react"
-import TeaAnimation from "../components/tea/TeaAnimation"
+import TeaAnimation from "tws-common/ui/TeaAnimation"
 
 // markup
 const IndexPage = () => {
 	return (
 		<main>
-			<TeaAnimation sandCount={500} />
+			<TeaAnimation />
 		</main>
 	)
 }
