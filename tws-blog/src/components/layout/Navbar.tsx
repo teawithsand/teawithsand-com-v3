@@ -17,9 +17,12 @@ const HeadingRow = styled.header`
 	grid-column: 1;
 	grid-row: 1;
 
-	width: fit-content;
 	font-size: 2rem;
 	font-weight: 400;
+
+	display: flex;
+	flex-flow: row wrap;
+	gap: 1rem;
 `
 
 const LinksRow = styled.div`
