@@ -17,6 +17,7 @@ const IndexPage = (props: { data: Queries.HomePagePostsQuery }) => {
 			timeToRead: n.timeToRead || 0,
 			tags: (n.frontmatter.tags || []).map(v => v || ""),
 			title: n.frontmatter.title || "",
+			slug: n.frontmatter.slug || "",
 			featuredImage: n.frontmatter.featuredImage?.childImageSharp,
 		})
 	}
