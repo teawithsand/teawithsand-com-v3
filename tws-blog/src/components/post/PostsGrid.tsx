@@ -3,6 +3,7 @@ import { PostHeader } from "@app/domain/Post"
 import styled from "styled-components"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 import { Link } from "gatsby"
+import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
 import {
 	BREAKPOINT_MD,
@@ -64,19 +65,18 @@ const PostEntryContainer = styled.article`
 	}
 `
 
-const PostEntryTags = styled.div`
-	display: flex;
-	flex-flow: row wrap;
-	gap: 0.8rem;
-`
-
 const PostEntryImageLink = styled(Link)`
 	display: block;
 	width: 100%;
 	height: 100%;
+
+	& > * {
+		width: 100%;
+		height: 100%;
+	}
 `
 
-const PostEntryImage = styled.img`
+const PostEntryImage = styled(GatsbyImage)`
 	display: block;
 
 	width: 100%;
@@ -93,11 +93,21 @@ const PostEntryTitle = styled.h1`
 	font-size: 2rem;
 	margin: 0;
 	padding: 0;
+
+	text-align: center;
 `
 
 const PostEntryInfoRow = styled.div`
 	padding-left: ${leftRightPadding};
 	padding-right: ${leftRightPadding};
+
+	display: grid;
+	grid-auto-flow: row;
+	grid-template-columns: auto;
+	grid-auto-rows: auto;
+
+	text-align: center;
+	justify-items: center;
 `
 
 const PostEntryTitleLink = styled(Link)`
@@ -109,32 +119,46 @@ const PostEntryTitleLink = styled(Link)`
 	}
 `
 
+const PostEntryTags = styled.div`
+	display: flex;
+	flex-flow: row wrap;
+	row-gap: 0.4rem;
+	column-gap: 0.8rem;
+
+	justify-content: center;
+
+	padding-left: ${leftRightPadding};
+	padding-right: ${leftRightPadding};
+`
+
 const PostEntry = (props: { header: PostHeader }) => {
 	const formatDate = useAppTranslationSelector(s => s.common.formatDate)
 	const post = props.header
 
-	const image = useMemo(() => {
-		if (Math.random() > 0.5) {
-			return <PostEntryImage src="https://placekitten.com/800/801" />
-		} else {
-			return <PostEntryImage src="https://placekitten.com/900/200" />
-		}
-	}, [])
+	const image = post.featuredImage ? getImage(post.featuredImage) : null
+
+	const imageComponent = image ? (
+		<GatsbyImage image={image} alt={post.title} objectFit="cover" />
+	) : null
 
 	return (
 		<PostEntryContainer>
-			<PostEntryImageLink to={post.path}>{image}</PostEntryImageLink>
+			<PostEntryImageLink to={post.path}>
+				{imageComponent}
+			</PostEntryImageLink>
 			<PostEntryTitleLink to={post.path}>
 				<PostEntryTitle>{post.title}</PostEntryTitle>
 			</PostEntryTitleLink>
 			<PostEntryInfoRow>
-				<time>{formatDate(post.createdAt)}</time> {post.readingTime}{" "}
-				read
+				<span>
+					<time>{formatDate(post.createdAt)}</time>
+				</span>
+				<span>{post.timeToRead} minutes read</span>
 			</PostEntryInfoRow>
 			<PostEntryTags>
 				{post.tags.map((v, i) => (
 					<Link className="link-secondary" to={tagPath(v)} key={i}>
-						{v}
+						#{v}
 					</Link>
 				))}
 			</PostEntryTags>
