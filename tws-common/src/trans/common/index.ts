@@ -1,6 +1,6 @@
 import { TimestampMs } from "tws-common/lang/time/Timestamp"
 
-export type TranslatableDate = Date | TimestampMs
+export type TranslatableDate = Date | TimestampMs | string
 
 export const translatableDateToDate = (date: TranslatableDate) => {
 	if (date instanceof Date) return date
