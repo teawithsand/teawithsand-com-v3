@@ -11,6 +11,9 @@ const ParentContainer = styled.nav`
 	grid-template-rows: auto auto;
 	grid-template-columns: auto;
 	gap: 0.8rem;
+
+	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+	padding-bottom: .3rem;
 `
 
 const HeadingRow = styled.header`
