@@ -8,20 +8,19 @@ export const createPages: GatsbyNode["createPages"] = async ({
 }) => {
 	const { createPage } = actions
 
-	/*
-	// Create pages for all blog posts
+	// Create pages for blog posts
 	{
 		// Define a template for blog post
-		const templatePath = path.resolve(`./src/templates/blog-post.tsx`)
+		const templatePath = path.resolve(`./src/templates/post.tsx`)
 
 		// Get all markdown blog posts sorted by date
 
 		// TODO(teawithsand): sort posts by date
 		const result = await graphql(`
-			query WaysideShrinesForPages {
+			query PostsForPages {
 				allFile(
 					filter: {
-						sourceInstanceName: { eq: "waysideshrines" }
+						sourceInstanceName: { eq: "blog" }
 						name: { eq: "index" }
 						extension: { eq: "md" }
 					}
@@ -60,9 +59,9 @@ export const createPages: GatsbyNode["createPages"] = async ({
 				const nextShrineId =
 					index === shrines.length - 1 ? null : shrines[index + 1].id
 
-				const shrinePath = shrine.childMarkdownRemark.fields.path
+				const postPath = shrine.childMarkdownRemark.fields.path
 				createPage({
-					path: shrinePath,
+					path: postPath,
 					component: templatePath,
 					context: {
 						id: shrine.id,
@@ -73,10 +72,9 @@ export const createPages: GatsbyNode["createPages"] = async ({
 			})
 		}
 	}
-	*/
 
 	/*
-	// Create all pages for all blog posts
+	// Create pages for all blog posts tags
 	{
 		// Define a template for blog post
 		const templatePath = path.resolve(`./src/templates/blog-tags.js`)

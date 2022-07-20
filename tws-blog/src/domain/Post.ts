@@ -9,3 +9,8 @@ export interface PostHeader {
 	tags: string[]
 	path: string
 }
+
+export interface Post {
+	header: PostHeader
+	contentHTML: string
+}
