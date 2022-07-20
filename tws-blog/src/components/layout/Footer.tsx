@@ -1,18 +1,19 @@
 import React from "react"
 
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
+import { graphql, useStaticQuery } from "gatsby"
 import styled from "styled-components"
 import { Container } from "tws-common/ui"
-import { appsPath, blogPostsPath, homePath, tagsPath } from "@app/paths"
-import { graphql, Link, useStaticQuery } from "gatsby"
 
 const ParentContainer = styled.nav`
 	margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+	margin-bottom: 1.5rem;
 	border-top: 1px solid rgba(0, 0, 0, 0.2);
 	display: grid;
 	color: rgba(0, 0, 0, 0.5);
-    font-size: 2rem;
+	font-size: 2rem;
+
+	text-align: right;
 `
 
 const Footer = () => {
