@@ -11,6 +11,7 @@ import {
 	BREAKPOINT_SM,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
 import { tagPath } from "@app/paths"
+import SmallTagList from "@app/components/tag/SmallTagList"
 
 const leftRightPadding = "0.3rem"
 
@@ -119,12 +120,7 @@ const PostEntryTitleLink = styled(Link)`
 	}
 `
 
-const PostEntryTags = styled.div`
-	display: flex;
-	flex-flow: row wrap;
-	row-gap: 0.4rem;
-	column-gap: 0.8rem;
-
+const PostEntryTags = styled(SmallTagList)`
 	justify-content: center;
 
 	padding-left: ${leftRightPadding};
@@ -155,13 +151,7 @@ const PostEntry = (props: { header: PostHeader }) => {
 				</span>
 				<span>{post.timeToRead} minutes read</span>
 			</PostEntryInfoRow>
-			<PostEntryTags>
-				{post.tags.map((v, i) => (
-					<Link className="link-secondary" to={tagPath(v)} key={i}>
-						#{v}
-					</Link>
-				))}
-			</PostEntryTags>
+			<PostEntryTags tags={post.tags} />
 		</PostEntryContainer>
 	)
 }

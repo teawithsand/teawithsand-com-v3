@@ -2,6 +2,40 @@ import { Post, PostHeader } from "@app/domain/Post"
 import { Helmet } from "react-helmet"
 import React from "react"
 import { graphql, useStaticQuery } from "gatsby"
+import styled from "styled-components"
+import { useAppTranslationSelector } from "@app/trans/AppTranslation"
+import SmallTagList from "@app/components/tag/SmallTagList"
+import { breakpointMediaDown, BREAKPOINT_SM } from "tws-common/react/hook/dimensions/useBreakpoint"
+
+const ArticleHeader = styled.header`
+	margin-bottom: 1rem;
+
+	& > h1 {
+		padding: 0;
+		margin: 0;
+	}
+
+	row-gap: 0.2rem;
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: auto;
+	grid-auto-flow: auto;
+
+	@media ${breakpointMediaDown(BREAKPOINT_SM)} {
+		text-align: center;
+		align-items: center;
+		justify-content: center;
+	}
+`
+
+const ArticleFooter = styled.footer``
+
+const ArticleContent = styled.div`
+	& h1 {
+		font-size: 2.3rem;
+		font-weight: 400;
+	}
+`
 
 export const PostHelmet = (props: { post: PostHeader }) => {
 	const query: Queries.PostHelmetMetaQuery = useStaticQuery(graphql`
@@ -38,21 +72,31 @@ export const PostDisplay = (props: {
 	nextPost: PostHeader | null
 	prevPost: PostHeader | null
 }) => {
+	const formatDate = useAppTranslationSelector(s => s.common.formatDate)
 	const { post } = props
 	const { header } = post
 	return (
 		<article>
-			<header>
+			<ArticleHeader>
 				<h1>{header.title}</h1>
-				<div
-					dangerouslySetInnerHTML={{
-						__html: post.contentHTML,
-					}}
-				></div>
-				<footer>
-					TODO comments here or things like next/prev posts
-				</footer>
-			</header>
+				<span>
+					Created at: <time>{formatDate(header.createdAt)}</time>
+				</span>
+				{header.lastEditedAt ? (
+					<span>Last edited at: {formatDate(header.createdAt)}</span>
+				) : null}
+				<span>
+					<SmallTagList tags={header.tags} />
+				</span>
+			</ArticleHeader>
+			<ArticleContent
+				dangerouslySetInnerHTML={{
+					__html: post.contentHTML,
+				}}
+			></ArticleContent>
+			<ArticleFooter>
+				TODO comments here or things like next/prev posts
+			</ArticleFooter>
 		</article>
 	)
 }
