@@ -27,6 +27,7 @@ const GridParent = styled.div`
 	}
 
 	justify-items: stretch;
+	align-items: center;
 
 	min-width: 0px;
 	gap: 2rem;
@@ -58,7 +59,7 @@ const PostEntryContainer = styled.article`
 	overflow: hidden;
 
 	&:hover {
-		transform: translateY(-1rem);
+		transform: translateY(-0.5rem);
 		z-index: 1;
 	}
 `
@@ -82,7 +83,7 @@ const PostEntryImage = styled.img`
 	height: 100%;
 	max-height: 50vh;
 
-    // default in case it was not set on image directly
+	// default in case it was not set on image directly
 	object-fit: cover;
 `
 
@@ -142,14 +143,7 @@ const PostEntry = (props: { header: PostHeader }) => {
 }
 
 const PostsGrid = (props: { posts: PostHeader[] }) => {
-	const posts = [
-		...props.posts,
-		...props.posts,
-		...props.posts,
-		...props.posts,
-		...props.posts,
-		...props.posts,
-	]
+	const posts = props.posts
 	return (
 		<GridParent>
 			{posts.map((v, i) => (
