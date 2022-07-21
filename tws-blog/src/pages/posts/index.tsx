@@ -32,6 +32,7 @@ const IndexPage = (props: { data: Queries.PostListQuery }) => {
 				>
 					Post list ({headers.length})
 				</h1>
+				<h4 className="mb-3">Use ctrl+f to search</h4>
 				<PostsGrid posts={headers} />
 			</Container>
 		</main>
