@@ -4,6 +4,7 @@ import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 import { graphql, useStaticQuery } from "gatsby"
 import styled from "styled-components"
 import { Container } from "tws-common/ui"
+import { breakpointMediaDown, BREAKPOINT_SM } from "tws-common/react/hook/dimensions/useBreakpoint"
 
 const ParentContainer = styled.nav`
 	margin-top: 1.5rem;
@@ -14,6 +15,10 @@ const ParentContainer = styled.nav`
 	font-size: 2rem;
 
 	text-align: right;
+
+	@media ${breakpointMediaDown(BREAKPOINT_SM)} {
+		text-align: center;
+	}
 `
 
 const Footer = () => {
