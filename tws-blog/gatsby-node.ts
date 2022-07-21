@@ -73,23 +73,27 @@ export const createPages: GatsbyNode["createPages"] = async ({
 		}
 	}
 
-	/*
-	// Create pages for all blog posts tags
+	// Create pages for all tags
 	{
 		// Define a template for blog post
-		const templatePath = path.resolve(`./src/templates/blog-tags.js`)
+		const templatePath = path.resolve(`./src/templates/tag.tsx`)
 
 		// Get all markdown blog posts sorted by date
 		const result = await graphql(`
-			{
-				allMarkdownRemark(
-					filter: { fields: { sourceName: { eq: "blog" } } }
-				) {
-					group(field: frontmatter___tags) {
-						tag: fieldValue
+				query TagsForPages {
+					allFile(
+						filter: {
+							sourceInstanceName: { eq: "blog" }
+							name: { eq: "index" }
+							extension: { eq: "md" }
+						}
+					) {
+						group(field: childMarkdownRemark___frontmatter___tags) {
+							tag: fieldValue
+							count: totalCount
+						}
 					}
 				}
-			}
 		`)
 
 		if (result.errors) {
@@ -100,7 +104,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 			return
 		}
 
-		const postByTags = result.data.allMarkdownRemark.group
+		const postByTags = result.data.allFile.group
 		// Create blog posts pages
 		// But only if there's at least one markdown file found at "content/blog" (defined in gatsby-config.js)
 		// `context` is available in the template as a prop and as a variable in GraphQL
@@ -108,16 +112,16 @@ export const createPages: GatsbyNode["createPages"] = async ({
 		if (postByTags.length > 0) {
 			postByTags.forEach(post => {
 				createPage({
-					path: "/blog/tag/" + post.tag,
+					path: "/tag/" + post.tag,
 					component: templatePath,
 					context: {
 						tag: post.tag,
+						count: post.count,
 					},
 				})
 			})
 		}
 	}
-	*/
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = ({

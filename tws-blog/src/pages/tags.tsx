@@ -45,6 +45,10 @@ export const query = graphql`
 				name: { eq: "index" }
 				extension: { eq: "md" }
 			}
+			sort: {
+				fields: [childMarkdownRemark___frontmatter___createdAt]
+				order: DESC
+			}
 		) {
 			group(field: childMarkdownRemark___frontmatter___tags) {
 				tag: fieldValue

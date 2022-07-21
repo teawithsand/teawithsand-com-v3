@@ -4,9 +4,18 @@ import { graphql } from "gatsby"
 import * as React from "react"
 import { Container } from "tws-common/ui"
 
-const IndexPage = (props: { data: Queries.PostListQuery }) => {
+
+const TagTemplate = (props: {
+	data: Queries.PostTagQuery
+	pageContext: {
+		count: number
+		tag: string
+	}
+}) => {
 	const nodes = props.data.allFile.nodes.map(v => v.childMarkdownRemark)
 	const headers: PostHeader[] = []
+
+	const { tag } = props.pageContext
 
 	for (const n of nodes) {
 		if (!n || !n.frontmatter || !n.fields) continue
@@ -30,7 +39,7 @@ const IndexPage = (props: { data: Queries.PostListQuery }) => {
 						marginBottom: "1rem",
 					}}
 				>
-					Post list ({headers.length})
+					Posts with tag <em>{tag}</em> ({headers.length})
 				</h1>
 				<PostsGrid posts={headers} />
 			</Container>
@@ -38,20 +47,21 @@ const IndexPage = (props: { data: Queries.PostListQuery }) => {
 	)
 }
 
-export default IndexPage
+export default TagTemplate
 
 export const query = graphql`
-	query PostList {
+	query PostTag($tag: String!) {
 		allFile(
 			filter: {
 				sourceInstanceName: { eq: "blog" }
 				name: { eq: "index" }
 				extension: { eq: "md" }
-			}
-			sort: {
-				fields: [childMarkdownRemark___frontmatter___createdAt]
-				order: DESC
-			}
+				childMarkdownRemark: { frontmatter: { tags: { in: [$tag] } } }
+			},
+            sort: {
+                fields: [childMarkdownRemark___frontmatter___createdAt],
+                order: DESC
+            }
 		) {
 			nodes {
 				childMarkdownRemark {
@@ -76,6 +86,8 @@ export const query = graphql`
 						}
 					}
 					timeToRead
+					html
+					excerpt(pruneLength: 160)
 				}
 			}
 		}
