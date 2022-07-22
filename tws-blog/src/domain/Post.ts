@@ -10,9 +10,14 @@ export interface PostHeader {
 	tags: string[]
 	path: string
 	excerpt: string
+	language: string
+}
+
+export interface ExtPostHeader extends PostHeader {
+	featuredImageSocial?: ImageDataLike | IGatsbyImageData | null | undefined
 }
 
 export interface Post {
-	header: PostHeader
+	header: ExtPostHeader
 	contentHTML: string
 }

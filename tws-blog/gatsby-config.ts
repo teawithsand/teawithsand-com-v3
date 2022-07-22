@@ -125,6 +125,8 @@ const plugins = customizeDefaultPlugins(
 		},
 	],
 )
-const config = makeConfig({}, plugins)
+const config = makeConfig({
+	siteUrl: "https://teawithsand.com/"
+}, plugins)
 
 export default config

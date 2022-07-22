@@ -1,31 +1,21 @@
 import PageContainer from "@app/components/layout/PageContainer"
+import {
+	convertPost,
+	convertPostHeader,
+} from "@app/components/page/PostListPageTemplate"
 import { PostDisplay } from "@app/components/post/PostDisplay"
 import { Post, PostHeader } from "@app/domain/Post"
 import { graphql } from "gatsby"
 import * as React from "react"
+import { asNonNullable } from "tws-common/typing/required"
 
 const PostTemplate = (props: { data: Queries.PostTemplateQuery }) => {
 	const { data } = props
-	const n = data.allFile.nodes[0].childMarkdownRemark
-	if (!n || !n.fields || !n.frontmatter)
-		throw new Error("Some fields do not exist, but they should")
+	const n = asNonNullable(
+		asNonNullable(data?.allFile?.nodes)[0].childMarkdownRemark,
+	)
 
-	const header: PostHeader = {
-		createdAt: n.frontmatter.createdAt || "",
-		path: n.fields.path || "",
-		timeToRead: n.timeToRead || 0,
-		tags: (n.frontmatter.tags || []).map(v => v || ""),
-		title: n.frontmatter.title || "",
-		slug: n.frontmatter.slug || "",
-		featuredImage:
-			n.frontmatter.featuredImage?.childImageSharp?.gatsbyImageData,
-		excerpt: n.excerpt || "",
-	}
-
-	const post: Post = {
-		header,
-		contentHTML: n.html ?? "",
-	}
+	const post: Post = convertPost(n)
 	return (
 		<main>
 			<PageContainer>

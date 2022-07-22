@@ -1,10 +1,11 @@
-import { Post, PostHeader } from "@app/domain/Post"
-import { Helmet } from "react-helmet"
-import React, { useLayoutEffect, useMemo, useRef, useState } from "react"
-import { graphql, useStaticQuery } from "gatsby"
-import styled from "styled-components"
-import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 import SmallTagList from "@app/components/tag/SmallTagList"
+import { ExtPostHeader, Post, PostHeader } from "@app/domain/Post"
+import { useAppTranslationSelector } from "@app/trans/AppTranslation"
+import { graphql, useStaticQuery } from "gatsby"
+import { getImage, getSrc } from "gatsby-plugin-image"
+import React, { ReactFragment, useMemo } from "react"
+import { Helmet } from "react-helmet"
+import styled from "styled-components"
 import {
 	breakpointMediaDown,
 	BREAKPOINT_SM,
@@ -100,7 +101,7 @@ const ArticleContent = styled.div`
 	}
 `
 
-const PostHelmet = (props: { header: PostHeader }) => {
+const PostHelmet = (props: { header: ExtPostHeader }) => {
 	const query: Queries.PostHelmetMetaQuery = useStaticQuery(graphql`
 		query PostHelmetMeta {
 			site {
@@ -113,18 +114,69 @@ const PostHelmet = (props: { header: PostHeader }) => {
 	let domain = query.site?.siteMetadata?.siteUrl || ""
 	if (!domain.endsWith("/")) domain = domain + "/"
 	const { header } = props
+
+	const ogImagePath = header.featuredImageSocial
+		? getSrc(header.featuredImageSocial)
+		: null || ""
+
+	const ogImage = header.featuredImageSocial
+		? getImage(header.featuredImageSocial)
+		: null || ""
+
+	let ogImageMeta: ReactFragment[] = []
+	if (ogImagePath && ogImage) {
+		// slicing is hack to avoid double slashes in url, which would work but they are bad
+		const ogImageHttpSrc =
+			domain.replace("https://", "http://") + ogImagePath.slice(1)
+		const ogImageHttpsSrc = domain + ogImagePath.slice(1)
+		ogImageMeta = [
+			<meta key={1} property="og:image" content={ogImageHttpSrc} />,
+			<meta
+				key={2}
+				property="og:image:secure"
+				content={ogImageHttpsSrc}
+			/>,
+			<meta
+				key={3}
+				property="og:image:width"
+				content={`${ogImage.width}`}
+			/>,
+			<meta
+				key={4}
+				property="og:image:height"
+				content={`${ogImage.height}`}
+			/>,
+		] as any
+	}
+
 	return (
-		<Helmet>
+		<Helmet
+			htmlAttributes={{
+				lang: header.language.split("-")[0],
+			}}
+		>
 			<title>{header.title}</title>
 
 			<link rel="canonical" href={domain + header.path} />
+			<meta property="og:url" content={domain + header.path} />
 			{header.tags.length > 0 ? (
 				<meta
 					name="keywords"
-					content={header.tags.slice(0, 3).join(", ")}
+					content={header.tags.sort().slice(0, 3).join(", ")}
 				/>
 			) : null}
 			<meta name="description" content={header.excerpt} />
+			<meta property="og:description" content={header.excerpt} />
+			<meta
+				property="og:locale"
+				content={(() => {
+					const [first, second] = header.language.split("-")
+
+					return `${first}_${second.toUpperCase()}`
+				})()}
+			/>
+			<meta property="og:type" content="article" />
+			{ogImageMeta}
 			{/* https://clutch.co/seo-firms/resources/meta-tags-that-improve-seo */}
 			{/* TODO(teawithsand): add meta description */}
 		</Helmet>
