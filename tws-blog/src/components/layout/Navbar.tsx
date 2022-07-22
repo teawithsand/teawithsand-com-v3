@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { Container } from "tws-common/ui"
 import { appsPath, blogPostsPath, homePath, tagsPath } from "@app/paths"
 import { graphql, Link, useStaticQuery } from "gatsby"
+import { twitterLink } from "tws-common/misc/social"
 
 const ParentContainer = styled.nav`
 	display: grid;
@@ -13,7 +14,7 @@ const ParentContainer = styled.nav`
 	gap: 0.8rem;
 
 	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-	padding-bottom: .3rem;
+	padding-bottom: 0.3rem;
 `
 
 const HeadingRow = styled.header`
@@ -50,15 +51,7 @@ const Spacer = styled.span`
 
 const AppNavbar = () => {
 	const trans = useAppTranslationSelector(s => s.layout.navbar)
-	const res: any = useStaticQuery(graphql`
-		query NavbarQuery {
-			site {
-				siteMetadata {
-					twitter
-				}
-			}
-		}
-	`)
+	const info = useAppTranslationSelector(s => s.info)
 	return (
 		<Container>
 			<ParentContainer>
@@ -74,7 +67,7 @@ const AppNavbar = () => {
 					<InvisibleLink to={tagsPath}>{trans.tagList}</InvisibleLink>
 					<InvisibleLink to={appsPath}>{trans.appList}</InvisibleLink>
 					<InvisibleLink
-						to={res.site.siteMetadata.twitter}
+						to={twitterLink(info.twitter)}
 						rel="noopener noreferrer"
 					>
 						{trans.twitter}

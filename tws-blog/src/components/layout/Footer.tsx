@@ -23,15 +23,6 @@ const ParentContainer = styled.nav`
 
 const Footer = () => {
 	const trans = useAppTranslationSelector(s => s.layout.navbar)
-	const res: any = useStaticQuery(graphql`
-		query FooterQuery {
-			site {
-				siteMetadata {
-					twitter
-				}
-			}
-		}
-	`)
 	return (
 		<Container>
 			<ParentContainer>© teawithsand 2022</ParentContainer>

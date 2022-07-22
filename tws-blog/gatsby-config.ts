@@ -64,8 +64,7 @@ const plugins = customizeDefaultPlugins(
 										{},
 										{
 											title: node.frontmatter.title,
-											description:
-												node.excerpt,
+											description: node.excerpt,
 											date: node.frontmatter.createdAt,
 											site_url: site.siteUrl,
 											url:
@@ -73,9 +72,9 @@ const plugins = customizeDefaultPlugins(
 												node.fields.path,
 											guid: node.frontmatter.uuid,
 											language: node.frontmatter.language,
-											// custom_elements: [
-											// 	{ "content:encoded": node.html },
-											// ],
+											custom_elements: [
+												{ "content:encoded": node.html },
+											],
 										},
 									)
 								})
@@ -105,13 +104,14 @@ const plugins = customizeDefaultPlugins(
 											}
 											excerpt(pruneLength: 240)
 											timeToRead
+											html
 										}
 									}
 								}
 							}
 						`,
 						output: "/rss.xml",
-						title: "Your Site's RSS Feed",
+						title: "Teawithsand's blog main RSS feed",
 						// optional configuration to insert feed reference in pages:
 						// if `string` is used, it will be used to create RegExp and then test if pathname of
 						// current page satisfied this regular expression;
@@ -125,13 +125,6 @@ const plugins = customizeDefaultPlugins(
 		},
 	],
 )
-const config = makeConfig(
-	{
-		title: `Teawithsand's blog`,
-		siteUrl: `https://teawithsand.com/`,
-		twitter: "https://twitter.com/teawithsand",
-	},
-	plugins,
-)
+const config = makeConfig({}, plugins)
 
 export default config

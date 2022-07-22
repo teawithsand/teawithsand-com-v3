@@ -10,9 +10,17 @@ import Translator, {
 	useTranslator,
 } from "tws-common/trans/Translator"
 
+export interface CommonTranslationInfo {
+	twitter: string
+}
+
 export default interface AppTranslation {
 	common: CommonTranslation
-	appName: string
+	info: CommonTranslationInfo
+
+	title: string
+	description: string
+	
 	layout: {
 		navbar: {
 			brandName: string

@@ -100,7 +100,7 @@ const ArticleContent = styled.div`
 	}
 `
 
-export const PostHelmet = (props: { post: PostHeader }) => {
+const PostHelmet = (props: { header: PostHeader }) => {
 	const query: Queries.PostHelmetMetaQuery = useStaticQuery(graphql`
 		query PostHelmetMeta {
 			site {
@@ -112,18 +112,19 @@ export const PostHelmet = (props: { post: PostHeader }) => {
 	`)
 	let domain = query.site?.siteMetadata?.siteUrl || ""
 	if (!domain.endsWith("/")) domain = domain + "/"
-	const { post } = props
+	const { header } = props
 	return (
 		<Helmet>
-			<title>{post.title}</title>
+			<title>{header.title}</title>
 
-			<link rel="canonical" href={domain + post.path} />
-			{post.tags.length > 0 ? (
+			<link rel="canonical" href={domain + header.path} />
+			{header.tags.length > 0 ? (
 				<meta
 					name="keywords"
-					content={post.tags.slice(0, 3).join(", ")}
+					content={header.tags.slice(0, 3).join(", ")}
 				/>
 			) : null}
+			<meta name="description" content={header.excerpt} />
 			{/* https://clutch.co/seo-firms/resources/meta-tags-that-improve-seo */}
 			{/* TODO(teawithsand): add meta description */}
 		</Helmet>
@@ -149,27 +150,32 @@ export const PostDisplay = (props: {
 	}, [post.contentHTML])
 
 	return (
-		<article>
-			<ArticleHeader>
-				<h1>{header.title}</h1>
-				<span>
-					Created at: <time>{formatDate(header.createdAt)}</time>
-				</span>
-				{header.lastEditedAt ? (
-					<span>Last edited at: {formatDate(header.createdAt)}</span>
-				) : null}
-				<span className="tags">
-					<SmallTagList tags={header.tags} />
-				</span>
-			</ArticleHeader>
-			<ArticleContent
-				dangerouslySetInnerHTML={{
-					__html: content,
-				}}
-			></ArticleContent>
-			<ArticleFooter>
-				TODO comments here or things like next/prev posts
-			</ArticleFooter>
-		</article>
+		<>
+			<PostHelmet header={header} />
+			<article>
+				<ArticleHeader>
+					<h1>{header.title}</h1>
+					<span>
+						Created at: <time>{formatDate(header.createdAt)}</time>
+					</span>
+					{header.lastEditedAt ? (
+						<span>
+							Last edited at: {formatDate(header.createdAt)}
+						</span>
+					) : null}
+					<span className="tags">
+						<SmallTagList tags={header.tags} />
+					</span>
+				</ArticleHeader>
+				<ArticleContent
+					dangerouslySetInnerHTML={{
+						__html: content,
+					}}
+				></ArticleContent>
+				<ArticleFooter>
+					TODO comments here or things like next/prev posts
+				</ArticleFooter>
+			</article>
+		</>
 	)
 }

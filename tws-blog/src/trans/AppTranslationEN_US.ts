@@ -4,7 +4,11 @@ import { CommonTranslationEN_US } from "tws-common/trans/common"
 
 const AppTranslationEN_US: AppTranslation = {
 	common: CommonTranslationEN_US,
-	appName: "Teawithsand's blog",
+	title: "Teawithsand's blog",
+	description: "Teawithsand's personal blog about programming and other stuff, but mostly programming",
+	info: {
+		twitter: "teawithsand",
+	},
 	layout: {
 		navbar: {
 			blogPostList: "Posts",
