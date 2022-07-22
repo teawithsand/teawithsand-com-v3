@@ -19,6 +19,7 @@
   "dependencies": {
     "babel-plugin-styled-components": "^2.0.7",
     "gatsby": "^4.18.2",
+    "gatsby-plugin-feed": "^4.19.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-helmet": "^6.1.0",
