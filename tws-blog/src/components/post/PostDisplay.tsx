@@ -5,6 +5,7 @@ import { graphql, useStaticQuery } from "gatsby"
 import { getImage, getSrc } from "gatsby-plugin-image"
 import React, { ReactFragment, useMemo } from "react"
 import { Helmet } from "react-helmet"
+import { absolutizePath } from "tws-common/lang/path"
 import styled from "styled-components"
 import {
 	breakpointMediaDown,
@@ -126,9 +127,12 @@ const PostHelmet = (props: { header: ExtPostHeader }) => {
 	let ogImageMeta: ReactFragment[] = []
 	if (ogImagePath && ogImage) {
 		// slicing is hack to avoid double slashes in url, which would work but they are bad
-		const ogImageHttpSrc =
-			domain.replace("https://", "http://") + ogImagePath.slice(1)
-		const ogImageHttpsSrc = domain + ogImagePath.slice(1)
+		const ogImageHttpSrc = absolutizePath(domain, ogImagePath, {
+			protocol: "http",
+		})
+		const ogImageHttpsSrc = absolutizePath(domain, ogImagePath, {
+			protocol: "https",
+		})
 		ogImageMeta = [
 			<meta key={1} property="og:image" content={ogImageHttpSrc} />,
 			<meta
