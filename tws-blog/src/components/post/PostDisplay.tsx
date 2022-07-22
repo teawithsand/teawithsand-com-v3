@@ -1,11 +1,14 @@
 import { Post, PostHeader } from "@app/domain/Post"
 import { Helmet } from "react-helmet"
-import React from "react"
+import React, { useLayoutEffect, useMemo, useRef, useState } from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import styled from "styled-components"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 import SmallTagList from "@app/components/tag/SmallTagList"
-import { breakpointMediaDown, BREAKPOINT_SM } from "tws-common/react/hook/dimensions/useBreakpoint"
+import {
+	breakpointMediaDown,
+	BREAKPOINT_SM,
+} from "tws-common/react/hook/dimensions/useBreakpoint"
 
 const ArticleHeader = styled.header`
 	margin-bottom: 1rem;
@@ -25,6 +28,12 @@ const ArticleHeader = styled.header`
 		text-align: center;
 		align-items: center;
 		justify-content: center;
+
+		// TODO(teawithsand): this is hack, make some better selector here
+		& .tags > * {
+			align-items: center;
+			justify-content: center;
+		}
 	}
 `
 
@@ -75,6 +84,16 @@ export const PostDisplay = (props: {
 	const formatDate = useAppTranslationSelector(s => s.common.formatDate)
 	const { post } = props
 	const { header } = post
+
+	// HACK: add rel="noopener noreferrer" using regex
+	// do not try that yourself.
+	const content = useMemo(() => {
+		return post.contentHTML.replace(
+			/<a(.*?)href="(.*?)"(.*?)>/gim,
+			`<a $1 href="$2" rel="noopener noreferrer" $3>`,
+		)
+	}, [post.contentHTML])
+
 	return (
 		<article>
 			<ArticleHeader>
@@ -85,13 +104,13 @@ export const PostDisplay = (props: {
 				{header.lastEditedAt ? (
 					<span>Last edited at: {formatDate(header.createdAt)}</span>
 				) : null}
-				<span>
+				<span className="tags">
 					<SmallTagList tags={header.tags} />
 				</span>
 			</ArticleHeader>
 			<ArticleContent
 				dangerouslySetInnerHTML={{
-					__html: post.contentHTML,
+					__html: content,
 				}}
 			></ArticleContent>
 			<ArticleFooter>
