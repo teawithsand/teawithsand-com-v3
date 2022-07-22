@@ -44,6 +44,60 @@ const ArticleContent = styled.div`
 		font-size: 2.3rem;
 		font-weight: 400;
 	}
+
+	& blockquote {
+		background-color: rgba(0, 0, 0, 0.0625);
+		padding: 0.3rem;
+		border-radius: 0.3rem;
+		border-left: 10px solid rgba(0, 0, 0, 0.125);
+
+		font-style: italic;
+
+		margin-bottom: 7px;
+		margin-top: 7px;
+		// margin-left: 10%;
+		// margin-right: 10%;
+
+		& p {
+			display: inline;
+			padding: 0;
+			margin: 0;
+
+			&::before {
+				content: "\\201C";
+				display: inline;
+				touch-action: none;
+				user-select: none;
+			}
+
+			&::after {
+				content: "\\201D";
+				display: inline;
+				touch-action: none;
+				user-select: none;
+			}
+		}
+	}
+
+	& figure.gatsby-resp-image-figure {
+		overflow: hidden;
+		& > span {
+			overflow: hidden;
+			max-height: max(80vh, 200px);
+
+			& img {
+				object-fit: contain;
+			}
+		}
+
+		& figcaption.gatsby-resp-image-figcaption {
+			padding-top: 0.3rem;
+			text-align: center;
+
+			color: rgba(0, 0, 0, 0.65);
+			font-size: 1rem;
+		}
+	}
 `
 
 export const PostHelmet = (props: { post: PostHeader }) => {
