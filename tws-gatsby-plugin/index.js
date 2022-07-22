@@ -1,5 +1,8 @@
 const path = require("path")
 
+const imageBreakpoints = [350, 750, 1080, 1366, 1920]
+const imageQuality = 50
+
 const BasicSitePluginsStart = [
 	// Styling stuff
 	{
@@ -29,8 +32,8 @@ const BasicSitePluginsStart = [
 			defaults: {
 				formats: ["jpg", "webp", "avif"],
 				placeholder: "blurred",
-				quality: 50,
-				breakpoints: [350, 750, 1080, 1366, 1920],
+				quality: imageQuality,
+				breakpoints: imageBreakpoints,
 				backgroundColor: `transparent`,
 			},
 		},
@@ -103,14 +106,14 @@ const GatsbyTransformerRemarkPlugins = [
 				{
 					resolve: `gatsby-remark-images`,
 					options: {
-						srcSetBreakpoints: [1920 / 8, 1920 / 4, 1920 / 2, 1920],
-						withWebp: {
-							quality: 80,
-						},
-						withAvif: {
-							quality: 80,
-						},
-						tracedSVG: true,
+						srcSetBreakpoints: imageBreakpoints,
+						withWebp: true,
+						withAvif: true,
+						quality: imageQuality,
+						showCaptions: true,
+						markdownCaptions: true,
+						backgroundColor: "transparent",
+						maxWidth: 1920,
 					},
 				},
 				{
