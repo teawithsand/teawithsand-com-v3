@@ -96,12 +96,11 @@ const HomeBio = () => {
 					</Link>{" "}
 					I also maintain a few open source projects on my{" "}
 					<Link to={"https://github.com/teawithsand"}>GitHub</Link>{" "}
-					and <Link to={appsPath}>util websites</Link>.
+					and <Link to={appsPath}>various other websites</Link>.
 				</p>
 				<p>
 					This website is my personal blog website, which is mostly
-					about programming, but ultimately anything could be
-					published here.
+					about programming. That being said, I also other misc stuff too.
 				</p>
 			</Description>
 		</BioContainer>
