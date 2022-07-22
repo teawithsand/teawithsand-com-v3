@@ -1,11 +1,17 @@
 import React from "react"
 
+import {
+	appsPath,
+	blogPostsPath,
+	contactPath,
+	homePath,
+	tagsPath,
+} from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
+import { Link } from "gatsby"
 import styled from "styled-components"
+import { twitterLink, githubLink } from "tws-common/misc/social"
 import { Container } from "tws-common/ui"
-import { appsPath, blogPostsPath, homePath, tagsPath } from "@app/paths"
-import { graphql, Link, useStaticQuery } from "gatsby"
-import { twitterLink } from "tws-common/misc/social"
 
 const ParentContainer = styled.nav`
 	display: grid;
@@ -71,6 +77,15 @@ const AppNavbar = () => {
 						rel="noopener noreferrer"
 					>
 						{trans.twitter}
+					</InvisibleLink>
+					<InvisibleLink
+						to={githubLink(info.github)}
+						rel="noopener noreferrer"
+					>
+						{trans.github}
+					</InvisibleLink>
+					<InvisibleLink to={contactPath} rel="noopener noreferrer">
+						{trans.contact}
 					</InvisibleLink>
 				</LinksRow>
 			</ParentContainer>

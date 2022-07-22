@@ -12,6 +12,9 @@ import Translator, {
 
 export interface CommonTranslationInfo {
 	twitter: string
+	github: string
+	linkedIn: string
+	email: string
 }
 
 export default interface AppTranslation {
@@ -20,7 +23,7 @@ export default interface AppTranslation {
 
 	title: string
 	description: string
-	
+
 	layout: {
 		navbar: {
 			brandName: string
@@ -31,7 +34,18 @@ export default interface AppTranslation {
 			facebook: string
 			linkedin: string
 			github: string
+			contact: string
 		}
+	}
+	contact: {
+		title: string
+		text: string
+		
+		twitter: string
+		facebook: string
+		linkedIn: string
+		github: string
+		email: string
 	}
 }
 
