@@ -7,6 +7,8 @@ import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 import { PostHeader } from "@app/domain/Post"
 
 const PostEntryContainer = styled.article`
+	height: 100%;
+	
 	display: grid;
 	grid-auto-flow: row;
 	grid-template-columns: 100%;
@@ -34,7 +36,7 @@ const PostEntryContainer = styled.article`
 		transform: translateY(-0.5rem);
 		z-index: 1;
 	}
-    
+
 	& > * {
 		padding-left: 0.3rem;
 		padding-right: 0.3rem;
@@ -46,8 +48,8 @@ const PostEntryImageLink = styled(Link)`
 	width: 100%;
 	height: 100%;
 
-    padding-left: 0;
-    padding-right: 0;
+	padding-left: 0;
+	padding-right: 0;
 
 	& > * {
 		width: 100%;
@@ -59,7 +61,7 @@ const PostEntryTitle = styled.h1`
 	font-size: 2rem;
 	margin: 0;
 	padding-top: 0;
-    padding-bottom: 0;
+	padding-bottom: 0;
 
 	text-align: center;
 `
@@ -107,6 +109,13 @@ const PostGridEntry = (props: { header: PostHeader }) => {
 					{post.title}
 				</PostEntryTitleLink>
 			</PostEntryTitle>
+			<p
+				style={{
+					textAlign: "justify",
+				}}
+			>
+				{post.excerpt} <Link to={post.path}>Read more</Link>
+			</p>
 			<PostEntryInfoRow>
 				<span>
 					<time>{formatDate(post.createdAt)}</time>

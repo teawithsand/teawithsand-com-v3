@@ -47,6 +47,7 @@ export const convertPostHeader = (
 		slug: header.frontmatter.slug || "",
 		featuredImage:
 			header.frontmatter.featuredImage?.childImageSharp?.gatsbyImageData,
+		excerpt: header.excerpt,
 	}
 }
 
@@ -72,6 +73,7 @@ export const query = graphql`
 				}
 			}
 		}
+		excerpt(pruneLength: 240)
 		timeToRead
 	}
 `

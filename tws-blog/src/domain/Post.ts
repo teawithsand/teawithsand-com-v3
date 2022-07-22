@@ -9,6 +9,7 @@ export interface PostHeader {
 	timeToRead: number
 	tags: string[]
 	path: string
+	excerpt: string
 }
 
 export interface Post {
