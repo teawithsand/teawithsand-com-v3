@@ -77,4 +77,31 @@ export const query = graphql`
 		excerpt(pruneLength: 240)
 		timeToRead
 	}
+
+	fragment Post on MarkdownRemark {
+		fields {
+			path
+		}
+		frontmatter {
+			slug
+			title
+			language
+			createdAt
+			lastEditedAt
+			tags
+			featuredImage {
+				childImageSharp {
+					gatsbyImageData(
+						layout: CONSTRAINED
+						width: 600
+						placeholder: BLURRED
+						quality: 80
+					)
+				}
+			}
+		}
+		excerpt(pruneLength: 240)
+		html
+		timeToRead
+	}
 `

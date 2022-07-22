@@ -47,29 +47,7 @@ export const query = graphql`
 		) {
 			nodes {
 				childMarkdownRemark {
-					fields {
-						path
-					}
-					frontmatter {
-						slug
-						title
-						language
-						createdAt
-						lastEditedAt
-						tags
-						featuredImage {
-							childImageSharp {
-								gatsbyImageData(
-									layout: CONSTRAINED
-									width: 1920
-									placeholder: BLURRED
-								)
-							}
-						}
-					}
-					timeToRead
-					html
-					excerpt(pruneLength: 160)
+					...Post
 				}
 			}
 		}
