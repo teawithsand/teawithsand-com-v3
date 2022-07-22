@@ -111,7 +111,7 @@ const PostGridEntry = (props: { header: PostHeader }) => {
 				<span>
 					<time>{formatDate(post.createdAt)}</time>
 				</span>
-				<span>{post.timeToRead} minutes read</span>
+				<span>{post.timeToRead} min read</span>
 			</PostEntryInfoRow>
 			<PostEntryTags tags={post.tags} />
 		</PostEntryContainer>
