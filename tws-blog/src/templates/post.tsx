@@ -17,7 +17,9 @@ const PostTemplate = (props: { data: Queries.PostTemplateQuery }) => {
 		tags: (n.frontmatter.tags || []).map(v => v || ""),
 		title: n.frontmatter.title || "",
 		slug: n.frontmatter.slug || "",
-		featuredImage: n.frontmatter.featuredImage?.childImageSharp,
+		featuredImage:
+			n.frontmatter.featuredImage?.childImageSharp?.gatsbyImageData,
+		excerpt: n.excerpt || "",
 	}
 
 	const post: Post = {
