@@ -153,6 +153,7 @@ const PostHelmet = (props: { header: ExtPostHeader }) => {
 		] as any
 	}
 
+	// TODO(teawithsand): add twitter headers here
 	return (
 		<Helmet
 			htmlAttributes={{
