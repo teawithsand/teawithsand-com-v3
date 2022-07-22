@@ -47,7 +47,7 @@ export const convertPostHeader = (
 		slug: header.frontmatter.slug || "",
 		featuredImage:
 			header.frontmatter.featuredImage?.childImageSharp?.gatsbyImageData,
-		excerpt: header.excerpt,
+		excerpt: header.excerpt || "",
 	}
 }
 
