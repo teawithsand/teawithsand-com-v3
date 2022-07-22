@@ -36,7 +36,7 @@ export const query = graphql`
 				name: { eq: "index" }
 				extension: { eq: "md" }
 			}
-			limit: 3
+			limit: 6
 		) {
 			nodes {
 				childMarkdownRemark {
