@@ -1,7 +1,7 @@
 import * as fs from "fs"
 import {
 	customizeDefaultPlugins,
-	GatsbyTransformerRemarkPlugins,
+	makeGatsbyTransformerRemarkPlugins,
 	makeConfig,
 	makeLayoutPlugin,
 	makeManifestPlugin,
@@ -14,7 +14,14 @@ const plugins = customizeDefaultPlugins(
 		makeLayoutPlugin("./src/Layout.jsx"),
 	],
 	SelfPlugins,
-	GatsbyTransformerRemarkPlugins,
+	makeGatsbyTransformerRemarkPlugins([
+		{
+			resolve: `gatsby-remark-prismjs`,
+			options: {
+				showLineNumbers: true,
+			},
+		},
+	]),
 	[
 		// for some reason
 		// when this plugin is included here it works

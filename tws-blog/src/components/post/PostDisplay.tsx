@@ -42,10 +42,55 @@ const ArticleHeader = styled.header`
 
 const ArticleFooter = styled.footer``
 
+// Styles from
+// https://www.gatsbyjs.com/plugins/gatsby-remark-prismjs/
+// to make prismjs work with gatsby.
+// These must be included to global scope.
+
+/*
+.gatsby-highlight-code-line {
+	background-color: #feb;
+	display: block;
+	margin-right: -1em;
+	margin-left: -1em;
+	padding-right: 1em;
+	padding-left: 0.75em;
+	border-left: 0.25em solid #f99;
+}
+
+// Adjust the position of the line numbers 
+.gatsby-highlight pre[class*="language-"].line-numbers {
+	padding-left: 2.8em;
+}
+*/
+
+/*
+.gatsby-highlight {
+	background-color: white;
+	border-radius: 0.3em;
+	margin: 0.5em 0;
+	padding: 1em;
+	overflow: auto;
+}
+*/
 const ArticleContent = styled.div`
 	& h1 {
 		font-size: 2.3rem;
 		font-weight: 400;
+	}
+
+	.gatsby-highlight pre[class*="language-"].line-numbers {
+		padding: 0;
+		padding-left: 2.8em;
+		overflow: initial;
+	}
+
+	.gatsby-highlight {
+		background: #f5f2f0;
+		padding: 0.2rem 0.3rem;
+		border-radius: 0.25rem;
+		margin-bottom: 0.5rem;
+		overflow: scroll;
 	}
 
 	& blockquote {

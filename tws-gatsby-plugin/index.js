@@ -129,6 +129,43 @@ const GatsbyTransformerRemarkPlugins = [
 	},
 ]
 
+/**
+ * Adds gatsby transformer remark with some plugins and ones added by user.
+ */
+const makeGatsbyTransformerRemarkPlugins = userPlugins => [
+	{
+		resolve: `gatsby-transformer-remark`,
+		options: {
+			// extensions: ['.md', '.mdx'],
+			plugins: [
+				{
+					resolve: `gatsby-remark-images`,
+					options: {
+						srcSetBreakpoints: imageBreakpoints,
+						withWebp: true,
+						withAvif: true,
+						quality: imageQuality,
+						showCaptions: true,
+						markdownCaptions: true,
+						backgroundColor: "transparent",
+						maxWidth: 1920,
+					},
+				},
+				{
+					resolve: `gatsby-remark-responsive-iframe`,
+					options: {
+						wrapperStyle: `margin-bottom: 1.0725rem`,
+					},
+				},
+				`gatsby-remark-copy-linked-files`,
+				`gatsby-remark-smartypants`,
+				...(userPlugins ?? []),
+			],
+		},
+	},
+]
+
+
 const mergePlugins = (...configs) => {
 	configs = configs.map(c =>
 		c.map(entry => {
@@ -191,6 +228,8 @@ module.exports = {
 	GatsbyTransformerRemarkPlugins,
 
 	SelfPlugins,
+
+	makeGatsbyTransformerRemarkPlugins,
 
 	makeManifestPlugin,
 	customizeDefaultPlugins,
