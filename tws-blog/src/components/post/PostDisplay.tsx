@@ -11,6 +11,7 @@ import {
 	breakpointMediaDown,
 	BREAKPOINT_SM,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
+import DisqusTemplate from "@app/components/post/DisqusTemplate"
 
 const ArticleHeader = styled.header`
 	margin-bottom: 1rem;
@@ -102,19 +103,8 @@ const ArticleContent = styled.div`
 	}
 `
 
-const PostHelmet = (props: { header: ExtPostHeader }) => {
-	const query: Queries.PostHelmetMetaQuery = useStaticQuery(graphql`
-		query PostHelmetMeta {
-			site {
-				siteMetadata {
-					siteUrl
-				}
-			}
-		}
-	`)
-	let domain = query.site?.siteMetadata?.siteUrl || ""
-	if (!domain.endsWith("/")) domain = domain + "/"
-	const { header } = props
+const PostHelmet = (props: { header: ExtPostHeader; domain: string }) => {
+	const { header, domain } = props
 
 	const ogImagePath = header.featuredImageSocial
 		? getSrc(header.featuredImageSocial)
@@ -193,6 +183,17 @@ export const PostDisplay = (props: {
 	nextPost: PostHeader | null
 	prevPost: PostHeader | null
 }) => {
+	const query: Queries.PostHelmetMetaQuery = useStaticQuery(graphql`
+		query PostDisplayMeta {
+			site {
+				siteMetadata {
+					siteUrl
+				}
+			}
+		}
+	`)
+	const domain = query.site?.siteMetadata?.siteUrl || ""
+
 	const formatDate = useAppTranslationSelector(s => s.common.formatDate)
 	const { post } = props
 	const { header } = post
@@ -208,7 +209,7 @@ export const PostDisplay = (props: {
 
 	return (
 		<>
-			<PostHelmet header={header} />
+			<PostHelmet header={header} domain={domain} />
 			<article>
 				<ArticleHeader>
 					<h1>{header.title}</h1>
@@ -230,7 +231,13 @@ export const PostDisplay = (props: {
 					}}
 				></ArticleContent>
 				<ArticleFooter>
-					TODO comments here or things like next/prev posts
+					<DisqusTemplate
+						pageURL={absolutizePath(domain, header.path, {
+							protocol: "https",
+						})}
+						pageIdentifier={header.slug}
+						pageTitle={header.title}
+					/>
 				</ArticleFooter>
 			</article>
 		</>

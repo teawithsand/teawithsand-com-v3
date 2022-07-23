@@ -16,6 +16,15 @@ const plugins = customizeDefaultPlugins(
 	SelfPlugins,
 	GatsbyTransformerRemarkPlugins,
 	[
+		// for some reason
+		// when this plugin is included here it works
+		// and when it's included below sources it causes compilation to fail...
+		{
+			resolve: `gatsby-plugin-disqus`,
+			options: {
+				shortname: `teawithsand-com`,
+			},
+		},
 		{
 			resolve: "gatsby-source-filesystem",
 			options: {
@@ -73,7 +82,10 @@ const plugins = customizeDefaultPlugins(
 											guid: node.frontmatter.uuid,
 											language: node.frontmatter.language,
 											custom_elements: [
-												{ "content:encoded": node.html },
+												{
+													"content:encoded":
+														node.html,
+												},
 											],
 										},
 									)
@@ -125,8 +137,11 @@ const plugins = customizeDefaultPlugins(
 		},
 	],
 )
-const config = makeConfig({
-	siteUrl: "https://teawithsand.com/"
-}, plugins)
+const config = makeConfig(
+	{
+		siteUrl: "https://teawithsand.com/",
+	},
+	plugins,
+)
 
 export default config

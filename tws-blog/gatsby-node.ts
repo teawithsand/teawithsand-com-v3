@@ -176,6 +176,7 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
 	}
 	type Fields {
 		slug: String
+		path: String
 	}
 	`)
 	}
