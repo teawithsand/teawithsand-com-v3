@@ -36,6 +36,10 @@ export const query = graphql`
 				name: { eq: "index" }
 				extension: { eq: "md" }
 			}
+			sort: {
+				fields: [childMarkdownRemark___frontmatter___createdAt]
+				order: DESC
+			}
 			limit: 6
 		) {
 			nodes {
