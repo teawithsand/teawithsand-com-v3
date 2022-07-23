@@ -12,7 +12,6 @@ const LogoContainer = styled.div`
 
 	width: ${width}px;
 	height: ${height}px;
-	border: 2px solid red;
 	overflow: hidden;
 `
 
