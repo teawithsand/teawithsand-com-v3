@@ -6,6 +6,11 @@ import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
 const AppTranslationPL: AppTranslation = {
 	common: CommonTranslationPL_PL,
 	appName: "SzlakiemKapliczek",
+	meta: {
+		title: "Szlakiem Kapliczek",
+		description:
+			"Portal szlakiemkapliczek.pl zbiera zdjęcia kapliczek nadesłane przez użytkowników. Pozwala także je przeglądać i wyszukiwać.",
+	},
 	layout: {
 		navbar: {
 			homePage: "Strona główna",

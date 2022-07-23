@@ -15,6 +15,10 @@ import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
 export default interface AppTranslation {
 	common: CommonTranslation
 	appName: string
+	meta: {
+		title: string
+		description: string
+	}
 	layout: {
 		navbar: {
 			search: string
@@ -34,8 +38,8 @@ export default interface AppTranslation {
 		display: {
 			noDescription: string
 			noName: string
-			latitude: (v: number) => string,
-			longitude: (v: number) => string,
+			latitude: (v: number) => string
+			longitude: (v: number) => string
 			editLabel: string
 			deleteLabel: string
 		}
@@ -47,11 +51,11 @@ export default interface AppTranslation {
 			validation: {
 				name: {
 					notEmpty: string
-				},
+				}
 				longitude: {
 					notEmpty: string
 					invalid: string
-				},
+				}
 				latitude: {
 					notEmpty: string
 					invalid: string
