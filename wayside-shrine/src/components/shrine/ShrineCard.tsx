@@ -1,28 +1,19 @@
 import { Link } from "gatsby"
-import { GatsbyImage, getImage, ImageDataLike } from "gatsby-plugin-image"
+import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import React from "react"
 import styled from "styled-components"
 
+import { ShrineHeader } from "@app/domain/shrine"
+
 import { Button, Card } from "tws-common/ui"
 import LinkContainer from "tws-common/ui/LinkContainer"
-
-export type ShrineCardData = {
-	title: string
-	path: string
-	excerpt: string
-	createdDate: string
-	lastEditedDate: string | null
-	tags: string[]
-	coordinates: [number, number]
-	featuredImage?: ImageDataLike | undefined
-}
 
 const TopImage = styled(GatsbyImage)`
 	max-height: 30vh;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `
 
-const ShrineCard = (props: { data: Readonly<ShrineCardData> }) => {
+const ShrineCard = (props: { data: ShrineHeader }) => {
 	const { data } = props
 	const { title, path, excerpt, featuredImage } = data
 

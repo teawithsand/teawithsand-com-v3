@@ -1,17 +1,16 @@
-import { graphql } from "gatsby";
-import React from "react";
-import styled from "styled-components";
+import { graphql } from "gatsby"
+import React from "react"
+import styled from "styled-components"
 
+import PageContainer from "@app/components/layout/PageContainer"
+import ShrineCard from "@app/components/shrine/ShrineCard"
+import { convertShrineHeader } from "@app/domain/shrine"
 
-
-import PageContainer from "@app/components/layout/PageContainer";
-import ShrineCard from "@app/components/shrine/ShrineCard";
-
-
-
-import { BREAKPOINT_MD, breakpointMediaDown } from "tws-common/react/hook/dimensions/useBreakpoint";
-import { asRequiredRecursively, RecursiveRequired } from "tws-common/typing/required";
-
+import {
+	BREAKPOINT_MD,
+	breakpointMediaDown,
+} from "tws-common/react/hook/dimensions/useBreakpoint"
+import { asNonNullable } from "tws-common/typing/required"
 
 const ShrineCardGrid = styled.div`
 	display: grid;
@@ -26,34 +25,17 @@ const ShrineCardGrid = styled.div`
 const SearchPage = (props: { data: Queries.WaysideShrineSearchQuery }) => {
 	const { data } = props
 
+	const headers = data.allFile.nodes
+		.filter(v => !!v)
+		.map(v => convertShrineHeader(asNonNullable(v.childMarkdownRemark)))
+
 	return (
 		<PageContainer>
 			<main>
 				<ShrineCardGrid>
-					{data.allFile.nodes
-						.map(v => asRequiredRecursively(v.childMarkdownRemark))
-						.map(v => {
-							const u = v as RecursiveRequired<typeof v>
-							if (!u) throw new Error("unreachable code")
-							return (
-								<ShrineCard
-									key={u.id}
-									data={{
-										title: u.frontmatter.title,
-										createdDate: u.frontmatter.date,
-										excerpt: u.excerpt,
-										lastEditedDate: null,
-										coordinates: u.frontmatter
-											.coordinates as [number, number],
-										path: u.fields.path,
-										tags: [...u.frontmatter.tags],
-										featuredImage: u.frontmatter
-											.featuredImage
-											.childImageSharp as any,
-									}}
-								/>
-							)
-						})}
+					{headers.map((v, i) => {
+						return <ShrineCard key={i} data={v} />
+					})}
 				</ShrineCardGrid>
 			</main>
 		</PageContainer>

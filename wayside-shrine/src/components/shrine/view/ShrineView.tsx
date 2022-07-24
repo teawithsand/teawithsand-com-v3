@@ -1,4 +1,3 @@
-import { graphql } from "gatsby"
 import { IGatsbyImageData, ImageDataLike } from "gatsby-plugin-image"
 import React, { useRef } from "react"
 import { Helmet } from "react-helmet"
@@ -9,6 +8,7 @@ import ShrineViewCommentsSection from "@app/components/shrine/view/ShrineViewCom
 import { ShrineViewContext } from "@app/components/shrine/view/ShrineViewContext"
 import ShrineViewGallerySection from "@app/components/shrine/view/ShrineViewGallerySection"
 import ShrineViewMapSection from "@app/components/shrine/view/ShrineViewMapSection"
+import { Shrine, ShrineHeader } from "@app/domain/shrine"
 
 import {
 	BREAKPOINT_LG,
@@ -17,20 +17,6 @@ import {
 	useBreakpointIndex,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
 
-export type ShrineViewData = {
-	title: string
-	path: string
-	excerpt: string
-	createdAt: string
-	lastEditedAt: string | null
-	tags: string[]
-	coordinates: [number, number]
-	html: string
-
-	featuredImage?: ImageDataLike | IGatsbyImageData | null | undefined
-	images: ImageDataLike[]
-}
-
 const ParentContainer = styled.article`
 	display: grid;
 	grid-auto-flow: row;
@@ -38,32 +24,25 @@ const ParentContainer = styled.article`
 	gap: 1rem;
 `
 
-const ShrineHelmet = (props: { data: Readonly<ShrineViewData> }) => {
-	const { data } = props
+const ShrineHelmet = (props: { header: ShrineHeader }) => {
+	const { header } = props
 
 	return (
 		<Helmet>
-			<title>{data.title}</title>
-			<meta name="description" content={data.excerpt} />
-			<meta name="og:title" content={data.title} />
-			<meta name="og:description" content={data.excerpt} />
+			<title>{header.title}</title>
+			<meta name="description" content={header.excerpt} />
+			<meta name="og:title" content={header.title} />
+			<meta name="og:description" content={header.excerpt} />
 			<meta name="og:type" content="article" />
 		</Helmet>
 	)
 }
 
-const ShrineView = (props: { data: Readonly<ShrineViewData> }) => {
+const ShrineView = (props: { data: Shrine }) => {
 	const { data } = props
-	const {
-		html,
-		title,
-		tags,
-		images,
-		coordinates,
-		createdAt,
-		lastEditedAt,
-		featuredImage,
-	} = data
+	const { title, tags, coordinates, createdAt, lastEditedAt, featuredImage } =
+		data.header
+	const { galleryImages, html } = data
 
 	const gallerySectionRef = useRef<HTMLElement | null>(null)
 	const mapSectionRef = useRef<HTMLElement | null>(null)
@@ -75,7 +54,7 @@ const ShrineView = (props: { data: Readonly<ShrineViewData> }) => {
 
 	return (
 		<>
-			<ShrineHelmet data={data} />
+			<ShrineHelmet header={data.header} />
 			<ShrineViewContext.Provider value={{ isSmall }}>
 				<ParentContainer>
 					<ShrineViewArticleSection
@@ -93,7 +72,7 @@ const ShrineView = (props: { data: Readonly<ShrineViewData> }) => {
 					/>
 
 					<ShrineViewGallerySection
-						images={images}
+						images={galleryImages}
 						ref={gallerySectionRef}
 					/>
 
@@ -110,28 +89,3 @@ const ShrineView = (props: { data: Readonly<ShrineViewData> }) => {
 }
 
 export default ShrineView
-
-export const query = graphql`
-	fragment ShrineHeader on MarkdownRemark {
-		id
-		frontmatter {
-			title
-			createdAt
-			coordinates
-			tags
-			featuredImage {
-				childImageSharp {
-					gatsbyImageData(
-						layout: CONSTRAINED
-						width: 420
-						placeholder: BLURRED
-					)
-				}
-			}
-		}
-		fields {
-			path
-		}
-		excerpt(pruneLength: 240)
-	}
-`
