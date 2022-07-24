@@ -1,18 +1,17 @@
-import { graphql } from "gatsby"
-import React from "react"
-import styled from "styled-components"
+import { graphql } from "gatsby";
+import React from "react";
+import styled from "styled-components";
 
-import PageContainer from "@app/components/layout/PageContainer"
-import ShrineCard from "@app/components/shrine/ShrineCard"
 
-import {
-	BREAKPOINT_MD,
-	breakpointMediaDown,
-} from "tws-common/react/hook/dimensions/useBreakpoint"
-import {
-	asRequiredRecursively,
-	RecursiveRequired,
-} from "tws-common/typing/required"
+
+import PageContainer from "@app/components/layout/PageContainer";
+import ShrineCard from "@app/components/shrine/ShrineCard";
+
+
+
+import { BREAKPOINT_MD, breakpointMediaDown } from "tws-common/react/hook/dimensions/useBreakpoint";
+import { asRequiredRecursively, RecursiveRequired } from "tws-common/typing/required";
+
 
 const ShrineCardGrid = styled.div`
 	display: grid;
@@ -74,26 +73,7 @@ export const pageQuery = graphql`
 		) {
 			nodes {
 				childMarkdownRemark {
-					id
-					frontmatter {
-						title
-						createdAt
-						coordinates
-						tags
-						featuredImage {
-							childImageSharp {
-								gatsbyImageData(
-									layout: CONSTRAINED
-									width: 420
-									placeholder: BLURRED
-								)
-							}
-						}
-					}
-					fields {
-						path
-					}
-					excerpt(pruneLength: 160)
+					...ShrineHeader
 				}
 			}
 		}

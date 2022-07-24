@@ -1,3 +1,4 @@
+import { graphql } from "gatsby"
 import { IGatsbyImageData, ImageDataLike } from "gatsby-plugin-image"
 import React, { useRef } from "react"
 import { Helmet } from "react-helmet"
@@ -109,3 +110,28 @@ const ShrineView = (props: { data: Readonly<ShrineViewData> }) => {
 }
 
 export default ShrineView
+
+export const query = graphql`
+	fragment ShrineHeader on MarkdownRemark {
+		id
+		frontmatter {
+			title
+			createdAt
+			coordinates
+			tags
+			featuredImage {
+				childImageSharp {
+					gatsbyImageData(
+						layout: CONSTRAINED
+						width: 420
+						placeholder: BLURRED
+					)
+				}
+			}
+		}
+		fields {
+			path
+		}
+		excerpt(pruneLength: 240)
+	}
+`
