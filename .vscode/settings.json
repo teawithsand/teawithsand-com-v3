@@ -11,6 +11,7 @@
     "downscaled",
     "downscaling",
     "frontmatter",
+    "geoblocking",
     "Głowacki",
     "Grunwald",
     "Hashable",
@@ -51,6 +52,7 @@
     "weblock",
     "webp",
     "weeb",
+    "Yubico",
     "zopfli"
   ],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
