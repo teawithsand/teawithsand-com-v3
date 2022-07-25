@@ -12,7 +12,7 @@ export const query = graphql`
 			tags
 			featuredImage {
 				childImageSharp {
-					gatsbyImageData(layout: CONSTRAINED)
+					gatsbyImageData(layout: CONSTRAINED, width: 10000)
 				}
 			}
 			featuredImageSocial: featuredImage {
@@ -28,7 +28,7 @@ export const query = graphql`
 			}
 			galleryImages {
 				childImageSharp {
-					gatsbyImageData(layout: CONSTRAINED)
+					gatsbyImageData(layout: CONSTRAINED, width: 10000)
 				}
 			}
 		}
