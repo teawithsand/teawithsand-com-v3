@@ -14,7 +14,7 @@ const AppTranslationPL: AppTranslation = {
 	layout: {
 		navbar: {
 			homePage: "Strona główna",
-			search: "Wyszukiwanie",
+			list: "Lista kapliczek",
 			publishing: "Jak dodać obiekt?",
 			brandName: "SzlakiemKapliczek",
 			location: {

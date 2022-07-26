@@ -1,5 +1,5 @@
 export const homePath = "/"
-export const searchPath = "/search"
+export const listPath = "/list"
 export const publishingPath = "/publishing"
 export const locationMenuPath = "/location"
 export const locationListPath = "/location/list"
