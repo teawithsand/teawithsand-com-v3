@@ -1,20 +1,13 @@
-import React, { useMemo } from "react"
 import { PostHeader } from "@app/domain/Post"
+import React from "react"
 import styled from "styled-components"
-import { useAppTranslationSelector } from "@app/trans/AppTranslation"
-import { Link } from "gatsby"
-import { GatsbyImage, getImage } from "gatsby-plugin-image"
 
+import PostGridEntry from "@app/components/post/PostGridEntry"
 import {
-	BREAKPOINT_MD,
 	breakpointMediaDown,
+	BREAKPOINT_MD,
 	BREAKPOINT_SM,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
-import { tagPath } from "@app/paths"
-import SmallTagList from "@app/components/tag/SmallTagList"
-import PostGridEntry from "@app/components/post/PostGridEntry"
-
-const leftRightPadding = "0.3rem"
 
 const GridParent = styled.div`
 	display: grid;
