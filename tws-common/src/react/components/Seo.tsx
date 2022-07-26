@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { ReactNode, useEffect, useMemo } from "react"
 import { Helmet } from "react-helmet"
 import { LOG } from "tws-common/log/logger"
 import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
@@ -54,6 +54,8 @@ export type SEOProps = (
 
 	image?: SEOImage
 	twitter?: SEOTwitter
+
+	children?: ReactNode,
 }
 
 const LOG_TAG = claimId(NS_LOG_TAG, "tws-common/seo")
@@ -343,6 +345,8 @@ export const Seo = (props: SEOProps) => {
 				...image,
 				...twitter,
 			]}
-		></Helmet>
+		>
+			{props.children}
+		</Helmet>
 	)
 }
