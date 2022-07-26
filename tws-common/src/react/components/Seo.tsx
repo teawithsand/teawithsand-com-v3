@@ -37,12 +37,15 @@ export type SEOProps = (
 			type: "article"
 			articleData: SEOArticle
 	  }
+	| {
+			type?: undefined
+	  }
 ) & {
-	language: Language
+	language?: Language
 	alternativeLanguages?: Language[]
-	title: string
-	description: string
-	keywords: string[]
+	title?: string
+	description?: string
+	keywords?: string[]
 
 	timeToLifeSeconds?: number
 
@@ -55,7 +58,7 @@ export type SEOProps = (
 	image?: SEOImage
 	twitter?: SEOTwitter
 
-	children?: ReactNode,
+	children?: ReactNode
 }
 
 const LOG_TAG = claimId(NS_LOG_TAG, "tws-common/seo")
@@ -92,7 +95,10 @@ export const Seo = (props: SEOProps) => {
 	const usedTwitterDescription = description ?? twitterDescription
 	const usedTwitterTitle = title ?? twitterTitle
 
-	const language = useMemo(() => parseLanguage(rawLanguage), [rawLanguage])
+	const language = useMemo(
+		() => (rawLanguage && parseLanguage(rawLanguage)) || null,
+		[rawLanguage],
+	)
 
 	useEffect(() => {
 		if (siteTwitter && !siteTwitter.startsWith("@"))
@@ -229,14 +235,22 @@ export const Seo = (props: SEOProps) => {
 						name: "twitter:card",
 						content: twitterType ?? "summary",
 					},
-					{
-						name: "twitter:title",
-						content: usedTwitterTitle,
-					},
-					{
-						name: "twitter:description",
-						content: usedTwitterDescription,
-					},
+					...(usedTwitterTitle
+						? [
+								{
+									name: "twitter:title",
+									content: usedTwitterTitle,
+								},
+						  ]
+						: []),
+					...(usedTwitterDescription
+						? [
+								{
+									name: "twitter:description",
+									content: usedTwitterDescription,
+								},
+						  ]
+						: []),
 			  ]
 			: []),
 		...(siteTwitter
@@ -260,9 +274,13 @@ export const Seo = (props: SEOProps) => {
 	return (
 		<Helmet
 			title={title}
-			htmlAttributes={{
-				lang: language.simpleLanguage,
-			}}
+			htmlAttributes={
+				language
+					? {
+							lang: language.simpleLanguage,
+					  }
+					: undefined
+			}
 			link={[
 				...(canonicalUrl
 					? [
@@ -274,30 +292,50 @@ export const Seo = (props: SEOProps) => {
 					: []),
 			]}
 			meta={[
-				{
-					name: "description",
-					content: description,
-				},
-				{
-					httpEquiv: "content-language",
-					content: language.language.toLowerCase(),
-				},
-				{
-					name: "og:title",
-					content: title,
-				},
-				{
-					name: "og:description",
-					content: description,
-				},
-				{
-					name: "og:type",
-					content: type,
-				},
-				{
-					name: "og:locale",
-					content: language.language.replace("-", "_"),
-				},
+				...(description !== undefined
+					? [
+							{
+								name: "og:description",
+								content: description,
+							},
+							{
+								name: "description",
+								content: description,
+							},
+					  ]
+					: []),
+				...(language
+					? [
+							{
+								httpEquiv: "content-language",
+								content: language.language.toLowerCase(),
+							},
+					  ]
+					: []),
+				...(title !== undefined
+					? [
+							{
+								name: "og:title",
+								content: title,
+							},
+					  ]
+					: []),
+				...(type
+					? [
+							{
+								name: "og:type",
+								content: type,
+							},
+					  ]
+					: []),
+				...(language
+					? [
+							{
+								name: "og:locale",
+								content: language.language.replace("-", "_"),
+							},
+					  ]
+					: []),
 
 				...(typeof timeToLifeSeconds === "number"
 					? [
