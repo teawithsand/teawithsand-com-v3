@@ -1,13 +1,23 @@
-import * as fs from "fs";
-import { customizeDefaultPlugins, GatsbyTransformerRemarkPlugins, makeConfig, makeLayoutPlugin, makeManifestPlugin, SelfPlugins } from "tws-gatsby-plugin";
-
+import * as fs from "fs"
+import {
+	customizeDefaultPlugins,
+	GatsbyTransformerRemarkPlugins,
+	makeConfig,
+	makeLayoutPlugin,
+	makeManifestPlugin,
+	makeSelfPlugin,
+} from "tws-gatsby-plugin"
 
 const plugins = customizeDefaultPlugins(
 	[
 		makeManifestPlugin("./src/images/icon.png"),
 		makeLayoutPlugin("./src/Layout.jsx"),
 	],
-	SelfPlugins,
+	[
+		makeSelfPlugin({
+			languages: [],
+		}),
+	],
 	GatsbyTransformerRemarkPlugins,
 	[
 		{
@@ -16,22 +26,6 @@ const plugins = customizeDefaultPlugins(
 				name: "waysideshrines",
 				path: "./content/waysideshrines",
 			},
-		},
-		{
-			resolve: "gatsby-source-filesystem",
-			options: {
-				name: "images",
-				path: "./src/images/",
-			},
-			__key: "images",
-		},
-		{
-			resolve: "gatsby-source-filesystem",
-			options: {
-				name: "pages",
-				path: "./src/pages/",
-			},
-			__key: "pages",
 		},
 	],
 )

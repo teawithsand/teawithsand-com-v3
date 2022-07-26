@@ -1,5 +1,40 @@
 const TSConfigPathsPlugin = require("tsconfig-paths-webpack-plugin")
 
+const onCreatePage = async ({ page, actions }, config) => {
+	let languages = []
+	let pageFilter = null
+	if (config) {
+		languages = config.languages ?? []
+		pageFilter = config.pageFilter ?? null
+	}
+
+	if (pageFilter === null) {
+		// quite rudimentary, but should do.
+		pageFilter = path => {
+			const innerLangs = languages.map(v => v.toLowerCase())
+			for (const l of innerLangs) {
+				if (path.startsWith("/" + l + "/")) return false
+			}
+			return true
+		}
+	}
+
+	const { createPage } = actions
+
+	for (const lang of languages) {
+		if (!pageFilter(page.path)) continue
+
+		createPage({
+			...page,
+			path: "/" + lang.toLowerCase() + page.path,
+			context: {
+				...page.context,
+				language: lang,
+			},
+		})
+	}
+}
+
 const onCreateWebpackConfig = ({
 	actions,
 	getConfig,
@@ -84,4 +119,4 @@ const onCreateWebpackConfig = ({
 	}
 }
 
-module.exports = { onCreateWebpackConfig }
+module.exports = { onCreateWebpackConfig, onCreatePage }

@@ -5,7 +5,7 @@ import {
 	makeConfig,
 	makeLayoutPlugin,
 	makeManifestPlugin,
-	SelfPlugins,
+	makeSelfPlugin,
 } from "tws-gatsby-plugin"
 
 const plugins = customizeDefaultPlugins(
@@ -13,7 +13,7 @@ const plugins = customizeDefaultPlugins(
 		makeManifestPlugin("./src/images/icon.png"),
 		makeLayoutPlugin("./src/Layout.jsx"),
 	],
-	SelfPlugins,
+	[makeSelfPlugin()],
 	makeGatsbyTransformerRemarkPlugins([
 		{
 			resolve: `gatsby-remark-prismjs`,
@@ -38,22 +38,6 @@ const plugins = customizeDefaultPlugins(
 				name: "blog",
 				path: "./content/blog",
 			},
-		},
-		{
-			resolve: "gatsby-source-filesystem",
-			options: {
-				name: "images",
-				path: "./src/images/",
-			},
-			__key: "images",
-		},
-		{
-			resolve: "gatsby-source-filesystem",
-			options: {
-				name: "pages",
-				path: "./src/pages/",
-			},
-			__key: "pages",
 		},
 
 		{

@@ -47,6 +47,24 @@ const BasicSitePluginsStart = [
 ]
 
 const BasicSitePluginsEnd = [
+	// Sources for convention are at the end as well
+	{
+		resolve: "gatsby-source-filesystem",
+		options: {
+			name: "images",
+			path: "./src/images/",
+		},
+		__key: "images",
+	},
+	{
+		resolve: "gatsby-source-filesystem",
+		options: {
+			name: "pages",
+			path: "./src/pages/",
+		},
+		__key: "pages",
+	},
+
 	// Compression has to be at the end
 	{
 		resolve: "gatsby-plugin-zopfli",
@@ -220,16 +238,21 @@ const makeConfig = (siteMetadata, plugins) => ({
 	plugins,
 })
 
-const SelfPlugins = ["tws-gatsby-plugin"]
+const makeSelfPlugin = (options) => {
+	return {
+		resolve: "tws-gatsby-plugin",
+		options,
+	}
+}
 
 module.exports = {
 	BasicSitePluginsStart,
 	BasicSitePluginsEnd,
 	GatsbyTransformerRemarkPlugins,
 
-	SelfPlugins,
-
 	makeGatsbyTransformerRemarkPlugins,
+
+	makeSelfPlugin,
 
 	makeManifestPlugin,
 	customizeDefaultPlugins,
