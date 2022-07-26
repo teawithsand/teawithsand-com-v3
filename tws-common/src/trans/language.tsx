@@ -1,3 +1,11 @@
+import React, {
+	createContext,
+	ReactNode,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from "react"
 import { isSSR } from "tws-common/ssr"
 
 /**
@@ -87,7 +95,7 @@ export const recoverLanguageFromString = (
 
 export const getPreferredUserLanguage = (
 	ssrFallback: Language,
-	fallback?: Language,
+	fallback: Language = DEFAULT_LANGUAGE,
 ): Language => {
 	if (isSSR()) {
 		return ssrFallback
@@ -95,11 +103,7 @@ export const getPreferredUserLanguage = (
 
 	const navigatorLanguage =
 		(navigator as any)?.userLanguage || navigator?.language || ""
-	return (
-		recoverLanguageFromString(navigatorLanguage) ??
-		fallback ??
-		DEFAULT_LANGUAGE
-	)
+	return recoverLanguageFromString(navigatorLanguage) ?? fallback
 }
 
 export const parseLanguage = (
@@ -121,3 +125,39 @@ export const parseLanguage = (
 		language: `${text.toLowerCase()}-${country.toUpperCase()}`,
 	}
 }
+
+export const LanguageContext = createContext<Language>(DEFAULT_LANGUAGE)
+
+export const ProvidePreferredUserLanguage = (props: {
+	ssrFallback?: Language // has to be constant
+	children?: ReactNode
+}) => {
+	const srrFallback = props.ssrFallback ?? DEFAULT_LANGUAGE
+
+	// This has to be done like this
+	// so it's ssr safe
+	const [language, setLanguage] = useState<Language>(srrFallback)
+
+	useEffect(() => {
+		setLanguage(getPreferredUserLanguage(srrFallback))
+	}, [])
+
+	return (
+		<LanguageContext.Provider value={language}>
+			{props.children}
+		</LanguageContext.Provider>
+	)
+}
+
+export const ProvideFixedLanguage = (props: {
+	language: Language
+	children?: ReactNode
+}) => {
+	return (
+		<LanguageContext.Provider value={props.language}>
+			{props.children}
+		</LanguageContext.Provider>
+	)
+}
+
+export const useLanguage = () => useContext(LanguageContext)
