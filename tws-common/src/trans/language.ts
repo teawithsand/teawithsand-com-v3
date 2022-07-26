@@ -59,6 +59,9 @@ export const simplifyLanguage = (lang: Language): SimpleLanguage => {
 export const recoverLanguageFromString = (
 	navigatorLanguage: string,
 ): Language | null => {
+	navigatorLanguage = navigatorLanguage.trim()
+	navigatorLanguage.replace("_", "-")
+
 	let language: Language | null = null
 	if (/^[a-zA-Z]{2}$/.test(navigatorLanguage)) {
 		try {
