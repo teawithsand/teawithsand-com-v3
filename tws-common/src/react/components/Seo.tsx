@@ -294,7 +294,7 @@ export const Seo = (props: SEOProps) => {
 				},
 				{
 					name: "og:locale",
-					content: language.language,
+					content: language.language.replace("-", "_"),
 				},
 
 				...(typeof timeToLifeSeconds === "number"
