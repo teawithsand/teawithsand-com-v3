@@ -9,7 +9,7 @@ const PostEntryTags = styled.div`
 	column-gap: 0.8rem;
 `
 
-const SmallTagList = (props: {
+export const SmallTagLine = (props: {
 	tags: string[]
 	style?: CSSProperties
 	className?: string
@@ -40,5 +40,3 @@ const SmallTagList = (props: {
 		)
 	}
 }
-
-export default SmallTagList
