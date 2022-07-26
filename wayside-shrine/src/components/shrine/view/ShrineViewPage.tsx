@@ -59,7 +59,7 @@ const ShrineHelmet = (props: { header: ShrineHeaderExt }) => {
 	)
 }
 
-const ShrineView = (props: { data: Shrine }) => {
+export const ShrineViewPage = (props: { data: Shrine }) => {
 	const { data } = props
 	const { title, tags, coordinates, createdAt, lastEditedAt, featuredImage } =
 		data.header
@@ -108,5 +108,3 @@ const ShrineView = (props: { data: Shrine }) => {
 		</>
 	)
 }
-
-export default ShrineView
