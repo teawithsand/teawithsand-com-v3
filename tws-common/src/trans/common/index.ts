@@ -1,4 +1,5 @@
 import { TimestampMs } from "tws-common/lang/time/Timestamp"
+import { Language } from "tws-common/trans/language"
 
 export type TranslatableDate = Date | TimestampMs | string
 
@@ -13,9 +14,20 @@ export const translatableDateToDate = (date: TranslatableDate) => {
 export interface CommonTranslation {
 	// language in format like en-US or en-GB
 	language: {
+		/**
+		 * @deprecated use new language instead and parse it if needed
+		 */
 		twoPartCode: string
+		/**
+		 * @deprecated use new language instead and parse it if needed
+		 */
 		singlePartCode: string
+		/**
+		 * Name of that language in given language. For instance "English".
+		 */
 		languageName: string
+
+		language: Language
 	}
 
 	// Date only

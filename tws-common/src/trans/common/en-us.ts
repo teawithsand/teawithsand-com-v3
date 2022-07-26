@@ -8,6 +8,8 @@ export const CommonTranslationEN_US: CommonTranslation = {
 		languageName: "English (United States)",
 		singlePartCode: "en",
 		twoPartCode: "en-US",
+		
+		language: "en-US",
 	}),
 	dialog: {
 		areYouSure: {
