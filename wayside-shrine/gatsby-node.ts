@@ -1,5 +1,6 @@
-import * as path from "path"
-import type { GatsbyNode } from "gatsby"
+import * as path from "path";
+import type { GatsbyNode } from "gatsby";
+
 
 export const createPages: GatsbyNode["createPages"] = async ({
 	graphql,
@@ -132,9 +133,9 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({
 		typeof node.frontmatter === "object"
 	) {
 		const slug = (node as any).frontmatter.slug ?? ""
-		const path = slug.startsWith("/")
-			? "/shrine/view" + slug
-			: "/shrine/view/" + slug
+		const language = (node as any).frontmatter.language ?? ""
+
+		const path = `/${language.toLowerCase()}/shrine/${slug}`
 
 		createNodeField({
 			node,
