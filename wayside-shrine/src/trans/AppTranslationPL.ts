@@ -130,6 +130,11 @@ const AppTranslationPL: AppTranslation = {
 			},
 		},
 	},
+	map: {
+		title: "Mapa",
+		description:
+			"Mapa zawiera wszystkie obiekty. Można na nie kliknąć aby przejść do strony danego obiektu.",
+	},
 }
 
 export default AppTranslationPL

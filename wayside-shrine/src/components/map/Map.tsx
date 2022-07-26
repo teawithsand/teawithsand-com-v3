@@ -53,7 +53,7 @@ export type MapIconLocation = {
 }
 
 export type Coordinates = [number, number]
-export type Extent = [number, number, number, number]
+export type Extent = number[]
 
 const MapContainer = styled.div`
 	width: 100%;

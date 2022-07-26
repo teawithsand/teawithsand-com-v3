@@ -2,13 +2,10 @@ import AppTranslationPL from "@app/trans/AppTranslationPL"
 
 import { TimestampMs } from "tws-common/lang/time/Timestamp"
 import { CommonTranslation } from "tws-common/trans/common"
-import {
-	DEFAULT_LANGUAGE,
-	getPreferredUserLanguage,
-} from "tws-common/trans/language"
+import { DEFAULT_LANGUAGE, Language } from "tws-common/trans/language"
 import Translator, {
 	createTranslatorContext,
-	useTranslator,
+	makeTranslationHooks,
 } from "tws-common/trans/Translator"
 import { GeolocationErrorCode } from "tws-common/webapi/geolocation"
 
@@ -119,9 +116,13 @@ export default interface AppTranslation {
 			commentsHeader: string
 		}
 	}
+	map: {
+		title: string
+		description: string,
+	}
 }
 
-const translations = new Map<string, AppTranslation>()
+const translations = new Map<Language, AppTranslation>()
 
 translations.set(DEFAULT_LANGUAGE, AppTranslationPL)
 
@@ -129,10 +130,8 @@ export const TranslatorContext = createTranslatorContext<AppTranslation>(
 	new Translator(translations),
 )
 
-export const useAppTranslation = (): AppTranslation =>
-	useTranslator(TranslatorContext).getTranslationForLanguage(
-		getPreferredUserLanguage(DEFAULT_LANGUAGE),
-	)
+const hooks = makeTranslationHooks(TranslatorContext)
 
-export const useAppTranslationSelector = <T>(s: (t: AppTranslation) => T): T =>
-	s(useAppTranslation())
+export const useAppTranslation = hooks.useTranslation
+export const useAppTranslationSelector = hooks.useTranslationSelector
+export const useTranslator = hooks.useTranslator
