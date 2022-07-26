@@ -28,10 +28,12 @@ const ParentContainer = styled.article`
 const ShrineHelmet = (props: { header: ShrineHeaderExt }) => {
 	const { header } = props
 
-	const image = makeSeoImage(
-		"https://szlakiemkapliczek.pl",
-		header.featuredImageSocial,
-	)
+	const image = header.featuredImageSocial
+		? makeSeoImage(
+				"https://szlakiemkapliczek.pl",
+				header.featuredImageSocial,
+		  )
+		: null
 
 	return (
 		<Seo
