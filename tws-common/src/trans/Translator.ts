@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { DEFAULT_LANGUAGE } from "tws-common/trans/language"
+import { DEFAULT_LANGUAGE, Language } from "tws-common/trans/language"
 
 export type StaticTranslation = () => string
 export type KeyedTranslation = () => string
@@ -8,8 +8,8 @@ export type TranslationObject = {}
 
 export default class Translator<T extends TranslationObject> {
 	constructor(
-		private translations: Map<string, T>,
-		private fallbackLanguage = DEFAULT_LANGUAGE,
+		private translations: Map<Language, T>,
+		private fallbackLanguage: Language = DEFAULT_LANGUAGE,
 	) {
 		if (!translations.has(fallbackLanguage))
 			throw new Error(
@@ -21,7 +21,7 @@ export default class Translator<T extends TranslationObject> {
 			)
 	}
 
-	getTranslationForLanguage = (lang?: string): T => {
+	getTranslationForLanguage = (lang?: Language): T => {
 		const res = this.translations.get(lang ?? this.fallbackLanguage)
 		if (!res) return this.translations.get(this.fallbackLanguage) as T
 		return res
