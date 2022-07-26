@@ -41,7 +41,7 @@ export type SimpleLanguage = "en" | "pl" | "ru"
 export const DEFAULT_LANGUAGE: Language = "en-US"
 
 export const unsimplifyLanguage = (lang: SimpleLanguage): Language => {
-	lang = lang.toLowerCase()
+	lang = lang.toLowerCase() as SimpleLanguage
 	const v = simpleToLanguage.get(lang)
 	if (!v) throw new Error(`Invalid simple language: ${lang}`)
 	return v
