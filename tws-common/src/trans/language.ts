@@ -41,6 +41,7 @@ export type SimpleLanguage = "en" | "pl" | "ru"
 export const DEFAULT_LANGUAGE: Language = "en-US"
 
 export const unsimplifyLanguage = (lang: SimpleLanguage): Language => {
+	lang = lang.toLowerCase()
 	const v = simpleToLanguage.get(lang)
 	if (!v) throw new Error(`Invalid simple language: ${lang}`)
 	return v
@@ -55,18 +56,13 @@ export const simplifyLanguage = (lang: Language): SimpleLanguage => {
 	return v
 }
 
-export const getPreferredUserLanguage = (ssrFallback: Language): Language => {
-	if (isSSR()) {
-		return ssrFallback
-	}
-
-	const navigatorLanguage =
-		(navigator as any)?.userLanguage || navigator?.language || ""
-	let language: Language = DEFAULT_LANGUAGE
-
+export const recoverLanguageFromString = (
+	navigatorLanguage: string,
+): Language | null => {
+	let language: Language | null = null
 	if (/^[a-zA-Z]{2}$/.test(navigatorLanguage)) {
 		try {
-			language = unsimplifyLanguage(navigatorLanguage)
+			language = unsimplifyLanguage(navigatorLanguage as SimpleLanguage)
 		} catch (e) {
 			// ignore
 		}
@@ -84,6 +80,23 @@ export const getPreferredUserLanguage = (ssrFallback: Language): Language => {
 	}
 
 	return language
+}
+
+export const getPreferredUserLanguage = (
+	ssrFallback: Language,
+	fallback?: Language,
+): Language => {
+	if (isSSR()) {
+		return ssrFallback
+	}
+
+	const navigatorLanguage =
+		(navigator as any)?.userLanguage || navigator?.language || ""
+	return (
+		recoverLanguageFromString(navigatorLanguage) ??
+		fallback ??
+		DEFAULT_LANGUAGE
+	)
 }
 
 export const parseLanguage = (
