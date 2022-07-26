@@ -45,7 +45,14 @@ const ShrineHelmet = (props: { header: ShrineHeaderExt }) => {
 			)}
 			type="article"
 			articleData={{}}
-			image={image ?? undefined}
+			image={
+				image
+					? {
+							...image,
+							alt: header.title,
+					  }
+					: undefined
+			}
 		/>
 	)
 }
