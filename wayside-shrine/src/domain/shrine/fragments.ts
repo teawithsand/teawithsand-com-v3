@@ -1,5 +1,4 @@
-import { graphql } from "gatsby";
-
+import { graphql } from "gatsby"
 
 export const query = graphql`
 	fragment Shrine on MarkdownRemark {
@@ -17,13 +16,7 @@ export const query = graphql`
 			}
 			featuredImageSocial: featuredImage {
 				childImageSharp {
-					gatsbyImageData(
-						layout: CONSTRAINED
-						width: 1200
-						height: 630
-						formats: [JPG]
-						transformOptions: { cropFocus: ATTENTION, fit: COVER }
-					)
+					...OgImage
 				}
 			}
 			galleryImages {
