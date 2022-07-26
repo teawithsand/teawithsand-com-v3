@@ -1,8 +1,9 @@
-import React, { ReactNode, useEffect, useMemo } from "react"
-import { Helmet } from "react-helmet"
-import { LOG } from "tws-common/log/logger"
-import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager"
-import { Language, parseLanguage } from "tws-common/trans/language"
+import React, { ReactNode, useEffect, useMemo } from "react";
+import { Helmet } from "react-helmet";
+import { LOG } from "tws-common/log/logger";
+import { claimId, NS_LOG_TAG } from "tws-common/misc/GlobalIDManager";
+import { Language, parseLanguage } from "tws-common/trans/language";
+
 
 export type SEOTwitter = {
 	siteTwitter?: string
@@ -194,6 +195,10 @@ export const Seo = (props: SEOProps) => {
 			? [
 					{
 						name: "og:image:secure",
+						content: imageHttpsUrl,
+					},
+					{
+						name: "og:image:secure_url",
 						content: imageHttpsUrl,
 					},
 			  ]
