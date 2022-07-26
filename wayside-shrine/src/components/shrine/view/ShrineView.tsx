@@ -1,6 +1,4 @@
-import { IGatsbyImageData, ImageDataLike } from "gatsby-plugin-image"
 import React, { useRef } from "react"
-import { Helmet } from "react-helmet"
 import styled from "styled-components"
 
 import ShrineViewArticleSection from "@app/components/shrine/view/ShrineViewArticleSection"
@@ -8,8 +6,11 @@ import ShrineViewCommentsSection from "@app/components/shrine/view/ShrineViewCom
 import { ShrineViewContext } from "@app/components/shrine/view/ShrineViewContext"
 import ShrineViewGallerySection from "@app/components/shrine/view/ShrineViewGallerySection"
 import ShrineViewMapSection from "@app/components/shrine/view/ShrineViewMapSection"
-import { Shrine, ShrineHeader } from "@app/domain/shrine"
+import { Shrine, ShrineHeaderExt } from "@app/domain/shrine"
 
+import { absolutizePath } from "tws-common/lang/path"
+import { makeSeoImage } from "tws-common/misc/social/image"
+import { Seo } from "tws-common/react/components/Seo"
 import {
 	BREAKPOINT_LG,
 	BREAKPOINT_MD,
@@ -24,17 +25,28 @@ const ParentContainer = styled.article`
 	gap: 1rem;
 `
 
-const ShrineHelmet = (props: { header: ShrineHeader }) => {
+const ShrineHelmet = (props: { header: ShrineHeaderExt }) => {
 	const { header } = props
 
+	const image = makeSeoImage(
+		"https://szlakiemkapliczek.pl",
+		header.featuredImageSocial,
+	)
+
 	return (
-		<Helmet>
-			<title>{header.title}</title>
-			<meta name="description" content={header.excerpt} />
-			<meta name="og:title" content={header.title} />
-			<meta name="og:description" content={header.excerpt} />
-			<meta name="og:type" content="article" />
-		</Helmet>
+		<Seo
+			title={header.title}
+			description={header.excerpt}
+			language="pl-PL"
+			// TODO(teawithsand): access this via config hook
+			canonicalUrl={absolutizePath(
+				"https://szlakiemkapliczek.pl",
+				header.path,
+			)}
+			type="article"
+			articleData={{}}
+			image={image ?? undefined}
+		/>
 	)
 }
 
