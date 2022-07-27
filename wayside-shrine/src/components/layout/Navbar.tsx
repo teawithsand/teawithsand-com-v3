@@ -2,12 +2,13 @@ import React from "react"
 
 import {
 	homePath,
+	listPath,
 	locationAddPath,
 	locationListPath,
 	locationLocatePath,
 	locationMenuPath,
+	mapPath,
 	publishingPath,
-	listPath,
 } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
@@ -27,6 +28,9 @@ const AppNavbar = () => {
 					<Nav className="ms-auto">
 						<LinkContainer to={listPath}>
 							<Nav.Link href="#">{trans.list}</Nav.Link>
+						</LinkContainer>
+						<LinkContainer to={mapPath}>
+							<Nav.Link href="#">{trans.map}</Nav.Link>
 						</LinkContainer>
 						<LinkContainer to={publishingPath}>
 							<Nav.Link href="#">{trans.publishing}</Nav.Link>

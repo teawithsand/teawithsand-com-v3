@@ -19,6 +19,7 @@ export default interface AppTranslation {
 	layout: {
 		navbar: {
 			list: string
+			map: string
 			publishing: string
 			homePage: string
 			brandName: string

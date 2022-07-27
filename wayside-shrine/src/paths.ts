@@ -1,5 +1,6 @@
 export const homePath = "/"
 export const listPath = "/list"
+export const mapPath = "/map"
 export const publishingPath = "/publishing"
 export const locationMenuPath = "/location"
 export const locationListPath = "/location/list"
