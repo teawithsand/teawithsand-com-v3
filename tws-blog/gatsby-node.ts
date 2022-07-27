@@ -30,6 +30,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 						childMarkdownRemark {
 							fields {
 								path
+								uuidPath
 							}
 							frontmatter {
 								slug
@@ -53,18 +54,30 @@ export const createPages: GatsbyNode["createPages"] = async ({
 		const shrines = (result.data as any).allFile.nodes.filter(n => !!n)
 
 		if (shrines.length > 0) {
-			shrines.forEach((shrine, index) => {
+			shrines.forEach((post, index) => {
 				const previousShrineId =
 					index === 0 ? null : shrines[index - 1].id
 				const nextShrineId =
 					index === shrines.length - 1 ? null : shrines[index + 1].id
 
-				const postPath = shrine.childMarkdownRemark.fields.path
+				const postPath = post.childMarkdownRemark.fields.path
+				const uuidPostPath = post.childMarkdownRemark.fields.uuidPath
+
 				createPage({
 					path: postPath,
 					component: templatePath,
 					context: {
-						id: shrine.id,
+						id: post.id,
+						previousShrineId,
+						nextShrineId,
+					},
+				})
+
+				createPage({
+					path: uuidPostPath,
+					component: templatePath,
+					context: {
+						id: post.id,
 						previousShrineId,
 						nextShrineId,
 					},
@@ -80,20 +93,20 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
 		// Get all markdown blog posts sorted by date
 		const result = await graphql(`
-				query TagsForPages {
-					allFile(
-						filter: {
-							sourceInstanceName: { eq: "blog" }
-							name: { eq: "index" }
-							extension: { eq: "md" }
-						}
-					) {
-						group(field: childMarkdownRemark___frontmatter___tags) {
-							tag: fieldValue
-							count: totalCount
-						}
+			query TagsForPages {
+				allFile(
+					filter: {
+						sourceInstanceName: { eq: "blog" }
+						name: { eq: "index" }
+						extension: { eq: "md" }
+					}
+				) {
+					group(field: childMarkdownRemark___frontmatter___tags) {
+						tag: fieldValue
+						count: totalCount
 					}
 				}
+			}
 		`)
 
 		if (result.errors) {
@@ -124,11 +137,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 	}
 }
 
-export const onCreateNode: GatsbyNode["onCreateNode"] = ({
-	node,
-	actions,
-	getNode,
-}) => {
+export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
 	const { createNodeField } = actions
 
 	if (
@@ -136,15 +145,23 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({
 		typeof node.frontmatter === "object"
 	) {
 		const slug = (node as any).frontmatter.slug ?? ""
-		const path = slug.startsWith("/")
-			? "/post" + slug
-			: "/post/" + slug
+		const uuid = (node as any).frontmatter.uuid ?? ""
+		const language = (node as any).frontmatter.language ?? ""
+		const path = `/post/${language.toLowerCase()}/${slug}`
+		const uuidPath = `/post/${uuid}`
 
 		createNodeField({
 			node,
 			name: "path",
 			value: path,
 		})
+
+		createNodeField({
+			node,
+			name: "uuidPath",
+			value: uuidPath,
+		})
+
 		createNodeField({
 			node,
 			name: "slug",
