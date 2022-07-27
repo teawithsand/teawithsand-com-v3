@@ -10,6 +10,7 @@ const PostEntryTags = styled.div`
 	column-gap: 0.8rem;
 `
 
+// TODO(teawithsand): instead use smallTagLine form tws-common
 const SmallTagList = (props: {
 	tags: string[]
 	style?: React.CSSProperties

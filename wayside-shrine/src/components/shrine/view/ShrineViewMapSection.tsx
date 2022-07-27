@@ -1,3 +1,5 @@
+import { graphql, useStaticQuery } from "gatsby"
+import { getSrc } from "gatsby-plugin-image"
 import React, { useMemo } from "react"
 import styled from "styled-components"
 
@@ -5,7 +7,7 @@ import Map, { fromLonLat, MapIcon, MapView } from "@app/components/map/Map"
 import { ShrineViewSectionHeader } from "@app/components/shrine/view/ShrineViewSection"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
-import { Button, ButtonGroup, ButtonToolbar } from "tws-common/ui"
+import { Button, ButtonGroup } from "tws-common/ui"
 
 const MapSection = styled.section``
 const MapSectionHeader = ShrineViewSectionHeader
@@ -17,6 +19,36 @@ const OptionsButtonGroup = styled(ButtonGroup)`
 // eslint-disable-next-line react/display-name
 const ShrineViewMapSection = React.forwardRef(
 	(props: { coordinates: [number, number] }, ref) => {
+		const iconData: Queries.MapLocationIconQuery = useStaticQuery(graphql`
+			query MapLocationIcon {
+				allFile(
+					filter: {
+						sourceInstanceName: { eq: "images" }
+						name: { eq: "location" }
+					}
+				) {
+					nodes {
+						childImageSharp {
+							gatsbyImageData(
+								layout: FIXED
+								backgroundColor: "transparent"
+								formats: [PNG]
+								placeholder: TRACED_SVG
+								height: 48
+							)
+						}
+					}
+				}
+			}
+		`)
+
+		const iconSource = iconData.allFile.nodes[0].childImageSharp
+			?.gatsbyImageData
+			? getSrc(
+					iconData.allFile.nodes[0].childImageSharp?.gatsbyImageData,
+			  ) ?? ""
+			: ""
+
 		const { coordinates } = props
 		const trans = useAppTranslationSelector(s => s.shrine.view)
 
@@ -33,7 +65,7 @@ const ShrineViewMapSection = React.forwardRef(
 			() => [
 				{
 					display: {
-						src: "https://openlayers.org/en/latest/examples/data/icon.png",
+						src: iconSource,
 						anchor: [0.5, 46],
 						anchorXUnits: "fraction",
 						anchorYUnits: "pixels",
@@ -72,7 +104,7 @@ const ShrineViewMapSection = React.forwardRef(
 							target="_blank"
 							rel="noopener noreferrer"
 						>
-							OSM
+							Open Street Maps
 						</Button>
 					</OptionsButtonGroup>
 				</MapSectionHeader>

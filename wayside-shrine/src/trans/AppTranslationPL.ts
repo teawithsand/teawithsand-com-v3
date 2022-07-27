@@ -14,7 +14,8 @@ const AppTranslationPL: AppTranslation = {
 	layout: {
 		navbar: {
 			homePage: "Strona główna",
-			search: "Wyszukiwanie",
+			map: "Mapa kapliczek",
+			list: "Lista kapliczek",
 			publishing: "Jak dodać obiekt?",
 			brandName: "SzlakiemKapliczek",
 			location: {
@@ -129,6 +130,11 @@ const AppTranslationPL: AppTranslation = {
 				map: "Mapa",
 			},
 		},
+	},
+	map: {
+		title: "Mapa",
+		description:
+			"Mapa zawiera wszystkie obiekty. Można na nie kliknąć aby przejść do strony danego obiektu.",
 	},
 }
 

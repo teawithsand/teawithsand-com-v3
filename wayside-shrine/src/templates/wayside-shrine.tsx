@@ -2,7 +2,7 @@ import * as React from "react"
 import { graphql } from "gatsby"
 
 import PageContainer from "@app/components/layout/PageContainer"
-import ShrineView from "@app/components/shrine/view/ShrineView"
+import { ShrineViewPage } from "@app/components/shrine/view/ShrineViewPage"
 import { convertShrine } from "@app/domain/shrine"
 
 import { asNonNullable } from "tws-common/typing/required"
@@ -13,7 +13,7 @@ const WaysideShrineTemplate = (props: {
 	return (
 		<PageContainer>
 			<main>
-				<ShrineView
+				<ShrineViewPage
 					data={convertShrine(
 						asNonNullable(props.data.current?.childMarkdownRemark),
 					)}

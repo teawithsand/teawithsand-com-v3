@@ -50,10 +50,11 @@ export const fromLonLat = (coords: [number, number]): Coordinates =>
 export type MapIconLocation = {
 	coordinates: Coordinates
 	name: string
+	onClick?: () => void
 }
 
 export type Coordinates = [number, number]
-export type Extent = [number, number, number, number]
+export type Extent = number[]
 
 const MapContainer = styled.div`
 	width: 100%;
@@ -122,6 +123,7 @@ const Map = (props: {
 					new Feature({
 						geometry: new Point(location.coordinates),
 						name: location.name,
+						onClick: location.onClick,
 					}),
 			),
 			display: icon.display,
@@ -215,6 +217,44 @@ const Map = (props: {
 				map.getLayers().push(layer)
 			}
 			currentIconsLayer.current = iconsLayers
+
+			const pointerMoveCallback = function (e: any) {
+				const pixel = map.getEventPixel(e.originalEvent)
+				const features = map.getFeaturesAtPixel(pixel)
+
+				let found = false
+				for (const f of features) {
+					if (f.get("onClick")) {
+						found = true
+						break
+					}
+				}
+
+				const target = map.getTarget()
+				if (target && typeof target !== "string") {
+					target.style.cursor = found ? "pointer" : ""
+				}
+			}
+			map.on("pointermove", pointerMoveCallback)
+
+			const clickCallback = function (e: any) {
+				const pixel = map.getEventPixel(e.originalEvent)
+				const features = map.getFeaturesAtPixel(pixel)
+
+				for (const f of features) {
+					const callback = f.get("onClick")
+					if (callback) {
+						callback()
+						break
+					}
+				}
+			}
+			map.on("click", clickCallback)
+
+			return () => {
+				map.un("pointermove", pointerMoveCallback)
+				map.un("click", clickCallback)
+			}
 		}
 	}, [map, iconsLayers])
 

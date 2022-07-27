@@ -1,12 +1,13 @@
-import { PostHeader } from "@app/domain/Post"
 import React from "react"
 import styled from "styled-components"
 
-import PostGridEntry from "@app/components/post/PostGridEntry"
+import { ShrineGridEntry } from "@app/components/shrine/grid/ShrineGridEntry"
+import { ShrineHeader } from "@app/domain/shrine"
+
 import {
-	breakpointMediaDown,
 	BREAKPOINT_MD,
 	BREAKPOINT_SM,
+	breakpointMediaDown,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
 
 const GridParent = styled.div`
@@ -30,15 +31,13 @@ const GridParent = styled.div`
 	box-sizing: border-box;
 `
 
-const PostsGrid = (props: { posts: PostHeader[] }) => {
-	const posts = props.posts
+export const ShrinesGrid = (props: { shrines: ShrineHeader[] }) => {
+	const posts = props.shrines
 	return (
 		<GridParent>
 			{posts.map((v, i) => (
-				<PostGridEntry key={i} header={v} />
+				<ShrineGridEntry key={i} header={v} />
 			))}
 		</GridParent>
 	)
 }
-
-export default PostsGrid

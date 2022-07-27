@@ -42,7 +42,7 @@ export type TagsViewTag = (
 	title?: string | undefined
 }
 
-const TagLine = (props: { tags: TagsViewTag[] }) => {
+export const TagLine = (props: { tags: TagsViewTag[] }) => {
 	const { tags } = props
 
 	if (tags.length === 0) {
@@ -77,5 +77,3 @@ const TagLine = (props: { tags: TagsViewTag[] }) => {
 		</Tags>
 	)
 }
-
-export default TagLine

@@ -7,7 +7,7 @@ import { ShrineViewContext } from "@app/components/shrine/view/ShrineViewContext
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import { Button } from "tws-common/ui"
-import TagLine from "tws-common/ui/TagLine"
+import { TagLine } from "tws-common/ui/tag/TagLine"
 
 type ViewProps = {
 	$isSmall: boolean

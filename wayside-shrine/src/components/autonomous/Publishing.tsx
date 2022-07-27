@@ -118,6 +118,14 @@ const PublishingPL = (props: Info) => {
 					dołączyć dane autora w opisie obiektu.
 				</li>
 				<li>
+					Jeśli osoba wysyłająca maila jest autorem treści zawartych w
+					mailu takich jak zdjęcia czy opis, to powinno być to opisane
+					w mailu w sposób niebudzący wątpliwości co do tego, kto jest
+					autorem danego zdjęcia/opisu/innej treści. Podobnie jeśli
+					nie jest, ale treści są udostępnione na kompatybilnej
+					licencji.
+				</li>
+				<li>
 					Opis(jeżeli jest dołączony):
 					<ul>
 						<li>
@@ -230,9 +238,15 @@ const PublishingPL = (props: Info) => {
 							</em>
 						</p>
 						<p>
+							Wszystkie załączone zdjęcia jak i opis zostały
+							stworzone przeze mnie(lub kogoś innego, wtedy opisać
+							która część powinna być przypisana do konkretnej
+							osoby).
+						</p>
+						<p>
 							Wszystkie załączone zdjęcia jak i opis udostępnione
 							są na licencji w pliku LICENSE.txt / załączonej
-							poniżej.
+							poniżej / dostępnej pod adresem.
 						</p>
 						<p>
 							<em>
@@ -260,9 +274,7 @@ const PublishingPL = (props: Info) => {
 							<li>
 								Zdjęcie 6.jpeg<s>.exe</s>
 							</li>
-							<li>
-								Opis.txt / Opis.md
-							</li>
+							<li>Opis.txt / Opis.md</li>
 						</ul>
 					</Card.Body>
 				</Card>
