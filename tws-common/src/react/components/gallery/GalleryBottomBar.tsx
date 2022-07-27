@@ -206,7 +206,6 @@ const GalleryBottomBar = (props: {
 			const res = current.querySelector(
 				`*[data-index="${currentEntryIndex}"]`,
 			)
-			console.error("Scrolling into view")
 			if (res) {
 				res.scrollIntoView({
 					behavior: "smooth",
