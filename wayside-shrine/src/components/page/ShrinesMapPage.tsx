@@ -7,6 +7,7 @@ import styled from "styled-components"
 import Map, { fromLonLat, MapIcon } from "@app/components/map/Map"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
+import { useNavigate } from "tws-common/react/hook/useNavigate"
 import { asRequiredRecursively } from "tws-common/typing/required"
 
 const InnerContainer = styled.section`
@@ -21,6 +22,7 @@ const Header = styled.header`
 `
 
 export const ShrinesMapPage = () => {
+	const navigate = useNavigate()
 	const data: Queries.ShrineMapPageQuery = useStaticQuery(graphql`
 		query ShrineMapPage {
 			allFile(
@@ -78,6 +80,7 @@ export const ShrinesMapPage = () => {
 					data: v.childMarkdownRemark.fields.path,
 					coordinates: v.childMarkdownRemark.frontmatter
 						.coordinates as [number, number],
+					path: v.childMarkdownRemark.fields.path,
 					processedCoordinates: fromLonLat(
 						v.childMarkdownRemark.frontmatter.coordinates as [
 							number,
@@ -104,6 +107,9 @@ export const ShrinesMapPage = () => {
 			locations: entries.map(v => ({
 				coordinates: v.processedCoordinates,
 				name: v.title,
+				onClick: () => {
+					navigate(v.path)
+				},
 			})),
 		}),
 		[entries],
