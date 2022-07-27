@@ -1,4 +1,4 @@
-import { absolutizePath } from "tws-common/lang/path";
+import { absolutizePath, removeTrailingSlash } from "tws-common/lang/path";
 
 
 describe("absolutizePath", () => {
@@ -11,5 +11,15 @@ describe("absolutizePath", () => {
 				protocol: "http",
 			}),
 		).toStrictEqual("http://teawithsand.com/asdf")
+	})
+
+	it("can remove trailing slashes", () => {
+		expect(
+			removeTrailingSlash("https://teawithsand.com/asdf"),
+		).toStrictEqual("https://teawithsand.com/asdf")
+		
+		expect(
+			removeTrailingSlash("https://teawithsand.com/asdf/"),
+		).toStrictEqual("https://teawithsand.com/asdf")
 	})
 })
