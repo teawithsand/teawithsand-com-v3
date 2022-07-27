@@ -65,10 +65,10 @@ export class ExtLog implements Log {
 		this.log(tag, LogLevel.INFO, ...args)
 
 	warn = (tag: LogTag, ...args: LogArg[]) =>
-		this.log(tag, LogLevel.ERROR, ...args)
+		this.log(tag, LogLevel.WARN, ...args)
 
 	error = (tag: LogTag, ...args: LogArg[]) =>
-		this.log(tag, LogLevel.WARN, ...args)
+		this.log(tag, LogLevel.ERROR, ...args)
 
 	assert = (tag: LogTag, ...args: LogArg[]) =>
 		this.log(tag, LogLevel.ASSERT, ...args)
