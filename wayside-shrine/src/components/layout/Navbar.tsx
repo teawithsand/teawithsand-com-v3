@@ -1,6 +1,7 @@
 import React from "react"
 
 import {
+	contactLink,
 	homePath,
 	listPath,
 	locationAddPath,
@@ -34,6 +35,9 @@ const AppNavbar = () => {
 						</LinkContainer>
 						<LinkContainer to={publishingPath}>
 							<Nav.Link href="#">{trans.publishing}</Nav.Link>
+						</LinkContainer>
+						<LinkContainer to={contactLink}>
+							<Nav.Link href="#">{trans.contact}</Nav.Link>
 						</LinkContainer>
 						<NavDropdown title={trans.location.title} align={"end"}>
 							<LinkContainer to={locationMenuPath}>

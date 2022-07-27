@@ -12,3 +12,6 @@ export const locationShowPath = (id: string) =>
 
 export const locationEditPath = (id: string) =>
 	`/location/edit?id=${encodeURIComponent(id)}`
+
+export const contactLink = "https://teawithsand.com/contact"
+export const footerLink = "https://teawithsand.com"

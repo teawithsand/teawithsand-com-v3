@@ -18,6 +18,7 @@ const AppTranslationPL: AppTranslation = {
 			list: "Lista kapliczek",
 			publishing: "Jak dodać obiekt?",
 			brandName: "SzlakiemKapliczek",
+			contact: "Kontakt",
 			location: {
 				title: "Lokalizacje",
 				menu: "Menu lokalizacji",
