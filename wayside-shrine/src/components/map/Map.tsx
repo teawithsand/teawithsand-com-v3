@@ -2,22 +2,20 @@ import { Collection, Feature } from "ol"
 import { Control, defaults as defaultControls, ZoomToExtent } from "ol/control"
 import { boundingExtent } from "ol/extent"
 import { Point } from "ol/geom"
-import Circle from "ol/geom/Circle"
 import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer"
 import OLMap from "ol/Map"
 import { fromLonLat as innerFromLonLat } from "ol/proj"
 import { OSM, Vector as VectorSource } from "ol/source"
-import {
-	Circle as CircleStyle,
-	Icon as IconStyle,
-	Stroke as StrokeStyle,
-	Style,
-} from "ol/style"
+import { Icon as IconStyle, Style } from "ol/style"
 import View from "ol/View"
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
 
 import { wrapNoSSR } from "tws-common/react/components/NoSSR"
+import {
+	BREAKPOINT_SM,
+	breakpointMediaDown,
+} from "tws-common/react/hook/dimensions/useBreakpoint"
 import { isSSR } from "tws-common/ssr"
 
 // https://stackoverflow.com/questions/37893131/how-to-convert-lat-long-from-decimal-degrees-to-dms-format
@@ -49,7 +47,8 @@ export const fromLonLat = (coords: [number, number]): Coordinates =>
 
 export type MapIconLocation = {
 	coordinates: Coordinates
-	name: string
+	htmlTitle?: string
+	hoverText?: string
 	onClick?: () => void
 }
 
@@ -99,6 +98,37 @@ const centerMap = (map: OLMap, center: MapView) => {
 	}
 }
 
+type MapHoverContainerProps = {
+	$visible: boolean
+	$position: [number, number]
+	$text: string
+}
+
+const MapHoverContainer = styled.div.attrs<MapHoverContainerProps>(props => ({
+	style: {
+		display: props.$visible ? "block" : "none",
+		top: props.$position[1],
+		left: props.$position[0],
+	},
+}))<MapHoverContainerProps>`
+	top: 0;
+	left: 0;
+	position: absolute;
+
+	background-color: rgba(255, 255, 255, 0.85);
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	padding: 1rem;
+	max-width: 50vw;
+
+	border-radius: 0.25rem;
+
+	@media ${breakpointMediaDown(BREAKPOINT_SM)} {
+		max-width: 90vw;
+	}
+
+	z-index: 1000;
+`
+
 const Map = (props: {
 	initialView?: MapView
 	zoomToExtentButton?: Extent
@@ -106,6 +136,13 @@ const Map = (props: {
 	style?: React.CSSProperties
 	className?: string
 }) => {
+	const [hoverContainerProps, setHoverContainerProps] =
+		useState<MapHoverContainerProps>({
+			$position: [0, 0],
+			$visible: false,
+			$text: "",
+		})
+
 	const center = props.initialView ?? {
 		type: "point",
 		coordinates: [0, 0],
@@ -122,7 +159,7 @@ const Map = (props: {
 				location =>
 					new Feature({
 						geometry: new Point(location.coordinates),
-						name: location.name,
+						htmlTitle: location.htmlTitle,
 						onClick: location.onClick,
 					}),
 			),
@@ -148,17 +185,6 @@ const Map = (props: {
 						}),
 					}),
 				})
-			}),
-			new VectorLayer({
-				source: new VectorSource({
-					features: [new Feature(new Circle([5e6, 7e6], 1e6))],
-				}),
-				style: new Style({
-					image: new CircleStyle({
-						radius: 5,
-						stroke: new StrokeStyle({ color: "red", width: 1 }),
-					}),
-				}),
 			}),
 		]
 	}, [icons])
@@ -222,20 +248,53 @@ const Map = (props: {
 				const pixel = map.getEventPixel(e.originalEvent)
 				const features = map.getFeaturesAtPixel(pixel)
 
-				let found = false
+				let feature = null
 				for (const f of features) {
 					if (f.get("onClick")) {
-						found = true
+						feature = f
 						break
 					}
 				}
 
+				const [x, y] = [
+					e.originalEvent.clientX,
+					e.originalEvent.clientY,
+				]
+
 				const target = map.getTarget()
 				if (target && typeof target !== "string") {
-					target.style.cursor = found ? "pointer" : ""
+					target.style.cursor = feature !== null ? "pointer" : ""
+					const targetTitle =
+						feature !== null ? feature.get("htmlTitle") : ""
+					if (target.title !== targetTitle) {
+						target.title = targetTitle ?? ""
+					}
+
+					if (targetTitle && feature) {
+						setHoverContainerProps({
+							$visible: true,
+							$position: [x, y],
+							$text: targetTitle,
+						})
+					} else {
+						setHoverContainerProps({
+							$visible: false,
+							$position: [0, 0],
+							$text: "",
+						})
+					}
 				}
 			}
 			map.on("pointermove", pointerMoveCallback)
+
+			const pointerLeaveCallback = () => {
+				setHoverContainerProps({
+					$visible: false,
+					$position: [0, 0],
+					$text: "",
+				})
+			}
+			map.on("pointerout", pointerLeaveCallback)
 
 			const clickCallback = function (e: any) {
 				const pixel = map.getEventPixel(e.originalEvent)
@@ -254,6 +313,7 @@ const Map = (props: {
 			return () => {
 				map.un("pointermove", pointerMoveCallback)
 				map.un("click", clickCallback)
+				map.un("pointerout", pointerLeaveCallback)
 			}
 		}
 	}, [map, iconsLayers])
@@ -298,11 +358,16 @@ const Map = (props: {
 	}, [map, extentToZoom])
 
 	return (
-		<MapContainer
-			ref={setRef}
-			className={props.className}
-			style={props.style}
-		></MapContainer>
+		<>
+			<MapHoverContainer {...hoverContainerProps}>
+				{hoverContainerProps.$text}
+			</MapHoverContainer>
+			<MapContainer
+				ref={setRef}
+				className={props.className}
+				style={props.style}
+			></MapContainer>
+		</>
 	)
 }
 

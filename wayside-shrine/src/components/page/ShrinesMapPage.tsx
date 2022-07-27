@@ -1,14 +1,19 @@
-import { graphql, useStaticQuery } from "gatsby"
-import { getSrc } from "gatsby-plugin-image"
-import { boundingExtent } from "ol/extent"
-import React, { useMemo } from "react"
-import styled from "styled-components"
+import { graphql, useStaticQuery } from "gatsby";
+import { getSrc } from "gatsby-plugin-image";
+import { boundingExtent } from "ol/extent";
+import React, { useMemo } from "react";
+import styled from "styled-components";
 
-import Map, { fromLonLat, MapIcon } from "@app/components/map/Map"
-import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
-import { useNavigate } from "tws-common/react/hook/useNavigate"
-import { asRequiredRecursively } from "tws-common/typing/required"
+
+import Map, { fromLonLat, MapIcon } from "@app/components/map/Map";
+import { useAppTranslationSelector } from "@app/trans/AppTranslation";
+
+
+
+import { useNavigate } from "tws-common/react/hook/useNavigate";
+import { asRequiredRecursively } from "tws-common/typing/required";
+
 
 const InnerContainer = styled.section`
 	display: grid;
@@ -106,7 +111,7 @@ export const ShrinesMapPage = () => {
 			},
 			locations: entries.map(v => ({
 				coordinates: v.processedCoordinates,
-				name: v.title,
+				htmlTitle: v.title,
 				onClick: () => {
 					navigate(v.path)
 				},
