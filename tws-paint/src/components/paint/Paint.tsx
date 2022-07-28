@@ -1,10 +1,7 @@
-import React, { FC } from "react"
+import React from "react"
 import styled from "styled-components"
 
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
-import { PaintScene } from "@app/domain/paint/defines"
-
-export type SceneRenderer = FC<PaintScene>
 
 const InnerContainer = styled.div`
 	display: grid;
