@@ -1,6 +1,7 @@
 import * as path from "path";
 import type { GatsbyNode } from "gatsby";
 
+
 export const createPages: GatsbyNode["createPages"] = async ({
 	graphql,
 	actions,
@@ -30,6 +31,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 						childMarkdownRemark {
 							fields {
 								path
+								uuidPath
 							}
 							frontmatter {
 								slug
@@ -60,8 +62,20 @@ export const createPages: GatsbyNode["createPages"] = async ({
 					index === shrines.length - 1 ? null : shrines[index + 1].id
 
 				const shrinePath = shrine.childMarkdownRemark.fields.path
+				const uuidPath = shrine.childMarkdownRemark.fields.uuidPath
+				
 				createPage({
 					path: shrinePath,
+					component: templatePath,
+					context: {
+						id: shrine.id,
+						previousShrineId,
+						nextShrineId,
+					},
+				})
+
+				createPage({
+					path: uuidPath,
 					component: templatePath,
 					context: {
 						id: shrine.id,
@@ -133,13 +147,20 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({
 	) {
 		const slug = (node as any).frontmatter.slug ?? ""
 		const language = (node as any).frontmatter.language ?? ""
+		const uuid = (node as any).frontmatter.uuid
 
 		const path = `/${language.toLowerCase()}/shrine/${slug}`
+		const uuidPath = `/shrine/${uuid}`
 
 		createNodeField({
 			node,
 			name: "path",
 			value: path,
+		})
+		createNodeField({
+			node,
+			name: "uuidPath",
+			value: uuidPath,
 		})
 		createNodeField({
 			node,
