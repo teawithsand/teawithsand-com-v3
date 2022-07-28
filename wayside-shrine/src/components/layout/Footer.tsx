@@ -13,7 +13,7 @@ const ParentContainer = styled.nav`
 	border-top: 1px solid rgba(0, 0, 0, 0.2);
 	display: grid;
 	color: rgba(0, 0, 0, 0.5);
-	font-size: 2rem;
+	font-size: 1rem;
 
 	text-align: right;
 
