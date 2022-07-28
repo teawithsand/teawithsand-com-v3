@@ -27,6 +27,9 @@ export const noCommitApplyPaintAction = createAction<PaintAction>(
 export const commitPaintAction = createAction<PaintAction>(
 	`${actionPrefix}/commitPaintAction`,
 )
+export const resetUndoStack = createAction<void>(
+	`${actionPrefix}/resetUndoStack`,
+)
 export const undoPaintActions = createAction<number>(
 	`${actionPrefix}/undoPaintActions`,
 )

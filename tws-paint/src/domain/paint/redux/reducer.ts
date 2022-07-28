@@ -7,6 +7,7 @@ import {
 	commitPaintAction,
 	noCommitApplyPaintAction,
 	redoPaintActions,
+	resetUndoStack,
 	setUncommittedMutations,
 	undoPaintActions,
 } from "@app/domain/paint/redux/actions"
@@ -147,6 +148,12 @@ export const paintStateReducer = createReducer<PaintState>(
 			})
 			.addCase(commitPaintAction, (state, action) => {
 				applyPaintAction(state, action.payload)
+			})
+			.addCase(resetUndoStack, state => {
+				state.actionsState.redoStack = []
+				state.actionsState.actionsStack = []
+				state.sceneState.snapshotLayers =
+					state.sceneState.currentScene.layers
 			})
 			.addCase(undoPaintActions, (state, action) => {
 				for (let i = 0; i < action.payload; i++) {
