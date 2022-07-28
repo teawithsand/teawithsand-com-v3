@@ -16,6 +16,8 @@ export const usePaintScene = (): PaintScene =>
 
 export const usePresentationDimensions = () => {
 	const scene = usePaintScene()
+	const viewOptions = usePaintSelector(s => s.uiState.viewOptions)
+
 	const { height: rawHeight, width: rawWidth } = useWindowDimensions({
 		height: 1,
 		width: 1,
@@ -38,15 +40,25 @@ export const usePresentationDimensions = () => {
 	const ratioWidth = windowWidth / sceneWidth
 	const ratioHeight = windowHeight / sceneHeight
 
-	const ratio = Math.min(ratioWidth, ratioHeight)
+	const ratio = Math.min(1, Math.min(ratioWidth, ratioHeight))
 
-	const width = sceneWidth * ratio
-	const height = sceneHeight * ratio
+	const cappedWidth = sceneWidth * ratio
+	const cappedHeight = sceneHeight * ratio
+
+	const desiredWidth = cappedWidth * viewOptions.zoomFactor
+	const desiredHeight = cappedHeight * viewOptions.zoomFactor
+
+	const width = Math.min(cappedWidth, desiredWidth)
+	const height = Math.min(cappedHeight, desiredHeight)
+
+	// This emulates zooming in to the bottom right corner behavior
+	const translateX = -(desiredWidth - width)
+	const translateY = -(desiredHeight - height)
 
 	return {
 		width,
 		height,
-		translateX: 0,
-		translateY: 0,
+		translateX,
+		translateY,
 	}
 }
