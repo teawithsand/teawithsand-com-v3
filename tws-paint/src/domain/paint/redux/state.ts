@@ -32,7 +32,7 @@ export type PaintUIState = {
 	viewOptions: PaintViewOptions
 
 	activeLayerIndex: number
-	drawColor: Color
+	strokeColor: Color
 	fillColor: Color | null
 }
 

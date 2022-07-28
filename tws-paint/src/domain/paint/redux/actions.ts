@@ -10,9 +10,9 @@ import {
 
 const actionPrefix = claimId(NS_REDUX_ACTION_PREFIX, "tws-paint")
 
-export const setUncommittedMutations = createAction<
-	PaintSceneMutation[] | null
->(`${actionPrefix}/setUncommittedMutations`)
+export const setUncommittedMutations = createAction<PaintSceneMutation[]>(
+	`${actionPrefix}/setUncommittedMutations`,
+)
 
 /**
  * Creates and pushes new action, which pushes these mutations to active layer and clears uncommitted mutations.
@@ -25,6 +25,9 @@ export const setInitialMutations = createAction<PaintSceneMutation[]>(
 	`${actionPrefix}/setInitialMutations`,
 )
 
+export const noCommitApplyPaintAction = createAction<PaintAction>(
+	`${actionPrefix}/noCommitApplyPaintAction`,
+)
 export const commitPaintAction = createAction<PaintAction>(
 	`${actionPrefix}/commitPaintAction`,
 )
