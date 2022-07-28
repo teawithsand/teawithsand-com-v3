@@ -18,7 +18,8 @@
     "streetsidesoftware.code-spell-checker-polish",
     "esbenp.prettier-vscode",
     "ms-vscode.vscode-typescript-next",
-    "styled-components.vscode-styled-components"
+    "styled-components.vscode-styled-components",
+    "ms-python.python"
 	],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
