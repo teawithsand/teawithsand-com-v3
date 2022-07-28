@@ -20,7 +20,7 @@ build_local tws-gatsby-plugin
 init_yalc wayside-shrine
 init_yalc palm-abooks-pwa
 init_yalc tws-blog
-init_yalc tws-paint-app
+init_yalc tws-paint
 
 build_local tws-common
 build_local tws-gatsby-plugin
