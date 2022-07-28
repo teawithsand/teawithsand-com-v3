@@ -46,8 +46,8 @@ const InnerPaint = () => {
 				style={{
 					backgroundColor: "white",
 				}}
-				height={300}
-				width={300}
+				presentationHeight={300}
+				presentationWidth={300}
 				scene={scene}
 			/>
 		</InnerContainer>

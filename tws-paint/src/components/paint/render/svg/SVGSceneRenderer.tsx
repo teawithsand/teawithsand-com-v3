@@ -10,7 +10,7 @@ const InnerRenderer = (
 	},
 	ref: Ref<SVGSVGElement>,
 ) => {
-	const { scene, width, height, style, className } = props
+	const { scene, presentationWidth: width, presentationHeight: height, style, className } = props
 
 	const { options } = scene
 
@@ -43,8 +43,8 @@ export const SVGSceneRenderer = memo(
 	forwardRef(InnerRenderer),
 	(prevState, nextState) =>
 		prevState.scene === nextState.scene && // this one is most likely to change
-		prevState.width === nextState.width &&
-		prevState.height === nextState.height &&
+		prevState.presentationWidth === nextState.presentationWidth &&
+		prevState.presentationHeight === nextState.presentationHeight &&
 		prevState.viewBox.every((point, i) =>
 			point.every(
 				(coordinate, j) => coordinate === nextState.viewBox[i][j],

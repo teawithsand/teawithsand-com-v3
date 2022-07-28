@@ -4,8 +4,8 @@ import { PaintScene } from "@app/domain/paint/defines"
 
 export type SceneRendererProps = {
 	scene: PaintScene
-	width: number
-	height: number
+	presentationWidth: number
+	presentationHeight: number
 }
 
 export type SceneRenderer = FC<SceneRendererProps>
