@@ -6,6 +6,7 @@ export enum PaintActionType {
 	SCENE_MUTATIONS = "scene-mutations",
 	SET_FILL_COLOR = "fill-color",
 	SET_STROKE_COLOR = "stroke-color",
+	SET_ZOOM = "set-zoom",
 }
 
 export type PaintAction =
@@ -20,4 +21,8 @@ export type PaintAction =
 	| {
 			type: PaintActionType.SET_STROKE_COLOR
 			color: Color
+	  }
+	| {
+			type: PaintActionType.SET_ZOOM
+			zoomFactor: number
 	  }

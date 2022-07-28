@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
 import React, { useMemo } from "react"
+import { Helmet } from "react-helmet"
 import { Provider } from "react-redux"
 import styled from "styled-components"
 
+import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
 import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
 import { PaintActionType } from "@app/domain/paint/defines/action"
@@ -92,6 +94,14 @@ export const Paint = () => {
 
 	return (
 		<Provider store={store}>
+			<Helmet>
+				<meta
+					name="viewport"
+					content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,shrink-to-fit=no"
+				/>
+			</Helmet>
+			
+			<ZoomHandler />
 			<InnerPaint />
 		</Provider>
 	)

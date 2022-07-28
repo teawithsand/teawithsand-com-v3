@@ -48,6 +48,8 @@ const applyPaintAction = (
 		state.uiState.fillColor = action.color
 	} else if (action.type === PaintActionType.SET_STROKE_COLOR) {
 		state.uiState.strokeColor = action.color
+	} else if (action.type === PaintActionType.SET_ZOOM) {
+		state.uiState.viewOptions.zoomFactor = action.zoomFactor
 	} else {
 		throw new Error(`Unknown action type: ${(action as any).type}`)
 	}
