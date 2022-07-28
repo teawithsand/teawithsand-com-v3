@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
-import { requireNoSSR } from "tws-common/ssr"
+import { useEffect, useState } from "react";
+import { requireNoSSR } from "tws-common/ssr";
+
 
 export type Orientation = "vertical" | "horizontal" | "square"
 export type ClientDimensions = {
@@ -30,7 +31,7 @@ export default function useClientDimensions(
 	if (!ssrInitialize) requireNoSSR()
 
 	const [windowDimensions, setWindowDimensions] = useState(
-		ssrInitialize ?? getClientDimensions(),
+		() => ssrInitialize ?? getClientDimensions(),
 	)
 
 	useEffect(() => {
@@ -42,7 +43,7 @@ export default function useClientDimensions(
 
 		window.addEventListener("resize", handleResize)
 		return () => window.removeEventListener("resize", handleResize)
-	}, [])
+	}, [setWindowDimensions])
 
 	return windowDimensions
 }

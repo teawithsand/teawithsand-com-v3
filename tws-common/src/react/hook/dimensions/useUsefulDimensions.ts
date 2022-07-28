@@ -50,7 +50,7 @@ export default function useUsefulDimensions(): UsefulDimensions {
 
 		window.addEventListener("resize", handleResize)
 		return () => window.removeEventListener("resize", handleResize)
-	}, [])
+	}, [setWindowDimensions])
 
 	return windowDimensions
 }
