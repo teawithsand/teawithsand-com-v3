@@ -1,8 +1,5 @@
 import React, { ReactElement, ReactFragment, ReactNode } from "react"
 
-import Footer from "@app/components/layout/Footer"
-import AppNavbar from "@app/components/layout/Navbar"
-
 import { GlobalIdManager } from "tws-common/misc/GlobalIDManager"
 import { DialogBoundary } from "tws-common/react/components/dialog"
 import { QueryClient, QueryClientProvider } from "tws-common/react/hook/query"
@@ -32,9 +29,7 @@ const Layout = (props: {
 		<SSRProvider>
 			<QueryClientProvider client={queryClient}>
 				<ProvideFixedLanguage language="pl-PL">
-					<AppNavbar />
 					<DialogBoundary>{props.children}</DialogBoundary>
-					<Footer />
 				</ProvideFixedLanguage>
 			</QueryClientProvider>
 		</SSRProvider>
