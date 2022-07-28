@@ -273,7 +273,7 @@ const Map = (props: {
 					if (targetTitle && feature) {
 						setHoverContainerProps({
 							$visible: true,
-							$position: [x, y],
+							$position: [x + 20, y + 20],
 							$text: targetTitle,
 						})
 					} else {
@@ -287,6 +287,7 @@ const Map = (props: {
 			}
 			map.on("pointermove", pointerMoveCallback)
 
+			/*
 			const pointerLeaveCallback = () => {
 				setHoverContainerProps({
 					$visible: false,
@@ -295,6 +296,7 @@ const Map = (props: {
 				})
 			}
 			map.on("pointerout", pointerLeaveCallback)
+			*/
 
 			const clickCallback = function (e: any) {
 				const pixel = map.getEventPixel(e.originalEvent)
@@ -313,7 +315,7 @@ const Map = (props: {
 			return () => {
 				map.un("pointermove", pointerMoveCallback)
 				map.un("click", clickCallback)
-				map.un("pointerout", pointerLeaveCallback)
+				// map.un("pointerout", pointerLeaveCallback)
 			}
 		}
 	}, [map, iconsLayers])
