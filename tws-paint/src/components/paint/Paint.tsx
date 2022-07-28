@@ -41,7 +41,8 @@ const InnerContainer = styled.div`
 const InnerPaint = () => {
 	const scene = usePaintScene()
 
-	const { width, height } = usePresentationDimensions()
+	const { width, height, translateX, translateY } =
+		usePresentationDimensions()
 
 	return (
 		<InnerContainer>
@@ -49,6 +50,7 @@ const InnerPaint = () => {
 			<SVGSceneRenderer
 				style={{
 					backgroundColor: "white",
+					transform: `translateX(${translateX}px) translateY(${translateY}px)`,
 				}}
 				presentationWidth={width}
 				presentationHeight={height}

@@ -31,6 +31,8 @@ export const usePresentationDimensions = () => {
 		return {
 			width: 0,
 			height: 0,
+			translateX: 0,
+			translateY: 0,
 		}
 
 	const ratioWidth = windowWidth / sceneWidth
@@ -44,5 +46,7 @@ export const usePresentationDimensions = () => {
 	return {
 		width,
 		height,
+		translateX: 0,
+		translateY: 0,
 	}
 }
