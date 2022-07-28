@@ -1,15 +1,18 @@
 import React from "react"
 
 import PageContainer from "@app/components/layout/PageContainer"
+import { Paint } from "@app/components/paint/Paint"
+
+import { wrapNoSSR } from "tws-common/react/components/NoSSR"
 
 const IndexPage = () => {
 	return (
 		<PageContainer>
 			<main>
-				Hell world!
+				<Paint />
 			</main>
 		</PageContainer>
 	)
 }
 
-export default IndexPage
+export default wrapNoSSR(IndexPage)
