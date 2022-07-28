@@ -5,10 +5,11 @@ import styled from "styled-components"
 
 import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
-import { PaintElementType } from "@app/domain/paint/defines"
 import { PaintActionType } from "@app/domain/paint/defines/action"
 import { commitPaintAction, paintStateReducer } from "@app/domain/paint/redux"
 import { usePaintScene } from "@app/domain/paint/redux/selector"
+
+import useWindowDimensions from "tws-common/react/hook/dimensions/useWindowDimensions"
 
 const InnerContainer = styled.div`
 	display: grid;
@@ -39,6 +40,44 @@ const InnerContainer = styled.div`
 const InnerPaint = () => {
 	const scene = usePaintScene()
 
+	const { height: rawHeight, width: rawWidth } = useWindowDimensions({
+		height: 1,
+		width: 1,
+		orientation: "square",
+	})
+
+	const windowHeight = Math.max(rawHeight, 1)
+	const windowWidth = Math.max(rawWidth, 1)
+
+	const { sceneHeight, sceneWidth } = scene.options
+
+	const [widthMin, widthMax] = [
+		Math.min(sceneWidth, windowWidth),
+		Math.max(sceneWidth, windowWidth),
+	]
+	const [heightMin, heightMax] = [
+		Math.min(sceneHeight, windowHeight),
+		Math.max(sceneHeight, windowHeight),
+	]
+
+	if (widthMin === 0 || heightMin === 0) {
+		// todo handle this case
+	}
+	// assume that window > scene
+
+	const ratioWidth = windowWidth / sceneWidth
+	const ratioHeight = windowHeight / sceneHeight
+
+	const ratio = Math.min(ratioWidth, ratioHeight)
+	console.error("Ratio", {
+		ratio,
+		windowHeight,
+		sceneHeight,
+	})
+
+	const widthFinal = sceneWidth * ratio
+	const heightFinal = sceneHeight * ratio
+
 	return (
 		<InnerContainer>
 			<SidePanel />
@@ -46,8 +85,8 @@ const InnerPaint = () => {
 				style={{
 					backgroundColor: "white",
 				}}
-				presentationHeight={300}
-				presentationWidth={300}
+				presentationWidth={widthFinal}
+				presentationHeight={heightFinal}
 				scene={scene}
 			/>
 		</InnerContainer>
@@ -61,28 +100,15 @@ export const Paint = () => {
 		})
 
 		store.dispatch(
+			// Do kind of initial mutation
+			// to ensure that layer zero is there
 			commitPaintAction({
 				type: PaintActionType.SCENE_MUTATIONS,
 				mutations: [
 					{
 						type: "push-layer",
 						layer: {
-							elements: [
-								{
-									type: PaintElementType.SIMPLE_PATH,
-									points: [
-										[0, 0],
-										[50, 10],
-										[100, 100],
-									],
-									stroke: {
-										color: [0, 0, 0, 1],
-										lineCap: "butt",
-										lineJoin: "bevel",
-										size: 10,
-									},
-								},
-							],
+							elements: [],
 							options: {
 								isLocked: false,
 								isVisible: true,
