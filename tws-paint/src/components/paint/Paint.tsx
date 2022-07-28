@@ -7,9 +7,10 @@ import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRende
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
 import { PaintActionType } from "@app/domain/paint/defines/action"
 import { commitPaintAction, paintStateReducer } from "@app/domain/paint/redux"
-import { usePaintScene } from "@app/domain/paint/redux/selector"
-
-import useWindowDimensions from "tws-common/react/hook/dimensions/useWindowDimensions"
+import {
+	usePaintScene,
+	usePresentationDimensions,
+} from "@app/domain/paint/redux/selector"
 
 const InnerContainer = styled.div`
 	display: grid;
@@ -40,43 +41,7 @@ const InnerContainer = styled.div`
 const InnerPaint = () => {
 	const scene = usePaintScene()
 
-	const { height: rawHeight, width: rawWidth } = useWindowDimensions({
-		height: 1,
-		width: 1,
-		orientation: "square",
-	})
-
-	const windowHeight = Math.max(rawHeight, 1)
-	const windowWidth = Math.max(rawWidth, 1)
-
-	const { sceneHeight, sceneWidth } = scene.options
-
-	const [widthMin, widthMax] = [
-		Math.min(sceneWidth, windowWidth),
-		Math.max(sceneWidth, windowWidth),
-	]
-	const [heightMin, heightMax] = [
-		Math.min(sceneHeight, windowHeight),
-		Math.max(sceneHeight, windowHeight),
-	]
-
-	if (widthMin === 0 || heightMin === 0) {
-		// todo handle this case
-	}
-	// assume that window > scene
-
-	const ratioWidth = windowWidth / sceneWidth
-	const ratioHeight = windowHeight / sceneHeight
-
-	const ratio = Math.min(ratioWidth, ratioHeight)
-	console.error("Ratio", {
-		ratio,
-		windowHeight,
-		sceneHeight,
-	})
-
-	const widthFinal = sceneWidth * ratio
-	const heightFinal = sceneHeight * ratio
+	const { width, height } = usePresentationDimensions()
 
 	return (
 		<InnerContainer>
@@ -85,8 +50,8 @@ const InnerPaint = () => {
 				style={{
 					backgroundColor: "white",
 				}}
-				presentationWidth={widthFinal}
-				presentationHeight={heightFinal}
+				presentationWidth={width}
+				presentationHeight={height}
 				scene={scene}
 			/>
 		</InnerContainer>
