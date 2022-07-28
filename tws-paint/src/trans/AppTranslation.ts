@@ -19,14 +19,23 @@ export default interface AppTranslation {
 	error: {
 		unknown: string
 	}
+	paint: {
+		panel: {
+			show: string
+			hide: string
+		}
+	}
 }
 
 const translations = new Map<Language, AppTranslation>()
 
-translations.set("en-US", AppTranslationEN_US)
+translations.set(
+	AppTranslationEN_US.common.language.language,
+	AppTranslationEN_US,
+)
 
 export const TranslatorContext = createTranslatorContext<AppTranslation>(
-	new Translator(translations),
+	new Translator(translations, "en-US"),
 )
 
 const hooks = makeTranslationHooks(TranslatorContext)
