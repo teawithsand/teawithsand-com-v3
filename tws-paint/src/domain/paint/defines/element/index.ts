@@ -6,6 +6,8 @@ export enum PaintElementType {
 	TEXT = "text",
 }
 
+// TODO(teawithsand): create element comparing function
+
 export type PaintElement =
 	| ({
 			type: PaintElementType.SIMPLE_PATH
