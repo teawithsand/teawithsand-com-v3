@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet"
 import { Provider } from "react-redux"
 import styled from "styled-components"
 
+import { UndoRedoHandler } from "@app/components/paint/handler/UndoRedoHandler"
 import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
 import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
@@ -100,7 +101,8 @@ export const Paint = () => {
 					content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,shrink-to-fit=no"
 				/>
 			</Helmet>
-			
+
+			<UndoRedoHandler />
 			<ZoomHandler />
 			<InnerPaint />
 		</Provider>
