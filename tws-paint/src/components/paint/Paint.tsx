@@ -1,7 +1,14 @@
-import React from "react"
+import { configureStore } from "@reduxjs/toolkit"
+import React, { useMemo } from "react"
+import { Provider } from "react-redux"
 import styled from "styled-components"
 
+import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
+import { PaintElementType } from "@app/domain/paint/defines"
+import { PaintActionType } from "@app/domain/paint/defines/action"
+import { commitPaintAction, paintStateReducer } from "@app/domain/paint/redux"
+import { usePaintScene } from "@app/domain/paint/redux/selector"
 
 const InnerContainer = styled.div`
 	display: grid;
@@ -29,10 +36,70 @@ const InnerContainer = styled.div`
 		20px 20px;
 `
 
-export const Paint = () => {
+const InnerPaint = () => {
+	const scene = usePaintScene()
+
 	return (
 		<InnerContainer>
 			<SidePanel />
+			<SVGSceneRenderer
+				style={{
+					backgroundColor: "white",
+				}}
+				height={300}
+				width={300}
+				scene={scene}
+			/>
 		</InnerContainer>
+	)
+}
+
+export const Paint = () => {
+	const store = useMemo(() => {
+		const store = configureStore({
+			reducer: paintStateReducer,
+		})
+
+		store.dispatch(
+			commitPaintAction({
+				type: PaintActionType.SCENE_MUTATIONS,
+				mutations: [
+					{
+						type: "push-layer",
+						layer: {
+							elements: [
+								{
+									type: PaintElementType.SIMPLE_PATH,
+									points: [
+										[0, 0],
+										[50, 10],
+										[100, 100],
+									],
+									stroke: {
+										color: [0, 0, 0, 1],
+										lineCap: "butt",
+										lineJoin: "bevel",
+										size: 10,
+									},
+								},
+							],
+							options: {
+								isLocked: false,
+								isVisible: true,
+								name: "Layer 0",
+							},
+						},
+					},
+				],
+			}),
+		)
+
+		return store
+	}, [])
+
+	return (
+		<Provider store={store}>
+			<InnerPaint />
+		</Provider>
 	)
 }
