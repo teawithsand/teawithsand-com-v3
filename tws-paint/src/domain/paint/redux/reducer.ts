@@ -43,8 +43,6 @@ const applyPaintAction = (
 			throw new Error(
 				"no-commit actions can't touch mutations, as they have to be applied in-order for ctrl+z to work",
 			)
-
-		recomputeScene(state)
 	} else if (action.type === PaintActionType.SET_FILL_COLOR) {
 		state.uiState.fillColor = action.color
 	} else if (action.type === PaintActionType.SET_STROKE_COLOR) {
@@ -84,9 +82,13 @@ const applyPaintAction = (
 		// quite classic behavior: doing something cancels possibility of doing ctrl + y or ctrl + shift + z
 		state.actionsState.redoStack = []
 	}
+
+	if (action.type === PaintActionType.SCENE_MUTATIONS) {
+		recomputeScene(state)
+	}
 }
 
-createReducer<PaintState>(
+export const paintStateReducer = createReducer<PaintState>(
 	{
 		sceneState: {
 			currentScene: {

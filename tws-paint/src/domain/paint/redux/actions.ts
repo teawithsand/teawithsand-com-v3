@@ -1,14 +1,12 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction } from "@reduxjs/toolkit"
 
+import { PaintSceneMutation } from "@app/domain/paint/defines"
+import { PaintAction } from "@app/domain/paint/defines/action"
 
-
-import { PaintSceneMutation } from "@app/domain/paint/defines";
-import { PaintAction } from "@app/domain/paint/defines/action";
-
-
-
-import { claimId, NS_REDUX_ACTION_PREFIX } from "tws-common/misc/GlobalIDManager";
-
+import {
+	claimId,
+	NS_REDUX_ACTION_PREFIX,
+} from "tws-common/misc/GlobalIDManager"
 
 const actionPrefix = claimId(NS_REDUX_ACTION_PREFIX, "tws-paint")
 
