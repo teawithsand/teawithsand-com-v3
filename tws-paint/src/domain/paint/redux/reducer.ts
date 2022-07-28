@@ -3,27 +3,32 @@ import { createReducer } from "@reduxjs/toolkit"
 import { applyMutationOnDraft } from "@app/domain/paint/defines"
 import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
 import {
-	commitMutations,
+	commitMutationsUsingAction,
 	commitPaintAction,
 	noCommitApplyPaintAction,
 	redoPaintActions,
-	setInitialMutations,
 	setUncommittedMutations,
 	undoPaintActions,
 } from "@app/domain/paint/redux/actions"
-import { PaintSceneState, PaintState } from "@app/domain/paint/redux/state"
+import { PaintState } from "@app/domain/paint/redux/state"
 
-const recomputeScene = (state: PaintSceneState): void => {
-	const mutations = [
-		...state.initialMutations,
-		...state.committedMutations,
-		...state.uncommittedMutations,
-	]
+const recomputeScene = (state: PaintState): void => {
+	const mutations = state.actionsState.actionsStack.flatMap(a => {
+		if (a.type === PaintActionType.SCENE_MUTATIONS) {
+			return a.mutations
+		} else {
+			return []
+		}
+	})
 
-	// For now let's go naive
-	// No reverse mutations applying here
-	state.layers = []
-	mutations.forEach(m => applyMutationOnDraft(state, m))
+	state.sceneState.currentScene.layers = [...state.sceneState.snapshotLayers]
+	mutations.forEach(m =>
+		applyMutationOnDraft(state.sceneState.currentScene, m),
+	)
+
+	state.sceneState.uncommittedMutations.forEach(m =>
+		applyMutationOnDraft(state.sceneState.currentScene, m),
+	)
 }
 
 const applyPaintAction = (
@@ -34,12 +39,12 @@ const applyPaintAction = (
 	// TODO(teawithsand): make this respect max action count
 
 	if (action.type === PaintActionType.SCENE_MUTATIONS) {
-		state.sceneState.committedMutations = [
-			...state.sceneState.committedMutations,
-			...action.mutations,
-		]
+		if (!push)
+			throw new Error(
+				"no-commit actions can't touch mutations, as they have to be applied in-order for ctrl+z to work",
+			)
 
-		recomputeScene(state.sceneState)
+		recomputeScene(state)
 	} else if (action.type === PaintActionType.SET_FILL_COLOR) {
 		state.uiState.fillColor = action.color
 	} else if (action.type === PaintActionType.SET_STROKE_COLOR) {
@@ -53,6 +58,18 @@ const applyPaintAction = (
 			state.actionsState.actionsStack.length >=
 			state.actionsState.actionsStackMaxSize
 		) {
+			const dropoutAction = state.actionsState.actionsStack[0]
+			if (dropoutAction.type === PaintActionType.SCENE_MUTATIONS) {
+				const tempScene = {
+					layers: [...state.sceneState.snapshotLayers],
+				}
+				dropoutAction.mutations.forEach(m =>
+					applyMutationOnDraft(tempScene, m),
+				)
+
+				state.sceneState.snapshotLayers = tempScene.layers
+			}
+
 			state.actionsState.actionsStack = [
 				...state.actionsState.actionsStack.slice(1),
 				action,
@@ -72,28 +89,19 @@ const applyPaintAction = (
 createReducer<PaintState>(
 	{
 		sceneState: {
-			initialMutations: [
-				{
-					type: "push-layer",
-					layer: {
-						elements: [],
-						options: {
-							isLocked: false,
-							isVisible: true,
-							name: "Layer 0",
-						},
-					},
+			currentScene: {
+				layers: [],
+				options: {
+					offsetX: 0,
+					offsetY: 0,
+					sceneHeight: 100,
+					sceneWidth: 100,
 				},
-			],
-			committedMutations: [],
-			uncommittedMutations: [],
-			layers: [],
-			options: {
-				offsetX: 0,
-				offsetY: 0,
-				sceneHeight: 0,
-				sceneWidth: 0,
 			},
+
+			snapshotLayers: [],
+
+			uncommittedMutations: [],
 		},
 		actionsState: {
 			actionsStackMaxSize: 200,
@@ -116,16 +124,12 @@ createReducer<PaintState>(
 	// niy for now
 	builder =>
 		builder
-			.addCase(setInitialMutations, (state, action) => {
-				state.sceneState.initialMutations = action.payload
-				recomputeScene(state.sceneState)
-			})
 			.addCase(setUncommittedMutations, (state, action) => {
 				state.sceneState.uncommittedMutations = action.payload
-				recomputeScene(state.sceneState)
+				recomputeScene(state)
 			})
-			.addCase(commitMutations, (state, action) => {
-				state.sceneState.committedMutations = []
+			.addCase(commitMutationsUsingAction, (state, action) => {
+				state.sceneState.uncommittedMutations = []
 
 				if (action.payload.length > 0) {
 					applyPaintAction(state, {
@@ -133,7 +137,7 @@ createReducer<PaintState>(
 						mutations: action.payload,
 					})
 				} else {
-					recomputeScene(state.sceneState)
+					recomputeScene(state)
 				}
 			})
 			.addCase(noCommitApplyPaintAction, (state, action) => {
@@ -149,7 +153,7 @@ createReducer<PaintState>(
 					else break
 				}
 
-				recomputeScene(state.sceneState)
+				recomputeScene(state)
 			})
 			.addCase(redoPaintActions, (state, action) => {
 				for (let i = 0; i < action.payload; i++) {
@@ -158,6 +162,6 @@ createReducer<PaintState>(
 					else break
 				}
 
-				recomputeScene(state.sceneState)
+				recomputeScene(state)
 			}),
 )

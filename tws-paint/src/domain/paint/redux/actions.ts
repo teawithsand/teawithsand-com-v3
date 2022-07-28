@@ -1,12 +1,14 @@
-import { createAction } from "@reduxjs/toolkit"
+import { createAction } from "@reduxjs/toolkit";
 
-import { PaintSceneMutation } from "@app/domain/paint/defines"
-import { PaintAction } from "@app/domain/paint/defines/action"
 
-import {
-	claimId,
-	NS_REDUX_ACTION_PREFIX,
-} from "tws-common/misc/GlobalIDManager"
+
+import { PaintSceneMutation } from "@app/domain/paint/defines";
+import { PaintAction } from "@app/domain/paint/defines/action";
+
+
+
+import { claimId, NS_REDUX_ACTION_PREFIX } from "tws-common/misc/GlobalIDManager";
+
 
 const actionPrefix = claimId(NS_REDUX_ACTION_PREFIX, "tws-paint")
 
@@ -17,12 +19,8 @@ export const setUncommittedMutations = createAction<PaintSceneMutation[]>(
 /**
  * Creates and pushes new action, which pushes these mutations to active layer and clears uncommitted mutations.
  */
-export const commitMutations = createAction<PaintSceneMutation[]>(
-	`${actionPrefix}/commitMutationsAndClearUncommitted`,
-)
-
-export const setInitialMutations = createAction<PaintSceneMutation[]>(
-	`${actionPrefix}/setInitialMutations`,
+export const commitMutationsUsingAction = createAction<PaintSceneMutation[]>(
+	`${actionPrefix}/commitMutationsUsingAction`,
 )
 
 export const noCommitApplyPaintAction = createAction<PaintAction>(

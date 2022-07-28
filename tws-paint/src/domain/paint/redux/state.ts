@@ -1,4 +1,5 @@
 import {
+	PaintLayer,
 	PaintScene,
 	PaintSceneMutation,
 	PaintViewOptions,
@@ -8,10 +9,11 @@ import { PaintAction } from "@app/domain/paint/defines/action"
 import { Color } from "tws-common/color"
 
 export type PaintSceneState = {
-	initialMutations: PaintSceneMutation[]
-	committedMutations: PaintSceneMutation[]
 	uncommittedMutations: PaintSceneMutation[]
-} & PaintScene
+
+	snapshotLayers: PaintLayer[]
+	currentScene: PaintScene
+}
 
 /**
  * This is separate from PaintUIState, as in future PaintUIState may require snapshots in order to handle large amount of actions.

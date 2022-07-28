@@ -10,4 +10,4 @@ export const usePaintSelector = <T>(selector: (state: PaintState) => T) =>
 	useSelector(selector)
 
 export const usePaintScene = (): PaintScene =>
-	usePaintSelector(s => s.sceneState)
+	usePaintSelector(s => s.sceneState.currentScene)
