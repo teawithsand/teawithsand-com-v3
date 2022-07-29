@@ -142,6 +142,11 @@ export const Paint = () => {
 	const store = useMemo(() => {
 		const store = configureStore({
 			reducer: paintStateReducer,
+			middleware: getDefaultMiddleware =>
+				getDefaultMiddleware({
+					immutableCheck: false,
+					serializableCheck: false,
+				}),
 		})
 
 		store.dispatch(
