@@ -1,13 +1,19 @@
-import React, { memo, useMemo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 
 import { PaintElement, PaintElementType } from "@app/domain/paint/defines"
+import {
+	PaintEventType,
+	PaintScreenEventType,
+} from "@app/domain/paint/defines/event"
+import { usePaintEventBus } from "@app/domain/paint/event"
 
 import { encodeColor } from "tws-common/color"
 
 const SimplePathElement = (props: {
 	element: PaintElement & { type: PaintElementType.SIMPLE_PATH }
+	onClick?: () => void
 }) => {
-	const { element } = props
+	const { element, onClick } = props
 
 	const { points, stroke } = element
 
@@ -37,14 +43,29 @@ const SimplePathElement = (props: {
 		return res
 	}, [stroke])
 
-	return <path d={pathString} style={style} />
+	return <path onClick={onClick} d={pathString} style={style} />
 }
 
-const InnerRenderer = (props: { element: PaintElement }) => {
-	const { element } = props
+const InnerRenderer = (props: {
+	element: PaintElement
+	layerIndex: number
+	elementIndex: number
+}) => {
+	const { element, layerIndex, elementIndex } = props
+	const bus = usePaintEventBus()
+	const onClick = useCallback(() => {
+		bus.emitEvent({
+			type: PaintEventType.SCREEN,
+			screenEvent: {
+				type: PaintScreenEventType.ELEMENT_CLICK,
+				elementIndex,
+				layerIndex,
+			},
+		})
+	}, [layerIndex, element, bus])
 
 	if (element.type === PaintElementType.SIMPLE_PATH) {
-		return <SimplePathElement element={element} />
+		return <SimplePathElement onClick={onClick} element={element} />
 	} else {
 		throw new Error(
 			`Unsupported element type in svg renderer ${(element as any).type}`,
@@ -54,5 +75,8 @@ const InnerRenderer = (props: { element: PaintElement }) => {
 
 export const SVGElementRenderer = memo(
 	InnerRenderer,
-	(prevProps, nextProps) => prevProps.element === nextProps.element,
+	(prevProps, nextProps) =>
+		prevProps.element === nextProps.element &&
+		prevProps.layerIndex === nextProps.layerIndex &&
+		prevProps.elementIndex === nextProps.elementIndex,
 )

@@ -39,7 +39,7 @@ const InnerRenderer = (
 			}}
 		>
 			{scene.layers.map((e, i) => (
-				<SVGLayerRenderer layer={e} key={i} />
+				<SVGLayerRenderer layerIndex={i} layer={e} key={i} />
 			))}
 		</svg>
 	)

@@ -2,6 +2,8 @@ export enum PaintScreenEventType {
 	POINTER_DOWN = "pointer-down",
 	POINTER_UP = "pointer-up",
 	POINTER_MOVE = "pointer-move",
+
+	ELEMENT_CLICK = "element-click",
 }
 
 export type AnyCursorEvent =  PointerEvent
@@ -15,6 +17,10 @@ export type PaintScreenEvent = {
 		| PaintScreenEventType.POINTER_MOVE
 		| PaintScreenEventType.POINTER_UP
 	event: AnyCursorEvent
+} | {
+	type: PaintScreenEventType.ELEMENT_CLICK,
+	layerIndex: number,
+	elementIndex: number
 }
 
 export enum PaintEventType {

@@ -3,13 +3,18 @@ import React, { memo } from "react"
 import { SVGElementRenderer } from "@app/components/paint/render/svg/SVGElementRenderer"
 import { PaintLayer } from "@app/domain/paint/defines"
 
-const InnerRenderer = (props: { layer: PaintLayer }) => {
+const InnerRenderer = (props: { layer: PaintLayer; layerIndex: number }) => {
 	const { layer } = props
 
 	return (
 		<>
 			{layer.elements.map((v, i) => (
-				<SVGElementRenderer element={v} key={i} />
+				<SVGElementRenderer
+					element={v}
+					key={i}
+					layerIndex={props.layerIndex}
+					elementIndex={i}
+				/>
 			))}
 		</>
 	)
@@ -17,5 +22,7 @@ const InnerRenderer = (props: { layer: PaintLayer }) => {
 
 export const SVGLayerRenderer = memo(
 	InnerRenderer,
-	(prevProps, nextProps) => prevProps.layer === nextProps.layer,
+	(prevProps, nextProps) =>
+		prevProps.layerIndex === nextProps.layerIndex &&
+		prevProps.layer === nextProps.layer,
 )
