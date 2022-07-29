@@ -13,6 +13,7 @@ import {
 	PaintScreenEvent,
 	PaintScreenEventType,
 } from "@app/domain/paint/defines/event"
+import { PaintEventBusProvider } from "@app/domain/paint/event"
 import { commitPaintAction, paintStateReducer } from "@app/domain/paint/redux"
 import {
 	usePaintScene,
@@ -126,16 +127,18 @@ export const Paint = () => {
 
 	return (
 		<Provider store={store}>
-			<Helmet>
-				<meta
-					name="viewport"
-					content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,shrink-to-fit=no"
-				/>
-			</Helmet>
+			<PaintEventBusProvider>
+				<Helmet>
+					<meta
+						name="viewport"
+						content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,shrink-to-fit=no"
+					/>
+				</Helmet>
 
-			<UndoRedoHandler />
-			<ZoomHandler />
-			<InnerPaint />
+				<UndoRedoHandler />
+				<ZoomHandler />
+				<InnerPaint />
+			</PaintEventBusProvider>
 		</Provider>
 	)
 }
