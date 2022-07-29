@@ -1,26 +1,21 @@
-import React, { useCallback, useRef } from "react"
-import { useDispatch } from "react-redux"
+import React, { useCallback, useRef } from "react";
+import { useDispatch } from "react-redux";
 
-import { useAsRef } from "@app/components/util/useAsRef"
-import { PaintElementType, PaintToolType } from "@app/domain/paint/defines"
-import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
-import {
-	PaintEvent,
-	PaintEventType,
-	PaintScreenEventType,
-} from "@app/domain/paint/defines/event"
-import { usePaintEventBus } from "@app/domain/paint/event"
-import {
-	commitPaintActionAndResetUncommitted,
-	setUncommittedPaintActions,
-} from "@app/domain/paint/redux"
-import {
-	useCurrentPaintTool,
-	usePointOperations,
-} from "@app/domain/paint/redux/selector"
 
-import { useSubscribableCallback } from "tws-common/event-bus"
-import { Point } from "tws-common/geometry/point"
+
+import { useAsRef } from "@app/components/util/useAsRef";
+import { PaintElementType, PaintToolType } from "@app/domain/paint/defines";
+import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action";
+import { PaintEvent, PaintEventType, PaintScreenEventType } from "@app/domain/paint/defines/event";
+import { usePaintEventBus } from "@app/domain/paint/event";
+import { commitPaintActionAndResetUncommitted, setUncommittedPaintActions } from "@app/domain/paint/redux";
+import { useCurrentPaintTool, usePointOperations } from "@app/domain/paint/redux/selector";
+
+
+
+import { useSubscribableCallback } from "tws-common/event-bus";
+import { Point } from "tws-common/geometry/point";
+
 
 type State =
 	| {
@@ -94,6 +89,8 @@ export const PathToolHandler = () => {
 			}
 
 			if (event.type === PaintScreenEventType.POINTER_DOWN) {
+				event.event.preventDefault()
+				
 				const screenPoint: Point = [
 					event.event.clientX,
 					event.event.clientY,
@@ -108,8 +105,12 @@ export const PathToolHandler = () => {
 					points: [canvasPoint],
 				}
 			} else if (event.type === PaintScreenEventType.POINTER_UP) {
+				event.event.preventDefault()
+
 				ensureIdleState()
 			} else if (event.type === PaintScreenEventType.POINTER_MOVE) {
+				event.event.preventDefault()
+
 				const screenPoint: Point = [
 					event.event.clientX,
 					event.event.clientY,
