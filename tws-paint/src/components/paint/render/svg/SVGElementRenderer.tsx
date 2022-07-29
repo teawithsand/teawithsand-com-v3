@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react"
+import React, { memo, MouseEvent, useCallback, useMemo } from "react"
 
 import { PaintElement, PaintElementType } from "@app/domain/paint/defines"
 import {
@@ -11,7 +11,7 @@ import { encodeColor } from "tws-common/color"
 
 const SimplePathElement = (props: {
 	element: PaintElement & { type: PaintElementType.SIMPLE_PATH }
-	onClick?: () => void
+	onClick?: (e: unknown) => void
 }) => {
 	const { element, onClick } = props
 
@@ -53,16 +53,20 @@ const InnerRenderer = (props: {
 }) => {
 	const { element, layerIndex, elementIndex } = props
 	const bus = usePaintEventBus()
-	const onClick = useCallback(() => {
-		bus.emitEvent({
-			type: PaintEventType.SCREEN,
-			screenEvent: {
-				type: PaintScreenEventType.ELEMENT_CLICK,
-				elementIndex,
-				layerIndex,
-			},
-		})
-	}, [layerIndex, element, bus])
+	const onClick = useCallback(
+		(e: unknown) => {
+			bus.emitEvent({
+				type: PaintEventType.SCREEN,
+				screenEvent: {
+					type: PaintScreenEventType.ELEMENT_CLICK,
+					elementIndex,
+					layerIndex,
+					event: (e as any).nativeEvent,
+				},
+			})
+		},
+		[layerIndex, element, bus],
+	)
 
 	if (element.type === PaintElementType.SIMPLE_PATH) {
 		return <SimplePathElement onClick={onClick} element={element} />
