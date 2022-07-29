@@ -1,11 +1,11 @@
-import { StickySubscribable } from "../bus/stateSubscribe"
-import { DefaultStickyEventBus } from "../bus/StickyEventBus"
-import {
-	EventSourcing,
-	EventSourcingAdapter,
-	NoHistoryEventSourcing,
-} from "./define"
+import { StickySubscribable } from "../bus/stateSubscribe";
+import { DefaultStickyEventBus } from "../bus/StickyEventBus";
+import { EventSourcing, EventSourcingAdapter, NoHistoryEventSourcing } from "./define";
 
+
+/**
+ * @deprecated This event sourcing stuff is not supported and shouldn't be used.
+ */
 export class InMemoryEventSourcing<A, E>
 	implements EventSourcing<A, E>, NoHistoryEventSourcing<A, E>
 {

@@ -2,6 +2,9 @@ import { StickySubscribable } from "../bus/stateSubscribe"
 import { DefaultStickyEventBus } from "../bus/StickyEventBus"
 import { EventSourcingAdapter, NoHistoryEventSourcing } from "./define"
 
+/**
+ * @deprecated This event sourcing stuff is not supported and shouldn't be used.
+ */
 export class NoHistoryInMemoryEventSourcing<A, E>
 	implements NoHistoryEventSourcing<A, E>
 {
