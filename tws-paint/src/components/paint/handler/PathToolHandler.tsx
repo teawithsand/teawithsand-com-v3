@@ -65,7 +65,7 @@ export const PathToolHandler = () => {
 				if (
 					commit &&
 					state.current.type === "painting" &&
-					state.current.points.length > 1
+					state.current.points.length >= 1
 				) {
 					dispatch(
 						commitMutationsUsingAction([
@@ -94,9 +94,7 @@ export const PathToolHandler = () => {
 					event.event.clientX,
 					event.event.clientY,
 				])
-
-				console.error("Drawing some stuff", state.current.points)
-
+                
 				dispatch(
 					setUncommittedMutations([
 						makeMutationFromPoints([...state.current.points]),
