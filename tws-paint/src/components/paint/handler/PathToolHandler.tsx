@@ -83,15 +83,15 @@ export const PathToolHandler = () => {
 				}
 			}
 
-			const screenPoint: Point = [
-				event.event.clientX,
-				event.event.clientY,
-			]
-
-			const canvasPoint =
-				pointOp.current.screenPointToCanvasPoint(screenPoint)
-
 			if (event.type === PaintScreenEventType.POINTER_DOWN) {
+				const screenPoint: Point = [
+					event.event.clientX,
+					event.event.clientY,
+				]
+
+				const canvasPoint =
+					pointOp.current.screenPointToCanvasPoint(screenPoint)
+
 				ensureIdleState()
 				state.current = {
 					type: "painting",
@@ -100,6 +100,14 @@ export const PathToolHandler = () => {
 			} else if (event.type === PaintScreenEventType.POINTER_UP) {
 				ensureIdleState()
 			} else if (event.type === PaintScreenEventType.POINTER_MOVE) {
+				const screenPoint: Point = [
+					event.event.clientX,
+					event.event.clientY,
+				]
+
+				const canvasPoint =
+					pointOp.current.screenPointToCanvasPoint(screenPoint)
+
 				if (state.current.type !== "painting") return
 
 				state.current.points.push(canvasPoint)
