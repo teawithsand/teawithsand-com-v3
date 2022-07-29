@@ -2,6 +2,7 @@ import React, { CSSProperties, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
+import { SidePanelZoomSection } from "@app/components/paint/side-panel/SidePanelZoomSection"
 import { footerLink } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
@@ -151,6 +152,7 @@ const SidePanelComponent = (props: {
 				<SidePanelToggleButton onClick={() => props.setShown(false)}>
 					{trans.hide}
 				</SidePanelToggleButton>
+				<SidePanelZoomSection />
 			</InnerContainer>
 		</OuterContainer>
 	)
