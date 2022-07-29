@@ -1,7 +1,7 @@
 import { PaintAction } from "@app/domain/paint/defines/action"
 import {
 	applyActionOnPaintStateSnapshot,
-	copyPaintStateSnapshot,
+	copyAndOperateOnStateSnapshot,
 } from "@app/domain/paint/redux/reducer/snapshot"
 import { PaintState } from "@app/domain/paint/redux/state"
 
@@ -34,26 +34,34 @@ export const commitActionToActionStackOnPaintState = (
 export const recomputeSnapshotsOnUncommittedActionsChange = (
 	state: PaintState,
 ) => {
-	state.currentSnapshot = copyPaintStateSnapshot(state.preUncommittedSnapshot)
-
-	for (const action of state.actionsState.uncommittedActions) {
-		applyActionOnPaintStateSnapshot(state.currentSnapshot, action)
-	}
+	state.currentSnapshot = copyAndOperateOnStateSnapshot(
+		state.preUncommittedSnapshot,
+		draft => {
+			for (const action of state.actionsState.uncommittedActions) {
+				applyActionOnPaintStateSnapshot(draft, action)
+			}
+		},
+	)
 }
 
 export const recomputeSnapshotsOnActionStackChange = (state: PaintState) => {
-	state.preUncommittedSnapshot = copyPaintStateSnapshot(
+	state.preUncommittedSnapshot = copyAndOperateOnStateSnapshot(
 		state.preActionsSnapshot,
+		draft => {
+			for (const action of state.actionsState.actionsStack) {
+				applyActionOnPaintStateSnapshot(draft, action)
+			}
+		},
 	)
-	for (const action of state.actionsState.actionsStack) {
-		applyActionOnPaintStateSnapshot(state.preUncommittedSnapshot, action)
-	}
 
-	state.currentSnapshot = copyPaintStateSnapshot(state.preUncommittedSnapshot)
-
-	for (const action of state.actionsState.uncommittedActions) {
-		applyActionOnPaintStateSnapshot(state.currentSnapshot, action)
-	}
+	state.currentSnapshot = copyAndOperateOnStateSnapshot(
+		state.preUncommittedSnapshot,
+		draft => {
+			for (const action of state.actionsState.uncommittedActions) {
+				applyActionOnPaintStateSnapshot(draft, action)
+			}
+		},
+	)
 }
 
 export const pushUndoStackOntoRootSnapshot = (state: PaintState) => {

@@ -1,11 +1,20 @@
+import { current, isDraft } from "@reduxjs/toolkit"
+import produce, { setAutoFreeze } from "immer"
+
 import { applyMutationOnDraft } from "@app/domain/paint/defines"
 import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
 import { PaintStateSnapshot } from "@app/domain/paint/redux/state"
 
-export const copyPaintStateSnapshot = (
+setAutoFreeze(false)
+export const copyAndOperateOnStateSnapshot = (
 	snapshot: PaintStateSnapshot,
+	operate: (snapshot: PaintStateSnapshot) => void,
 ): PaintStateSnapshot => {
-	return JSON.parse(JSON.stringify(snapshot))
+	if (isDraft(snapshot)) {
+		snapshot = current(snapshot)
+	}
+
+	return produce(snapshot, draft => operate(draft))
 }
 
 export const applyActionOnPaintStateSnapshot = (
