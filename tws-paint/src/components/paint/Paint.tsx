@@ -121,6 +121,17 @@ export const Paint = () => {
 				],
 			}),
 		)
+		store.dispatch(
+			// Do kind of initial mutation
+			// to ensure that layer zero is there
+			commitPaintAction({
+				type: PaintActionType.SET_SCENE_DIMENSIONS,
+				dimensions: {
+					height: 1000,
+					width: 1000,
+				},
+			}),
+		)
 
 		return store
 	}, [])

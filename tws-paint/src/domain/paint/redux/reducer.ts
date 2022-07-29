@@ -50,6 +50,14 @@ const applyPaintAction = (
 		state.uiState.globalToolConfig.strokeColor = action.color
 	} else if (action.type === PaintActionType.SET_ZOOM) {
 		state.uiState.viewOptions.zoomFactor = action.zoomFactor
+	} else if (action.type === PaintActionType.SET_SCENE_DIMENSIONS) {
+		state.sceneState.currentScene.options.sceneHeight =
+			action.dimensions.height
+		state.sceneState.currentScene.options.sceneWidth =
+			action.dimensions.width
+	} else if (action.type === PaintActionType.SET_SCENE_OFFSETS) {
+		state.sceneState.currentScene.options.offsetX = action.offsets.offsetX
+		state.sceneState.currentScene.options.offsetY = action.offsets.offsetY
 	} else {
 		throw new Error(`Unknown action type: ${(action as any).type}`)
 	}
