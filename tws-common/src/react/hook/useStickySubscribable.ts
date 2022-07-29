@@ -3,6 +3,8 @@ import { StickySubscribable } from "tws-common/lang/bus/stateSubscribe"
 
 /**
  * Subscribes to specified StickySubscribable using react.
+ *
+ * @deprecated use new hook from root event-bus package
  */
 export const useStickySubscribable = <T>(
 	subscribable: StickySubscribable<T>,
