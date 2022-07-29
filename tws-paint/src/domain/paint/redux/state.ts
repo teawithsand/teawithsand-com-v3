@@ -1,18 +1,20 @@
 import {
-	PaintLayer,
+	PaintGlobalToolConfig,
 	PaintScene,
 	PaintSceneMutation,
 	PaintToolsConfig,
-	PaintGlobalToolConfig,
+	PaintToolType,
 	PaintViewOptions,
 } from "@app/domain/paint/defines"
 import { PaintAction } from "@app/domain/paint/defines/action"
 
 export type PaintSceneState = {
-	uncommittedMutations: PaintSceneMutation[]
+	// in future some things
+	// about that scene
+	// like click element targeting may be implemented
+	// so this parent object is left as-is
 
-	snapshotLayers: PaintLayer[]
-	currentScene: PaintScene
+	scene: PaintScene
 }
 
 /**
@@ -22,6 +24,8 @@ export type PaintSceneState = {
  * Mutations are handled separately, so it's not a problem.
  */
 export type PaintActionsState = {
+	uncommittedActions: PaintAction[]
+
 	actionsStackMaxSize: number
 
 	actionsStack: PaintAction[]
@@ -37,11 +41,51 @@ export type PaintUIState = {
 	toolsConfig: PaintToolsConfig
 }
 
-export type PaintState = {
+export type PaintStateSnapshot = {
 	uiState: PaintUIState
 	sceneState: PaintSceneState
+}
+
+export type PaintState = {
 	actionsState: PaintActionsState
 
-	// there is no such thing as draw state
-	// as it's drawer's responsibility, not redux's to handle it.
+	preActionsSnapshot: PaintStateSnapshot
+	preUncommittedSnapshot: PaintStateSnapshot
+	currentSnapshot: PaintStateSnapshot
+}
+
+export const initialPaintStateSnapshot: PaintStateSnapshot = {
+	sceneState: {
+		scene: {
+			layers: [],
+			options: {
+				offsetX: 0,
+				offsetY: 0,
+				sceneHeight: 300,
+				sceneWidth: 300,
+			},
+		},
+	},
+	uiState: {
+		globalToolConfig: {
+			activeLayerIndex: 0,
+			activeTool: PaintToolType.MOVE,
+			strokeColor: [0, 0, 0, 1],
+			fillColor: null,
+		},
+		toolsConfig: {
+			[PaintToolType.MOVE]: {},
+			[PaintToolType.PATH]: {
+				join: "round",
+				stroke: "round",
+			},
+		},
+		viewOptions: {
+			offsetX: 0,
+			offsetY: 0,
+			viewportHeight: 0,
+			viewportWidth: 0,
+			zoomFactor: 1,
+		},
+	},
 }

@@ -20,7 +20,11 @@ import {
 	PaintEventBusProvider,
 	usePaintEventBus,
 } from "@app/domain/paint/event"
-import { commitPaintAction, paintStateReducer } from "@app/domain/paint/redux"
+import {
+	commitPaintActionAndResetUncommitted,
+	paintStateReducer,
+	resetPaintActionsStack,
+} from "@app/domain/paint/redux"
 import {
 	usePaintScene,
 	usePresentationDimensions,
@@ -114,7 +118,7 @@ export const Paint = () => {
 		store.dispatch(
 			// Do kind of initial mutation
 			// to ensure that layer zero is there
-			commitPaintAction({
+			commitPaintActionAndResetUncommitted({
 				type: PaintActionType.SCENE_MUTATIONS,
 				mutations: [
 					{
@@ -134,7 +138,7 @@ export const Paint = () => {
 		store.dispatch(
 			// Do kind of initial mutation
 			// to ensure that layer zero is there
-			commitPaintAction({
+			commitPaintActionAndResetUncommitted({
 				type: PaintActionType.SET_SCENE_DIMENSIONS,
 				dimensions: {
 					height: 1000,
@@ -142,6 +146,8 @@ export const Paint = () => {
 				},
 			}),
 		)
+
+		store.dispatch(resetPaintActionsStack())
 
 		return store
 	}, [])

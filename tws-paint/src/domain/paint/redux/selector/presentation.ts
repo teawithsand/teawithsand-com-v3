@@ -1,13 +1,15 @@
 import {
+	useCurrentPaintSnapshotSelector,
 	usePaintScene,
-	usePaintSelector,
 } from "@app/domain/paint/redux/selector/misc"
 
 import { Point } from "tws-common/geometry/point"
 
 export const usePresentationDimensions = () => {
 	const scene = usePaintScene()
-	const viewOptions = usePaintSelector(s => s.uiState.viewOptions)
+	const viewOptions = useCurrentPaintSnapshotSelector(
+		s => s.uiState.viewOptions,
+	)
 
 	return {
 		width: scene.options.sceneWidth * viewOptions.zoomFactor,
@@ -18,8 +20,9 @@ export const usePresentationDimensions = () => {
 }
 
 export const usePointOperations = () => {
-	const scene = usePaintScene()
-	const viewOptions = usePaintSelector(s => s.uiState.viewOptions)
+	const viewOptions = useCurrentPaintSnapshotSelector(
+		s => s.uiState.viewOptions,
+	)
 	return {
 		screenPointToCanvasPoint: (point: Point): Point => {
 			return [

@@ -2,11 +2,8 @@ import React, { useCallback, useRef } from "react"
 import { useDispatch } from "react-redux"
 
 import { useAsRef } from "@app/components/util/useAsRef"
-import {
-	PaintElementType,
-	PaintSceneMutation,
-	PaintToolType,
-} from "@app/domain/paint/defines"
+import { PaintElementType, PaintToolType } from "@app/domain/paint/defines"
+import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
 import {
 	PaintEvent,
 	PaintEventType,
@@ -14,8 +11,8 @@ import {
 } from "@app/domain/paint/defines/event"
 import { usePaintEventBus } from "@app/domain/paint/event"
 import {
-	commitMutationsUsingAction,
-	setUncommittedMutations,
+	commitPaintActionAndResetUncommitted,
+	setUncommittedPaintActions,
 } from "@app/domain/paint/redux"
 import {
 	useCurrentPaintTool,
@@ -53,23 +50,26 @@ export const PathToolHandler = () => {
 
 			const event = e.screenEvent
 
-			const makeMutationFromPoints = (
-				points: Point[],
-			): PaintSceneMutation => {
+			const makeActionFromPoints = (points: Point[]): PaintAction => {
 				return {
-					type: "push-layer-elements",
-					layerIndex: 0,
-					elements: [
+					type: PaintActionType.SCENE_MUTATIONS,
+					mutations: [
 						{
-							type: PaintElementType.SIMPLE_PATH,
-							points: points,
-							// TODO(teawithsand): read these from config
-							stroke: {
-								color: [0, 0, 0, 1],
-								lineCap: "round",
-								lineJoin: "round",
-								size: 10,
-							},
+							type: "push-layer-elements",
+							layerIndex: 0,
+							elements: [
+								{
+									type: PaintElementType.SIMPLE_PATH,
+									points: points,
+									// TODO(teawithsand): read these from config
+									stroke: {
+										color: [0, 0, 0, 1],
+										lineCap: "round",
+										lineJoin: "round",
+										size: 10,
+									},
+								},
+							],
 						},
 					],
 				}
@@ -82,9 +82,9 @@ export const PathToolHandler = () => {
 					state.current.points.length >= 1
 				) {
 					dispatch(
-						commitMutationsUsingAction([
-							makeMutationFromPoints(state.current.points),
-						]),
+						commitPaintActionAndResetUncommitted(
+							makeActionFromPoints(state.current.points),
+						),
 					)
 				}
 
@@ -123,8 +123,8 @@ export const PathToolHandler = () => {
 				state.current.points.push(canvasPoint)
 
 				dispatch(
-					setUncommittedMutations([
-						makeMutationFromPoints([...state.current.points]),
+					setUncommittedPaintActions([
+						makeActionFromPoints([...state.current.points]),
 					]),
 				)
 			}

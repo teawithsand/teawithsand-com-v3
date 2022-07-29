@@ -1,6 +1,5 @@
 import { createAction } from "@reduxjs/toolkit"
 
-import { PaintSceneMutation } from "@app/domain/paint/defines"
 import { PaintAction } from "@app/domain/paint/defines/action"
 
 import {
@@ -10,29 +9,22 @@ import {
 
 const actionPrefix = claimId(NS_REDUX_ACTION_PREFIX, "tws-paint")
 
-export const setUncommittedMutations = createAction<PaintSceneMutation[]>(
-	`${actionPrefix}/setUncommittedMutations`,
+export const setUncommittedPaintActions = createAction<PaintAction[]>(
+	`${actionPrefix}/setUncommittedPaintActions`,
 )
 
-/**
- * Creates and pushes new action, which pushes these mutations to active layer and clears uncommitted mutations.
- */
-export const commitMutationsUsingAction = createAction<PaintSceneMutation[]>(
-	`${actionPrefix}/commitMutationsUsingAction`,
+export const commitPaintActionAndResetUncommitted = createAction<PaintAction>(
+	`${actionPrefix}/commitPaintActionAndResetUncommitted`,
 )
 
-export const noCommitApplyPaintAction = createAction<PaintAction>(
-	`${actionPrefix}/noCommitApplyPaintAction`,
+export const resetPaintActionsStack = createAction<void>(
+	`${actionPrefix}/resetPaintActionsStack`,
 )
-export const commitPaintAction = createAction<PaintAction>(
-	`${actionPrefix}/commitPaintAction`,
-)
-export const resetUndoStack = createAction<void>(
-	`${actionPrefix}/resetUndoStack`,
-)
+
 export const undoPaintActions = createAction<number>(
 	`${actionPrefix}/undoPaintActions`,
 )
+
 export const redoPaintActions = createAction<number>(
 	`${actionPrefix}/redoPaintActions`,
 )

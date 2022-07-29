@@ -1,21 +1,26 @@
-import React, { useCallback, useRef } from "react";
-import { useDispatch } from "react-redux";
+import React, { useCallback, useRef } from "react"
+import { useDispatch } from "react-redux"
 
+import { useAsRef } from "@app/components/util/useAsRef"
+import { PaintToolType } from "@app/domain/paint/defines"
+import { PaintActionType } from "@app/domain/paint/defines/action"
+import {
+	PaintEvent,
+	PaintEventType,
+	PaintScreenEventType,
+} from "@app/domain/paint/defines/event"
+import { usePaintEventBus } from "@app/domain/paint/event"
+import {
+	commitPaintActionAndResetUncommitted,
+	setUncommittedPaintActions,
+} from "@app/domain/paint/redux"
+import {
+	useCurrentPaintSnapshotSelector,
+	useCurrentPaintTool,
+} from "@app/domain/paint/redux/selector"
 
-
-import { useAsRef } from "@app/components/util/useAsRef";
-import { PaintToolType } from "@app/domain/paint/defines";
-import { PaintActionType } from "@app/domain/paint/defines/action";
-import { PaintEvent, PaintEventType, PaintScreenEventType } from "@app/domain/paint/defines/event";
-import { usePaintEventBus } from "@app/domain/paint/event";
-import { commitPaintAction, noCommitApplyPaintAction } from "@app/domain/paint/redux";
-import { useCurrentPaintTool, usePaintSelector } from "@app/domain/paint/redux/selector";
-
-
-
-import { useSubscribableCallback } from "tws-common/event-bus";
-import { Point } from "tws-common/geometry/point";
-
+import { useSubscribableCallback } from "tws-common/event-bus"
+import { Point } from "tws-common/geometry/point"
 
 type State =
 	| {
@@ -40,9 +45,9 @@ export const MoveToolHandler = () => {
 	})
 
 	const offsets = useAsRef(
-		usePaintSelector(s => ({
-			offsetX: s.sceneState.currentScene.options.offsetX,
-			offsetY: s.sceneState.currentScene.options.offsetY,
+		useCurrentPaintSnapshotSelector(s => ({
+			offsetX: s.sceneState.scene.options.offsetX,
+			offsetY: s.sceneState.scene.options.offsetY,
 		})),
 	)
 
@@ -86,17 +91,7 @@ export const MoveToolHandler = () => {
 				state.current.lastPoint = screenPoint
 
 				dispatch(
-					commitPaintAction({
-						type: PaintActionType.SET_VIEW_OFFSETS,
-						offsets: {
-							offsetX: state.current.startOffsets.offsetX,
-							offsetY: state.current.startOffsets.offsetY,
-						},
-					}),
-				)
-
-				dispatch(
-					commitPaintAction({
+					commitPaintActionAndResetUncommitted({
 						type: PaintActionType.SET_VIEW_OFFSETS,
 						offsets: {
 							offsetX:
@@ -122,20 +117,22 @@ export const MoveToolHandler = () => {
 
 				state.current.lastPoint = screenPoint
 
-                dispatch(
-					noCommitApplyPaintAction({
-						type: PaintActionType.SET_VIEW_OFFSETS,
-						offsets: {
-							offsetX:
-								state.current.startOffsets.offsetX +
-								state.current.lastPoint[0] -
-								state.current.initialScreenPoint[0],
-							offsetY:
-								state.current.startOffsets.offsetY +
-								state.current.lastPoint[1] -
-								state.current.initialScreenPoint[1],
+				dispatch(
+					setUncommittedPaintActions([
+						{
+							type: PaintActionType.SET_VIEW_OFFSETS,
+							offsets: {
+								offsetX:
+									state.current.startOffsets.offsetX +
+									state.current.lastPoint[0] -
+									state.current.initialScreenPoint[0],
+								offsetY:
+									state.current.startOffsets.offsetY +
+									state.current.lastPoint[1] -
+									state.current.initialScreenPoint[1],
+							},
 						},
-					}),
+					]),
 				)
 			}
 		},

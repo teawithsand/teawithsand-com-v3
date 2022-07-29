@@ -2,13 +2,15 @@ import React, { useEffect } from "react"
 import { useDispatch } from "react-redux"
 
 import { PaintActionType } from "@app/domain/paint/defines/action"
-import { commitPaintAction } from "@app/domain/paint/redux"
-import { usePaintSelector } from "@app/domain/paint/redux/selector"
+import { commitPaintActionAndResetUncommitted } from "@app/domain/paint/redux"
+import { useCurrentPaintSnapshotSelector } from "@app/domain/paint/redux/selector"
 
 const roundZoom = (a: number) => Math.round(a * 1000) / 1000
 
 export const ZoomHandler = () => {
-	const zoomFactor = usePaintSelector(s => s.uiState.viewOptions.zoomFactor)
+	const zoomFactor = useCurrentPaintSnapshotSelector(
+		s => s.uiState.viewOptions.zoomFactor,
+	)
 
 	const dispatch = useDispatch()
 
@@ -19,14 +21,14 @@ export const ZoomHandler = () => {
 
 				if (e.deltaY > 0) {
 					dispatch(
-						commitPaintAction({
+						commitPaintActionAndResetUncommitted({
 							type: PaintActionType.SET_ZOOM,
 							zoomFactor: roundZoom(zoomFactor - 0.05),
 						}),
 					)
 				} else if (e.deltaY < 0) {
 					dispatch(
-						commitPaintAction({
+						commitPaintActionAndResetUncommitted({
 							type: PaintActionType.SET_ZOOM,
 							zoomFactor: roundZoom(zoomFactor + 0.05),
 						}),
