@@ -16,3 +16,6 @@ export const useGlobalToolConfig = () =>
 	usePaintSelector(s => s.uiState.globalToolConfig)
 export const useToolConfig = (toolType: PaintToolType) =>
 	usePaintSelector(s => s.uiState.toolsConfig[toolType])
+
+export const useCurrentPaintTool = () =>
+	usePaintSelector(s => s.uiState.globalToolConfig.activeTool)

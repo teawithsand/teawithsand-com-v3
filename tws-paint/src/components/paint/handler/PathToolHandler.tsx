@@ -2,7 +2,11 @@ import React, { useCallback, useRef } from "react"
 import { useDispatch } from "react-redux"
 
 import { useAsRef } from "@app/components/util/useAsRef"
-import { PaintElementType, PaintSceneMutation } from "@app/domain/paint/defines"
+import {
+	PaintElementType,
+	PaintSceneMutation,
+	PaintToolType,
+} from "@app/domain/paint/defines"
 import {
 	PaintEvent,
 	PaintEventType,
@@ -13,7 +17,10 @@ import {
 	commitMutationsUsingAction,
 	setUncommittedMutations,
 } from "@app/domain/paint/redux"
-import { usePointOperations } from "@app/domain/paint/redux/selector"
+import {
+	useCurrentPaintTool,
+	usePointOperations,
+} from "@app/domain/paint/redux/selector"
 
 import { useSubscribableCallback } from "tws-common/event-bus"
 import { Point } from "tws-common/geometry/point"
@@ -37,8 +44,11 @@ export const PathToolHandler = () => {
 
 	const pointOp = useAsRef(usePointOperations())
 
+	const tool = useAsRef(useCurrentPaintTool())
+
 	const callback = useCallback(
 		(e: PaintEvent) => {
+			if (tool.current !== PaintToolType.PATH) return
 			if (e.type !== PaintEventType.SCREEN) return
 
 			const event = e.screenEvent

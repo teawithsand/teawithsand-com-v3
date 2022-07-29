@@ -12,8 +12,8 @@ export const usePresentationDimensions = () => {
 	return {
 		width: scene.options.sceneWidth * viewOptions.zoomFactor,
 		height: scene.options.sceneHeight * viewOptions.zoomFactor,
-		translateX: 0,
-		translateY: 0,
+		translateX: viewOptions.offsetX,
+		translateY: viewOptions.offsetY,
 	}
 }
 

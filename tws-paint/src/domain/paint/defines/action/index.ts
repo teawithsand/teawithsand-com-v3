@@ -1,9 +1,6 @@
-import { PaintSceneMutation } from "@app/domain/paint/defines/mutation";
+import { PaintSceneMutation } from "@app/domain/paint/defines/mutation"
 
-
-
-import { Color } from "tws-common/color";
-
+import { Color } from "tws-common/color"
 
 export enum PaintActionType {
 	SCENE_MUTATIONS = "scene-mutations",
@@ -12,6 +9,7 @@ export enum PaintActionType {
 	SET_ZOOM = "set-zoom",
 	SET_SCENE_DIMENSIONS = "set-scene-dimensions",
 	SET_SCENE_OFFSETS = "set-scene-offsets",
+	SET_VIEW_OFFSETS = "set-view-offsets",
 }
 
 export type PaintAction =
@@ -40,6 +38,13 @@ export type PaintAction =
 	  }
 	| {
 			type: PaintActionType.SET_SCENE_OFFSETS
+			offsets: {
+				offsetX: number
+				offsetY: number
+			}
+	  }
+	| {
+			type: PaintActionType.SET_VIEW_OFFSETS
 			offsets: {
 				offsetX: number
 				offsetY: number

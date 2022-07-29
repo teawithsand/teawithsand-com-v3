@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet"
 import { Provider } from "react-redux"
 import styled from "styled-components"
 
+import { MoveToolHandler } from "@app/components/paint/handler/MoveToolHandler"
 import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
 import { UndoRedoHandler } from "@app/components/paint/handler/UndoRedoHandler"
 import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
@@ -63,7 +64,7 @@ const InnerPaint = () => {
 			screenEvent: e,
 		})
 	}
-	
+
 	const scene = usePaintScene()
 
 	const { width, height, translateX, translateY } =
@@ -155,6 +156,7 @@ export const Paint = () => {
 					/>
 				</Helmet>
 
+				<MoveToolHandler />
 				<PathToolHandler />
 				<UndoRedoHandler />
 				<ZoomHandler />

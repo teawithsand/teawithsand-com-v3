@@ -58,6 +58,9 @@ const applyPaintAction = (
 	} else if (action.type === PaintActionType.SET_SCENE_OFFSETS) {
 		state.sceneState.currentScene.options.offsetX = action.offsets.offsetX
 		state.sceneState.currentScene.options.offsetY = action.offsets.offsetY
+	} else if (action.type === PaintActionType.SET_VIEW_OFFSETS) {
+		state.uiState.viewOptions.offsetX = action.offsets.offsetX
+		state.uiState.viewOptions.offsetY = action.offsets.offsetY
 	} else {
 		throw new Error(`Unknown action type: ${(action as any).type}`)
 	}
@@ -130,7 +133,7 @@ export const paintStateReducer = createReducer<PaintState>(
 				zoomFactor: 1,
 			},
 			globalToolConfig: {
-				activeTool: PaintToolType.PATH,
+				activeTool: PaintToolType.MOVE,
 				activeLayerIndex: 0,
 				strokeColor: [0, 0, 0, 1],
 				fillColor: null,
