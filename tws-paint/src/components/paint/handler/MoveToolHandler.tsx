@@ -46,8 +46,8 @@ export const MoveToolHandler = () => {
 
 	const offsets = useAsRef(
 		useCurrentPaintSnapshotSelector(s => ({
-			offsetX: s.sceneState.scene.options.offsetX,
-			offsetY: s.sceneState.scene.options.offsetY,
+			offsetX: s.uiState.viewOptions.offsetX,
+			offsetY: s.uiState.viewOptions.offsetY,
 		})),
 	)
 
