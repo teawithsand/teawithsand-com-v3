@@ -2,6 +2,12 @@ import { applyMutationOnDraft } from "@app/domain/paint/defines"
 import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
 import { PaintStateSnapshot } from "@app/domain/paint/redux/state"
 
+export const copyPaintStateSnapshot = (
+	snapshot: PaintStateSnapshot,
+): PaintStateSnapshot => {
+	return JSON.parse(JSON.stringify(snapshot))
+}
+
 export const applyActionOnPaintStateSnapshot = (
 	snapshot: PaintStateSnapshot,
 	action: PaintAction,
