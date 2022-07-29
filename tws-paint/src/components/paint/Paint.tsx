@@ -4,16 +4,21 @@ import { Helmet } from "react-helmet"
 import { Provider } from "react-redux"
 import styled from "styled-components"
 
+import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
 import { UndoRedoHandler } from "@app/components/paint/handler/UndoRedoHandler"
 import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
 import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
 import { PaintActionType } from "@app/domain/paint/defines/action"
 import {
+	PaintEventType,
 	PaintScreenEvent,
 	PaintScreenEventType,
 } from "@app/domain/paint/defines/event"
-import { PaintEventBusProvider } from "@app/domain/paint/event"
+import {
+	PaintEventBusProvider,
+	usePaintEventBus,
+} from "@app/domain/paint/event"
 import { commitPaintAction, paintStateReducer } from "@app/domain/paint/redux"
 import {
 	usePaintScene,
@@ -50,11 +55,15 @@ const Renderer = styled(SVGSceneRenderer)`
 	z-index: 5;
 `
 
-const InnerPaint = (props: {
-	onPaintScreenEvent?: (e: PaintScreenEvent) => void
-}) => {
-	const { onPaintScreenEvent } = props
-	const mustOnPaintScreenEvent = onPaintScreenEvent || (e => void 0)
+const InnerPaint = () => {
+	const bus = usePaintEventBus()
+	const mustOnPaintScreenEvent = (e: PaintScreenEvent) => {
+		bus.emitEvent({
+			type: PaintEventType.SCREEN,
+			screenEvent: e,
+		})
+	}
+	
 	const scene = usePaintScene()
 
 	const { width, height, translateX, translateY } =
@@ -146,6 +155,7 @@ export const Paint = () => {
 					/>
 				</Helmet>
 
+				<PathToolHandler />
 				<UndoRedoHandler />
 				<ZoomHandler />
 				<InnerPaint />
