@@ -1,21 +1,26 @@
-import React, { useCallback, useRef } from "react";
-import { useDispatch } from "react-redux";
+import React, { useCallback, useRef } from "react"
+import { useDispatch } from "react-redux"
 
+import { useAsRef } from "@app/components/util/useAsRef"
+import { PaintToolType } from "@app/domain/paint/defines"
+import { PaintActionType } from "@app/domain/paint/defines/action"
+import {
+	PaintEvent,
+	PaintEventType,
+	PaintScreenEventType,
+} from "@app/domain/paint/defines/event"
+import { usePaintEventBus } from "@app/domain/paint/event"
+import {
+	commitPaintActionAndResetUncommitted,
+	setUncommittedPaintActions,
+} from "@app/domain/paint/redux"
+import {
+	useCurrentPaintSnapshotSelector,
+	useCurrentPaintTool,
+} from "@app/domain/paint/redux/selector"
 
-
-import { useAsRef } from "@app/components/util/useAsRef";
-import { PaintToolType } from "@app/domain/paint/defines";
-import { PaintActionType } from "@app/domain/paint/defines/action";
-import { PaintEvent, PaintEventType, PaintScreenEventType } from "@app/domain/paint/defines/event";
-import { usePaintEventBus } from "@app/domain/paint/event";
-import { commitPaintActionAndResetUncommitted, setUncommittedPaintActions } from "@app/domain/paint/redux";
-import { useCurrentPaintSnapshotSelector, useCurrentPaintTool } from "@app/domain/paint/redux/selector";
-
-
-
-import { useSubscribableCallback } from "tws-common/event-bus";
-import { Point } from "tws-common/geometry/point";
-
+import { useSubscribableCallback } from "tws-common/event-bus"
+import { Point } from "tws-common/geometry/point"
 
 type State =
 	| {
