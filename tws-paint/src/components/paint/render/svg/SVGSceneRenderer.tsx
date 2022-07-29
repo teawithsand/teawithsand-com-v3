@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, Ref } from "react"
+import React, { forwardRef, Ref } from "react"
 
 import { SceneRendererProps } from "@app/components/paint/render/SceneRenderer"
 import { SVGLayerRenderer } from "@app/components/paint/render/svg/SVGLayerRenderer"
@@ -45,10 +45,4 @@ const InnerRenderer = (
 	)
 }
 
-export const SVGSceneRenderer = memo(
-	forwardRef(InnerRenderer),
-	(prevState, nextState) =>
-		prevState.scene === nextState.scene && // this one is most likely to change
-		prevState.presentationWidth === nextState.presentationWidth &&
-		prevState.presentationHeight === nextState.presentationHeight,
-)
+export const SVGSceneRenderer = forwardRef(InnerRenderer)
