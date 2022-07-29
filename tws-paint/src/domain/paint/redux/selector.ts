@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 
-import { PaintScene } from "@app/domain/paint/defines"
+import { PaintScene, PaintToolType } from "@app/domain/paint/defines"
 import { PaintState } from "@app/domain/paint/redux/state"
 
 import useWindowDimensions from "tws-common/react/hook/dimensions/useWindowDimensions"
@@ -13,6 +13,11 @@ export const usePaintSelector = <T>(selector: (state: PaintState) => T) =>
 
 export const usePaintScene = (): PaintScene =>
 	usePaintSelector(s => s.sceneState.currentScene)
+
+export const useGlobalToolConfig = () =>
+	usePaintSelector(s => s.uiState.globalToolConfig)
+export const useToolConfig = (toolType: PaintToolType) =>
+	usePaintSelector(s => s.uiState.toolsConfig[toolType])
 
 export const usePresentationDimensions = () => {
 	const scene = usePaintScene()

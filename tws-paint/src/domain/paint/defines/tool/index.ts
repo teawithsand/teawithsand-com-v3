@@ -22,8 +22,10 @@ export type PaintGlobalToolConfig = {
  */
 export type PaintToolsConfig = {
 	[PaintToolType.PATH]: PathToolConfig
+	[PaintToolType.MOVE]: MoveToolConfig
 }
 
+export type MoveToolConfig = {}
 export type PathToolConfig = {
 	stroke: PathLineCapType
 	join: PathLineJoinType

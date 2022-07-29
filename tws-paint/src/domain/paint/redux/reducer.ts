@@ -140,6 +140,7 @@ export const paintStateReducer = createReducer<PaintState>(
 					join: "round",
 					stroke: "round",
 				},
+				[PaintToolType.MOVE]: {},
 			},
 		},
 	},
