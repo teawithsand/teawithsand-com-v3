@@ -9,6 +9,10 @@ import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
 import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
 import { PaintActionType } from "@app/domain/paint/defines/action"
+import {
+	PaintScreenEvent,
+	PaintScreenEventType,
+} from "@app/domain/paint/defines/event"
 import { commitPaintAction, paintStateReducer } from "@app/domain/paint/redux"
 import {
 	usePaintScene,
@@ -41,16 +45,43 @@ const InnerContainer = styled.div`
 		20px 20px;
 `
 
-const InnerPaint = () => {
+const Renderer = styled(SVGSceneRenderer)`
+	z-index: 5;
+`
+
+const InnerPaint = (props: {
+	onPaintScreenEvent?: (e: PaintScreenEvent) => void
+}) => {
+	const { onPaintScreenEvent } = props
+	const mustOnPaintScreenEvent = onPaintScreenEvent || (e => void 0)
 	const scene = usePaintScene()
 
 	const { width, height, translateX, translateY } =
 		usePresentationDimensions()
 
 	return (
-		<InnerContainer>
+		<InnerContainer
+			onPointerDown={e => {
+				mustOnPaintScreenEvent({
+					type: PaintScreenEventType.POINTER_DOWN,
+					event: e.nativeEvent,
+				})
+			}}
+			onPointerMove={e => {
+				mustOnPaintScreenEvent({
+					type: PaintScreenEventType.POINTER_MOVE,
+					event: e.nativeEvent,
+				})
+			}}
+			onPointerUp={e => {
+				mustOnPaintScreenEvent({
+					type: PaintScreenEventType.POINTER_UP,
+					event: e.nativeEvent,
+				})
+			}}
+		>
 			<SidePanel />
-			<SVGSceneRenderer
+			<Renderer
 				style={{
 					backgroundColor: "white",
 					transform: `translateX(${translateX}px) translateY(${translateY}px)`,
