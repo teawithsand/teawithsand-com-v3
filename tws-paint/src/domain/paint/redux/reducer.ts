@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit"
 
-import { applyMutationOnDraft } from "@app/domain/paint/defines"
+import { applyMutationOnDraft, PaintToolType } from "@app/domain/paint/defines"
 import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
 import {
 	commitMutationsUsingAction,
@@ -45,9 +45,9 @@ const applyPaintAction = (
 				"no-commit actions can't touch mutations, as they have to be applied in-order for ctrl+z to work",
 			)
 	} else if (action.type === PaintActionType.SET_FILL_COLOR) {
-		state.uiState.fillColor = action.color
+		state.uiState.globalToolConfig.fillColor = action.color
 	} else if (action.type === PaintActionType.SET_STROKE_COLOR) {
-		state.uiState.strokeColor = action.color
+		state.uiState.globalToolConfig.strokeColor = action.color
 	} else if (action.type === PaintActionType.SET_ZOOM) {
 		state.uiState.viewOptions.zoomFactor = action.zoomFactor
 	} else {
@@ -114,7 +114,6 @@ export const paintStateReducer = createReducer<PaintState>(
 			redoStack: [],
 		},
 		uiState: {
-			activeLayerIndex: 0,
 			viewOptions: {
 				offsetX: 0,
 				offsetY: 0,
@@ -122,8 +121,18 @@ export const paintStateReducer = createReducer<PaintState>(
 				viewportWidth: 0,
 				zoomFactor: 1,
 			},
-			strokeColor: [0, 0, 0, 1],
-			fillColor: null,
+			globalToolConfig: {
+				activeTool: PaintToolType.PATH,
+				activeLayerIndex: 0,
+				strokeColor: [0, 0, 0, 1],
+				fillColor: null,
+			},
+			toolsConfig: {
+				[PaintToolType.PATH]: {
+					join: "round",
+					stroke: "round",
+				},
+			},
 		},
 	},
 	// niy for now

@@ -2,11 +2,11 @@ import {
 	PaintLayer,
 	PaintScene,
 	PaintSceneMutation,
+	PaintToolsConfig,
+	PaintGlobalToolConfig,
 	PaintViewOptions,
 } from "@app/domain/paint/defines"
 import { PaintAction } from "@app/domain/paint/defines/action"
-
-import { Color } from "tws-common/color"
 
 export type PaintSceneState = {
 	uncommittedMutations: PaintSceneMutation[]
@@ -33,9 +33,8 @@ export type PaintUIState = {
 
 	viewOptions: PaintViewOptions
 
-	activeLayerIndex: number
-	strokeColor: Color
-	fillColor: Color | null
+	globalToolConfig: PaintGlobalToolConfig
+	toolsConfig: PaintToolsConfig
 }
 
 export type PaintState = {
