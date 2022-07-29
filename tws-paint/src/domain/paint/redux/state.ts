@@ -69,7 +69,7 @@ export const initialPaintStateSnapshot: PaintStateSnapshot = {
 	uiState: {
 		globalToolConfig: {
 			activeLayerIndex: 0,
-			activeTool: PaintToolType.MOVE,
+			activeTool: PaintToolType.PATH,
 			strokeColor: [0, 0, 0, 1],
 			fillColor: null,
 		},
