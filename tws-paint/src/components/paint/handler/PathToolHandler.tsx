@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from "react"
 import { useDispatch } from "react-redux"
 
+import { useAsRef } from "@app/components/util/useAsRef"
 import { PaintElementType, PaintSceneMutation } from "@app/domain/paint/defines"
 import {
 	PaintEvent,
@@ -12,6 +13,7 @@ import {
 	commitMutationsUsingAction,
 	setUncommittedMutations,
 } from "@app/domain/paint/redux"
+import { usePointOperations } from "@app/domain/paint/redux/selector"
 
 import { useSubscribableCallback } from "tws-common/event-bus"
 import { Point } from "tws-common/geometry/point"
@@ -32,6 +34,8 @@ export const PathToolHandler = () => {
 	const state = useRef<State>({
 		type: "idle",
 	})
+
+	const pointOp = useAsRef(usePointOperations())
 
 	const callback = useCallback(
 		(e: PaintEvent) => {
@@ -90,11 +94,15 @@ export const PathToolHandler = () => {
 			} else if (event.type === PaintScreenEventType.POINTER_MOVE) {
 				if (state.current.type !== "painting") return
 
-				state.current.points.push([
+				const screenPoint: Point = [
 					event.event.clientX,
 					event.event.clientY,
-				])
-                
+				]
+
+				state.current.points.push(
+					pointOp.current.screenPointToCanvasPoint(screenPoint),
+				)
+
 				dispatch(
 					setUncommittedMutations([
 						makeMutationFromPoints([...state.current.points]),
@@ -102,7 +110,7 @@ export const PathToolHandler = () => {
 				)
 			}
 		},
-		[state],
+		[pointOp, state],
 	)
 	useSubscribableCallback(bus, callback)
 
