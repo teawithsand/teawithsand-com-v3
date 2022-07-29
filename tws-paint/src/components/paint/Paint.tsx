@@ -56,6 +56,23 @@ const InnerContainer = styled.div`
 		20px 20px;
 `
 
+// Trick not to emit cursor events while we are processing paint's stuff.
+const EventContainer = styled.div`
+	display: grid;
+
+	grid-template-columns: 100vw;
+	grid-template-rows: 100vh;
+	padding: 0;
+	margin: 0;
+
+	overflow: hidden;
+
+	& > * {
+		grid-row: 1;
+		grid-column: 1;
+	}
+`
+
 const Renderer = styled(SVGSceneRenderer)`
 	z-index: 5;
 `
@@ -75,36 +92,38 @@ const InnerPaint = () => {
 		usePresentationDimensions()
 
 	return (
-		<InnerContainer
-			onPointerDown={e => {
-				mustOnPaintScreenEvent({
-					type: PaintScreenEventType.POINTER_DOWN,
-					event: e.nativeEvent,
-				})
-			}}
-			onPointerMove={e => {
-				mustOnPaintScreenEvent({
-					type: PaintScreenEventType.POINTER_MOVE,
-					event: e.nativeEvent,
-				})
-			}}
-			onPointerUp={e => {
-				mustOnPaintScreenEvent({
-					type: PaintScreenEventType.POINTER_UP,
-					event: e.nativeEvent,
-				})
-			}}
-		>
+		<InnerContainer>
 			<SidePanel />
-			<Renderer
-				style={{
-					backgroundColor: "white",
-					transform: `translateX(${translateX}px) translateY(${translateY}px)`,
+			<EventContainer
+				onPointerDown={e => {
+					mustOnPaintScreenEvent({
+						type: PaintScreenEventType.POINTER_DOWN,
+						event: e.nativeEvent,
+					})
 				}}
-				presentationWidth={width}
-				presentationHeight={height}
-				scene={scene}
-			/>
+				onPointerMove={e => {
+					mustOnPaintScreenEvent({
+						type: PaintScreenEventType.POINTER_MOVE,
+						event: e.nativeEvent,
+					})
+				}}
+				onPointerUp={e => {
+					mustOnPaintScreenEvent({
+						type: PaintScreenEventType.POINTER_UP,
+						event: e.nativeEvent,
+					})
+				}}
+			>
+				<Renderer
+					style={{
+						backgroundColor: "white",
+						transform: `translateX(${translateX}px) translateY(${translateY}px)`,
+					}}
+					presentationWidth={width}
+					presentationHeight={height}
+					scene={scene}
+				/>
+			</EventContainer>
 		</InnerContainer>
 	)
 }
