@@ -1,20 +1,22 @@
-import EventBus, { SimpleEventBus } from "./EventBus"
-import {
-	StickySubscribable,
-	Subscriber,
-	SubscriptionCanceler,
-} from "./stateSubscribe"
+import EventBus, { SimpleEventBus } from "./EventBus";
+import { StickySubscribable, Subscriber, SubscriptionCanceler } from "./stateSubscribe";
+
 
 /**
  * Event bus, which:
  * 1. Emits lastEvent to newly registered listener.
  * 2. Stores last event sent.
  * 3. Requires initial event during construction.
+ * 
+ * @deprecated use one from event-bus top level package
  */
 export default interface StickyEventBus<T> extends EventBus<T> {
 	readonly lastEvent: T
 }
 
+/**
+ * @deprecated use one from event-bus top level package
+ */
 export class DefaultStickyEventBus<T>
 	implements StickyEventBus<T>, StickySubscribable<T>
 {

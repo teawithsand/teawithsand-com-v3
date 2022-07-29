@@ -1,9 +1,26 @@
+/**
+ * @deprecated use one from event-bus top level package
+ */
+
 export type Subscriber<S> = (state: S) => void
+/**
+ * @deprecated use one from event-bus top level package
+ */
+
 export type DeltaSubscriber<S> = (previousState: S, newState: S) => void
+/**
+ * @deprecated use one from event-bus top level package
+ */
+
 export type Extractor<S, E> = (state: S) => E
+/**
+ * @deprecated use one from event-bus top level package
+ */
 export type SubscriptionCanceler = () => void
 
-// note: this should be replaced with rxjs
+/**
+ * @deprecated use one from event-bus top level package
+ */
 export interface StickySubscribable<T> extends Subscribable<T> {
 	readonly lastEvent: T
 }
@@ -11,11 +28,16 @@ export interface StickySubscribable<T> extends Subscribable<T> {
 // note: this should be replaced with rxjs
 /**
  * Something, one can subscribe to.
+ *
+ * @deprecated use one from event-bus top level package
  */
 export interface Subscribable<T> {
 	addSubscriber(subscriber: Subscriber<T>): SubscriptionCanceler
 }
 
+/**
+ * @deprecated use one from event-bus top level package
+ */
 export class StateSubscriptionManager<S> {
 	private subscribers: Subscriber<S>[] = []
 	constructor(private innerState: S) {}

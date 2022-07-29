@@ -1,13 +1,16 @@
-import {
-	Subscribable,
-	Subscriber,
-	SubscriptionCanceler,
-} from "tws-common/lang/bus/stateSubscribe"
+import { Subscribable, Subscriber, SubscriptionCanceler } from "tws-common/lang/bus/stateSubscribe";
 
+
+/**
+ * @deprecated use one in event-bus top dir
+ */
 export default interface EventBus<T> extends Subscribable<T> {
 	emitEvent(e: T): void
 }
 
+/**
+ * @deprecated use one in event-bus top dir
+ */
 export class SimpleEventBus<T> implements EventBus<T>, Subscribable<T> {
 	private subscribers: Subscriber<T>[] = []
 
