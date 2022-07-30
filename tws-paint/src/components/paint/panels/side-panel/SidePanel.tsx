@@ -2,11 +2,14 @@ import React, { CSSProperties, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
+import { CanvasDimensionsPanel } from "@app/components/paint/panels/canvas/CanvasDimensionsPanel"
 import { SidePanelZoomSection } from "@app/components/paint/panels/side-panel/SidePanelZoomSection"
+import { ZoomPanel } from "@app/components/paint/panels/zoom-panel/ZoomPanel"
 import {
 	sidePanelButtonZIndex,
 	sidePanelZIndex,
 } from "@app/components/paint/pantZAxis"
+import { ButtonDropdown } from "@app/components/util/ButtonDropdown"
 import { footerLink } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
@@ -55,12 +58,7 @@ export const SidePanel = () => {
 
 const OuterContainer = styled.nav`
 	background: rgb(241, 193, 123);
-	background: linear-gradient(
-		45deg,
-		#f1c17b 0%,
-		#cf9ce2 50%,
-		#71e7ff 100%
-	);
+	background: linear-gradient(45deg, #f1c17b 0%, #cf9ce2 50%, #71e7ff 100%);
 
 	min-height: 100%;
 	width: 33%;
@@ -136,6 +134,15 @@ const SidePanelToggleButton = styled(Button)`
 	font-size: 1.2rem;
 `
 
+const SubPanelContainer = styled.div`
+	background-color: rgba(255, 255, 255, 0.9);
+	padding: 1rem 0;
+	border-radius: 0.25rem;
+	box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+		rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+		rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+`
+
 const SidePanelComponent = (props: {
 	className?: string
 	style?: CSSProperties
@@ -156,7 +163,25 @@ const SidePanelComponent = (props: {
 				<SidePanelToggleButton onClick={() => props.setShown(false)}>
 					{trans.hide}
 				</SidePanelToggleButton>
-				<SidePanelZoomSection />
+				<ButtonDropdown
+					defaultShown={false}
+					shownLabel="Hide zoom options"
+					hiddenLabel="Show zoom options"
+				>
+					<SubPanelContainer>
+						<ZoomPanel />
+					</SubPanelContainer>
+				</ButtonDropdown>
+
+				<ButtonDropdown
+					defaultShown={false}
+					shownLabel="Hide canvas size options"
+					hiddenLabel="Show canvas size options"
+				>
+					<SubPanelContainer>
+						<CanvasDimensionsPanel />
+					</SubPanelContainer>
+				</ButtonDropdown>
 			</InnerContainer>
 		</OuterContainer>
 	)
