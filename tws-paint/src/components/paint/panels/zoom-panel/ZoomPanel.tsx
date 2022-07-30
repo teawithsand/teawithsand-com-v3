@@ -9,11 +9,6 @@ import { useCurrentPaintSnapshotSelector } from "@app/domain/paint/redux/selecto
 import { Button } from "tws-common/ui"
 
 const InnerContainer = styled.div`
-	background: rgba(255, 255, 255, 0.9);
-	font-size: 1.2rem;
-	padding: 0.4rem;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-
 	display: grid;
 	grid-auto-flow: column;
 	grid-template-rows: auto;
