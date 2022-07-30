@@ -101,7 +101,7 @@ const doInverseTest = (data: {
 // note: elements really only have to be different
 // we do not really care about inner data
 const element = (i: number): PaintElement => ({
-	type: PaintElementType.SIMPLE_PATH,
+	type: PaintElementType.HAND_DRAWN_PATH,
 
 	points: [
 		[i, i],

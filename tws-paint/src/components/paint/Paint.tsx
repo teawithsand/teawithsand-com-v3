@@ -8,7 +8,6 @@ import { MoveToolHandler } from "@app/components/paint/handler/MoveToolHandler"
 import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
 import { UndoRedoHandler } from "@app/components/paint/handler/UndoRedoHandler"
 import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
-import { OptimizingSceneRenderer } from "@app/components/paint/render/OptimizingSceneRenderer"
 import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
 import { SelectionDisplay } from "@app/components/paint/selection/SelectionDisplay"
 import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
@@ -125,17 +124,14 @@ const InnerPaint = () => {
 						transform: `translateX(${translateX}px) translateY(${translateY}px)`,
 					}}
 				/>
-				<OptimizingSceneRenderer
-					renderer={Renderer}
-					scene={scene}
-					innerProps={{
-						style: {
-							backgroundColor: "white",
-							transform: `translateX(${translateX}px) translateY(${translateY}px)`,
-						},
-						presentationWidth: width,
-						presentationHeight: height,
+				<Renderer
+					style={{
+						backgroundColor: "white",
+						transform: `translateX(${translateX}px) translateY(${translateY}px)`,
 					}}
+					presentationWidth={width}
+					presentationHeight={height}
+					scene={scene}
 				/>
 			</EventContainer>
 		</InnerContainer>

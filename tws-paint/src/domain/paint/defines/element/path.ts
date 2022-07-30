@@ -14,7 +14,7 @@ export type PathFillData = {
 	color: Color
 }
 
-export type SimplePathPaintElement = {
+export type HandDrawnPathPaintElement = {
 	stroke: PathStrokeData
 	// Points as set of pairs of [X, Y] coordinates
 	// In other words: flattened list of two dimensional array

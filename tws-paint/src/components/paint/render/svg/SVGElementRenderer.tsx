@@ -28,7 +28,7 @@ function getSvgPathFromStroke(stroke: ReturnType<typeof getStroke>) {
 }
 
 const SimplePathElement = (props: {
-	element: PaintElement & { type: PaintElementType.SIMPLE_PATH }
+	element: PaintElement & { type: PaintElementType.HAND_DRAWN_PATH }
 	onClick?: (e: unknown) => void
 }) => {
 	const { element, onClick } = props
@@ -99,7 +99,7 @@ const InnerRenderer = (props: {
 		[layerIndex, element, bus],
 	)
 
-	if (element.type === PaintElementType.SIMPLE_PATH) {
+	if (element.type === PaintElementType.HAND_DRAWN_PATH) {
 		return <SimplePathElement onClick={onClick} element={element} />
 	} else {
 		throw new Error(

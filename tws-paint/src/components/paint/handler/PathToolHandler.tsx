@@ -59,7 +59,7 @@ export const PathToolHandler = () => {
 							layerIndex: 0,
 							elements: [
 								{
-									type: PaintElementType.SIMPLE_PATH,
+									type: PaintElementType.HAND_DRAWN_PATH,
 									flattenedPoints: points,
 									// TODO(teawithsand): read these from config
 									stroke: {
