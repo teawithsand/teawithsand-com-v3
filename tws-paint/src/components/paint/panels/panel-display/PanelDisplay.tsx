@@ -1,6 +1,7 @@
 import React, { CSSProperties } from "react"
 import styled from "styled-components"
 
+import { CanvasDimensionsPanel } from "@app/components/paint/panels/canvas/CanvasDimensionsPanel"
 import { ZoomPanel } from "@app/components/paint/panels/zoom-panel/ZoomPanel"
 import { overlayPanelZIndex } from "@app/components/paint/pantZAxis"
 
@@ -12,6 +13,9 @@ export const PanelDisplay = () => {
 		<>
 			<PanelDisplayWrapper $align="bottom-left">
 				<ZoomPanel />
+			</PanelDisplayWrapper>
+			<PanelDisplayWrapper $align="top-left">
+				<CanvasDimensionsPanel />
 			</PanelDisplayWrapper>
 		</>
 	)
