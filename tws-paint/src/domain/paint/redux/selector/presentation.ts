@@ -23,11 +23,13 @@ export const usePointOperations = () => {
 	const viewOptions = useCurrentPaintSnapshotSelector(
 		s => s.uiState.viewOptions,
 	)
+
+	// TODO(teawithsand): factor in scene(AKA viewport) offsets
 	return {
 		screenPointToCanvasPoint: (point: Point): Point => {
 			return [
-				point[0] / viewOptions.zoomFactor,
-				point[1] / viewOptions.zoomFactor,
+				(point[0] - viewOptions.offsetX) / viewOptions.zoomFactor,
+				(point[1] - viewOptions.offsetY) / viewOptions.zoomFactor,
 			]
 		},
 	}
