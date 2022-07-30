@@ -3,7 +3,7 @@ import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
 import { CanvasDimensionsPanel } from "@app/components/paint/panels/canvas/CanvasDimensionsPanel"
-import { SidePanelZoomSection } from "@app/components/paint/panels/side-panel/SidePanelZoomSection"
+import { PickToolPanel } from "@app/components/paint/panels/tool/PickToolPanel"
 import { ZoomPanel } from "@app/components/paint/panels/zoom-panel/ZoomPanel"
 import {
 	sidePanelButtonZIndex,
@@ -18,7 +18,6 @@ import {
 	breakpointMediaDown,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
 import { Button } from "tws-common/ui"
-import { PickToolPanel } from "@app/components/paint/panels/tool/PickToolPanel"
 
 const slideDuration = "300ms"
 const slideDurationNumber = parseInt(slideDuration.slice(0, -2))
