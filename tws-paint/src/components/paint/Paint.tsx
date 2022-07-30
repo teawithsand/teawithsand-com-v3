@@ -32,6 +32,7 @@ import {
 	resetPaintActionsStack,
 } from "@app/domain/paint/redux"
 import {
+	usePaintCursor,
 	usePaintScene,
 	usePresentationDimensions,
 } from "@app/domain/paint/redux/selector"
@@ -103,6 +104,8 @@ const InnerPaint = () => {
 	const { width, height, translateX, translateY } =
 		usePresentationDimensions()
 
+	const cursor = usePaintCursor()
+
 	return (
 		<InnerContainer>
 			<PanelDisplay />
@@ -134,6 +137,7 @@ const InnerPaint = () => {
 				/>
 				<Renderer
 					style={{
+						cursor,
 						transform: `translateX(${translateX}px) translateY(${translateY}px)`,
 					}}
 					presentationWidth={width}

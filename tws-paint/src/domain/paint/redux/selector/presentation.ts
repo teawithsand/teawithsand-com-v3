@@ -1,5 +1,9 @@
+import { CSSProperties } from "react"
+
+import { PaintToolType } from "@app/domain/paint/defines"
 import {
 	useCurrentPaintSnapshotSelector,
+	useCurrentPaintTool,
 	usePaintScene,
 } from "@app/domain/paint/redux/selector/misc"
 
@@ -32,5 +36,15 @@ export const usePointOperations = () => {
 				(point[1] - viewOptions.offsetY) / viewOptions.zoomFactor,
 			]
 		},
+	}
+}
+
+export const usePaintCursor = (): CSSProperties["cursor"] => {
+	const tool = useCurrentPaintTool()
+
+	if (tool === PaintToolType.PATH) {
+		return "crosshair"
+	} else {
+		return "grab"
 	}
 }
