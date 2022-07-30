@@ -33,26 +33,20 @@ const SimplePathElement = (props: {
 }) => {
 	const { element, onClick } = props
 
-	const { flattenedPoints, stroke } = element
+	const { points, stroke } = element
 
 	const pathString = useMemo(() => {
 		const options: StrokeOptions = {
-			simulatePressure: false,
-			size: 1,
+			simulatePressure: true,
+			size: stroke.size,
 			// Just use ease-out sine, like excalidraw uses
 			// It seems to work ok.
 			easing: (t: number) => Math.sin((t * Math.PI) / 2),
 			last: false,
 		}
 
-		const points: Point[] = []
-
-		for (let i = 0; i < flattenedPoints.length; i += 2) {
-			points.push([flattenedPoints[i], flattenedPoints[i + 1]])
-		}
-
 		return getSvgPathFromStroke(getStroke(points, options))
-	}, [flattenedPoints])
+	}, [points, stroke.size])
 
 	const style = useMemo(() => {
 		const res: React.CSSProperties = {}
@@ -65,9 +59,9 @@ const SimplePathElement = (props: {
 		}
         */
 
-		res.fill = "none"
+		res.fill = stroke.fill ? encodeColor(stroke.fill) : "none"
 		res.stroke = encodeColor(stroke.color)
-		res.strokeWidth = stroke.size
+		res.strokeWidth = 1
 		res.strokeLinecap = stroke.lineCap
 		res.strokeLinejoin = stroke.lineJoin
 
