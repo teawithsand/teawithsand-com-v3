@@ -5,6 +5,7 @@ import { PaintActionType } from "@app/domain/paint/defines/action"
 import { commitPaintActionAndResetUncommitted } from "@app/domain/paint/redux"
 import { useCurrentPaintSnapshotSelector } from "@app/domain/paint/redux/selector"
 
+// TODO(teawithsand): move this to action setting zoom
 const roundZoom = (a: number) => Math.round(a * 1000) / 1000
 
 export const ZoomHandler = () => {
