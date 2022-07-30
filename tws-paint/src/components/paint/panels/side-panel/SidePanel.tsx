@@ -2,7 +2,11 @@ import React, { CSSProperties, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
-import { SidePanelZoomSection } from "@app/components/paint/side-panel/SidePanelZoomSection"
+import { SidePanelZoomSection } from "@app/components/paint/panels/side-panel/SidePanelZoomSection"
+import {
+	sidePanelButtonZIndex,
+	sidePanelZIndex,
+} from "@app/components/paint/pantZAxis"
 import { footerLink } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
@@ -16,7 +20,7 @@ const slideDuration = "300ms"
 const slideDurationNumber = parseInt(slideDuration.slice(0, -2))
 
 const ShowButtonComponent = styled(Button)`
-	z-index: 9;
+	z-index: ${sidePanelButtonZIndex};
 
 	justify-content: center;
 	align-self: center;
@@ -53,9 +57,9 @@ const OuterContainer = styled.nav`
 	background: rgb(241, 193, 123);
 	background: linear-gradient(
 		45deg,
-		rgba(241, 193, 123, 1) 0%,
-		rgba(196, 100, 230, 1) 50%,
-		rgba(113, 231, 255, 1) 100%
+		#f1c17b 0%,
+		#cf9ce2 50%,
+		#71e7ff 100%
 	);
 
 	min-height: 100%;
@@ -69,7 +73,7 @@ const OuterContainer = styled.nav`
 	overflow-x: hidden;
 	overflow-y: scroll;
 
-	z-index: 10;
+	z-index: ${sidePanelZIndex};
 
 	padding: 1rem;
 

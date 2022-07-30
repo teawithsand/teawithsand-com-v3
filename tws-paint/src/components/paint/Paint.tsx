@@ -8,9 +8,14 @@ import { MoveToolHandler } from "@app/components/paint/handler/MoveToolHandler"
 import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
 import { UndoRedoHandler } from "@app/components/paint/handler/UndoRedoHandler"
 import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
+import { PanelDisplay } from "@app/components/paint/panels/panel-display/PanelDisplay"
+import { SidePanel } from "@app/components/paint/panels/side-panel/SidePanel"
+import {
+	drawBackgroundZIndex,
+	pointerEventsCaptureZIndex,
+} from "@app/components/paint/pantZAxis"
 import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
 import { SelectionDisplay } from "@app/components/paint/selection/SelectionDisplay"
-import { SidePanel } from "@app/components/paint/side-panel/SidePanel"
 import { PaintActionType } from "@app/domain/paint/defines/action"
 import {
 	PaintEventType,
@@ -75,11 +80,11 @@ const EventContainer = styled.div`
 `
 
 const Renderer = styled(SVGSceneRenderer)`
-	z-index: 1;
+	z-index: ${drawBackgroundZIndex};
 `
 
 const InnerSelectionDisplay = styled(SelectionDisplay)`
-	z-index: 2;
+	z-index: ${pointerEventsCaptureZIndex};
 `
 
 const InnerPaint = () => {
@@ -98,6 +103,7 @@ const InnerPaint = () => {
 
 	return (
 		<InnerContainer>
+			<PanelDisplay />
 			<SidePanel />
 			<EventContainer
 				onPointerDown={e => {
