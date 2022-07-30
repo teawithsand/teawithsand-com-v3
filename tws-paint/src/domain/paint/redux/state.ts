@@ -63,6 +63,7 @@ export const initialPaintStateSnapshot: PaintStateSnapshot = {
 				offsetY: 0,
 				sceneHeight: 300,
 				sceneWidth: 300,
+				backgroundColor: [255, 255, 255, 1],
 			},
 		},
 	},

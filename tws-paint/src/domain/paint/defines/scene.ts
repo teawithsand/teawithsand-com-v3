@@ -1,5 +1,7 @@
 import { PaintElement } from "@app/domain/paint/defines/element"
 
+import { Color } from "tws-common/color"
+
 export type PaintLayerOptions = {
 	name: string
 	isVisible: boolean
@@ -29,6 +31,8 @@ export type PaintSceneOptions = {
 	 * Note: for now these are always zero as I prefer to move user-display canvas via transform instead.
 	 */
 	offsetY: number
+
+	backgroundColor: Color
 }
 
 export type PaintScene = {

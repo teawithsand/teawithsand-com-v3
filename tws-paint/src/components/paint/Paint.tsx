@@ -134,7 +134,6 @@ const InnerPaint = () => {
 				/>
 				<Renderer
 					style={{
-						backgroundColor: "white",
 						transform: `translateX(${translateX}px) translateY(${translateY}px)`,
 					}}
 					presentationWidth={width}

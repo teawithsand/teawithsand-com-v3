@@ -3,6 +3,8 @@ import React, { forwardRef, Ref } from "react"
 import { SceneRendererProps } from "@app/components/paint/render/SceneRenderer"
 import { SVGLayerRenderer } from "@app/components/paint/render/svg/SVGLayerRenderer"
 
+import { encodeColor } from "tws-common/color"
+
 const InnerRenderer = (
 	props: SceneRendererProps & {
 		style?: React.CSSProperties
@@ -25,7 +27,10 @@ const InnerRenderer = (
 			xmlns="http://www.w3.org/2000/svg"
 			width={width}
 			height={height}
-			style={style}
+			style={{
+				backgroundColor: encodeColor(scene.options.backgroundColor),
+				...style,
+			}}
 			className={className}
 			ref={ref}
 			viewBox={`${options.offsetX} ${options.offsetY} ${options.sceneWidth} ${options.sceneHeight}`}
