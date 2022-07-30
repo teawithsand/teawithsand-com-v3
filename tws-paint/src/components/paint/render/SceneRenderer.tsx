@@ -6,6 +6,8 @@ export type SceneRendererProps = {
 	scene: PaintScene
 	presentationWidth: number
 	presentationHeight: number
+	style?: React.CSSProperties
+	className?: string
 }
 
 export type SceneRenderer = FC<SceneRendererProps>
