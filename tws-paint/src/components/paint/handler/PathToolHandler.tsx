@@ -26,6 +26,7 @@ type State =
 	| {
 			type: "painting"
 			points: Point[]
+			enteredZeroPressure: boolean
 	  }
 	| {
 			type: "idle"
@@ -49,6 +50,13 @@ export const PathToolHandler = () => {
 			if (e.type !== PaintEventType.SCREEN) return
 
 			const event = e.screenEvent
+
+			if (
+				event.type !== PaintScreenEventType.POINTER_DOWN &&
+				event.type !== PaintScreenEventType.POINTER_MOVE &&
+				event.type !== PaintScreenEventType.POINTER_UP
+			)
+				return
 
 			const makeActionFromPoints = (points: Point[]): PaintAction => {
 				return {
@@ -76,6 +84,18 @@ export const PathToolHandler = () => {
 				}
 			}
 
+			event.event.preventDefault()
+
+			const pressure = event.event.pressure
+
+			const screenPoint: Point = [
+				event.event.clientX,
+				event.event.clientY,
+			]
+
+			const canvasPoint =
+				pointOp.current.screenPointToCanvasPoint(screenPoint)
+
 			const ensureIdleState = (commit = true) => {
 				if (
 					commit &&
@@ -95,39 +115,26 @@ export const PathToolHandler = () => {
 			}
 
 			if (event.type === PaintScreenEventType.POINTER_DOWN) {
-				event.event.preventDefault()
-
-				const screenPoint: Point = [
-					event.event.clientX,
-					event.event.clientY,
-				]
-
-				const canvasPoint =
-					pointOp.current.screenPointToCanvasPoint(screenPoint)
-
 				ensureIdleState()
 				state.current = {
 					type: "painting",
 					points: [canvasPoint],
+					enteredZeroPressure: false,
 				}
-			} else if (event.type === PaintScreenEventType.POINTER_UP) {
+			} else if (
+				event.type === PaintScreenEventType.POINTER_UP ||
+				(state.current.type === "painting" &&
+					state.current.enteredZeroPressure)
+			) {
 				event.event.preventDefault()
 
 				ensureIdleState()
 			} else if (event.type === PaintScreenEventType.POINTER_MOVE) {
-				event.event.preventDefault()
-
-				const screenPoint: Point = [
-					event.event.clientX,
-					event.event.clientY,
-				]
-
-				const canvasPoint =
-					pointOp.current.screenPointToCanvasPoint(screenPoint)
-
 				if (state.current.type !== "painting") return
 
 				state.current.points.push(canvasPoint)
+
+				if (pressure === 0) state.current.enteredZeroPressure = true
 
 				dispatch(
 					setUncommittedPaintActions([
