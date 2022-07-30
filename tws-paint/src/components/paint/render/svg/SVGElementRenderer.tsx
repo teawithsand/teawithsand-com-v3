@@ -15,13 +15,17 @@ const SimplePathElement = (props: {
 }) => {
 	const { element, onClick } = props
 
-	const { points, stroke } = element
+	const { flattenedPoints, stroke } = element
 
 	const pathString = useMemo(() => {
-		return element.points
-			.map((v, i) => `${i === 0 ? "M" : "L"} ${v[0]}, ${v[1]}`)
-			.join(" ")
-	}, [points])
+		let res = ""
+		for (let i = 0; i < flattenedPoints.length; i += 2) {
+			const x = flattenedPoints[i]
+			const y = flattenedPoints[i + 1]
+			res += `${i === 0 ? "M" : "L"} ${x}, ${y}`
+		}
+		return res
+	}, [flattenedPoints])
 
 	const style = useMemo(() => {
 		const res: React.CSSProperties = {}

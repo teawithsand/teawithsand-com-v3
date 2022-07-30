@@ -25,7 +25,7 @@ import { Point } from "tws-common/geometry/point"
 type State =
 	| {
 			type: "painting"
-			points: Point[]
+			points: number[]
 	  }
 	| {
 			type: "idle"
@@ -50,7 +50,7 @@ export const PathToolHandler = () => {
 
 			const event = e.screenEvent
 
-			const makeActionFromPoints = (points: Point[]): PaintAction => {
+			const makeActionFromPoints = (points: number[]): PaintAction => {
 				return {
 					type: PaintActionType.SCENE_MUTATIONS,
 					mutations: [
@@ -60,7 +60,7 @@ export const PathToolHandler = () => {
 							elements: [
 								{
 									type: PaintElementType.SIMPLE_PATH,
-									points: points,
+									flattenedPoints: points,
 									// TODO(teawithsand): read these from config
 									stroke: {
 										color: [0, 0, 0, 1],
@@ -107,7 +107,7 @@ export const PathToolHandler = () => {
 				ensureIdleState()
 				state.current = {
 					type: "painting",
-					points: [canvasPoint],
+					points: [...canvasPoint],
 				}
 			} else if (event.type === PaintScreenEventType.POINTER_UP) {
 				event.event.preventDefault()
@@ -126,7 +126,8 @@ export const PathToolHandler = () => {
 
 				if (state.current.type !== "painting") return
 
-				state.current.points.push(canvasPoint)
+				state.current.points.push(canvasPoint[0])
+				state.current.points.push(canvasPoint[1])
 
 				dispatch(
 					setUncommittedPaintActions([

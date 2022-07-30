@@ -1,5 +1,4 @@
 import { Color } from "tws-common/color"
-import { Point } from "tws-common/geometry/point"
 
 export type PathLineCapType = "butt" | "square" | "round"
 export type PathLineJoinType = "miter" | "round" | "bevel"
@@ -17,5 +16,7 @@ export type PathFillData = {
 
 export type SimplePathPaintElement = {
 	stroke: PathStrokeData
-	points: Point[]
+	// Points as set of pairs of [X, Y] coordinates
+	// In other words: flattened list of two dimensional array
+	flattenedPoints: number[]
 }
