@@ -1,4 +1,5 @@
-import React, { memo, MouseEvent, useCallback, useMemo } from "react"
+import { getStroke, StrokeOptions } from "perfect-freehand"
+import React, { memo, useCallback, useMemo } from "react"
 
 import { PaintElement, PaintElementType } from "@app/domain/paint/defines"
 import {
@@ -8,6 +9,23 @@ import {
 import { usePaintEventBus } from "@app/domain/paint/event"
 
 import { encodeColor } from "tws-common/color"
+import { Point } from "tws-common/geometry/point"
+
+function getSvgPathFromStroke(stroke: ReturnType<typeof getStroke>) {
+	if (!stroke.length) return ""
+
+	const d = stroke.reduce(
+		(acc, [x0, y0], i, arr) => {
+			const [x1, y1] = arr[(i + 1) % arr.length]
+			acc.push(x0, y0, (x0 + x1) / 2, (y0 + y1) / 2)
+			return acc
+		},
+		["M", ...stroke[0], "Q"],
+	)
+
+	d.push("Z")
+	return d.join(" ")
+}
 
 const SimplePathElement = (props: {
 	element: PaintElement & { type: PaintElementType.SIMPLE_PATH }
@@ -18,13 +36,22 @@ const SimplePathElement = (props: {
 	const { flattenedPoints, stroke } = element
 
 	const pathString = useMemo(() => {
-		let res = ""
-		for (let i = 0; i < flattenedPoints.length; i += 2) {
-			const x = flattenedPoints[i]
-			const y = flattenedPoints[i + 1]
-			res += `${i === 0 ? "M" : "L"} ${x}, ${y}`
+		const options: StrokeOptions = {
+			simulatePressure: false,
+			size: 1,
+			// Just use ease-out sine, like excalidraw uses
+			// It seems to work ok.
+			easing: (t: number) => Math.sin((t * Math.PI) / 2),
+			last: false,
 		}
-		return res
+
+		const points: Point[] = []
+
+		for (let i = 0; i < flattenedPoints.length; i += 2) {
+			points.push([flattenedPoints[i], flattenedPoints[i + 1]])
+		}
+
+		return getSvgPathFromStroke(getStroke(points, options))
 	}, [flattenedPoints])
 
 	const style = useMemo(() => {
