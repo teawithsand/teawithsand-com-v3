@@ -83,8 +83,6 @@ export const initialPaintStateSnapshot: PaintStateSnapshot = {
 		viewOptions: {
 			offsetX: 0,
 			offsetY: 0,
-			viewportHeight: 0,
-			viewportWidth: 0,
 			zoomFactor: 1,
 		},
 	},
