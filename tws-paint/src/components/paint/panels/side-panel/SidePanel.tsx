@@ -18,6 +18,7 @@ import {
 	breakpointMediaDown,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
 import { Button } from "tws-common/ui"
+import { PickToolPanel } from "@app/components/paint/panels/tool/PickToolPanel"
 
 const slideDuration = "300ms"
 const slideDurationNumber = parseInt(slideDuration.slice(0, -2))
@@ -180,6 +181,16 @@ const SidePanelComponent = (props: {
 				>
 					<SubPanelContainer>
 						<CanvasDimensionsPanel />
+					</SubPanelContainer>
+				</ButtonDropdown>
+
+				<ButtonDropdown
+					defaultShown={false}
+					shownLabel="Hide tool picker"
+					hiddenLabel="Show tool picker"
+				>
+					<SubPanelContainer>
+						<PickToolPanel />
 					</SubPanelContainer>
 				</ButtonDropdown>
 			</InnerContainer>

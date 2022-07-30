@@ -40,6 +40,8 @@ export const applyActionOnPaintStateSnapshot = (
 	} else if (action.type === PaintActionType.SET_VIEW_OFFSETS) {
 		snapshot.uiState.viewOptions.offsetX = action.offsets.offsetX
 		snapshot.uiState.viewOptions.offsetY = action.offsets.offsetY
+	} else if(action.type === PaintActionType.SET_ACTIVE_TOOL) {
+		snapshot.uiState.globalToolConfig.activeTool = action.tool
 	} else {
 		throw new Error(`Unknown action type: ${(action as any).type}`)
 	}

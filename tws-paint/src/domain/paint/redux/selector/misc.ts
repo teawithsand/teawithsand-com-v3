@@ -1,6 +1,8 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 import { PaintScene, PaintToolType } from "@app/domain/paint/defines"
+import { PaintAction } from "@app/domain/paint/defines/action"
+import { commitPaintActionAndResetUncommitted } from "@app/domain/paint/redux/actions"
 import { PaintState, PaintStateSnapshot } from "@app/domain/paint/redux/state"
 
 /**
@@ -8,6 +10,13 @@ import { PaintState, PaintStateSnapshot } from "@app/domain/paint/redux/state"
  */
 export const usePaintSelector = <T>(selector: (state: PaintState) => T) =>
 	useSelector(selector)
+
+export const useDispatchAndCommitPaintActions = () => {
+	const dispatch = useDispatch()
+	return (pa: PaintAction) => {
+		dispatch(commitPaintActionAndResetUncommitted(pa))
+	}
+}
 
 export const useCurrentPaintSnapshotSelector = <T>(
 	selector: (state: PaintStateSnapshot) => T,

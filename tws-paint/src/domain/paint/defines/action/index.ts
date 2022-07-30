@@ -1,4 +1,5 @@
 import { PaintSceneMutation } from "@app/domain/paint/defines/mutation"
+import { PaintToolType } from "@app/domain/paint/defines/tool"
 
 import { Color } from "tws-common/color"
 
@@ -10,6 +11,7 @@ export enum PaintActionType {
 	SET_SCENE_DIMENSIONS = "set-scene-dimensions",
 	SET_SCENE_OFFSETS = "set-scene-offsets",
 	SET_VIEW_OFFSETS = "set-view-offsets",
+	SET_ACTIVE_TOOL = "set-active-tool",
 }
 
 export type PaintAction =
@@ -49,4 +51,8 @@ export type PaintAction =
 				offsetX: number
 				offsetY: number
 			}
+	  }
+	| {
+			type: PaintActionType.SET_ACTIVE_TOOL
+			tool: PaintToolType
 	  }
