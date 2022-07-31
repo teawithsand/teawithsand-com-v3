@@ -1,8 +1,8 @@
 import React, { ReactNode, useMemo } from "react"
 
-import { CanvasDimensionsPanel } from "@app/components/paint/panels/CanvasDimensionsPanel"
-import { PickToolPanel } from "@app/components/paint/panels/PickToolPanel"
-import { ZoomPanel } from "@app/components/paint/panels/ZoomPanel"
+import { CanvasDimensionsPanel } from "@app/components/paint/panels/impls/CanvasDimensionsPanel"
+import { PickToolPanel } from "@app/components/paint/panels/impls/PickToolPanel"
+import { ZoomPanel } from "@app/components/paint/panels/impls/ZoomPanel"
 
 export enum PaintPanelType {
 	CANVAS_DIMENSIONS = 1,

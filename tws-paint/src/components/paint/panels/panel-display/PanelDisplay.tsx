@@ -1,8 +1,8 @@
 import React, { CSSProperties } from "react"
 import styled from "styled-components"
 
-import { CanvasDimensionsPanel } from "@app/components/paint/panels/CanvasDimensionsPanel"
-import { ZoomPanel } from "@app/components/paint/panels/ZoomPanel"
+import { CanvasDimensionsPanel } from "@app/components/paint/panels/impls/CanvasDimensionsPanel"
+import { ZoomPanel } from "@app/components/paint/panels/impls/ZoomPanel"
 import { overlayPanelZIndex } from "@app/components/paint/pantZAxis"
 
 /**
