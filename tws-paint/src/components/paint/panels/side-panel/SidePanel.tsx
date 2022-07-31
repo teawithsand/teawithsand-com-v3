@@ -1,15 +1,15 @@
-import React, { CSSProperties, useState } from "react"
+import React, { CSSProperties, ReactNode, useMemo, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
 import { CanvasDimensionsPanel } from "@app/components/paint/panels/canvas/CanvasDimensionsPanel"
+import { PanelSwitcher } from "@app/components/paint/panels/side-panel/PanelSwitcher"
 import { PickToolPanel } from "@app/components/paint/panels/tool/PickToolPanel"
 import { ZoomPanel } from "@app/components/paint/panels/zoom-panel/ZoomPanel"
 import {
 	sidePanelButtonZIndex,
 	sidePanelZIndex,
 } from "@app/components/paint/pantZAxis"
-import { ButtonDropdown } from "@app/components/util/ButtonDropdown"
 import { footerLink } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
@@ -125,23 +125,54 @@ const SidePanelHeader = styled.div`
 	text-align: center;
 
 	& > p {
-		font-size: 1.5rem;
+		font-size: 1.7rem;
 	}
 `
 
 const SidePanelToggleButton = styled(Button)`
 	width: 100%;
-	font-size: 1.2rem;
+	font-size: 1.5rem;
 `
 
 const SubPanelContainer = styled.div`
 	background-color: rgba(255, 255, 255, 0.9);
-	padding: 1rem 0;
+	padding: 1rem;
 	border-radius: 0.25rem;
 	box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
 		rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
 		rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 `
+
+const wrapSubPanel = (panel: ReactNode) => {
+	return <SubPanelContainer>{panel}</SubPanelContainer>
+}
+
+const ToolButtonGroup = styled.div`
+	display: flex;
+	gap: 1rem;
+	flex-flow: row wrap;
+`
+const ToolButton = styled(Button).attrs(props => ({
+	...props,
+	variant: "secondary",
+}))`
+	font-size: 1.1rem;
+`
+
+const FallbackContainer = styled.div`
+	text-align: center;
+`
+
+const FallbackPanel = () => {
+	return (
+		<SubPanelContainer>
+			<FallbackContainer>
+				Here will be displayed any panel you choose. You can chose one
+				using buttons above.
+			</FallbackContainer>
+		</SubPanelContainer>
+	)
+}
 
 const SidePanelComponent = (props: {
 	className?: string
@@ -150,6 +181,28 @@ const SidePanelComponent = (props: {
 }) => {
 	const trans = useAppTranslationSelector(s => s.paint.panel)
 	const meta = useAppTranslationSelector(s => s.meta)
+
+	const [activePanelId, setActivePanelId] = useState<string | null>(null)
+
+	const panels = useMemo(() => {
+		return [
+			{
+				id: "zoom",
+				panel: <ZoomPanel />,
+			},
+			{
+				id: "canvas-dimensions",
+				panel: <CanvasDimensionsPanel />,
+			},
+			{
+				id: "pick-tool",
+				panel: <PickToolPanel />,
+			},
+		].map(v => ({
+			...v,
+			panel: wrapSubPanel(v.panel),
+		}))
+	}, [])
 
 	return (
 		<OuterContainer className={props.className} style={props.style}>
@@ -163,36 +216,57 @@ const SidePanelComponent = (props: {
 				<SidePanelToggleButton onClick={() => props.setShown(false)}>
 					{trans.hide}
 				</SidePanelToggleButton>
-				<ButtonDropdown
-					defaultShown={false}
-					shownLabel="Hide zoom options"
-					hiddenLabel="Show zoom options"
-				>
-					<SubPanelContainer>
-						<ZoomPanel />
-					</SubPanelContainer>
-				</ButtonDropdown>
-
-				<ButtonDropdown
-					defaultShown={false}
-					shownLabel="Hide canvas size options"
-					hiddenLabel="Show canvas size options"
-				>
-					<SubPanelContainer>
-						<CanvasDimensionsPanel />
-					</SubPanelContainer>
-				</ButtonDropdown>
-
-				<ButtonDropdown
-					defaultShown={false}
-					shownLabel="Hide tool picker"
-					hiddenLabel="Show tool picker"
-				>
-					<SubPanelContainer>
-						<PickToolPanel />
-					</SubPanelContainer>
-				</ButtonDropdown>
+				<ToolButtonGroup>
+					<ToolButton onClick={() => setActivePanelId("zoom")}>
+						Zoom
+					</ToolButton>
+					<ToolButton
+						onClick={() => setActivePanelId("canvas-dimensions")}
+					>
+						Scene size
+					</ToolButton>
+					<ToolButton onClick={() => setActivePanelId("pick-tool")}>
+						Pick tool
+					</ToolButton>
+				</ToolButtonGroup>
+				<PanelSwitcher
+					fallbackPanel={<FallbackPanel />}
+					activePanelId={activePanelId}
+					panels={panels}
+				/>
 			</InnerContainer>
 		</OuterContainer>
 	)
 }
+
+/*
+<ButtonDropdown
+	defaultShown={false}
+	shownLabel="Hide zoom options"
+	hiddenLabel="Show zoom options"
+>
+	<SubPanelContainer>
+		<ZoomPanel />
+	</SubPanelContainer>
+</ButtonDropdown>
+
+<ButtonDropdown
+	defaultShown={false}
+	shownLabel="Hide canvas size options"
+	hiddenLabel="Show canvas size options"
+>
+	<SubPanelContainer>
+		<CanvasDimensionsPanel />
+	</SubPanelContainer>
+</ButtonDropdown>
+
+<ButtonDropdown
+	defaultShown={false}
+	shownLabel="Hide tool picker"
+	hiddenLabel="Show tool picker"
+>
+	<SubPanelContainer>
+		<PickToolPanel />
+	</SubPanelContainer>
+</ButtonDropdown>
+*/

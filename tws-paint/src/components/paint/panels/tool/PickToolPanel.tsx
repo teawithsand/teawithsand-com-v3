@@ -11,13 +11,17 @@ import {
 import { Button } from "tws-common/ui"
 
 const InnerContainer = styled.div`
-	display: grid;
-	grid-auto-flow: column;
-	grid-template-rows: auto;
+	display: flex;
+	flex-flow: row wrap;
 	gap: 0.6rem;
 
 	justify-items: center;
 	align-items: center;
+
+	& > * {
+		flex-grow: 1;
+		flex-basis: 33%;
+	}
 `
 
 export const PickToolPanel = () => {
