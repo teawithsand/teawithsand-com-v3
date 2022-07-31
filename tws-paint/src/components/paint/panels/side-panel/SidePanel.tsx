@@ -2,10 +2,10 @@ import React, { CSSProperties, ReactNode, useMemo, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
-import { CanvasDimensionsPanel } from "@app/components/paint/panels/canvas/CanvasDimensionsPanel"
+import { CanvasDimensionsPanel } from "@app/components/paint/panels/CanvasDimensionsPanel"
 import { PanelSwitcher } from "@app/components/paint/panels/side-panel/PanelSwitcher"
-import { PickToolPanel } from "@app/components/paint/panels/tool/PickToolPanel"
-import { ZoomPanel } from "@app/components/paint/panels/zoom-panel/ZoomPanel"
+import { PickToolPanel } from "@app/components/paint/panels/PickToolPanel"
+import { ZoomPanel } from "@app/components/paint/panels/ZoomPanel"
 import {
 	sidePanelButtonZIndex,
 	sidePanelZIndex,
@@ -34,6 +34,12 @@ const ShowButtonComponent = styled(Button)`
 	margin-right: 1rem;
 `
 
+/**
+ * Note: side panel is not just another panel.
+ * It's THE Side Panel.
+ *
+ * All the panels API do not apply to this one.
+ */
 export const SidePanel = () => {
 	const [isEnabled, setIsEnabled] = useState(true)
 
