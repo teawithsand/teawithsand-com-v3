@@ -1,6 +1,8 @@
-import React, { ReactNode, useMemo } from "react"
+import React, { ReactNode } from "react"
 import { CSSTransition, SwitchTransition } from "react-transition-group"
 import styled from "styled-components"
+
+import { PaintPanelType, usePanel } from "@app/components/paint/panels/panels"
 
 const transitionTime = 200
 const transitionTimeCss = `${transitionTime}ms`
@@ -28,33 +30,37 @@ const SwitcherContainer = styled.div`
 	}
 `
 
-export const PanelSwitcher = (props: {
-	panels: {
-		id: string
-		panel: ReactNode
-	}[]
-	fallbackPanel: ReactNode
-	activePanelId: string | null
-}) => {
-	const { panels, activePanelId, fallbackPanel } = props
+const SubPanelContainer = styled.div`
+	background-color: rgba(255, 255, 255, 0.9);
+	padding: 0.3rem;
+	padding-bottom: 0.6rem;
+	border-radius: 0.25rem;
+	box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+		rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+		rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+`
 
-	const activePanel = useMemo(() => {
-		const res = panels.find(({ id }) => id === activePanelId)
-		if (res) {
-			return res.panel
-		}
-		return null
-	}, [activePanelId])
+export const PanelSwitcher = (props: {
+	panelType: PaintPanelType | null
+	fallbackElement: ReactNode
+}) => {
+	const { panelType, fallbackElement } = props
+
+	const panel = usePanel(panelType ?? PaintPanelType.ZOOM, {
+		titled: true,
+	})
 
 	return (
 		<SwitcherContainer>
 			<SwitchTransition mode={"out-in"}>
 				<CSSTransition
-					key={activePanelId}
+					key={panelType}
 					timeout={transitionTime}
 					classNames="dissolve"
 				>
-					{activePanel ?? fallbackPanel}
+					<SubPanelContainer>
+						{panelType !== null ? panel : fallbackElement}
+					</SubPanelContainer>
 				</CSSTransition>
 			</SwitchTransition>
 		</SwitcherContainer>

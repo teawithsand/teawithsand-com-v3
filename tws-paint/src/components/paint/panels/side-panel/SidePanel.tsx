@@ -1,10 +1,8 @@
-import React, { CSSProperties, ReactNode, useMemo, useState } from "react"
+import React, { CSSProperties, useState } from "react"
 import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
-import { CanvasDimensionsPanel } from "@app/components/paint/panels/impls/CanvasDimensionsPanel"
-import { PickToolPanel } from "@app/components/paint/panels/impls/PickToolPanel"
-import { ZoomPanel } from "@app/components/paint/panels/impls/ZoomPanel"
+import { PaintPanelType } from "@app/components/paint/panels/panels"
 import { PanelSwitcher } from "@app/components/paint/panels/side-panel/PanelSwitcher"
 import {
 	sidePanelButtonZIndex,
@@ -140,19 +138,6 @@ const SidePanelToggleButton = styled(Button)`
 	font-size: 1.5rem;
 `
 
-const SubPanelContainer = styled.div`
-	background-color: rgba(255, 255, 255, 0.9);
-	padding: 1rem;
-	border-radius: 0.25rem;
-	box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-		rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-		rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-`
-
-const wrapSubPanel = (panel: ReactNode) => {
-	return <SubPanelContainer>{panel}</SubPanelContainer>
-}
-
 const ToolButtonGroup = styled.div`
 	display: flex;
 	gap: 1rem;
@@ -171,12 +156,10 @@ const FallbackContainer = styled.div`
 
 const FallbackPanel = () => {
 	return (
-		<SubPanelContainer>
-			<FallbackContainer>
-				Here will be displayed any panel you choose. You can chose one
-				using buttons above.
-			</FallbackContainer>
-		</SubPanelContainer>
+		<FallbackContainer>
+			Here will be displayed any panel you choose. You can chose one using
+			buttons above.
+		</FallbackContainer>
 	)
 }
 
@@ -188,27 +171,8 @@ const SidePanelComponent = (props: {
 	const trans = useAppTranslationSelector(s => s.paint.panel)
 	const meta = useAppTranslationSelector(s => s.meta)
 
-	const [activePanelId, setActivePanelId] = useState<string | null>(null)
-
-	const panels = useMemo(() => {
-		return [
-			{
-				id: "zoom",
-				panel: <ZoomPanel />,
-			},
-			{
-				id: "canvas-dimensions",
-				panel: <CanvasDimensionsPanel />,
-			},
-			{
-				id: "pick-tool",
-				panel: <PickToolPanel />,
-			},
-		].map(v => ({
-			...v,
-			panel: wrapSubPanel(v.panel),
-		}))
-	}, [])
+	const [activePanelType, setActivePanelType] =
+		useState<PaintPanelType | null>(null)
 
 	return (
 		<OuterContainer className={props.className} style={props.style}>
@@ -223,22 +187,29 @@ const SidePanelComponent = (props: {
 					{trans.hide}
 				</SidePanelToggleButton>
 				<ToolButtonGroup>
-					<ToolButton onClick={() => setActivePanelId("zoom")}>
+					<ToolButton
+						onClick={() => setActivePanelType(PaintPanelType.ZOOM)}
+					>
 						Zoom
 					</ToolButton>
 					<ToolButton
-						onClick={() => setActivePanelId("canvas-dimensions")}
+						onClick={() =>
+							setActivePanelType(PaintPanelType.CANVAS_DIMENSIONS)
+						}
 					>
 						Scene size
 					</ToolButton>
-					<ToolButton onClick={() => setActivePanelId("pick-tool")}>
+					<ToolButton
+						onClick={() =>
+							setActivePanelType(PaintPanelType.PICK_TOOL)
+						}
+					>
 						Pick tool
 					</ToolButton>
 				</ToolButtonGroup>
 				<PanelSwitcher
-					fallbackPanel={<FallbackPanel />}
-					activePanelId={activePanelId}
-					panels={panels}
+					fallbackElement={<FallbackPanel />}
+					panelType={activePanelType}
 				/>
 			</InnerContainer>
 		</OuterContainer>

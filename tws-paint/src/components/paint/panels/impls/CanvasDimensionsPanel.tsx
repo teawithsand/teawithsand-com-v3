@@ -48,7 +48,6 @@ export const CanvasDimensionsPanel = () => {
 
 	return (
 		<InnerContainer>
-			<h1>Scene properties</h1>
 			<FormRow>
 				<Form.Label>Offset X</Form.Label>
 				<Form.Control

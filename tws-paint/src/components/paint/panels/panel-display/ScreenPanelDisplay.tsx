@@ -8,7 +8,7 @@ import { overlayPanelZIndex } from "@app/components/paint/pantZAxis"
 /**
  * Util for displaying panels on top of paint canvas
  */
-export const PanelDisplay = () => {
+export const ScreenPanelDisplay = () => {
 	return (
 		<>
 			<PanelDisplayWrapper $align="bottom-left">

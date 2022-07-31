@@ -8,7 +8,7 @@ import { MoveToolHandler } from "@app/components/paint/handler/MoveToolHandler"
 import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
 import { UndoRedoHandler } from "@app/components/paint/handler/UndoRedoHandler"
 import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
-import { PanelDisplay } from "@app/components/paint/panels/panel-display/PanelDisplay"
+import { ScreenPanelDisplay } from "@app/components/paint/panels/panel-display/ScreenPanelDisplay"
 import { SidePanel } from "@app/components/paint/panels/side-panel/SidePanel"
 import {
 	drawBackgroundZIndex,
@@ -108,7 +108,7 @@ const InnerPaint = () => {
 
 	return (
 		<InnerContainer>
-			<PanelDisplay />
+			<ScreenPanelDisplay />
 			<SidePanel />
 			<EventContainer
 				onPointerDown={e => {
