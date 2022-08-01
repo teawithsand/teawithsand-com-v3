@@ -1,18 +1,18 @@
 import React, { ReactNode, useMemo } from "react"
 
-import { CanvasDimensionsPanel } from "@app/components/paint/panels/impls/CanvasDimensionsPanel"
 import { PickToolPanel } from "@app/components/paint/panels/impls/PickToolPanel"
+import { SceneSizePanel } from "@app/components/paint/panels/impls/SceneSizePanel"
 import { ZoomPanel } from "@app/components/paint/panels/impls/ZoomPanel"
 import { TitledPanel } from "@app/components/paint/panels/panel-display/TitledPanel"
 
 export enum PaintPanelType {
-	CANVAS_DIMENSIONS = 1,
+	SCENE_SIZE = 1,
 	PICK_TOOL = 2,
 	ZOOM = 3,
 }
 
 export const usePanelShortTitle = (type: PaintPanelType) => {
-	if (type === PaintPanelType.CANVAS_DIMENSIONS) {
+	if (type === PaintPanelType.SCENE_SIZE) {
 		return "Scene size"
 	} else if (type === PaintPanelType.PICK_TOOL) {
 		return "Pick tool"
@@ -24,7 +24,7 @@ export const usePanelShortTitle = (type: PaintPanelType) => {
 }
 
 export const usePanelTitle = (type: PaintPanelType) => {
-	if (type === PaintPanelType.CANVAS_DIMENSIONS) {
+	if (type === PaintPanelType.SCENE_SIZE) {
 		return "Scene size properties"
 	} else if (type === PaintPanelType.PICK_TOOL) {
 		return "Pick tool"
@@ -44,8 +44,8 @@ export const usePanel = (
 	const title = usePanelTitle(type)
 
 	const panelObtainer = () => {
-		if (type === PaintPanelType.CANVAS_DIMENSIONS) {
-			return <CanvasDimensionsPanel />
+		if (type === PaintPanelType.SCENE_SIZE) {
+			return <SceneSizePanel />
 		} else if (type === PaintPanelType.PICK_TOOL) {
 			return <PickToolPanel />
 		} else if (type === PaintPanelType.ZOOM) {

@@ -194,7 +194,7 @@ const SidePanelComponent = (props: {
 					</ToolButton>
 					<ToolButton
 						onClick={() =>
-							setActivePanelType(PaintPanelType.CANVAS_DIMENSIONS)
+							setActivePanelType(PaintPanelType.SCENE_SIZE)
 						}
 					>
 						Scene size
@@ -215,35 +215,3 @@ const SidePanelComponent = (props: {
 		</OuterContainer>
 	)
 }
-
-/*
-<ButtonDropdown
-	defaultShown={false}
-	shownLabel="Hide zoom options"
-	hiddenLabel="Show zoom options"
->
-	<SubPanelContainer>
-		<ZoomPanel />
-	</SubPanelContainer>
-</ButtonDropdown>
-
-<ButtonDropdown
-	defaultShown={false}
-	shownLabel="Hide canvas size options"
-	hiddenLabel="Show canvas size options"
->
-	<SubPanelContainer>
-		<CanvasDimensionsPanel />
-	</SubPanelContainer>
-</ButtonDropdown>
-
-<ButtonDropdown
-	defaultShown={false}
-	shownLabel="Hide tool picker"
-	hiddenLabel="Show tool picker"
->
-	<SubPanelContainer>
-		<PickToolPanel />
-	</SubPanelContainer>
-</ButtonDropdown>
-*/

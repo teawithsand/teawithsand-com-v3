@@ -1,7 +1,7 @@
 import React, { CSSProperties, useMemo } from "react"
 import styled from "styled-components"
 
-import { CanvasDimensionsPanel } from "@app/components/paint/panels/impls/CanvasDimensionsPanel"
+import { SceneSizePanel } from "@app/components/paint/panels/impls/SceneSizePanel"
 import { ZoomPanel } from "@app/components/paint/panels/impls/ZoomPanel"
 import {
 	PaintPanelDisplayContext,
@@ -26,7 +26,7 @@ export const ScreenPanelDisplay = () => {
 				<ZoomPanel />
 			</PanelDisplayWrapper>
 			<PanelDisplayWrapper $align="top-left">
-				<CanvasDimensionsPanel />
+				<SceneSizePanel />
 			</PanelDisplayWrapper>
 		</PaintPanelDisplayContext.Provider>
 	)

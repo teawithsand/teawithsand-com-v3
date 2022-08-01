@@ -34,7 +34,7 @@ const FormRow = styled(Form.Group)`
 	}
 `
 
-export const CanvasDimensionsPanel = () => {
+export const SceneSizePanel = () => {
 	const offsets = useCurrentPaintSnapshotSelector(s => ({
 		offsetX: s.uiState.viewOptions.offsetX,
 		offsetY: s.uiState.viewOptions.offsetY,
