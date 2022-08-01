@@ -13,6 +13,7 @@ import { footerLink } from "@app/paths"
 import { useAppTranslationSelector } from "@app/trans/AppTranslation"
 
 import {
+	BREAKPOINT_LG,
 	BREAKPOINT_MD,
 	breakpointMediaDown,
 } from "tws-common/react/hook/dimensions/useBreakpoint"
@@ -68,6 +69,9 @@ const OuterContainer = styled.nav`
 	min-height: 100%;
 	width: 33%;
 
+	@media ${breakpointMediaDown(BREAKPOINT_LG)} {
+		width: 50%;
+	}
 	@media ${breakpointMediaDown(BREAKPOINT_MD)} {
 		width: 100%;
 	}
