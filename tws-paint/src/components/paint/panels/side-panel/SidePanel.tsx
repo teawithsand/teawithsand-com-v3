@@ -3,6 +3,7 @@ import { CSSTransition } from "react-transition-group"
 import styled from "styled-components"
 
 import { PaintPanelType } from "@app/components/paint/panels/panels"
+import { PanelPicker } from "@app/components/paint/panels/side-panel/PanelPicker"
 import { PanelSwitcher } from "@app/components/paint/panels/side-panel/PanelSwitcher"
 import {
 	sidePanelButtonZIndex,
@@ -138,18 +139,6 @@ const SidePanelToggleButton = styled(Button)`
 	font-size: 1.5rem;
 `
 
-const ToolButtonGroup = styled.div`
-	display: flex;
-	gap: 1rem;
-	flex-flow: row wrap;
-`
-const ToolButton = styled(Button).attrs(props => ({
-	...props,
-	variant: "secondary",
-}))`
-	font-size: 1.1rem;
-`
-
 const FallbackContainer = styled.div`
 	text-align: center;
 `
@@ -186,27 +175,12 @@ const SidePanelComponent = (props: {
 				<SidePanelToggleButton onClick={() => props.setShown(false)}>
 					{trans.hide}
 				</SidePanelToggleButton>
-				<ToolButtonGroup>
-					<ToolButton
-						onClick={() => setActivePanelType(PaintPanelType.ZOOM)}
-					>
-						Zoom
-					</ToolButton>
-					<ToolButton
-						onClick={() =>
-							setActivePanelType(PaintPanelType.SCENE_SIZE)
-						}
-					>
-						Scene size
-					</ToolButton>
-					<ToolButton
-						onClick={() =>
-							setActivePanelType(PaintPanelType.PICK_TOOL)
-						}
-					>
-						Pick tool
-					</ToolButton>
-				</ToolButtonGroup>
+
+				<PanelPicker
+					currentPanelType={activePanelType}
+					onPanelChange={setActivePanelType}
+				/>
+
 				<PanelSwitcher
 					fallbackElement={<FallbackPanel />}
 					panelType={activePanelType}
