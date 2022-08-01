@@ -1,7 +1,12 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode, useMemo } from "react"
 import { CSSTransition, SwitchTransition } from "react-transition-group"
 import styled from "styled-components"
 
+import {
+	PaintPanelDisplayContext,
+	PaintPanelDisplayContextData,
+	PaintPanelPlace,
+} from "@app/components/paint/panels/panel-display/PanelContext"
 import { PaintPanelType, usePanel } from "@app/components/paint/panels/panels"
 
 const transitionTime = 200
@@ -50,19 +55,27 @@ export const PanelSwitcher = (props: {
 		titled: true,
 	})
 
+	const ctx: PaintPanelDisplayContextData = useMemo(() => {
+		return {
+			place: PaintPanelPlace.SCREEN,
+		}
+	}, [])
+
 	return (
-		<SwitcherContainer>
-			<SwitchTransition mode={"out-in"}>
-				<CSSTransition
-					key={panelType}
-					timeout={transitionTime}
-					classNames="dissolve"
-				>
-					<SubPanelContainer>
-						{panelType !== null ? panel : fallbackElement}
-					</SubPanelContainer>
-				</CSSTransition>
-			</SwitchTransition>
-		</SwitcherContainer>
+		<PaintPanelDisplayContext.Provider value={ctx}>
+			<SwitcherContainer>
+				<SwitchTransition mode={"out-in"}>
+					<CSSTransition
+						key={panelType}
+						timeout={transitionTime}
+						classNames="dissolve"
+					>
+						<SubPanelContainer>
+							{panelType !== null ? panel : fallbackElement}
+						</SubPanelContainer>
+					</CSSTransition>
+				</SwitchTransition>
+			</SwitcherContainer>
+		</PaintPanelDisplayContext.Provider>
 	)
 }

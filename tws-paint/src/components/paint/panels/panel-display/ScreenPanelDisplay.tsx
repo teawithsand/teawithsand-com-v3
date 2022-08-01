@@ -1,23 +1,34 @@
-import React, { CSSProperties } from "react"
+import React, { CSSProperties, useMemo } from "react"
 import styled from "styled-components"
 
 import { CanvasDimensionsPanel } from "@app/components/paint/panels/impls/CanvasDimensionsPanel"
 import { ZoomPanel } from "@app/components/paint/panels/impls/ZoomPanel"
+import {
+	PaintPanelDisplayContext,
+	PaintPanelDisplayContextData,
+	PaintPanelPlace,
+} from "@app/components/paint/panels/panel-display/PanelContext"
 import { overlayPanelZIndex } from "@app/components/paint/pantZAxis"
 
 /**
  * Util for displaying panels on top of paint canvas
  */
 export const ScreenPanelDisplay = () => {
+	const context: PaintPanelDisplayContextData = useMemo(
+		() => ({
+			place: PaintPanelPlace.SCREEN,
+		}),
+		[],
+	)
 	return (
-		<>
+		<PaintPanelDisplayContext.Provider value={context}>
 			<PanelDisplayWrapper $align="bottom-left">
 				<ZoomPanel />
 			</PanelDisplayWrapper>
 			<PanelDisplayWrapper $align="top-left">
 				<CanvasDimensionsPanel />
 			</PanelDisplayWrapper>
-		</>
+		</PaintPanelDisplayContext.Provider>
 	)
 }
 
