@@ -61,6 +61,11 @@ export const PanelPicker = (props: {
 				<PanelButton onClick={makeCallback(PaintPanelType.PICK_TOOL)}>
 					Pick tool
 				</PanelButton>
+				<PanelButton
+					onClick={makeCallback(PaintPanelType.GENERAL_TOOL_SETTINGS)}
+				>
+					General tool settings
+				</PanelButton>
 			</PanelSection>
 		</InnerContainer>
 	)
