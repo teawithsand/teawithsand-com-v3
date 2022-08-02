@@ -1,9 +1,12 @@
+
 export enum PaintScreenEventType {
 	POINTER_DOWN = "pointer-down",
 	POINTER_UP = "pointer-up",
 	POINTER_MOVE = "pointer-move",
 
 	ELEMENT_CLICK = "element-click",
+	ELEMENT_POINTER_OVER = "element-pointer-over",
+	// ELEMENT_IN_BOUNDING_BOX = "element-in-bounding-box",
 }
 
 /**
@@ -19,11 +22,28 @@ export type PaintScreenEvent =
 	  }
 	| {
 			type: PaintScreenEventType.ELEMENT_CLICK
-			event: MouseEvent
+			event: PointerEvent
 			layerIndex: number
 			elementIndex: number
 	  }
+	| {
+			type: PaintScreenEventType.ELEMENT_POINTER_OVER
+			event: PointerEvent
+			layerIndex: number
+			elementIndex: number
+	  }
+/*
 
+	| {
+			type: PaintScreenEventType.ELEMENT_IN_BOUNDING_BOX
+			event: PointerEvent
+			layerIndex: number
+			elementIndex: number
+			// contains screen coordinates, not canvas coordinates
+			boundingBox: Rect
+	  }
+
+	  */
 export enum PaintEventType {
 	SCREEN = "screen",
 }

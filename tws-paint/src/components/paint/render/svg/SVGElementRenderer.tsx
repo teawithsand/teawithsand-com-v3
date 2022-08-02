@@ -29,8 +29,9 @@ function getSvgPathFromStroke(stroke: ReturnType<typeof getStroke>) {
 const SimplePathElement = (props: {
 	element: PaintElement & { type: PaintElementType.HAND_DRAWN_PATH }
 	onClick?: (e: unknown) => void
+	onPointerEnter?: (e: unknown) => void
 }) => {
-	const { element, onClick } = props
+	const { element, onPointerEnter, onClick } = props
 
 	const { points, stroke } = element
 
@@ -59,7 +60,14 @@ const SimplePathElement = (props: {
 		return res
 	}, [stroke])
 
-	return <path onClick={onClick} d={pathString} style={style} />
+	return (
+		<path
+			onClick={onClick}
+			onPointerEnter={onPointerEnter}
+			d={pathString}
+			style={style}
+		/>
+	)
 }
 
 const InnerRenderer = (props: {
@@ -81,11 +89,32 @@ const InnerRenderer = (props: {
 				},
 			})
 		},
-		[layerIndex, element, bus],
+		[layerIndex, elementIndex, bus],
+	)
+
+	const onPointerEnter = useCallback(
+		(e: unknown) => {
+			bus.emitEvent({
+				type: PaintEventType.SCREEN,
+				screenEvent: {
+					type: PaintScreenEventType.ELEMENT_POINTER_OVER,
+					elementIndex,
+					layerIndex,
+					event: (e as any).nativeEvent,
+				},
+			})
+		},
+		[layerIndex, elementIndex, bus],
 	)
 
 	if (element.type === PaintElementType.HAND_DRAWN_PATH) {
-		return <SimplePathElement onClick={onClick} element={element} />
+		return (
+			<SimplePathElement
+				onClick={onClick}
+				onPointerEnter={onPointerEnter}
+				element={element}
+			/>
+		)
 	} else {
 		throw new Error(
 			`Unsupported element type in svg renderer ${(element as any).type}`,
