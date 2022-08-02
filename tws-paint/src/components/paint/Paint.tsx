@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit"
-import React, { useMemo } from "react"
+import React, { forwardRef, useMemo, useState } from "react"
 import { Helmet } from "react-helmet"
 import { Provider } from "react-redux"
 import styled from "styled-components"
@@ -92,7 +92,8 @@ const InnerSelectionDisplay = styled(SelectionDisplay)`
 	z-index: ${pointerEventsCaptureZIndex};
 `
 
-const InnerPaint = () => {
+// eslint-disable-next-line react/display-name
+const InnerPaint = forwardRef((props: {}, ref) => {
 	const bus = usePaintEventBus()
 	const mustOnPaintScreenEvent = (e: PaintScreenEvent) => {
 		bus.emitEvent({
@@ -113,6 +114,7 @@ const InnerPaint = () => {
 			<ScreenPanelDisplay />
 			<SidePanel />
 			<EventContainer
+				ref={ref as any}
 				onPointerDown={e => {
 					mustOnPaintScreenEvent({
 						type: PaintScreenEventType.POINTER_DOWN,
@@ -149,7 +151,7 @@ const InnerPaint = () => {
 			</EventContainer>
 		</InnerContainer>
 	)
-}
+})
 
 export const Paint = () => {
 	const store = useMemo(() => {
@@ -199,6 +201,8 @@ export const Paint = () => {
 		return store
 	}, [])
 
+	const [sceneElement, setSceneElement] = useState<HTMLElement | null>(null)
+
 	return (
 		<Provider store={store}>
 			<PaintEventBusProvider>
@@ -210,12 +214,14 @@ export const Paint = () => {
 				</Helmet>
 
 				<EraseToolHandler />
-				<ScrollSceneHandler />
+				{sceneElement ? (
+					<ScrollSceneHandler sceneElement={sceneElement} />
+				) : null}
 				<MoveToolHandler />
 				<PathToolHandler />
 				<UndoRedoHandler />
 				<ZoomHandler />
-				<InnerPaint />
+				<InnerPaint ref={setSceneElement} />
 			</PaintEventBusProvider>
 		</Provider>
 	)

@@ -7,7 +7,9 @@ import {
 	useDispatchAndCommitPaintActions,
 } from "@app/domain/paint/redux/selector"
 
-export const ScrollSceneHandler = () => {
+export const ScrollSceneHandler = (props: { sceneElement: HTMLElement }) => {
+	const { sceneElement } = props
+
 	const offsets = useAsRef(
 		useCurrentPaintSnapshotSelector(s => ({
 			offsetX: s.uiState.viewOptions.offsetX,
@@ -46,14 +48,14 @@ export const ScrollSceneHandler = () => {
 			}
 		}
 
-		document.body.addEventListener("wheel", wheelHandler, {
+		sceneElement.addEventListener("wheel", wheelHandler, {
 			passive: false,
 		})
 
 		return () => {
-			document.body.removeEventListener("wheel", wheelHandler)
+			sceneElement.removeEventListener("wheel", wheelHandler)
 		}
-	}, [offsets, dispatchPaintAction])
+	}, [sceneElement, offsets, dispatchPaintAction])
 
 	return <></>
 }
