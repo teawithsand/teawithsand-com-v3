@@ -9,6 +9,10 @@ const InnerContainer = styled.div`
 	display: flex;
 	gap: 1rem;
 	flex-flow: row wrap;
+
+	& > * {
+		flex: 1;
+	}
 `
 
 const PanelButton = styled(Button)`
@@ -16,8 +20,6 @@ const PanelButton = styled(Button)`
 `
 
 const PanelSection = styled.div`
-	flex: 1;
-
 	display: flex;
 	gap: 0.5rem;
 	flex-flow: column nowrap;
@@ -48,7 +50,7 @@ export const PanelPicker = (props: {
 	return (
 		<InnerContainer>
 			<PanelSection>
-				<PanelSectionTitle>Screen/Display panels</PanelSectionTitle>
+				<PanelSectionTitle>Screen/Display</PanelSectionTitle>
 				<PanelButton onClick={makeCallback(PaintPanelType.ZOOM)}>
 					Zoom
 				</PanelButton>
@@ -57,7 +59,7 @@ export const PanelPicker = (props: {
 				</PanelButton>
 			</PanelSection>
 			<PanelSection>
-				<PanelSectionTitle>Tool panels</PanelSectionTitle>
+				<PanelSectionTitle>Tool</PanelSectionTitle>
 				<PanelButton onClick={makeCallback(PaintPanelType.PICK_TOOL)}>
 					Pick tool
 				</PanelButton>
@@ -65,6 +67,12 @@ export const PanelPicker = (props: {
 					onClick={makeCallback(PaintPanelType.GENERAL_TOOL_SETTINGS)}
 				>
 					General tool settings
+				</PanelButton>
+			</PanelSection>
+			<PanelSection>
+				<PanelSectionTitle>Save/Export</PanelSectionTitle>
+				<PanelButton onClick={makeCallback(PaintPanelType.EXPORT)}>
+					Export
 				</PanelButton>
 			</PanelSection>
 		</InnerContainer>

@@ -32,3 +32,19 @@ export const downloadObject = (
 		URL.revokeObjectURL(url)
 	}, 5000)
 }
+
+// Hack to workaround utf-8 characters
+// TODO(teawithsand): replace it with robust base64 implementation provided by tws-common package
+function utf8ToBase64(str: string) {
+	return window.btoa(window.unescape(encodeURIComponent(str)))
+}
+
+export const downloadString = (
+	text: string,
+	mime: string,
+	filename: string,
+) => {
+	if (isSSR()) return
+
+	downloadUrl(`data:${mime};base64,${utf8ToBase64(text)}`, filename)
+}

@@ -14,8 +14,8 @@ const InnerRenderer = (
 ) => {
 	const {
 		scene,
-		presentationWidth: width,
-		presentationHeight: height,
+		presentationWidth,
+		presentationHeight,
 		style,
 		className,
 	} = props
@@ -25,8 +25,8 @@ const InnerRenderer = (
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			width={width}
-			height={height}
+			width={presentationWidth}
+			height={presentationHeight}
 			style={{
 				backgroundColor: encodeColor(scene.options.backgroundColor),
 				...style,

@@ -1,5 +1,6 @@
 import React, { ReactNode, useMemo } from "react"
 
+import { ExportPanel } from "@app/components/paint/panels/impls/ExportPanel"
 import { GeneralToolSettingsPanel } from "@app/components/paint/panels/impls/GeneralToolSettingsPanel"
 import { PickToolPanel } from "@app/components/paint/panels/impls/PickToolPanel"
 import { SceneSizePanel } from "@app/components/paint/panels/impls/SceneSizePanel"
@@ -11,6 +12,7 @@ export enum PaintPanelType {
 	PICK_TOOL = 2,
 	ZOOM = 3,
 	GENERAL_TOOL_SETTINGS = 4,
+	EXPORT = 5,
 }
 
 export const usePanelShortTitle = (type: PaintPanelType) => {
@@ -21,7 +23,9 @@ export const usePanelShortTitle = (type: PaintPanelType) => {
 	} else if (type === PaintPanelType.ZOOM) {
 		return "Zoom"
 	} else if (type === PaintPanelType.GENERAL_TOOL_SETTINGS) {
-		return "General tool settings"
+		return "General settings"
+	} else if (type === PaintPanelType.EXPORT) {
+		return "Export image"
 	} else {
 		throw new Error(`Bad panel type ${type as any}`)
 	}
@@ -36,6 +40,8 @@ export const usePanelTitle = (type: PaintPanelType) => {
 		return "Zoom properties"
 	} else if (type === PaintPanelType.GENERAL_TOOL_SETTINGS) {
 		return "General tool settings"
+	} else if (type === PaintPanelType.EXPORT) {
+		return "Export image"
 	} else {
 		throw new Error(`Bad panel type ${type as any}`)
 	}
@@ -58,6 +64,8 @@ export const usePanel = (
 			return <ZoomPanel />
 		} else if (type === PaintPanelType.GENERAL_TOOL_SETTINGS) {
 			return <GeneralToolSettingsPanel />
+		} else if (type === PaintPanelType.EXPORT) {
+			return <ExportPanel />
 		} else {
 			throw new Error(`Bad panel type ${type as any}`)
 		}
