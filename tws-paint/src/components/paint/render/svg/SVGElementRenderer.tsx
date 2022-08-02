@@ -1,16 +1,14 @@
-import { getStroke, StrokeOptions } from "perfect-freehand";
-import React, { memo, useCallback, useMemo, useRef } from "react";
+import { getStroke, StrokeOptions } from "perfect-freehand"
+import React, { memo, useCallback, useMemo } from "react"
 
+import { PaintElement, PaintElementType } from "@app/domain/paint/defines"
+import {
+	PaintEventType,
+	PaintScreenEventType,
+} from "@app/domain/paint/defines/event"
+import { usePaintEventBus } from "@app/domain/paint/event"
 
-
-import { PaintElement, PaintElementType } from "@app/domain/paint/defines";
-import { PaintEventType, PaintScreenEventType } from "@app/domain/paint/defines/event";
-import { usePaintEventBus } from "@app/domain/paint/event";
-
-
-
-import { encodeColor } from "tws-common/color";
-
+import { encodeColor } from "tws-common/color"
 
 function getSvgPathFromStroke(stroke: ReturnType<typeof getStroke>) {
 	if (!stroke.length) return ""
@@ -52,14 +50,6 @@ const SimplePathElement = (props: {
 	const style = useMemo(() => {
 		const res: React.CSSProperties = {}
 
-		/*
-		if (fill) {
-			res.fill = encodeColor(fill.color)
-		} else {
-			res.fill = "none"
-		}
-        */
-
 		res.fill = encodeColor(stroke.color)
 		res.stroke = encodeColor(stroke.color)
 		res.strokeWidth = 1
@@ -69,16 +59,7 @@ const SimplePathElement = (props: {
 		return res
 	}, [stroke])
 
-	return (
-		<path
-			onClick={onClick}
-			d={pathString}
-			style={style}
-			onPointerOver={() => {
-				console.error("Pointer over path with", points.length)
-			}}
-		/>
-	)
+	return <path onClick={onClick} d={pathString} style={style} />
 }
 
 const InnerRenderer = (props: {
