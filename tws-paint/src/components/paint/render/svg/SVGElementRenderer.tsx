@@ -1,14 +1,16 @@
-import { getStroke, StrokeOptions } from "perfect-freehand"
-import React, { memo, useCallback, useMemo } from "react"
+import { getStroke, StrokeOptions } from "perfect-freehand";
+import React, { memo, useCallback, useMemo, useRef } from "react";
 
-import { PaintElement, PaintElementType } from "@app/domain/paint/defines"
-import {
-	PaintEventType,
-	PaintScreenEventType,
-} from "@app/domain/paint/defines/event"
-import { usePaintEventBus } from "@app/domain/paint/event"
 
-import { encodeColor } from "tws-common/color"
+
+import { PaintElement, PaintElementType } from "@app/domain/paint/defines";
+import { PaintEventType, PaintScreenEventType } from "@app/domain/paint/defines/event";
+import { usePaintEventBus } from "@app/domain/paint/event";
+
+
+
+import { encodeColor } from "tws-common/color";
+
 
 function getSvgPathFromStroke(stroke: ReturnType<typeof getStroke>) {
 	if (!stroke.length) return ""
@@ -38,7 +40,7 @@ const SimplePathElement = (props: {
 		const options: StrokeOptions = {
 			simulatePressure: true,
 			size: stroke.size,
-			// Just use ease-out sine, like excalidraw uses
+			// Just use sin ease-out, like excalidraw uses
 			// It seems to work ok.
 			easing: (t: number) => Math.sin((t * Math.PI) / 2),
 			last: false,
@@ -67,7 +69,16 @@ const SimplePathElement = (props: {
 		return res
 	}, [stroke])
 
-	return <path onClick={onClick} d={pathString} style={style} />
+	return (
+		<path
+			onClick={onClick}
+			d={pathString}
+			style={style}
+			onPointerOver={() => {
+				console.error("Pointer over path with", points.length)
+			}}
+		/>
+	)
 }
 
 const InnerRenderer = (props: {
