@@ -6,6 +6,7 @@ import styled from "styled-components"
 
 import { MoveToolHandler } from "@app/components/paint/handler/MoveToolHandler"
 import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
+import { ScrollSceneHandler } from "@app/components/paint/handler/ScrollSceneHandler"
 import { UndoRedoHandler } from "@app/components/paint/handler/UndoRedoHandler"
 import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
 import { ScreenPanelDisplay } from "@app/components/paint/panels/panel-display/ScreenPanelDisplay"
@@ -207,6 +208,7 @@ export const Paint = () => {
 					/>
 				</Helmet>
 
+				<ScrollSceneHandler />
 				<MoveToolHandler />
 				<PathToolHandler />
 				<UndoRedoHandler />
