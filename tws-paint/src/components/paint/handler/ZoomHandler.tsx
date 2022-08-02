@@ -45,7 +45,7 @@ export const ZoomHandler = () => {
 		return () => {
 			document.body.removeEventListener("wheel", wheelHandler)
 		}
-	}, [zoomFactor])
+	}, [dispatch, zoomFactor])
 
 	return <></>
 }
