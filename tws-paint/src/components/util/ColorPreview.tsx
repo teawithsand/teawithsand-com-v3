@@ -50,7 +50,6 @@ const Preview = styled.div.attrs<{
 `
 
 export const ColorPreview = (props: { color: Color }) => {
-	console.error("previewing color", props.color, encodeColor(props.color))
 	return (
 		<Preview $color={props.color}>
 			<Foreground></Foreground>
