@@ -71,9 +71,15 @@ export const PanelPicker = (props: {
 				</PanelButton>
 			</PanelSection>
 			<PanelSection>
-				<PanelSectionTitle>Save/Export</PanelSectionTitle>
+				<PanelSectionTitle>Save/Load/Export</PanelSectionTitle>
 				<PanelButton onClick={makeCallback(PaintPanelType.EXPORT)}>
 					Export
+				</PanelButton>
+				<PanelButton onClick={makeCallback(PaintPanelType.SAVE)}>
+					Save
+				</PanelButton>
+				<PanelButton onClick={makeCallback(PaintPanelType.LOAD)}>
+					Load
 				</PanelButton>
 			</PanelSection>
 		</InnerContainer>

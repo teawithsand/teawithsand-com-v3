@@ -1,5 +1,6 @@
 import { createAction } from "@reduxjs/toolkit"
 
+import { PaintScene } from "@app/domain/paint/defines"
 import { PaintAction } from "@app/domain/paint/defines/action"
 
 import {
@@ -29,28 +30,6 @@ export const redoPaintActions = createAction<number>(
 	`${actionPrefix}/redoPaintActions`,
 )
 
-// These will be ported to PaintAction
-/*
-export const setRenderSize = createAction<{ width: number; height: number }>(
-	`${actionPrefix}/setRenderSize`,
+export const loadPaintScene = createAction<PaintScene>(
+	`${actionPrefix}/loadPaintScene`,
 )
-export const setSceneSize = createAction<{ width: number; height: number }>(
-	`${actionPrefix}/setSceneSize`,
-)
-export const setSceneOffsets = createAction<[number, number]>(
-	`${actionPrefix}/setSceneOffsets`,
-)
-export const setZoomFactor = createAction<number>(
-	`${actionPrefix}/setZoomFactor`,
-)
-
-export const setDrawColor = createAction<Color>(`${actionPrefix}/setDrawColor`)
-export const setFillColor = createAction<Color | null>(
-	`${actionPrefix}/setFillColor`,
-)
-
-export const setTool = createAction<PaintToolName>(`${actionPrefix}/setTool`)
-export const setPathPaintToolOptions = createAction<PathPaintToolOptions>(
-	`${actionPrefix}/setPathPaintToolOptions`,
-)
-*/

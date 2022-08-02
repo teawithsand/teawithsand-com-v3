@@ -2,6 +2,7 @@ import { createReducer } from "@reduxjs/toolkit"
 
 import {
 	commitPaintActionAndResetUncommitted,
+	loadPaintScene,
 	redoPaintActions,
 	resetPaintActionsStack,
 	setUncommittedPaintActions,
@@ -66,6 +67,13 @@ export const paintStateReducer = createReducer<PaintState>(
 					else break
 				}
 
+				recomputeSnapshotsOnActionStackChangeOrUncommittedActionsChange(
+					state,
+				)
+			})
+			.addCase(loadPaintScene, (state, action) => {
+				pushUndoStackOntoRootSnapshot(state)
+				state.preActionsSnapshot.sceneState.scene = action.payload
 				recomputeSnapshotsOnActionStackChangeOrUncommittedActionsChange(
 					state,
 				)

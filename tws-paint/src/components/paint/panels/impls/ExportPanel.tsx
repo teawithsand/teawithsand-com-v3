@@ -124,7 +124,7 @@ export const ExportPanel = () => {
 		<InnerContainer>
 			<DescriptionRow>
 				<p>
-					Allowed extensions are: <b>.vg</b>, <b>png</b>, <b>gif</b>,{" "}
+					Allowed extensions are: <b>.svg</b>, <b>png</b>, <b>gif</b>,{" "}
 					<b>jpg/jpeg</b>. If extension is not valid, <b>svg</b>{" "}
 					format is used.
 				</p>
