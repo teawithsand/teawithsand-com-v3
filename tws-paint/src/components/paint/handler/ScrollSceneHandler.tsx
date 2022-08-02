@@ -7,6 +7,8 @@ import {
 	useDispatchAndCommitPaintActions,
 } from "@app/domain/paint/redux/selector"
 
+const scrollSpeed = 50
+
 export const ScrollSceneHandler = (props: { sceneElement: HTMLElement }) => {
 	const { sceneElement } = props
 
@@ -31,7 +33,7 @@ export const ScrollSceneHandler = (props: { sceneElement: HTMLElement }) => {
 							...offsets.current,
 							offsetX:
 								offsets.current.offsetX +
-								(e.deltaY > 0 ? 10 : -10),
+								(e.deltaY > 0 ? scrollSpeed : -scrollSpeed),
 						},
 					})
 				} else {
@@ -41,7 +43,7 @@ export const ScrollSceneHandler = (props: { sceneElement: HTMLElement }) => {
 							...offsets.current,
 							offsetY:
 								offsets.current.offsetY +
-								(e.deltaY > 0 ? 10 : -10),
+								(e.deltaY > 0 ? scrollSpeed : -scrollSpeed),
 						},
 					})
 				}
