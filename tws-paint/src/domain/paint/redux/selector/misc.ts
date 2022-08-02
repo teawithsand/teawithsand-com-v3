@@ -1,3 +1,4 @@
+import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { PaintScene, PaintToolType } from "@app/domain/paint/defines"
@@ -13,9 +14,12 @@ export const usePaintSelector = <T>(selector: (state: PaintState) => T) =>
 
 export const useDispatchAndCommitPaintActions = () => {
 	const dispatch = useDispatch()
-	return (pa: PaintAction) => {
-		dispatch(commitPaintActionAndResetUncommitted(pa))
-	}
+	return useCallback(
+		(pa: PaintAction) => {
+			dispatch(commitPaintActionAndResetUncommitted(pa))
+		},
+		[dispatch],
+	)
 }
 
 export const useCurrentPaintSnapshotSelector = <T>(
