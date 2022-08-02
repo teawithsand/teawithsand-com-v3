@@ -44,7 +44,11 @@ export const usePaintCursor = (): CSSProperties["cursor"] => {
 
 	if (tool === PaintToolType.PATH) {
 		return "crosshair"
-	} else {
+	} else if (tool === PaintToolType.MOVE) {
 		return "grab"
+	} else if (tool === PaintToolType.ERASE) {
+		return "default"
+	} else {
+		return "default"
 	}
 }

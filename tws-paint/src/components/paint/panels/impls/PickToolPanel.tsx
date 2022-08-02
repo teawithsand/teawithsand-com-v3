@@ -52,6 +52,16 @@ export const PickToolPanel = () => {
 			>
 				Move canvas
 			</Button>
+			<Button
+				onClick={() => {
+					dispatch({
+						type: PaintActionType.SET_ACTIVE_TOOL,
+						tool: PaintToolType.ERASE,
+					})
+				}}
+			>
+				Eraser
+			</Button>
 		</InnerContainer>
 	)
 }

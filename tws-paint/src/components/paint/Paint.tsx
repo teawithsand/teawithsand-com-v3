@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet"
 import { Provider } from "react-redux"
 import styled from "styled-components"
 
+import { EraseToolHandler } from "@app/components/paint/handler/EraseToolHandler"
 import { MoveToolHandler } from "@app/components/paint/handler/MoveToolHandler"
 import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
 import { ScrollSceneHandler } from "@app/components/paint/handler/ScrollSceneHandler"
@@ -208,6 +209,7 @@ export const Paint = () => {
 					/>
 				</Helmet>
 
+				<EraseToolHandler />
 				<ScrollSceneHandler />
 				<MoveToolHandler />
 				<PathToolHandler />
