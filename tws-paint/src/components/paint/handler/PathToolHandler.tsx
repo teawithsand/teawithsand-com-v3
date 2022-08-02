@@ -15,6 +15,7 @@ import {
 	setUncommittedPaintActions,
 } from "@app/domain/paint/redux"
 import {
+	useCurrentPaintSnapshotSelector,
 	useCurrentPaintTool,
 	usePointOperations,
 } from "@app/domain/paint/redux/selector"
@@ -44,6 +45,9 @@ export const PathToolHandler = () => {
 
 	const tool = useAsRef(useCurrentPaintTool())
 
+	const strokeColor = useAsRef(useCurrentPaintSnapshotSelector(s => s.uiState.globalToolConfig.strokeColor))
+	const fillColor = useAsRef(useCurrentPaintSnapshotSelector(s => s.uiState.globalToolConfig.fillColor))
+
 	const callback = useCallback(
 		(e: PaintEvent) => {
 			if (tool.current !== PaintToolType.PATH) return
@@ -71,11 +75,11 @@ export const PathToolHandler = () => {
 									points,
 									// TODO(teawithsand): read these from config
 									stroke: {
-										color: [0, 0, 0, 1],
+										color: strokeColor.current,
 										lineCap: "round",
 										lineJoin: "round",
 										size: 10,
-										fill: [0, 0, 0, 1],
+										fill: fillColor.current,
 									},
 								},
 							],

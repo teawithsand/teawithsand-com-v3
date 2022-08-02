@@ -9,7 +9,6 @@ import {
 import { usePaintEventBus } from "@app/domain/paint/event"
 
 import { encodeColor } from "tws-common/color"
-import { Point } from "tws-common/geometry/point"
 
 function getSvgPathFromStroke(stroke: ReturnType<typeof getStroke>) {
 	if (!stroke.length) return ""
@@ -59,7 +58,7 @@ const SimplePathElement = (props: {
 		}
         */
 
-		res.fill = stroke.fill ? encodeColor(stroke.fill) : "none"
+		res.fill = encodeColor(stroke.color)
 		res.stroke = encodeColor(stroke.color)
 		res.strokeWidth = 1
 		res.strokeLinecap = stroke.lineCap
