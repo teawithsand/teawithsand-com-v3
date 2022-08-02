@@ -45,8 +45,16 @@ export const PathToolHandler = () => {
 
 	const tool = useAsRef(useCurrentPaintTool())
 
-	const strokeColor = useAsRef(useCurrentPaintSnapshotSelector(s => s.uiState.globalToolConfig.strokeColor))
-	const fillColor = useAsRef(useCurrentPaintSnapshotSelector(s => s.uiState.globalToolConfig.fillColor))
+	const strokeColor = useAsRef(
+		useCurrentPaintSnapshotSelector(
+			s => s.uiState.globalToolConfig.strokeColor,
+		),
+	)
+	const fillColor = useAsRef(
+		useCurrentPaintSnapshotSelector(
+			s => s.uiState.globalToolConfig.fillColor,
+		),
+	)
 
 	const callback = useCallback(
 		(e: PaintEvent) => {
