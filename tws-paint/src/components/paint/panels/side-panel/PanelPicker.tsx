@@ -12,6 +12,7 @@ const InnerContainer = styled.div`
 
 	& > * {
 		flex: 1;
+		flex-basis: calc(50% - 0.6rem); // 50% - padding
 	}
 `
 
