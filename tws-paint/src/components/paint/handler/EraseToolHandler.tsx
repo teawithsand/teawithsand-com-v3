@@ -2,7 +2,11 @@ import React, { useCallback, useRef } from "react"
 import { useDispatch } from "react-redux"
 
 import { useAsRef } from "@app/components/util/useAsRef"
-import { PaintSceneMutation, PaintToolType } from "@app/domain/paint/defines"
+import {
+	PaintFilterType,
+	PaintSceneMutation,
+	PaintToolType,
+} from "@app/domain/paint/defines"
 import { PaintActionType } from "@app/domain/paint/defines/action"
 import {
 	PaintEvent,
@@ -113,14 +117,18 @@ export const EraseToolHandler = () => {
 						layerIndex,
 						elements,
 					] of state.current.touchedElements.entries()) {
-						const res = [...elements.values()].map(v => [
-							v,
-							{
-								...scene.current.layers[layerIndex].elements[v]
-									.commonOptions,
-								visible: false,
-							},
-						])
+						const res = [...elements.values()].map(v => {
+							const currentOptions =
+								scene.current.layers[layerIndex].elements[v]
+									.commonOptions
+							return [
+								v,
+								{
+									...currentOptions,
+									isMarkedForRemoval: true,
+								},
+							]
+						})
 
 						mutations.push({
 							type: "set-layer-elements-options",
@@ -153,8 +161,6 @@ export const EraseToolHandler = () => {
 			) {
 				if (state.current.type !== "erasing") return
 
-				console.error("Doing erasing stuff")
-
 				if (!state.current.touchedElements.get(event.layerIndex)) {
 					state.current.touchedElements.set(
 						event.layerIndex,
@@ -170,7 +176,6 @@ export const EraseToolHandler = () => {
 				const newLength = set.size
 
 				if (prevLength !== newLength) {
-					console.error("Dispatching....")
 					dispatch(
 						setUncommittedPaintActions([
 							{

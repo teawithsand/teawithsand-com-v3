@@ -1,7 +1,12 @@
 import { getStroke, StrokeOptions } from "perfect-freehand"
 import React, { memo, useCallback, useMemo } from "react"
 
-import { PaintElement, PaintElementType } from "@app/domain/paint/defines"
+import {
+	PaintElement,
+	PaintElementType,
+	PaintFilterType,
+	renderPaintFilters,
+} from "@app/domain/paint/defines"
 import {
 	PaintEventType,
 	PaintScreenEventType,
@@ -33,7 +38,8 @@ const SimplePathElement = (props: {
 }) => {
 	const { element, onPointerEnter, onClick } = props
 
-	const { points, stroke } = element
+	const { points, stroke, commonOptions } = element
+	const { isMarkedForRemoval = false, filters } = commonOptions
 
 	const pathString = useMemo(() => {
 		const options: StrokeOptions = {
@@ -48,6 +54,22 @@ const SimplePathElement = (props: {
 		return getSvgPathFromStroke(getStroke(points, options))
 	}, [points, stroke.size])
 
+	const renderedFilters = useMemo(
+		() =>
+			renderPaintFilters(
+				isMarkedForRemoval
+					? [
+							...element.commonOptions.filters,
+							{
+								type: PaintFilterType.OPACITY,
+								factor: 0.5,
+							},
+					  ]
+					: element.commonOptions.filters,
+			),
+		[isMarkedForRemoval, filters],
+	)
+
 	const style = useMemo(() => {
 		const res: React.CSSProperties = {}
 
@@ -57,8 +79,11 @@ const SimplePathElement = (props: {
 		res.strokeLinecap = stroke.lineCap
 		res.strokeLinejoin = stroke.lineJoin
 
-		return res
-	}, [stroke])
+		return {
+			...res,
+			...renderedFilters,
+		}
+	}, [stroke, renderedFilters])
 
 	// skip rendering of invisible elements
 	// on bottom most level

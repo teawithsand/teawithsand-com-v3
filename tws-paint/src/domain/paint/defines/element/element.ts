@@ -23,9 +23,11 @@ export type PaintElement = (
 export const defaultPaintElementCommonOptions: PaintElementCommonOptions = {
 	filters: [],
 	visible: true,
+	isMarkedForRemoval: false,
 }
 
 export type PaintElementCommonOptions = {
 	visible?: boolean // defaults to true
+	isMarkedForRemoval?: boolean // defaults to false
 	filters: PaintFilter[]
 }
