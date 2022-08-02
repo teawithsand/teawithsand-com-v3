@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet"
 import { Provider } from "react-redux"
 import styled from "styled-components"
 
+import { BeforeUnloadHandler } from "@app/components/paint/handler/BeforeUnloadHandler"
 import { EraseToolHandler } from "@app/components/paint/handler/EraseToolHandler"
 import { MoveToolHandler } from "@app/components/paint/handler/MoveToolHandler"
 import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
@@ -213,6 +214,7 @@ export const Paint = () => {
 					/>
 				</Helmet>
 
+				<BeforeUnloadHandler />
 				<EraseToolHandler />
 				{sceneElement ? (
 					<ScrollSceneHandler sceneElement={sceneElement} />
