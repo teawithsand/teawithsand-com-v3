@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React from "react"
 import styled from "styled-components"
 
 import { SVGElementRenderer } from "@app/components/paint/render/svg/SVGElementRenderer"
@@ -23,9 +23,4 @@ const InnerRenderer = (props: { layer: PaintLayer; layerIndex: number }) => {
 	)
 }
 
-export const SVGLayerRenderer = memo(
-	InnerRenderer,
-	(prevProps, nextProps) =>
-		prevProps.layerIndex === nextProps.layerIndex &&
-		prevProps.layer === nextProps.layer,
-)
+export const SVGLayerRenderer = InnerRenderer

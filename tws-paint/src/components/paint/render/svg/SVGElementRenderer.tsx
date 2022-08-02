@@ -122,10 +122,4 @@ const InnerRenderer = (props: {
 	}
 }
 
-export const SVGElementRenderer = memo(
-	InnerRenderer,
-	(prevProps, nextProps) =>
-		prevProps.element === nextProps.element &&
-		prevProps.layerIndex === nextProps.layerIndex &&
-		prevProps.elementIndex === nextProps.elementIndex,
-)
+export const SVGElementRenderer = InnerRenderer
