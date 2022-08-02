@@ -1,4 +1,3 @@
-
 export enum PaintScreenEventType {
 	POINTER_DOWN = "pointer-down",
 	POINTER_UP = "pointer-up",

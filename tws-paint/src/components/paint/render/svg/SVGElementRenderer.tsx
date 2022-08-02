@@ -60,6 +60,13 @@ const SimplePathElement = (props: {
 		return res
 	}, [stroke])
 
+	// skip rendering of invisible elements
+	// on bottom most level
+	// to prevent loss of useMemoed stuff
+	if ((element.commonOptions.visible ?? true) === false) {
+		return <></>
+	}
+
 	return (
 		<path
 			onClick={onClick}

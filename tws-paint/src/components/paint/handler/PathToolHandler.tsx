@@ -2,7 +2,11 @@ import React, { useCallback, useRef } from "react"
 import { useDispatch } from "react-redux"
 
 import { useAsRef } from "@app/components/util/useAsRef"
-import { PaintElementType, PaintToolType } from "@app/domain/paint/defines"
+import {
+	defaultPaintElementCommonOptions,
+	PaintElementType,
+	PaintToolType,
+} from "@app/domain/paint/defines"
 import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
 import {
 	PaintEvent,
@@ -89,6 +93,8 @@ export const PathToolHandler = () => {
 										size: 10,
 										fill: fillColor.current,
 									},
+									commonOptions:
+										defaultPaintElementCommonOptions,
 								},
 							],
 						},

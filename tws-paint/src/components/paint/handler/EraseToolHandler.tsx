@@ -20,7 +20,7 @@ import {
 } from "@app/domain/paint/redux/selector"
 
 import { useSubscribableCallback } from "tws-common/event-bus"
-import { compareNumbers } from "tws-common/lang/sort"
+import { compareNumbers, inverseComparator } from "tws-common/lang/sort"
 import { throwExpression } from "tws-common/lang/throw"
 
 // Map of layer index to set of touched element index
@@ -50,6 +50,12 @@ export const EraseToolHandler = () => {
 		})),
 	)
 
+	// HACK(teawithsand): create special action type to get rid of this ugly hack
+	// tools shouldn't require scene
+	// the flow should be unidirectional - from tool to scene.
+	const scene = useAsRef(
+		useCurrentPaintSnapshotSelector(s => s.sceneState.scene),
+	)
 	const tool = useAsRef(useCurrentPaintTool())
 
 	const callback = useCallback(
@@ -72,31 +78,58 @@ export const EraseToolHandler = () => {
 				}
 			}
 
-			const makeMutations = (): PaintSceneMutation[] => {
+			const makeMutations = (final: boolean): PaintSceneMutation[] => {
 				if (state.current.type !== "erasing") return []
 
-				const mutations: PaintSceneMutation[] = []
-				for (const [
-					layerIndex,
-					elements,
-				] of state.current.touchedElements.entries()) {
-					const sorted = [...elements].sort(compareNumbers)
+				if (final) {
+					const mutations: PaintSceneMutation[] = []
+					for (const [
+						layerIndex,
+						elements,
+					] of state.current.touchedElements.entries()) {
+						// when deleting elements from the end
+						// indexes of previous elements aren't changed
+						// so "old" AKA pre-deletion indexes are valid after deletion of some element
+						// so it does what we want
+						const sorted = [...elements].sort(
+							inverseComparator(compareNumbers),
+						)
 
-					let removed = 0
-					for (const elementIndex of sorted) {
-						mutations.push({
-							type: "drop-layer-elements",
-							layerIndex: layerIndex,
-							fromElementIndex: elementIndex - removed,
-							toElementIndex: elementIndex - removed + 1,
-						})
-						removed++
+						for (const elementIndex of sorted) {
+							mutations.push({
+								type: "drop-layer-elements",
+								layerIndex: layerIndex,
+								fromElementIndex: elementIndex,
+								toElementIndex: elementIndex + 1,
+							})
+						}
 					}
+					return mutations
+				} else {
+					// when mutation's not final
+					// just hide element
+					const mutations: PaintSceneMutation[] = []
+					for (const [
+						layerIndex,
+						elements,
+					] of state.current.touchedElements.entries()) {
+						const res = [...elements.values()].map(v => [
+							v,
+							{
+								...scene.current.layers[layerIndex].elements[v]
+									.commonOptions,
+								visible: false,
+							},
+						])
+
+						mutations.push({
+							type: "set-layer-elements-options",
+							layerIndex,
+							optionsMap: Object.fromEntries(res),
+						})
+					}
+					return mutations
 				}
-
-				console.error("Got mutations", mutations)
-
-				return mutations
 			}
 
 			if (event.type === PaintScreenEventType.POINTER_DOWN) {
@@ -110,7 +143,7 @@ export const EraseToolHandler = () => {
 				dispatch(
 					commitPaintActionAndResetUncommitted({
 						type: PaintActionType.SCENE_MUTATIONS,
-						mutations: makeMutations(),
+						mutations: makeMutations(true),
 					}),
 				)
 
@@ -142,7 +175,7 @@ export const EraseToolHandler = () => {
 						setUncommittedPaintActions([
 							{
 								type: PaintActionType.SCENE_MUTATIONS,
-								mutations: makeMutations(),
+								mutations: makeMutations(false),
 							},
 						]),
 					)

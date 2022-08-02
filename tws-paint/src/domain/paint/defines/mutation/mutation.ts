@@ -1,7 +1,10 @@
 import produce from "immer"
 import { WritableDraft } from "immer/dist/internal"
 
-import { PaintElement } from "@app/domain/paint/defines/element"
+import {
+	PaintElement,
+	PaintElementCommonOptions,
+} from "@app/domain/paint/defines/element"
 import { PaintLayer, PaintLayerOptions } from "@app/domain/paint/defines/scene"
 
 /**
@@ -72,6 +75,14 @@ type PaintElementMutation =
 			sourceElementIndex: number
 			destinationLayerIndex: number
 			beforeDestinationElementIndex?: number | undefined
+	  }
+	| {
+			// TODO(teawithsand): test it and it's reverse
+			type: "set-layer-elements-options"
+			layerIndex: number
+			optionsMap: {
+				[key: number]: PaintElementCommonOptions
+			}
 	  }
 
 export type PaintSceneMutation =
@@ -178,6 +189,17 @@ export const applyMutationOnDraft = (
 		}
 		if (fromIndex !== toIndex) {
 			l.elements.splice(fromIndex, toIndex - fromIndex)
+		}
+	} else if (m.type === "set-layer-elements-options") {
+		const l = ensureSceneHasLayer(scene, m.layerIndex)
+		for (let i = 0; i < l.elements.length; i++) {
+			const element = l.elements[i]
+			const options = m.optionsMap[i] ?? element.commonOptions
+
+			l.elements[i] = {
+				...element,
+				commonOptions: options,
+			}
 		}
 	} else if (m.type === "move-layer-element") {
 		const sl = ensureSceneHasLayer(scene, m.sourceLayerIndex)
@@ -290,6 +312,26 @@ export const inverseMutation = (
 				m.toElementIndex ?? l.elements.length,
 			),
 			beforeElementIndex: m.fromElementIndex ?? 0,
+		}
+	} else if (m.type === "set-layer-elements-options") {
+		const l = scene.layers[m.layerIndex]
+
+		const optionsMap: {
+			[key: number]: PaintElementCommonOptions
+		} = {}
+
+		for (const rawIndex of Object.keys(m.optionsMap)) {
+			const i =
+				typeof rawIndex === "string"
+					? parseInt(rawIndex)
+					: (rawIndex as number)
+			optionsMap[i] = l.elements[i].commonOptions
+		}
+
+		return {
+			type: "set-layer-elements-options",
+			layerIndex: m.layerIndex,
+			optionsMap,
 		}
 	} else if (m.type === "move-layer-element") {
 		if (m.sourceLayerIndex === m.destinationLayerIndex) {
