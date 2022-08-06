@@ -20,11 +20,20 @@ const Foreground = styled.div`
 	background-color: var(--color-picker-color);
 `
 
+const inverseColor = (color: Color): Color => {
+	if (color.length === 3) {
+		return color.map(v => 255 - v) as Color
+	} else {
+		return [...color.slice(0, 3).map(v => 255 - v), color[3]] as Color
+	}
+}
+
 const Preview = styled.div.attrs<{
 	$color: Color
 }>(props => ({
 	style: {
 		"--color-picker-color": encodeColor(props.$color),
+		"--color-picker-border-color": encodeColor(inverseColor(props.$color)),
 	},
 }))<{
 	$color: Color
@@ -32,9 +41,11 @@ const Preview = styled.div.attrs<{
 	display: block;
 	position: relative;
 
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
 	border: 2px solid black;
-	overflow: hidden;
 	border-radius: 0.25rem;
+	overflow: hidden;
 
 	width: 3rem;
 	height: 2rem;
