@@ -12,13 +12,8 @@ const InnerRenderer = (
 	},
 	ref: Ref<SVGSVGElement>,
 ) => {
-	const {
-		scene,
-		presentationWidth,
-		presentationHeight,
-		style,
-		className,
-	} = props
+	const { scene, presentationWidth, presentationHeight, style, className } =
+		props
 
 	const { options } = scene
 

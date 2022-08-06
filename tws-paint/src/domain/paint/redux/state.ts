@@ -1,7 +1,6 @@
 import {
 	PaintGlobalToolConfig,
 	PaintScene,
-	PaintSceneMutation,
 	PaintToolsConfig,
 	PaintToolType,
 	PaintViewOptions,
