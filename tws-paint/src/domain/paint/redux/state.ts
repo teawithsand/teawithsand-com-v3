@@ -23,6 +23,9 @@ export type PaintSceneState = {
  * Mutations are handled separately, so it's not a problem.
  */
 export type PaintActionsState = {
+	// TODO(teawithsand): make this variable change along with ctrl+z ing stuff
+	wasSceneMutatedSinceLastSave: boolean
+
 	uncommittedActions: PaintAction[]
 
 	actionsStackMaxSize: number
