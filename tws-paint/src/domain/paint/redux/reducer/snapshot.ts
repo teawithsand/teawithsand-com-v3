@@ -5,7 +5,7 @@ import { applyMutationOnDraft } from "@app/domain/paint/defines"
 import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
 import { PaintStateSnapshot } from "@app/domain/paint/redux/state"
 
-setAutoFreeze(false)
+setAutoFreeze(false) // improves performance of immer AFAIK
 export const copyAndOperateOnStateSnapshot = (
 	snapshot: PaintStateSnapshot,
 	operate: (snapshot: PaintStateSnapshot) => void,
