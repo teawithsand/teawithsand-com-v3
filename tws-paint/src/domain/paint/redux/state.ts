@@ -80,6 +80,8 @@ export const initialPaintStateSnapshot: PaintStateSnapshot = {
 				join: "round",
 				stroke: "round",
 			},
+			[PaintToolType.ERASE]: {},
+			[PaintToolType.SELECT]: {},
 		},
 		viewOptions: {
 			offsetX: 0,
