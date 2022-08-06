@@ -6,17 +6,27 @@ import { LoadPanel } from "@app/components/paint/panels/impls/LoadPanel"
 import { PickToolPanel } from "@app/components/paint/panels/impls/PickToolPanel"
 import { SavePanel } from "@app/components/paint/panels/impls/SavePanel"
 import { SceneSizePanel } from "@app/components/paint/panels/impls/SceneSizePanel"
+import { BrushToolSettingsPanel } from "@app/components/paint/panels/impls/tool/BrushToolSettingsPanel"
+import { MoveToolSettingsPanel } from "@app/components/paint/panels/impls/tool/MoveToolSettingsPanel"
 import { ZoomPanel } from "@app/components/paint/panels/impls/ZoomPanel"
 import { TitledPanel } from "@app/components/paint/panels/panel-display/TitledPanel"
 
 export enum PaintPanelType {
+	EMPTY = 0, // empty react fragment panel
+
 	SCENE_SIZE = 1,
 	PICK_TOOL = 2,
 	ZOOM = 3,
+	/**
+	 * @deprecated Should be replaced with settings for specific panels instead.
+	 */
 	GENERAL_TOOL_SETTINGS = 4,
 	EXPORT = 5,
 	SAVE = 6,
 	LOAD = 7,
+
+	TOOL_BRUSH = 1000 + 0,
+	TOOL_MOVE = 1000 + 1,
 }
 
 export const usePanelShortTitle = (type: PaintPanelType) => {
@@ -34,6 +44,12 @@ export const usePanelShortTitle = (type: PaintPanelType) => {
 		return "Save"
 	} else if (type === PaintPanelType.LOAD) {
 		return "Load"
+	} else if (type === PaintPanelType.EMPTY) {
+		return ""
+	} else if (type === PaintPanelType.TOOL_BRUSH) {
+		return "Brush tool settings"
+	} else if (type === PaintPanelType.TOOL_MOVE) {
+		return "Move tool settings"
 	} else {
 		throw new Error(`Bad panel type ${type as any}`)
 	}
@@ -54,6 +70,12 @@ export const usePanelTitle = (type: PaintPanelType) => {
 		return "Save"
 	} else if (type === PaintPanelType.LOAD) {
 		return "Load"
+	} else if (type === PaintPanelType.EMPTY) {
+		return ""
+	} else if (type === PaintPanelType.TOOL_BRUSH) {
+		return "Brush settings"
+	} else if (type === PaintPanelType.TOOL_MOVE) {
+		return "Scene position"
 	} else {
 		throw new Error(`Bad panel type ${type as any}`)
 	}
@@ -82,6 +104,10 @@ export const usePanel = (
 			return <SavePanel />
 		} else if (type === PaintPanelType.LOAD) {
 			return <LoadPanel />
+		} else if (type === PaintPanelType.TOOL_MOVE) {
+			return <MoveToolSettingsPanel />
+		} else if (type === PaintPanelType.TOOL_BRUSH) {
+			return <BrushToolSettingsPanel />
 		} else {
 			throw new Error(`Bad panel type ${type as any}`)
 		}
@@ -90,6 +116,9 @@ export const usePanel = (
 	const { titled = false } = options ?? {}
 
 	return useMemo(() => {
+		if (type === PaintPanelType.EMPTY) {
+			return <></>
+		}
 		const panel = panelObtainer()
 		if (titled) {
 			return <TitledPanel title={title}>{panel}</TitledPanel>
