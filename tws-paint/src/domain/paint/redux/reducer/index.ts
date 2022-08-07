@@ -1,11 +1,24 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from "@reduxjs/toolkit"
 
-
-
-import { commitPaintActionAndResetUncommitted, loadPaintScene, redoPaintActions, resetPaintActionsStack, setUncommittedPaintActions, undoPaintActions } from "@app/domain/paint/redux/actions";
-import { commitActionToActionStackOnPaintState, pushUndoStackOntoRootSnapshot, recomputeSnapshotsOnActionStackChange as recomputeSnapshotsOnActionStackChangeOrUncommittedActionsChange, setUncommittedActionsOnPaintState } from "@app/domain/paint/redux/reducer/state";
-import { initialPaintStateSnapshot, PaintState } from "@app/domain/paint/redux/state";
-
+import {
+	commitPaintActionAndResetUncommitted,
+	loadPaintScene,
+	redoPaintActions,
+	resetPaintActionsStack,
+	setSceneSavedAction,
+	setUncommittedPaintActions,
+	undoPaintActions,
+} from "@app/domain/paint/redux/actions"
+import {
+	commitActionToActionStackOnPaintState,
+	pushUndoStackOntoRootSnapshot,
+	recomputeSnapshotsOnActionStackChange as recomputeSnapshotsOnActionStackChangeOrUncommittedActionsChange,
+	setUncommittedActionsOnPaintState,
+} from "@app/domain/paint/redux/reducer/state"
+import {
+	initialPaintStateSnapshot,
+	PaintState,
+} from "@app/domain/paint/redux/state"
 
 export const paintStateReducer = createReducer<PaintState>(
 	{
@@ -71,11 +84,14 @@ export const paintStateReducer = createReducer<PaintState>(
 			})
 			.addCase(loadPaintScene, (state, action) => {
 				state.actionsState.wasSceneMutatedSinceLastSave = false
-				
+
 				pushUndoStackOntoRootSnapshot(state)
 				state.preActionsSnapshot.sceneState.scene = action.payload
 				recomputeSnapshotsOnActionStackChangeOrUncommittedActionsChange(
 					state,
 				)
+			})
+			.addCase(setSceneSavedAction, (state, action) => {
+				state.actionsState.wasSceneMutatedSinceLastSave = !action.payload
 			}),
 )

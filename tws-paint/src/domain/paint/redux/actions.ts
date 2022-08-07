@@ -33,3 +33,7 @@ export const redoPaintActions = createAction<number>(
 export const loadPaintScene = createAction<PaintScene>(
 	`${actionPrefix}/loadPaintScene`,
 )
+
+export const setSceneSavedAction = createAction<boolean>(
+	`${actionPrefix}/setSceneSavedAction`,
+)

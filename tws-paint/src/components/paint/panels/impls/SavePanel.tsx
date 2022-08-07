@@ -1,6 +1,8 @@
 import React, { useState } from "react"
+import { useDispatch } from "react-redux"
 import styled from "styled-components"
 
+import { setSceneSavedAction } from "@app/domain/paint/redux"
 import { useCurrentPaintSnapshotSelector } from "@app/domain/paint/redux/selector"
 
 import { Button, Form } from "tws-common/ui"
@@ -45,6 +47,7 @@ export const SavePanel = () => {
 	const [fileName, setFileName] = useState("tws-paint-image")
 
 	const scene = useCurrentPaintSnapshotSelector(s => s.sceneState.scene)
+	const dispatch = useDispatch()
 
 	return (
 		<InnerContainer>
@@ -71,6 +74,8 @@ export const SavePanel = () => {
 						"application/json",
 						fileName + ".twspaint",
 					)
+
+					dispatch(setSceneSavedAction(true))
 				}}
 			>
 				Save
