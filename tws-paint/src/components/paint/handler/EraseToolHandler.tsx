@@ -1,9 +1,10 @@
+import produce from "immer"
 import React, { useCallback, useRef } from "react"
 import { useDispatch } from "react-redux"
 
 import { useAsRef } from "@app/components/util/useAsRef"
 import {
-	PaintFilterType,
+	PaintElementCommonOptions,
 	PaintSceneMutation,
 	PaintToolType,
 } from "@app/domain/paint/defines"
@@ -117,17 +118,21 @@ export const EraseToolHandler = () => {
 						layerIndex,
 						elements,
 					] of state.current.touchedElements.entries()) {
-						const res = [...elements.values()].map(v => {
+						const res: [number, PaintElementCommonOptions][] = [
+							...elements.values(),
+						].map(v => {
 							const currentOptions =
 								scene.current.layers[layerIndex].elements[v]
 									.commonOptions
-							return [
+							const imm: [number, PaintElementCommonOptions] = [
 								v,
-								{
-									...currentOptions,
-									isMarkedForRemoval: true,
-								},
+								produce(currentOptions, draft => {
+									draft.local.removal.isMarkedForRemoval =
+										true
+								}),
 							]
+
+							return imm
 						})
 
 						mutations.push({

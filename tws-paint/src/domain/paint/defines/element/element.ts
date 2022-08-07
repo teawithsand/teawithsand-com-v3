@@ -23,11 +23,38 @@ export type PaintElement = (
 export const defaultPaintElementCommonOptions: PaintElementCommonOptions = {
 	filters: [],
 	visible: true,
-	isMarkedForRemoval: false,
+
+	local: {
+		removal: {
+			isMarkedForRemoval: false,
+		},
+		selection: {
+			isSelected: false,
+			selectionRotation: 0,
+			selectionScaleX: 1,
+			selectionScaleY: 1,
+			selectionTranslateX: 0,
+			selectionTranslateY: 0,
+		},
+	},
 }
 
 export type PaintElementCommonOptions = {
 	visible?: boolean // defaults to true
-	isMarkedForRemoval?: boolean // defaults to false
+
 	filters: PaintFilter[]
+
+	local: {
+		selection: {
+			isSelected: boolean // defaults to false
+			selectionRotation: number // degrees
+			selectionScaleX: number
+			selectionScaleY: number
+			selectionTranslateX: number
+			selectionTranslateY: number
+		}
+		removal: {
+			isMarkedForRemoval: boolean // defaults to false
+		}
+	}
 }

@@ -39,7 +39,12 @@ const SimplePathElement = (props: {
 	const { element, onPointerEnter, onClick } = props
 
 	const { points, stroke, commonOptions } = element
-	const { isMarkedForRemoval = false, filters } = commonOptions
+	const {
+		local: {
+			removal: { isMarkedForRemoval = false },
+		},
+		filters,
+	} = commonOptions
 
 	const pathString = useMemo(() => {
 		const options: StrokeOptions = {
