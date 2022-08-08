@@ -3,6 +3,7 @@ import { HandDrawnPathPaintElement } from "@app/domain/paint/defines/element/pat
 import { TextPaintElement } from "@app/domain/paint/defines/element/text"
 
 export enum PaintElementType {
+	// TODO(teawithsand): rename it to brush path
 	HAND_DRAWN_PATH = "hand-drawn-path",
 	TEXT = "text",
 }

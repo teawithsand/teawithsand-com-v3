@@ -14,11 +14,15 @@ import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
 import { ScreenPanelDisplay } from "@app/components/paint/panels/panel-display/ScreenPanelDisplay"
 import { SidePanel } from "@app/components/paint/panels/side-panel/SidePanel"
 import {
-	drawBackgroundZIndex,
-	pointerEventsCaptureZIndex,
+	sceneZIndex,
+	selectionDisplayZIndex,
 } from "@app/components/paint/pantZAxis"
+import {
+	ElementDisplayBoundingBoxContext,
+	ElementDisplayBoundingBoxRegistryImpl,
+} from "@app/components/paint/render/bbox"
 import { SVGSceneRenderer } from "@app/components/paint/render/svg/SVGSceneRenderer"
-import { SelectionDisplay } from "@app/components/paint/selection/SelectionDisplay"
+import { SVGSelectionRenderer } from "@app/components/paint/selection/svg/SVGSelectionRenderer"
 import { PaintActionType } from "@app/domain/paint/defines/action"
 import {
 	PaintEventType,
@@ -39,6 +43,8 @@ import {
 	usePaintScene,
 	usePresentationDimensions,
 } from "@app/domain/paint/redux/selector"
+
+import useWindowDimensions from "tws-common/react/hook/dimensions/useWindowDimensions"
 
 const InnerContainer = styled.div`
 	display: grid;
@@ -86,11 +92,7 @@ const EventContainer = styled.div`
 `
 
 const Renderer = styled(SVGSceneRenderer)`
-	z-index: ${drawBackgroundZIndex};
-`
-
-const InnerSelectionDisplay = styled(SelectionDisplay)`
-	z-index: ${pointerEventsCaptureZIndex};
+	z-index: ${sceneZIndex};
 `
 
 // eslint-disable-next-line react/display-name
@@ -108,12 +110,15 @@ const InnerPaint = forwardRef((props: {}, ref) => {
 	const { width, height, translateX, translateY } =
 		usePresentationDimensions()
 
+	const { height: screenHeight, width: screenWidth } = useWindowDimensions()
+
 	const cursor = usePaintCursor()
 
 	return (
 		<InnerContainer>
 			<ScreenPanelDisplay />
 			<SidePanel />
+
 			<EventContainer
 				ref={ref as any}
 				onPointerDown={e => {
@@ -135,15 +140,21 @@ const InnerPaint = forwardRef((props: {}, ref) => {
 					})
 				}}
 			>
-				<InnerSelectionDisplay
+				<SVGSelectionRenderer
 					style={{
 						transform: `translateX(${translateX}px) translateY(${translateY}px)`,
+						zIndex: selectionDisplayZIndex,
 					}}
+					presentationWidth={screenWidth}
+					presentationHeight={screenHeight}
+					scene={scene}
 				/>
+				
 				<Renderer
 					style={{
 						cursor,
 						transform: `translateX(${translateX}px) translateY(${translateY}px)`,
+						zIndex: sceneZIndex,
 					}}
 					presentationWidth={width}
 					presentationHeight={height}
@@ -203,27 +214,35 @@ export const Paint = () => {
 	}, [])
 
 	const [sceneElement, setSceneElement] = useState<HTMLElement | null>(null)
+	const boundingBoxProvider = useMemo(
+		() => new ElementDisplayBoundingBoxRegistryImpl(),
+		[],
+	)
 
 	return (
 		<Provider store={store}>
 			<PaintEventBusProvider>
-				<Helmet>
-					<meta
-						name="viewport"
-						content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,shrink-to-fit=no"
-					/>
-				</Helmet>
+				<ElementDisplayBoundingBoxContext.Provider
+					value={boundingBoxProvider}
+				>
+					<Helmet>
+						<meta
+							name="viewport"
+							content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,shrink-to-fit=no"
+						/>
+					</Helmet>
 
-				<BeforeUnloadHandler />
-				<EraseToolHandler />
-				{sceneElement ? (
-					<ScrollSceneHandler sceneElement={sceneElement} />
-				) : null}
-				<MoveToolHandler />
-				<PathToolHandler />
-				<UndoRedoHandler />
-				<ZoomHandler />
-				<InnerPaint ref={setSceneElement} />
+					<BeforeUnloadHandler />
+					<EraseToolHandler />
+					{sceneElement ? (
+						<ScrollSceneHandler sceneElement={sceneElement} />
+					) : null}
+					<MoveToolHandler />
+					<PathToolHandler />
+					<UndoRedoHandler />
+					<ZoomHandler />
+					<InnerPaint ref={setSceneElement} />
+				</ElementDisplayBoundingBoxContext.Provider>
 			</PaintEventBusProvider>
 		</Provider>
 	)

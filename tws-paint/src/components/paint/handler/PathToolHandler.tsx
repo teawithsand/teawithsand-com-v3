@@ -26,6 +26,7 @@ import {
 
 import { useSubscribableCallback } from "tws-common/event-bus"
 import { Point } from "tws-common/geometry/point"
+import produce from "immer"
 
 type State =
 	| {
@@ -94,7 +95,9 @@ export const PathToolHandler = () => {
 										fill: fillColor.current,
 									},
 									commonOptions:
-										defaultPaintElementCommonOptions,
+										produce(defaultPaintElementCommonOptions, draft => {
+											draft.local.selection.isSelected = true
+										}),
 								},
 							],
 						},
