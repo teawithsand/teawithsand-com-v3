@@ -1,9 +1,12 @@
-import { current, isDraft } from "@reduxjs/toolkit"
-import produce, { setAutoFreeze } from "immer"
+import { current, isDraft } from "@reduxjs/toolkit";
+import produce, { setAutoFreeze } from "immer";
 
-import { applyMutationOnDraft } from "@app/domain/paint/defines"
-import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action"
-import { PaintStateSnapshot } from "@app/domain/paint/redux/state"
+
+
+import { applyMutationOnDraft } from "@app/domain/paint/defines";
+import { PaintAction, PaintActionType } from "@app/domain/paint/defines/action";
+import { PaintStateSnapshot } from "@app/domain/paint/redux/state";
+
 
 setAutoFreeze(false) // improves performance of immer AFAIK
 export const copyAndOperateOnStateSnapshot = (
@@ -16,6 +19,8 @@ export const copyAndOperateOnStateSnapshot = (
 
 	return produce(snapshot, draft => operate(draft))
 }
+
+const roundZoom = (a: number) => Math.round(a * 1000) / 1000
 
 export const applyActionOnPaintStateSnapshot = (
 	snapshot: PaintStateSnapshot,
@@ -30,7 +35,7 @@ export const applyActionOnPaintStateSnapshot = (
 	} else if (action.type === PaintActionType.SET_STROKE_COLOR) {
 		snapshot.uiState.globalToolConfig.strokeColor = action.color
 	} else if (action.type === PaintActionType.SET_ZOOM) {
-		snapshot.uiState.viewOptions.zoomFactor = action.zoomFactor
+		snapshot.uiState.viewOptions.zoomFactor = roundZoom(action.zoomFactor)
 	} else if (action.type === PaintActionType.SET_SCENE_DIMENSIONS) {
 		snapshot.sceneState.scene.options.sceneHeight = action.dimensions.height
 		snapshot.sceneState.scene.options.sceneWidth = action.dimensions.width
