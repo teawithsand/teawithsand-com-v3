@@ -4,8 +4,8 @@ import { PaintScene } from "@app/domain/paint/defines"
 
 export type SelectionRendererProps = {
 	scene: PaintScene
-	presentationWidth: number
-	presentationHeight: number
+	screenWidth: number
+	screenHeight: number
 	style?: React.CSSProperties
 	className?: string
 }

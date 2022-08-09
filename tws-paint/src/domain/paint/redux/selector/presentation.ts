@@ -36,6 +36,12 @@ export const usePointOperations = () => {
 				(point[1] - viewOptions.offsetY) / viewOptions.zoomFactor,
 			]
 		},
+		canvasPointToScreenPoint: (point: Point): Point => {
+			return [
+				point[0] * viewOptions.zoomFactor + viewOptions.offsetX,
+				point[1] * viewOptions.zoomFactor + viewOptions.offsetY,
+			]
+		},
 	}
 }
 

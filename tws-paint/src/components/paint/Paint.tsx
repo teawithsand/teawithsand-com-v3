@@ -143,11 +143,10 @@ const InnerPaint = forwardRef((props: {}, ref) => {
 			>
 				<SVGSelectionRenderer
 					style={{
-						transform: `translateX(${translateX}px) translateY(${translateY}px)`,
 						zIndex: selectionDisplayZIndex,
 					}}
-					presentationWidth={screenWidth}
-					presentationHeight={screenHeight}
+					screenWidth={screenWidth}
+					screenHeight={screenHeight}
 					scene={scene}
 				/>
 

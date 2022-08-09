@@ -1,17 +1,17 @@
-import React, { forwardRef, Ref, useMemo } from "react"
+import React, { forwardRef, Ref, useMemo } from "react";
 
-import { useElementDisplayBBoxRegistry } from "@app/components/paint/render/bbox"
-import { SelectionRendererProps } from "@app/components/paint/selection/SelectionRenderer"
-import { PaintElement } from "@app/domain/paint/defines"
-import { useCurrentPaintSnapshotSelector, usePaintSelector } from "@app/domain/paint/redux/selector"
 
-import { useSubscribable } from "tws-common/event-bus"
-import {
-	NORM_RECT_MIN,
-	Rect,
-	rectDimensions,
-	rectNormalize,
-} from "tws-common/geometry"
+
+import { useElementDisplayBBoxRegistry } from "@app/components/paint/render/bbox";
+import { SelectionRendererProps } from "@app/components/paint/selection/SelectionRenderer";
+import { PaintElement } from "@app/domain/paint/defines";
+import { useCurrentPaintSnapshotSelector, usePaintSelector, usePointOperations } from "@app/domain/paint/redux/selector";
+
+
+
+import { useSubscribable } from "tws-common/event-bus";
+import { NORM_RECT_MIN, Point, Rect, rectDimensions, rectNormalize } from "tws-common/geometry";
+
 
 const SelectionBoundingBox = (props: {
 	layerIndex: number
@@ -28,13 +28,21 @@ const SelectionBoundingBox = (props: {
 		() => sub.getBBox(),
 		[boundingBoxManager, props.layerIndex, props.elementIndex],
 	)
-	const box = useSubscribable(sub, initialValue)
+	const canvasCoordsBox = useSubscribable(sub, initialValue)
 
-	if (!box) {
+	const ops = usePointOperations()
+
+	if (!canvasCoordsBox) {
 		return <></>
 	}
-	const normalizedBox = rectNormalize(box)
-	const dimensions = rectDimensions(box)
+
+	const screenBox: Rect = [
+		ops.canvasPointToScreenPoint(canvasCoordsBox[0]),
+		ops.canvasPointToScreenPoint(canvasCoordsBox[1]),
+	]
+
+	const normalizedBox = rectNormalize(screenBox)
+	const dimensions = rectDimensions(normalizedBox)
 
 	const growFactor = 10
 	const dashSize = 10
@@ -63,17 +71,21 @@ const SelectionBoundingBox = (props: {
 }
 
 const SelectionDragBox = (props: { box: Rect | null }) => {
-	const { box } = props
+	const { box: canvasCoordsBox } = props
+	const ops = usePointOperations()
 
-	if (!box) return <></>
+	if (!canvasCoordsBox) return <></>
 
-	const normalizedBox = rectNormalize(box)
-	const dimensions = rectDimensions(box)
+	const screenBox: Rect = [
+		ops.canvasPointToScreenPoint(canvasCoordsBox[0]),
+		ops.canvasPointToScreenPoint(canvasCoordsBox[1]),
+	]
+
+	const normalizedBox = rectNormalize(screenBox)
+	const dimensions = rectDimensions(normalizedBox)
 
 	const growFactor = 0
 	const dashSize = 10
-
-	const zoomFactor = useCurrentPaintSnapshotSelector(s => s.uiState.viewOptions.zoomFactor)
 
 	return (
 		<rect
@@ -103,7 +115,7 @@ const InnerRenderer = (
 	props: SelectionRendererProps,
 	ref: Ref<SVGSVGElement | null>,
 ) => {
-	const { scene, presentationWidth, presentationHeight, style, className } =
+	const { scene, screenWidth: presentationWidth, screenHeight: presentationHeight, style, className } =
 		props
 
 	const currentSelectionBox = usePaintSelector(
