@@ -62,6 +62,16 @@ export const PickToolPanel = () => {
 			>
 				Eraser
 			</Button>
+			<Button
+				onClick={() => {
+					dispatch({
+						type: PaintActionType.SET_ACTIVE_TOOL,
+						tool: PaintToolType.SELECT,
+					})
+				}}
+			>
+				Select
+			</Button>
 		</InnerContainer>
 	)
 }

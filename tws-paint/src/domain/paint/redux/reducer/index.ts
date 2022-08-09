@@ -5,6 +5,7 @@ import {
 	loadPaintScene,
 	redoPaintActions,
 	resetPaintActionsStack,
+	setDragSelectionBox,
 	setSceneSavedAction,
 	setUncommittedPaintActions,
 	undoPaintActions,
@@ -24,6 +25,7 @@ export const paintStateReducer = createReducer<PaintState>(
 	{
 		actionsState: {
 			wasSceneMutatedSinceLastSave: false,
+			currentSelectionDragBox: null,
 			actionsStackMaxSize: 200,
 			actionsStack: [],
 			redoStack: [],
@@ -92,6 +94,10 @@ export const paintStateReducer = createReducer<PaintState>(
 				)
 			})
 			.addCase(setSceneSavedAction, (state, action) => {
-				state.actionsState.wasSceneMutatedSinceLastSave = !action.payload
+				state.actionsState.wasSceneMutatedSinceLastSave =
+					!action.payload
+			})
+			.addCase(setDragSelectionBox, (state, action) => {
+				state.actionsState.currentSelectionDragBox = action.payload
 			}),
 )

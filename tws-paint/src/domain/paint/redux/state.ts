@@ -7,6 +7,8 @@ import {
 } from "@app/domain/paint/defines"
 import { PaintAction } from "@app/domain/paint/defines/action"
 
+import { Rect } from "tws-common/geometry"
+
 export type PaintSceneState = {
 	// in future some things
 	// about that scene
@@ -25,6 +27,7 @@ export type PaintSceneState = {
 export type PaintActionsState = {
 	// TODO(teawithsand): make this variable change along with ctrl+z ing stuff
 	wasSceneMutatedSinceLastSave: boolean
+	currentSelectionDragBox: Rect | null
 
 	uncommittedActions: PaintAction[]
 

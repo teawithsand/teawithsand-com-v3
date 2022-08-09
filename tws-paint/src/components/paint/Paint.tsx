@@ -9,6 +9,7 @@ import { EraseToolHandler } from "@app/components/paint/handler/EraseToolHandler
 import { MoveToolHandler } from "@app/components/paint/handler/MoveToolHandler"
 import { PathToolHandler } from "@app/components/paint/handler/PathToolHandler"
 import { ScrollSceneHandler } from "@app/components/paint/handler/ScrollSceneHandler"
+import { SelectHandler } from "@app/components/paint/handler/SelectHandler"
 import { UndoRedoHandler } from "@app/components/paint/handler/UndoRedoHandler"
 import { ZoomHandler } from "@app/components/paint/handler/ZoomHandler"
 import { ScreenPanelDisplay } from "@app/components/paint/panels/panel-display/ScreenPanelDisplay"
@@ -149,7 +150,7 @@ const InnerPaint = forwardRef((props: {}, ref) => {
 					presentationHeight={screenHeight}
 					scene={scene}
 				/>
-				
+
 				<Renderer
 					style={{
 						cursor,
@@ -232,6 +233,7 @@ export const Paint = () => {
 						/>
 					</Helmet>
 
+					<SelectHandler />
 					<BeforeUnloadHandler />
 					<EraseToolHandler />
 					{sceneElement ? (

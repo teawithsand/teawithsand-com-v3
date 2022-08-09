@@ -4,10 +4,8 @@ import React, { useMemo } from "react"
 import { useRegisterInBBoxRegistry } from "@app/components/paint/render/bbox"
 import { InnerSVGElementRendererProps } from "@app/components/paint/render/svg/SVGElementRenderer"
 import {
-	PaintElement,
 	PaintElementType,
-	PaintFilterType,
-	renderPaintFilters,
+	renderElementTransformAndFilter,
 } from "@app/domain/paint/defines"
 
 import { encodeColor } from "tws-common/color"
@@ -55,18 +53,7 @@ export const SVGBrushPathElementRenderer = (
 	}, [points, stroke.size])
 
 	const renderedFilters = useMemo(
-		() =>
-			renderPaintFilters(
-				isMarkedForRemoval
-					? [
-							...element.commonOptions.filters,
-							{
-								type: PaintFilterType.OPACITY,
-								factor: 0.5,
-							},
-					  ]
-					: element.commonOptions.filters,
-			),
+		() => renderElementTransformAndFilter(element.commonOptions),
 		[isMarkedForRemoval, filters],
 	)
 

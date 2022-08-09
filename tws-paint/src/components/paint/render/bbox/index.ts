@@ -30,6 +30,7 @@ type RectObtainerEvent = {
 	elementIndex: number
 }
 
+// TODO(teawithsand): implement some sexy dynamic tree or sth to get all elements, which fit/intersect given AABB.
 export class ElementDisplayBoundingBoxRegistryImpl
 	implements ElementDisplayBoundingBoxRegistry
 {
@@ -89,9 +90,14 @@ export class ElementDisplayBoundingBoxRegistryImpl
 			getBBox: () => this.getBBox(layerIndex, elementIndex),
 			addSubscriber: subscriber => {
 				return this.innerBus.addSubscriber(e => {
-					lastRect = this.getBBox(e.layerIndex, e.elementIndex)
+					if (
+						e.layerIndex === layerIndex &&
+						e.elementIndex === elementIndex
+					) {
+						lastRect = this.getBBox(e.layerIndex, e.elementIndex)
 
-					subscriber(lastRect)
+						subscriber(lastRect)
+					}
 				})
 			},
 		}

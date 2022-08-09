@@ -1,15 +1,15 @@
-import React, { forwardRef, Ref, useMemo, useState } from "react"
+import React, { forwardRef, Ref, useMemo } from "react"
 
 import { useElementDisplayBBoxRegistry } from "@app/components/paint/render/bbox"
 import { SelectionRendererProps } from "@app/components/paint/selection/SelectionRenderer"
 import { PaintElement } from "@app/domain/paint/defines"
+import { useCurrentPaintSnapshotSelector, usePaintSelector } from "@app/domain/paint/redux/selector"
 
 import { useSubscribable } from "tws-common/event-bus"
 import {
 	NORM_RECT_MIN,
 	Rect,
 	rectDimensions,
-	rectGrow,
 	rectNormalize,
 } from "tws-common/geometry"
 
@@ -62,12 +62,53 @@ const SelectionBoundingBox = (props: {
 	)
 }
 
+const SelectionDragBox = (props: { box: Rect | null }) => {
+	const { box } = props
+
+	if (!box) return <></>
+
+	const normalizedBox = rectNormalize(box)
+	const dimensions = rectDimensions(box)
+
+	const growFactor = 0
+	const dashSize = 10
+
+	const zoomFactor = useCurrentPaintSnapshotSelector(s => s.uiState.viewOptions.zoomFactor)
+
+	return (
+		<rect
+			x={0}
+			y={0}
+			width={dimensions.width + growFactor * 2}
+			height={dimensions.height + growFactor * 2}
+			style={{
+				transform: `translateX(${
+					normalizedBox[NORM_RECT_MIN][0] - growFactor
+				}px) translateY(${
+					normalizedBox[NORM_RECT_MIN][1] - growFactor
+				}px)`,
+				fill: "rgba(38, 0, 255, 0.527)",
+				stroke: "black",
+				strokeWidth: 2,
+				strokeDasharray: `${new Array(4)
+					.fill(dashSize)
+					.map(v => v.toString())
+					.join(" ")}`,
+			}}
+		/>
+	)
+}
+
 const InnerRenderer = (
 	props: SelectionRendererProps,
 	ref: Ref<SVGSVGElement | null>,
 ) => {
 	const { scene, presentationWidth, presentationHeight, style, className } =
 		props
+
+	const currentSelectionBox = usePaintSelector(
+		s => s.actionsState.currentSelectionDragBox,
+	)
 
 	const selectedElements = useMemo(() => {
 		return scene.layers
@@ -107,6 +148,8 @@ const InnerRenderer = (
 			{selectedElements.map((v, i) => (
 				<SelectionBoundingBox {...v} key={i} />
 			))}
+
+			<SelectionDragBox box={currentSelectionBox} />
 		</svg>
 	)
 }

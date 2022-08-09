@@ -1,12 +1,15 @@
-import { createAction } from "@reduxjs/toolkit"
+import { createAction } from "@reduxjs/toolkit";
 
-import { PaintScene } from "@app/domain/paint/defines"
-import { PaintAction } from "@app/domain/paint/defines/action"
 
-import {
-	claimId,
-	NS_REDUX_ACTION_PREFIX,
-} from "tws-common/misc/GlobalIDManager"
+
+import { PaintScene } from "@app/domain/paint/defines";
+import { PaintAction } from "@app/domain/paint/defines/action";
+
+
+
+import { Rect } from "tws-common/geometry";
+import { claimId, NS_REDUX_ACTION_PREFIX } from "tws-common/misc/GlobalIDManager";
+
 
 const actionPrefix = claimId(NS_REDUX_ACTION_PREFIX, "tws-paint")
 
@@ -36,4 +39,8 @@ export const loadPaintScene = createAction<PaintScene>(
 
 export const setSceneSavedAction = createAction<boolean>(
 	`${actionPrefix}/setSceneSavedAction`,
+)
+
+export const setDragSelectionBox = createAction<Rect | null>(
+	`${actionPrefix}/setDragSelectionBox`,
 )

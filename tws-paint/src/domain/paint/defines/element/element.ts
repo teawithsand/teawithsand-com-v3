@@ -1,5 +1,5 @@
-import { PaintFilter } from "@app/domain/paint/defines/element/filter"
 import { HandDrawnPathPaintElement } from "@app/domain/paint/defines/element/path"
+import { PaintFilter } from "@app/domain/paint/defines/element/styles"
 import { TextPaintElement } from "@app/domain/paint/defines/element/text"
 
 export enum PaintElementType {
