@@ -2,3 +2,13 @@
 /TODO
 yarn-error.log
 .nowrap
+
+node_modules/
+.cache/
+/*/public
+.yalc/
+yalc.lock
+
+gatsby-types.d.ts
+
+*.pyc
