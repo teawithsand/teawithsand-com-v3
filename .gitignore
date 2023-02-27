@@ -21,3 +21,4 @@ yalc.lock
 gatsby-types.d.ts
 
 *.pyc
+/deploy
