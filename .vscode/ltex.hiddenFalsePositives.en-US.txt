@@ -1,0 +1,3 @@
+{"rule":"A_TO","sentence":"^\\Q\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q casts a to number, or NaN if not valid number... unless it's array.\\E$"}
+{"rule":"ID_CASING","sentence":"^\\QIn general, all elements, which have id may be accessed via \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q object, even though \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q exist.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QFalsy values are:\\E$"}

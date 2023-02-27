@@ -1,0 +1,34 @@
+@mixin animation-slide-out($duration) {
+    visibility: visible;
+
+    & { 
+        transform: translateX(0);
+    }
+
+    &-enter {
+        transform: translateX(100%);
+    }
+
+    &-enter-active {
+        transition: transform $duration;
+        transform: translateX(0);
+    }
+
+    &-enter-done {
+        transform: translateX(0);
+    }
+
+    &-exit {
+        transform: translateX(0);
+    }
+
+    &-exit-active {
+        transform: translateX(100%);
+        transition: transform $duration;
+    }
+
+    &-exit-done {
+        transform: translateX(100%);
+        visibility: hidden;
+    }
+}
