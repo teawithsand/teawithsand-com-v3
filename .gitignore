@@ -75,3 +75,14 @@ yarn-error.log
 /deploy
 !/deploy/.gitkeep
 !/posts/.gitkeep
+.nowrap
+
+node_modules/
+.cache/
+/*/public
+.yalc/
+yalc.lock
+
+gatsby-types.d.ts
+
+*.pyc
